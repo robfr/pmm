@@ -1,0 +1,276 @@
+----------------------------------------
+expierments for partial model completion
+----------------------------------------
+
+The objective of these experiments is to find out if a partially constructed
+model can be used to effectively in the scheduling of non divisable tasks.
+
+If the level of model completeion required to give satisfactory scheduling
+behavours is low, it will show that even partially building FPMs can give
+improved scheduling.
+
+To investigate this we devise an application that executes a number of remote
+tasks, while providing the scheduling middleware with a partially complete
+FPM of the tasks executed and measure the overall performance of the
+application.
+
+By providing successivly more complete FPMs to the middleware, we can reveal
+how complete a model must be before it can provide for optimal scheduling.
+
+Our server pool P is described in [table]. Each server is configured to execute
+a single task at a time.
+
+The application consists of sets of matrix multiplications. Each set contains N
+multiplications of random size, where N<P. The multiplications in each set have
+no dependencies and may be executed in parallel. The sets however, must be
+executed in sequence. The random sizes of matrices is replicated in successive
+experiments. The purpose of the randomness is to have the scheduler request
+performance predictions from the entire range of each FPM and not preference any
+one region, which maybe constructed or unconstructed.
+
+The complete models of a selection of the servers is shown in [plot]. [plots]
+show a series of models for server S, each in increasing level of model
+completion.
+
+[plot] shows the average execution time of the application against the level
+of completeness of the models provided to the scheduler.
+
+TODO how to address level of completeness. In time spent benchmarking? Number
+of points, or fraction of the complete model (i.e. no. points/total number of
+points in complete model). Also, initial climb phase may execute many benchmarks
+at little cost. Should this be considered a minimal model.
+
+The second experiment under this theme is one which assumes no model exists
+upon execution of the application. however timing calls in the middleware
+provide points which are fed back into the model as the application executes.
+The objective is to show whether constructing a useful model without any
+additional experimentation is feasable, and how soon one can expect the model
+to become useful.
+
+In this experiment we limit the number of servers to be equal to the number of
+parallel tasks executed by the application. So N=P.
+
+Instead of measuring execution time of the entire application, we measure
+the execution time of each set of multiplications. We then compare the execution
+time of an optimally mapped set to the execution time of the set mapped with the
+feedback model to give the scheduling efficiency for each set.
+
+[plot] shows the scheduling efficency of the sequence of task sets. [plots]
+show an example of the evolution of the model after successive task sets are
+executed.
+
+
+The test application is a fixed sequence of randomly sized matrix
+multiplications. We cannot use Hydropad as a test application as it cannot be
+executed with randomly sized input parameters. Rather, it has strict
+requirements that would hinder our experimentation.
+
+Sets of P multiplications are be executed in parallel, each set block
+before the following set is executed.
+
+
+
+Our Grid
+
+We will build partial models for a matrix multiplication routine,
+dgemm, on all nodes of our cluster. 
+
+
+
+
+--------------------------------
+initial and invalid model states 
+--------------------------------
+After the parsing of configuration files and models, each model should be in
+a valid and known state so that construction proceedures can act in a simplified
+manner. Some desirable and undesirbale states are:
+
+  1. totally empty model
+     - cause: model file does not exist or parsing error
+     - action: either we should initialize the model with zero speed points
+       at this time or wait until a construction method has been envoked on the
+       model. Advantages to immediate initialization are that we can expect
+       a minimal model when construction is envoked. Disadvantages are that
+       the initial model may not be appropriate for all construction methods
+       and each one will have to detect the model state to determine this.
+       
+  2. model that consists only of derived zero speed points (at max problem
+     sizes which are defined in the routine config for each problem parameter).
+     - cause: model file does not exist or parsing error
+     - action: 
+     
+  3. model that consists of benchmarked points and derived points, along with
+     valid construction intervals and no complete flag.
+     - cause: model construction interrupted at some point
+     - appropriate: yes
+     
+  4. model that consists of benchmarked points and derived points, but no or
+     invalid construction intervals.
+     - cause: parsing error on construction intervals, or construction never
+       proceeded, but points exist from some other source
+     - action: 
+
+
+
+
+-------------------------
+High Level Design of PMM
+-------------------------
+
+Performance Model Manager consists of two main parts. A daemon which constructs
+multidimensional performance models and a library which permits the use of these
+models in a scheduler.
+
+Construction Daemon Design:
+
+Daemon initization:
+
+configuration files are read 
+
+
+-----------------------------------------
+Performance Model Manager Design Document
+-----------------------------------------
+
+Introduction
+
+This document provides an detailed description of the design and implementation
+of the Performance Model Manager (PMM) application. It is intended to enable
+future development of PMM and should be considered a living document, updated
+as and when needed.
+
+This version of the design document pertains to pmm-0.1 release.
+
+It is assumed the the reader as familiarity with Functional Performance Models
+[ref] (FPMs) and the theory behind their construction [/ref].
+
+
+System Overview
+
+PMM is a tool that enables the construction and use of FPMs in a parallel
+computing environment. As such it is decomposed into two fundamental parts:
+
+1. The construction of FPMs on computation nodes
+2. The use of constructed FPMs by a scheduling middleware
+
+Construction is realised by PMM through a daemon process, pmmd, that resides on
+each node and inobtrusively experiments and collects data that go to realising
+an optimised approximation of an FPM.
+
+Use of constructed models in other software is enabled through a shared library
+libpmm, which provides a simple interface to parse stored models and lookup the
+value of a model at any point
+
+
+
+Design Constraints
+
+	Assumptions and Dependencies
+PMM is implemented for POSIX style operating systems. Certain aspects of data
+collection require system specific code and this must be dealt with
+appropriately.
+
+The following dependencies are required for the current implementation of
+PMM however their functionality may be implemented directly in future
+
+libxml - parsing of configuration and stored models
+octave - multidimensional linear interpolation of models
+
+
+
+    * Design Considerations
+          o Assumptions and Dependencies
+          o General Constraints
+          o Goals and Guidelines
+          o Development Methods 
+    * Architectural Strategies
+          o strategy-1 name or description
+          o strategy-2 name or description
+          o ... 
+    * System Architecture
+          o component-1 name or description
+          o component-2 name or description
+          o ... 
+    * Policies and Tactics
+          o policy/tactic-1 name or description
+          o policy/tactic-2 name or description
+          o ... 
+    * Detailed System Design
+          o module-1 name or description
+          o module-2 name or description
+          o ... 
+    * Glossary
+    * Bibliography 
+    
+    
+    
+    
+
+
+--------
+Benchmark Structure: struct pmm_benchmark
+--------
+
+<benchmark>
+	<parameter_array>
+		<n_p>3<n_p>
+		<parameter>300</parameter>
+		<parameter>200</parameter>
+		<parameter>25</parameter>
+	</parameter_array>
+	
+	<complexity>20000000</complexity>
+	
+	<flops>1300000000</flops>
+	
+	<seconds>34</seconds>
+	
+	<used_time>
+		<secs>34</secs>
+		<usecs>23</usecs>
+	</used_time>
+	
+	<wall_time>
+		<secs>34</secs>
+		<usecs>23</usecs>
+	</wall_time>
+</benchmark>
+
+-------------
+Model Structure: struct pmm_model
+
+-------
+<model>
+	<completion>334</completion>
+	<complete>0</complete>
+	
+	<boundary_model_array>
+		<boundary_model_array_size>2</boundary_model_array_size>
+		
+		<boundary_model>
+			<boundary_index>0</boundary_index>
+			<benchmark>
+			</benchmark>
+		</boundary_model>
+		
+		<boundary_model>
+			...
+		</boundary_model>
+		...
+	</boundary_model_array>
+	<mesh_model>
+		<size>300</size>
+		<benchmark>
+			.....
+		</benchmark>
+		<benchmark>
+			....
+		</benchmark>
+	</mesh_model>
+	
+	<interval_list>
+		<interval>
+			....
+		</interval>
+	</interval_list>
+</model>

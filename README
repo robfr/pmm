@@ -1,0 +1,26 @@
+
+Release notes for PMM
+---------------------
+
+Building and Installing
+-----------------------
+
+To install for version control repository:
+
+    1. Enter base sorce directory.
+    2. Run ./bootstrap to set up building tools (autotools required)
+    3. Continue with the following instructions
+
+To install from a source distribution (i.e. tar.gz)
+
+    4. Run ./configure with any specific options you wish, --prefix=<target dir>
+       is recommended as otherwise installed files will enter your base
+       system
+    5. Run "make"
+    6. Run "make install" (Do not skip this ... you will have difficulty
+       running compiled programs directly from the source tree as some of them
+       look for files in locations specific to the install.)
+       
+
+Setting up PMM
+--------------

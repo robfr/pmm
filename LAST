@@ -1,0 +1,32 @@
+This file contains notes on the last thing that a developer was working on. It
+serves as a reminder as to where an individual left off so that it is easier
+to restart work after a pause.
+
+rhiggins:
+
+- problem with size of history array, it is -1 than the size, so the size
+should be increased (i.e. if a user expects 60 history recordings then we
+need to accoate 60+1 array elements to store this)
+
+done ... writing history periodically is done, need to start reading history
+at startup if it exists and also to perhaps write history using a thread and to
+functionalise the history reading/writing.
+
+	- messing around with load writing, new_load functino maybe not needed
+	- human readable time is printed as comment in load history, remove or add as an attribute
+    - seperate load function out of pmm_main.c
+    - read period from configuration file
+    
+    
+    
+    
+done ... fix make file to link with libxml
+
+done ... fix make dist
+
+* does log file work at all?
+* configure script takes too long, checks things that are not needed
+* error when conf file does not exist is not clear
+
+everything else
+    

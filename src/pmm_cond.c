@@ -1,0 +1,169 @@
+/*
+    Copyright (C) 2008-2010 Robert Higgins
+        Author: Robert Higgins <robert.higgins@ucd.ie>
+
+    This file is part of PMM.
+
+    PMM is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    PMM is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with PMM.  If not, see <http://www.gnu.org/licenses/>.
+*/
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <time.h>
+#include <utmp.h>
+#include <paths.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <sys/param.h>
+
+#include "pmm_data.h"
+#include "pmm_cond.h"
+
+int ttystat(char *line, int sz);
+int num_users();
+
+/*
+ * checks that the tty a user is logged into (as per utmp) exists in /dev
+ * returns 1 (true) if tty exists, 0 if tty does not exist
+ *
+ * code comes from FreeBSD /usr/src/usr.bin/w/w.c
+ *
+ * TODO Portable?
+ */
+int ttystat(char *line, int sz) {
+	static struct stat sb;
+	char ttybuf[MAXPATHLEN];
+
+	//create the string /dev/<terminal user is logged into>
+	(void)snprintf(ttybuf, sizeof(ttybuf), "%s%.*s", _PATH_DEV, sz, line);
+
+	//check that the terminal/file exists by stat'ing it
+	if(stat(ttybuf, &sb) == 0) {
+		return 1; // terminal exists, great
+	}
+	else {
+		return 0; // terminal does not exist, corrupt utmp line
+	}
+}
+
+
+/*
+ * counts the number of users logged into a system by reading utmp returns
+ * the number of users logged in.
+ *
+ * code comes from FreeBSD /usr/src/usr.bin/w/w.c
+ *
+ * TODO Portable?
+ */
+int num_users() {
+	FILE *ut;
+	struct utmp utmp;
+	int nusers;
+
+	//open utmp file stream
+	if((ut = fopen(_PATH_UTMP, "r")) == NULL) {
+		printf("Error calculating users logged in, could not read file %s\n",
+				_PATH_UTMP);
+		exit(EXIT_FAILURE);
+	}
+
+	nusers=0;
+	for(;fread(&utmp, sizeof(utmp), 1, ut);) {
+
+		if(utmp.ut_name[0] == '\0') {
+			continue;
+		}
+
+		//check that the tty if the user exists in /dev
+		if(!ttystat(utmp.ut_line, UT_LINESIZE)) {
+			continue; //corrupted record
+		}
+
+		nusers++;
+	}
+	fclose(ut);
+
+	return nusers;
+}
+
+/*
+ * cond_users, returns true (1) if users are logged into the system, or 0 if
+ * no users are logged in.
+ */
+int cond_users() {
+	if(num_users() > 0) {
+		return 1;
+	} else {
+		return 0;
+	}
+}
+
+/*
+ * cond_idle, return true if 5 minute load is below 0.1
+ */
+int cond_idle() {
+	double loadavg[3];
+
+	if(!getloadavg(loadavg, 3)) {
+		printf("Error, could not retreive system load averages.\n");
+		exit(EXIT_FAILURE);
+	}
+
+	// if load is below 0.10, i.e. 10% untilisation
+	if(loadavg[1] < 0.10) {
+		return 1;
+	}
+	else {
+		return 0;
+	}
+}
+
+/*!
+ * check if conditions for execution of a routine are satisfied and
+ * set executable parameter of routine accordingly
+ *
+ * TODO add PMM_UNTIL and PMM_PERIODIC to this function ...
+ * TODO permit multiple conditions in one routine
+ * TODO permit system wide conditions applicable to all routines
+ *
+ * @param   r   pointer to the routine
+ *
+ * @return 0 if routine is not execuable based on conditions, 1 if
+ * it is
+ */
+int
+check_conds(struct pmm_routine *r)
+{
+    r->executable = 0;
+    if(r->condition == PMM_NOW) {
+        r->executable = 1;
+
+    }
+    else if(r->condition == PMM_IDLE) {
+        if(cond_idle()) {
+            r->executable = 1;
+        }
+    }
+    else if(r->condition == PMM_NOUSERS) {
+        if(!cond_users()) {
+            r->executable = 1;
+        }
+    }
+
+	return r->executable;
+}
+

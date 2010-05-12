@@ -1,0 +1,12 @@
+*.[oa]
+*.l[oa]
+*~
+*.swp
+Makefile
+.deps
+.libs
+libtool
+stamp-h1
+config.log
+config.status
+autom4te.cache/*

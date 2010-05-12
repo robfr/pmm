@@ -1,0 +1,592 @@
+\documentclass[a4paper,12pt]{report}
+
+\usepackage[english]{babel} %language selection
+\selectlanguage{english}
+
+%\usepackage{html,makeidx}
+\usepackage{pslatex}
+\usepackage{boxedminipage}
+\usepackage{listings}
+
+\usepackage{titlesec}
+\titleformat{\chapter}[hang]{\bf\huge}{\thechapter}{2pc}{}
+
+\pagenumbering{arabic}
+
+\usepackage{hyperref}
+\hypersetup{colorlinks, 
+           citecolor=black,
+           filecolor=black,
+           linkcolor=black,
+           urlcolor=black,
+           bookmarksopen=true}
+           
+\usepackage{html}   %  *always* load this for LaTeX2HTML
+\begin{htmlonly}
+  \usepackage{verbatim}
+  \providecommand{\lstinputlisting}[2][]{\verbatiminput{#2}}
+\end{htmlonly}
+
+
+%\hfuzz = .6pt % avoid black boxes
+
+\newcommand{\devvar}{The default value is suitable and this variable is made configurable mostly for developmental purposes}
+
+% style for XML Config listings
+\lstdefinestyle{xmlconfig}{language=XML,basicstyle=\small\ttfamily,numbers=left,frame=lines,breaklines=true}
+
+% style for C Code listings
+\lstdefinestyle{c_code}{language=C,basicstyle=\small\ttfamily,numbers=left,frame=lines,breaklines=true}
+
+\begin{document}
+
+    \pagestyle{empty}
+    \vspace*{15cm}
+    \begin{flushright}
+        \rule[-1ex]{11cm}{3pt}\\
+        \huge Performance Model Manager\\
+        \huge \emph{User Manual}\\
+    \end{flushright}
+
+    \newpage
+
+
+    \noindent
+
+    \begin{boxedminipage}[b]{\textwidth}
+    Performance Model Manager User Manual,
+    Copyright \copyright{} 2010 Robert Higgins.
+    Permission is granted to copy, distribute and/or modify this document
+    under the \\ terms of the GNU Free Documentation License, Version 1.3
+    or any later version published by the Free Software Foundation;
+    with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.
+    A copy of the license is included in the section entitled ``GNU
+    Free Documentation License''.
+    \end{boxedminipage}
+
+    \newpage
+
+    \tableofcontents
+
+
+    \chapter{Introduction}
+
+    Performance Model Manager (PMM) is an open source GNU Public Licenced tool
+    for experimentation in the use of Functional Performance Models (FPMs). An
+    FPM describes the speed of a computational routine in terms of the
+    routine's input parameters. It focuses on addressing issues surrounding the
+    construction, maintenance and use of FPMs. To this end, it has three main
+    features:
+    \begin{itemize}
+        \item It implements the Geometric Bisection Building Procedure for
+            multi-parameter FPMs, optimizing the construction of a problem's
+            performance model. 
+        \item It permits the construction of models for a large number of
+            problems by implementing a flexible benchmarking scheduler.
+        \item It provides access to the models in a variety of ways, so that
+            they may be visualised or used to make scheduling decisions.
+    \end{itemize}
+    Construction of the FPM of some general computational procedure is supported
+    by requiring that the user provides a benchmarking executable which behaves
+    according to a simple protocol.
+    
+    An example implementation of such a 'benchmark binary' is given in Chapter
+    \ref{chap:writingbench} along with details of its configuration within PMM.
+    Further examples are also included in the source distribution.
+
+    Models can be constructed on demand or in the background by the \verb+pmmd+
+    daemon. Construction of multiple models can be scheduled according to a
+    variety of policies. They will be constructed in turn according to their
+    priority and scheduling criteria.
+
+    Access to models will be made available via an API in a future release of
+    PMM, at present only viewing of models is possible, via a plotting program:
+    \verb+pmm_view+.
+
+    This manual continues to Chapter \ref{install_chap} where compilation and 
+    installation is described. Then the PMM configuration file is described in
+    Chapter \ref{config_chap}. Chapter \ref{bench_chap} provides notes on how
+    to write a benchmark binary and configure it as a 'routine' to be modelled
+    within
+    PMM.
+
+    \chapter{Installation}
+    \label{install_chap}
+
+    \section{Requirements}
+    PMM is developed for the Linux platform but may also compile on other POSIX
+    operating systems. The following softwares are required to install PMM:
+    \begin{itemize}
+        \item Gnuplot
+        \item GNU Make
+        \item GCC compiler suite (tested with 4.x series only)
+        \item libxml2 2.6.0 or greater
+        \item GNU Scientific Library
+    \end{itemize}
+    The following are optional but enable certain features:
+    \begin{itemize}
+        \item Octave (2.9.14 or greater) is required for multi-parameter model construction
+        \item PAPI (4.0.0 tested) is required for higher resolution timing and automatic complexity calculation
+        \item GotoBLAS2 is required for for further example problems
+    \end{itemize}
+
+    \section{Compiling \& Installing}
+    Installation of PMM uses a hierarchy of directories under a certain prefix,
+    by default \verb+/usr+. If this is not desirable the build should be
+    configured with the \verb+--prefix=<dir>+ option. A typical installation
+    follows:
+
+    \begin{verbatim}
+        $ tar -xzf pmm-0.0.1.tar.gz
+        $ cd pmm-0.0.1
+        $ ./configure --prefix=$PWD/install
+        $ make && make install
+    \end{verbatim}
+
+    \noindent Configuration options to note:
+
+    \begin{itemize}
+        \item \verb+--enable-debug+ enable debugging messages and flags
+        \item \verb+--disable-octave+ disable use of octave and multi-parameter
+            model support
+        \item \verb+--disable-benchgslblas+ disable compilation and
+            installation of demonstration GSL problem benchmarks
+        \item \verb+--enable-benchgotoblas2+ enable compilation and
+            installation of demonstration GotoBLAS2 problems
+        \item \verb+--with-papi[=path]+ enable use of PAPI with optional
+            specification of PAPI installation path
+    \end{itemize}
+
+    \noindent Further options can be viewed by running \verb+./configure --help+
+    .
+
+    After installation, the PMM daemon is started by executing the
+    \verb+pmmd+ binary and the PMM viewer program is run via the \verb+pmm_view+
+    binary.
+
+
+    \chapter{Configuration}
+    \label{config_chap}
+    PMM is distributed with a default configuration which will be installed under:
+    \begin{verbatim} <prefix>/etc/pmmd.conf[.sample] \end{verbatim}
+
+    \noindent This can serve as a template for a user's own configuration and
+    contains sane values for all options. If example problem benchmarks are
+    built, the sample configuration will also describe those problems.
+    
+    The configuration file has an heirarchical XML structure Configuration is
+    described between \verb+<config>+ root element tags.  Under this, the load
+    monitor facility is described by a \verb+<load_monitor>+ element, and each
+    routine for which a model is to be built, is described by a 
+    \verb+<routine>+ element.
+
+    In the following sections, each element in the configuration file is
+    described. If an element has a default value, it need not be explicitly set
+    in the configuration file, on the other hand, some options must be set.
+    This information, along with the type of the expected element value
+    (string, integer, etc.) and what exactly the element describes is detailed
+    below.
+
+    \section{General Configuration}
+    The following elements (which can be seen in context in Listing
+    \ref{basic_config_example}) define some general application configurable
+    options and come directly under the \verb+<config>+ tags:
+    \begin{itemize}
+        \item \verb+<main_sleep_period>+ (\emph{integer, default:1}) The
+            benchmark scheduler checks the system state ever $n$ seconds and
+            this period may be configured here. \devvar.
+        \item \verb+<model_write_time_threshold>+ (\emph{integer, default:60})
+            When benchmarking problems of very small size, which execute very
+            quickly, the manager may become overloaded by writing the model to
+            disk after each execution. This option allows us to configure how
+            often the model will be saved to disk, i.e. after a total of $n$
+            seconds has been spent benchmarking a particular model it will be
+            written to disk.  \devvar.
+        \item \verb+<model_write_execs_threshold>+ (\emph{integer, default:10})
+            This option serves the same purpose as the previous one, except
+            that it specifies the number of benchmark executions that must
+            occur before it is written to disk.  It may take hundreds of small
+            benchmarks exceed the time threshold (above), so this second
+            threshold allows us to write based on execution frequency as well.
+            \devvar.
+    \end{itemize}
+
+    \begin{lstlisting}[style=xmlconfig,caption=Basic Configuration,float=h,label=basic_config_example]
+<?xml version="1.0"?>
+<config>
+   <main_sleep_period>1</main_sleep_period>
+   <model_write_time_threshold>60
+      </model_write_time_threshold>
+   <model_write_execs_threshold>20
+      </model_write_execs_threshold>
+
+   <load_monitor>
+      <load_path>/usr/var/pmm/loadhistory</load_path>
+      <write_period>60</write_period>
+      <history_size>60</history_size>
+   </load_monitor>
+
+   ....
+</config>
+    \end{lstlisting}
+
+    \section{Load Monitor Configuration}
+
+    The load monitoring facility is is described by a \verb+<load_monitor>+
+    element, this has the following children:
+
+    \begin{itemize}
+        \item \verb+<load_path>+ (\emph{string, required}) path to a file where
+            load observations are recorded
+        \item \verb+<write_period>+ (\emph{integer, default:360}) frequency
+            with which to save the load file to disk (in seconds)
+        \item \verb+<history_size>+ (\emph{integer, default:60}) number of load
+            observations to store \end{itemize}
+
+
+    \section{Routine Configuration}
+
+    \noindent Each routine is described by a \verb+<routine>+ element.
+    Routines have detailed descriptions of the parameters to be passed to them
+    and the construction method that should be used to build their models. An
+    example routine configuration can been seen in Listing
+    \ref{routine_config_example}, it describes a 2-parameter routine. First,
+    the general options are set using the following child elements:
+    \begin{itemize}
+        \item \verb+<name>+ (\emph{string, required}) The routine name.
+        \item \verb+<exe_path>+ (\emph{string, required}) The path to the
+            benchmarking executable
+        \item \verb+<model_path>+ (\emph{string, required}) The path to the
+            file where the performance model of the routine will be saved.
+        \item \verb+<priority>+ (\emph{integer, default:0}) The construction
+            priority this routine has (logically, the higher the value, the
+            higher the priority)
+    \end{itemize}
+
+    \noindent The parameters of a routine are described by a 
+    \verb+<parameters>+ elmenet. These are the parameters that will be passed to
+    the benchmark binary which ultimately executes the routine which is being
+    modeled. The parameters passed to the benchmark are those that influnce the
+    volume of computations or the speed at which the computations are carried
+    outt. This is further described in Chapter \ref{bench_chap}. The first
+    child of the \verb+<parameters>+ element must be the number of parameter
+    descriptions which will follow:
+    \begin{itemize}
+        \item \verb+<n_p>+ (\emph{integer, required}) number of parameters
+            which the benchmark accepts
+    \end{itemize}
+    Following that, each parameter is described by a \verb+<param>+ element.
+    The \verb+<param>+ element has a number of child elements which are:
+    \begin{itemize}
+        \item \verb+<order>+ (\emph{integer, required}) The order
+            in which this parameter should be passed to the benchmark binary.
+        \item \verb+<name>+ (\emph{string, required}) The name of this
+            parameter.
+        \item \verb+<min>+ (\emph{integer, required}) The
+            minimum value this parameter may have. If modelling the performance
+            of the processor while operating in cache only is \emph{not}
+            important, this should be set so the overall problem size is large
+            enough to occupy main memory.
+        \item \verb+<max>+ (\emph{integer, required}) The maximum value this
+            parameter may have. This should be large enough to induce
+            significant paging.
+        \item \verb+<stride>+ (\emph{integer, default:1}) The stride with which
+            this parameter should be incremented. Stride influences the
+            climbing phase of optimised construction (where successive
+            benchmarks are incremented in size by this value) as well as naive
+            construction (where all points on the stride between min and max
+            are benchmarked). A reasonable value for stride would be, for
+            example, 1/100th of the range between max and min. If stride is too
+            low, excessive time may be spent building a model.
+        \item \verb+<offset>+ (\emph{integer, default:0}) Offset for this
+            parameter. If required, you can specify that a parameter value must
+            always be a certain offset from zero.
+        \item \verb+<fuzzy_max>+ (\emph{boolean, default:false}) This specifies
+            that the maximum parameter size defined is not a true max and speed
+            at this maximum should be measured.
+            
+            In normal circumstances the FPM is constructed across
+            a complete range of problem sizes, from small to so large that
+            speed is effectively zero. The maximum parameter value will be so
+            large that it induces heavy paging. Speed at this maximum is not
+            measured, but assumed to be zero. If this is \emph{not} the case,
+            and the maximum parameter size will not induce heavy paging,
+            \verb+<fuzzy_max>+ must be set to \emph{true} for the GBBP algorithm
+            to complete successfully.
+    \end{itemize}
+
+
+    \noindent Directives for the construction method must be described by a
+    \verb+<construction>+ element. It has the following child elements:
+    \begin{itemize}
+        \item \verb+<method>+ (\emph{string, default:gbbp}) The construction
+            method, this element may have the following values:
+        \begin{itemize}
+            \item \emph{gbbp} - the Geometric Bisection Building Procedure will
+                be used to select benchmark points, minimising the number of
+                points required to accurately estimate the model
+            \item \emph{naive} - all possible points between the parameter
+                ranges will be benchmarked.
+            \item \emph{rand} - points between the parameter ranges will be
+                selected at random
+        \end{itemize}
+        \item \verb+<min_sample_num>+ (\emph{integer, default:1}) Specify the
+            minimum number of benchmarks to be taken at a single point in the
+            model. Once this is met, the point will be considered as measured
+            and the construction method will proceed to the next point of its
+            choosing.
+        \item \verb+<min_sample_time>+ (\emph{integer, default:0}) Specify the
+            minimum number of seconds that should be spent in the benchmarking
+            of a single point before it is considered as measured. I.e. if set
+            to 60 seconds, a benchmark taking 20 seconds will be measured 3
+            times.
+    \end{itemize}
+
+    Finally, priority and scheduling policy may be specified. When multiple
+    routines are configured in PMM priorities allow the user to specify which
+    models will be built first. Scheduling policies allow the user limit the
+    execution of benchmarks to certain time periods or certain system
+    conditions.
+
+    \begin{itemize}
+        \item \verb+<priority>+ (\emph{integer, default:0}) Priority of
+            construction for the routine. Higher priority routines will have
+            their models constructed before lower ones
+        \item \verb+<condition>+ (\emph{string, default:now}) Condition under
+            which benchmarking of a routine is permitted. Note: Once started, a
+            benchmark will not be interrupted, even if the conditions that
+            permitted its execution have changed to ones which would otherwise
+            prevent execution.
+            \begin{itemize}
+                \item \emph{now} - construction is permitted at all times
+                \item \emph{idle} - construction is only permitted when the
+                    observed 5 minute load average is less than 0.10 (note: the
+                    act of benchmarking will influence the load average of the
+                    system. After the benchmark is complete, PMM will probably
+                    have to wait ~5 minutes before the next execution can
+                    occur)
+                \item \emph{nousers} - construction is only permitted when no
+                    users are logged into the system. Logged in users would be
+                    those reported by utilities such as \verb+w+, \verb+who+,
+                    \verb+users+ and so on.
+            \end{itemize}
+    \end{itemize}
+
+
+    \begin{lstlisting}[style=xmlconfig,caption=Routine Configuration Example,label=routine_config_example]
+<routine>
+   <name>dgemm2</name>
+   <exe_path>/usr/local/lib/pmm/dgemm2</exe_path>
+   <model_path>/usr/local/var/pmm/dgemm2_model</model_path>
+   <parameters>
+      <n_p>2</n_p>
+      <param>
+         <order>0</order>
+         <name>m</name>
+         <min>32</min>
+         <max>4096</max>
+         <stride>32</stride>
+         <offset>0</offset>
+      </param>
+      <param>
+         <order>1</order>
+         <name>n</name>
+         <min>32</min>
+         <max>4096</max>
+         <stride>32</stride>
+         <offset>0</offset>
+      </param>
+   </parameters>
+   <construction>
+      <method>gbbp</method>
+      <min_sample_num>5</min_sample_num>
+      <min_sample_time>120</min_sample_time>
+   </construction>
+   <condition>now</condition>
+   <priority>30</priority>
+</routine>
+    \end{lstlisting}
+
+    \chapter{Building the FPM of a Computation}
+    \label{bench_chap}
+    This chapter outlines what a user must do to have PMM build the FPM of some
+    computation. The computation may be a library subroutine, a code
+    fragment or an entire process. Throughout this document this computation
+    will be referred to as a \emph{routine}. The users routine must be wrapped
+    in a benchmarking binary or script which should behave in a specific
+    manner:
+
+    \begin{itemize}
+        \item It must accept arguments from the command line which define
+            the volume of computations it must carry out.
+        \item It must execute and time the computation that is to be modeled.
+            Execution may be via a script or compiled binary, written in any
+            language, and the details of how it perform or times the
+            computation do not concern the PMM tool. If the benchmark is written
+            in C/C++, PMM provides some utilities to aid this in a shared
+            library, \verb+libpmm+.
+        \item It must output timing and volume of computations (complexity) in
+            a standard manner. \verb+libpmm+ also supports this.
+    \end{itemize}
+
+    Implementation of this benchmark is a task left to the user. The following
+    sections describe how to choose input parameters, write the benchmark and
+    configure PMM to build a FPM for the routine.
+
+    \section{Choosing Parameters of a Routine}
+
+    The first step a user must take is to identify the parameters of the
+    routine which effect the volume of computations it must carry out.
+    Typically, the volume of computations would be floating point operation
+    count, however PMM is agnostic to the type of computations the routine
+    carries out, and the volume may be expressed as the user wishes.
+    The performance model that we build will be expressed in terms of these
+    parameters. Throughout this chapter we will refer to an example of a square
+    matrix multiplication. In this scenario, there is only one parameter that
+    effects the volume of computations, $N$, the length of a matrix side in the
+    multiplication.
+
+    For a more general case, were two matrices of sizes $N \times K$ and $K
+    \times M$ are multiplied and the result stored in an third matrix of size
+    $N \times M$, then the volume of computations would depend on three
+    parameters, $N$, $M$ and $K$.
+
+    A general purpose matrix multiplication routine usually has other
+    associated parameters defining transpositions of the input data and other
+    coefficients. These however do not contribute significantly to the
+    computational complexity of the routine and they should not be considered
+    as parameters of the model in the PMM framework. It is important to note
+    than building an FPM which is in terms of more than one parameter is very
+    intensive as the number of points required to accurately approximate scales
+    exponentially with the number of parameters the model is in terms of. Any
+    parameters of a routine that can be excluded from the functional
+    performance model should be.
+
+    \section{Writing a Benchmark for PMM} \label{chap:writingbench}
+
+    For PMM to build the performance model of a routine, it must be able to
+    execute benchmarks of that routine for various problem sizes. As previously
+    stated, the problem's size is determined by the parameters which effect the
+    computational complexity of the routine, and the performance model is a
+    function of these parameters.
+    
+    PMM must be provided with an executable which carries out a benchmark with
+    given input parameters.  The user must write this executable so that it
+    behaves in a specified way. PMM is distributed with the source of a number
+    of example benchmarks, here we will list one and reference it as the
+    required behaviours are described below. Listing \ref{square_mxm_code}
+    shows an example benchmark for a square matrix multiplication routine. The
+    multiplication is provided by the Gnu Scientific Library. Note in a square
+    matrix multiplication, the volume of computations is determined by the size
+    of one side of matrices to be multiplied.
+
+    The benchmark code behaves in the following manner:
+
+    \begin{itemize}
+        \item The executable must accept a number of parameters on the command
+            line. These parameters will also be described in the configuration
+            entry for the routine. As of version 0.0.1 parameters can only have
+            integer types. (Lines 17-23)
+        \item Based on the parameters passed on the command line, the benchmark
+            must initialise memory and data structures that are to be passed to
+            the routine. If the computation that is to be modelled is just a
+            simple code fragment, no allocation of memory that occurs within
+            the code fragment should be done in this initialisation phase. (Lines 29-35)
+        \item The benchmark must start a timer, either using timers provided by
+            the PMM shared library, libpmm, or using his own methods (Lines
+            38-41)
+        \item The benchmark must execute the routine directly after timing is
+            initiated (Line 44)
+        \item the benchmark must stop timing directly after the routine has
+            finished (Line 47)
+        \item the benchmark must print on a single line, to \verb+stdout+, the
+            seconds and microseconds, separated by a single space, elapsed
+            during the routine execution. This can be done using a function
+            provided by libpmm or the users own method. (Line 50)
+        \item the benchmark must print on a new line, the volume
+            of computations made by the routine (typically the number of
+            floating point operations carried out). Long long integers are
+            supported.  (Lines 26,38,50)
+        \item on successful completion of the above operations, the benchmark
+            should terminate and return successful exit status, PMM expects
+            this to be equivalent to \verb+EXIT_SUCCESS+ as defined by the C
+            standard. (Line 59)
+    \end{itemize}
+
+    Listing \ref{square_mxm_code} shows an example benchmark for a square
+    matrix multiplication routine provided by GSL. The inline comments refer to
+    each of the points made above
+
+    \begin{lstlisting}[style=c_code,caption=Square Matrix Multiplication Benchmark,label=square_mxm_code]
+#include <stdlib.h>
+#include <stdio.h>
+#include "pmm_util.h"
+#include <gsl/gsl_blas.h>
+
+#define NARGS 1
+
+int main(int argc, char **argv) {
+
+	/* declare variables */
+	gsl_matrix *A, *B, *C;
+	double arg;
+	size_t n;
+	long long int c;
+
+	/* parse arguments */
+	if(argc != NARGS+1) {
+		return PMM_EXIT_ARGFAIL;
+	}
+	if(sscanf(argv[1], "%lf", &arg) == 0) {
+		return PMM_EXIT_ARGPARSEFAIL;
+	}
+	n = (size_t)arg;
+
+	/* calculate complexity */
+	c = 2*n*n*(long long int)n;
+
+	/* initialise data */
+	A = gsl_matrix_alloc(n, n);
+	B = gsl_matrix_alloc(n, n);
+	C = gsl_matrix_alloc(n, n);
+
+	gsl_matrix_set_all(A, 2.5);
+	gsl_matrix_set_all(B, 4.9);
+	gsl_matrix_set_zero(C);
+
+	/* initialise timer */
+	pmm_timer_init(c);
+
+	/* start timer */
+	pmm_timer_start();
+
+	/* execute routine */
+	gsl_blas_dgemm(CblasNoTrans, CblasNoTrans, 1.0, A, B, 0.0, C);
+
+	/* stop timer */
+	pmm_timer_stop();
+
+	/* get timing result */
+	pmm_timer_result();
+
+	/* destroy timer */
+	pmm_timer_destroy();
+
+	gsl_matrix_free(A);
+	gsl_matrix_free(B);
+	gsl_matrix_free(C);
+
+	return PMM_EXIT_SUCCESS;
+}
+    \end{lstlisting}
+
+    \section{Configuring the Benchmark in PMM}
+
+    For now, use the example configurations as a template. Small parameter
+    strides should be avoided as they make naive/optimised construction very
+    slow.
+
+    \include{fdl-1.3}
+
+\end{document}
+

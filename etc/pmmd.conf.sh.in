@@ -1,0 +1,251 @@
+#!/bin/sh
+#
+# This is a simple script that generates the default config file for PMM based
+# on options set and ./configure time (i.e. --enable-benchgslblas etc.)
+#
+
+ENABLE_OCTAVE=@ENABLE_OCTAVE@
+BENCHGSLBLAS=@BENCHGSLBLAS@
+BENCHGOTOBLAS2=@BENCHGOTOBLAS2@
+
+echo "<?xml version=\"1.0\"?>
+
+<config>
+
+    <main_sleep_period>1</main_sleep_period>
+
+    <model_write_time_threshold>60</model_write_time_threshold>
+    <model_write_execs_threshold>20</model_write_execs_threshold>
+
+	<load_monitor>
+		<load_path>@LOCALSTATEDIR@/loadhistory</load_path>
+		<write_period>60</write_period>
+		<history_size>60</history_size>
+	</load_monitor>
+
+	<routine>
+		<name>dgemm_sim_cpu</name>
+		<exe_path>@ROUTINESDIR@/dgemm_sim_cpu.sh</exe_path>
+		<model_path>@LOCALSTATEDIR@/dgemm_sim_cpu_model</model_path>
+		<parameters>
+			<n_p>1</n_p>
+			<param>
+				<order>0</order>
+				<name>k</name>
+				<min>16</min>
+				<max>4080</max>
+                <stride>16</stride>
+                <fuzzy_max>true</fuzzy_max>
+			</param>
+		</parameters>
+		
+		<condition>now</condition>
+		<priority>40</priority>
+		<construction>
+			<method>gbbp</method>
+		</construction>
+	</routine>
+	<routine>
+		<name>dgemm_sim_gpu</name>
+		<exe_path>@ROUTINESDIR@/dgemm_sim_gpu.sh</exe_path>
+		<model_path>@LOCALSTATEDIR@/dgemm_sim_gpu_model</model_path>
+		<parameters>
+			<n_p>1</n_p>
+			<param>
+				<order>0</order>
+				<name>k</name>
+				<min>16</min>
+				<max>4080</max>
+                <stride>16</stride>
+                <fuzzy_max>true</fuzzy_max>
+			</param>
+		</parameters>
+		
+		<condition>now</condition>
+		<priority>40</priority>
+		<construction>
+			<method>gbbp</method>
+		</construction>
+	</routine>
+    "
+
+if [ "$BENCHGSLBLAS" = "yes" ]; then
+    echo "
+	<routine>
+		<name>dgemm</name>
+		<exe_path>@ROUTINESDIR@/dgemm</exe_path>
+		<model_path>@LOCALSTATEDIR@/dgemm_model</model_path>
+		<parameters>
+			<n_p>1</n_p>
+			<param>
+				<order>0</order>
+				<name>n</name>
+				<min>50</min>
+				<max>3000</max>
+                <stride>50</stride>
+                <fuzzy_max>true</fuzzy_max>
+			</param>
+		</parameters>
+		
+		<condition>now</condition>
+		<priority>20</priority>
+		<construction>
+			<method>gbbp</method>
+		</construction>
+	</routine>
+"
+    if [ "$ENABLE_OCTAVE" = "yes" ]; then
+        echo "
+	<routine>
+		<name>dgemm2</name>
+		<exe_path>@ROUTINESDIR@/dgemm2</exe_path>
+		<model_path>@LOCALSTATEDIR@/dgemm2_model</model_path>
+		<parameters>
+			<n_p>2</n_p>
+			<param>
+				<order>0</order>
+				<name>m</name>
+				<min>50</min>
+				<max>1000</max>
+                <stride>50</stride>
+                <offset>0</offset>
+			</param>
+			<param>
+				<order>1</order>
+				<name>n</name>
+				<min>50</min>
+				<max>1000</max>
+                <stride>50</stride>
+                <offset>0</offset>
+			</param>
+		</parameters>
+		<condition>now</condition>
+		<priority>30</priority>
+		<construction>
+			<method>gbbp</method>
+            <min_sample_num>5</min_sample_num>
+            <min_sample_time>120</min_sample_time>
+		</construction>
+	</routine>
+	<routine>
+		<name>dgemm2_naive</name>
+		<exe_path>@ROUTINESDIR@/dgemm2</exe_path>
+		<model_path>@LOCALSTATEDIR@/dgemm2_naive_model</model_path>
+		<parameters>
+			<n_p>2</n_p>
+			<param>
+				<order>0</order>
+				<name>m</name>
+				<min>50</min>
+				<max>1000</max>
+                <stride>50</stride>
+                <offset>0</offset>
+			</param>
+			<param>
+				<order>1</order>
+				<name>n</name>
+				<min>50</min>
+				<max>1000</max>
+                <stride>50</stride>
+                <offset>0</offset>
+			</param>
+		</parameters>
+		<condition>now</condition>
+		<priority>25</priority>
+		<construction>
+			<method>gbbp</method>
+            <min_sample_num>5</min_sample_num>
+            <min_sample_time>120</min_sample_time>
+		</construction>
+	</routine>
+	<routine>
+		<name>dgemm3</name>
+		<exe_path>@ROUTINESDIR@/dgemm3</exe_path>
+		<model_path>@LOCALSTATEDIR@/dgemm3_model</model_path>
+		<parameters>
+			<n_p>3</n_p>
+			<param>
+				<order>0</order>
+				<name>n</name>
+				<min>5</min>
+				<max>1000</max>
+                <stride>5</stride>
+                <offset>0</offset>
+			</param>
+			<param>
+				<order>1</order>
+				<name>k</name>
+				<min>5</min>
+				<max>1000</max>
+                <stride>5</stride>
+                <offset>0</offset>
+			</param>
+			<param>
+				<order>2</order>
+				<name>m</name>
+				<min>5</min>
+				<max>1000</max>
+                <stride>5</stride>
+                <offset>0</offset>
+			</param>
+		</parameters>
+		<condition>now</condition>
+		<priority>20</priority>
+		<construction>
+			<method>gbbp</method>
+            <min_sample_num>5</min_sample_num>
+            <min_sample_time>120</min_sample_time>
+		</construction>
+	</routine>
+    "
+fi
+    echo "
+	<routine>
+		<name>dsyrk</name>
+		<exe_path>@ROUTINESDIR@/dsyrk</exe_path>
+		<model_path>@LOCALSTATEDIR@/dsyrk_model</model_path>
+		<parameters>
+			<n_p>1</n_p>
+			<param>
+			<order>0</order>
+				<name>n</name>
+				<min>50</min>
+				<max>3000</max>
+                <stride>50</stride>
+			</param>
+		</parameters>
+		<condition>now</condition>
+		<priority>20</priority>
+		<construction>
+			<method>gbbp</method>
+		</construction>
+	</routine>"
+fi
+
+if [ "$BENCHGOTO2BLAS" = "yes" ]; then
+    echo "
+	<routine>
+		<name>gotoblas2_dgemm</name>
+		<exe_path>@ROUTINESDIR@/gotoblas2_dgemm</exe_path>
+		<model_path>@LOCALSTATEDIR@/gotoblas2_dgemm_model</model_path>
+		<parameters>
+			<n_p>1</n_p>
+			<param>
+				<order>0</order>
+				<name>n</name>
+				<min>1</min>
+				<max>3000</max>
+                <fuzzy_max>true<fuzzy_max>
+			</param>
+		</parameters>
+		
+		<condition>now</condition>
+		<priority>30</priority>
+		<construction>
+			<method>gbbp</method>
+		</construction>
+	</routine>"
+fi
+
+echo "
+</config>"

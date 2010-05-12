@@ -1,0 +1,62 @@
+The only reason PMM has a dependencey on octave is to use the n-dimensional
+interpolation function 'griddatan' that octave provides. In a future release
+this functionality chould be implemented within PMM itself. This should be
+considered because: a.) octave is a rather large package to require, b.) the
+functionality delivered is implemented by spawning an octave interprative
+session and calling the function via that session, this clearly involves
+significant overhead and c.) octave itself uses Qhull to provide the basis
+of the n-dimensional interpolation, so the hoops that must be jumped through
+to use octave could be avoided.
+
+Implementing n-dimensional interpolation inside PMM would require a moderate
+amount of time. The interface to Qhull is complex and the that algorithms 
+achieve the interploation would have to be carefully translated from 
+octave/matlab's scripting language to C
+
+
+Overview of griddatan.m (octave script)
+
+input n-dimensional matrix x describing coordinates, matching y column matrix
+describing values at coordinates and xi, a matrix of the same dimension as
+x describing the interpolation points (only 1 point makes this a row vector)
+
+- find the delaunay triangluation of x
+  each triangle is defined in terms of it vertecies, as a list of indexes of x
+
+- search for enclosing triangle of every xi point
+  return index of triangle that encloses each xi and the barycentric coordinate
+  of that point
+
+- use barycentric coordinate to calculate yi, the interpolation of xi
+
+
+psuedo code translation of griddatan.m function
+
+inputs :
+  x - an n dimensional matrix containting data points
+  y - a column vector containing values for corresponding data points
+  xi - a row vector containing an interpolation point
+
+output
+  yi - interpolated value at xi
+
+
+
+algorithm
+
+m - number of datapoints
+n - dimension of data points
+mi - number of interpolation points
+ni - dimension of interpolation point
+
+if( n not equal ni) //inpolated points must have same dimension as data points
+   fail
+if( size y not equal m) //number of data points must be same as number of values
+    fail
+
+
+  //triangulate data
+
+  //initialize yi as null
+
+

@@ -1,0 +1,20 @@
+To bootstrap the PMM project the following tool versions are required:
+
+aclocal >=?
+autoconf >=2.60
+automake >=1.11
+libtool >=2.2.6
+?compiler? >= ? probably gcc, probably 4.x
+
+Run ./bootstrap from the base directory to prepare the project for configuration
+and building.
+
+Consider ./configuring with arguments:
+
+    --enable-maintainer-mode
+    --enable-debug
+
+To build a distribution of this software you will need latex tools to create
+the manual and doxygen to create the api documentation.
+
+Questions to Robert Higgins <robert.higgins@ucd.ie>
