@@ -15,7 +15,7 @@ int main(void) {
    struct pmm_config *cfg;
    struct pmm_benchmark *b;
 
-   long long int p[2];
+   int p[2];
 
    cfg = new_config();
 
@@ -36,7 +36,7 @@ int main(void) {
 
     b = lookup_model(cfg->routines[1]->model, p);
 
-    printf("Interpolation of %lld, %lld:\n", p[0], p[1]);
+    printf("Interpolation of %d, %d:\n", p[0], p[1]);
 
     print_benchmark(b);
 

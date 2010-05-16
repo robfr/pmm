@@ -26,18 +26,18 @@
 
 
 /*
-long long int gbbp_select_new_bench(struct pmm_routine *r);
-long long int gbbp_bench_from_interval(struct pmm_routine *r,
+int gbbp_select_new_bench(struct pmm_routine *r);
+int gbbp_bench_from_interval(struct pmm_routine *r,
 		                               struct pmm_interval *i);
 void gbbp_insert_bench(struct pmm_loadhistory *h, struct pmm_routine *r,
 		                   struct pmm_benchmark *b);
-long long int naive_select_new_bench(struct pmm_routine *r);
+int naive_select_new_bench(struct pmm_routine *r);
 */
 
-long long int* multi_random_select_new_bench(struct pmm_routine *r);
-long long int rand_between(long long int min, long long int max);
+int* multi_random_select_new_bench(struct pmm_routine *r);
+int rand_between(int min, int max);
 
-long long int*
+int*
 multi_naive_select_new_bench(struct pmm_routine *r);
 int
 multi_naive_insert_bench(struct pmm_routine *r, struct pmm_benchmark *b);
@@ -45,17 +45,17 @@ int
 naive_process_interval_list(struct pmm_routine *r, struct pmm_benchmark *b);
 
 
-long long int*
+int*
 multi_gbbp_diagonal_select_new_bench(struct pmm_routine *r);
 int
 init_gbbp_diagonal_interval(struct pmm_routine *r);
 int
 project_diagonal_intervals(struct pmm_model *m);
 struct pmm_interval*
-new_projection_interval(long long int *p, struct pmm_paramdef *pd, int d,
+new_projection_interval(int *p, struct pmm_paramdef *pd, int d,
                          int n);
 
-long long int* multi_gbbp_select_new_bench(struct pmm_routine *r);
+int* multi_gbbp_select_new_bench(struct pmm_routine *r);
 int
 init_gbbp_boundary_intervals(struct pmm_routine *r);
 int multi_gbbp_insert_bench(struct pmm_loadhistory *h, struct pmm_routine *r,
@@ -84,18 +84,18 @@ int
 is_interval_divisible(struct pmm_interval *i, struct pmm_routine *r);
 
 void
-set_params_step_along_climb_interval(long long int *params, int step, 
+set_params_step_along_climb_interval(int *params, int step, 
                              struct pmm_interval *i,
                              struct pmm_paramdef *pd_array, int n_p);
 int
 multi_gbbp_bench_from_interval(struct pmm_routine *r,
 		                       struct pmm_interval *interval,
-                               long long int *params);
+                               int *params);
 void
-set_params_interval_midpoint(long long int *p, struct pmm_interval *i);
+set_params_interval_midpoint(int *p, struct pmm_interval *i);
 
 void mesh_boundary_models(struct pmm_model *m);
-void recurse_mesh(struct pmm_model *m, long long int *p, int plane, int n_p);
+void recurse_mesh(struct pmm_model *m, int *p, int plane, int n_p);
 
 #endif /*PMM_SELECTOR_H_*/
 

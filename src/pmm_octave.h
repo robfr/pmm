@@ -59,10 +59,10 @@ struct pmm_octave_data*
 fill_octave_input_matrices(struct pmm_model *m);
 
 double
-octave_interpolate(struct pmm_octave_data *oct_data, long long int *p, int n);
+octave_interpolate(struct pmm_octave_data *oct_data, int *p, int n);
 
 struct pmm_benchmark*
-interpolate_griddatan(struct pmm_model *m, long long int *p);
+interpolate_griddatan(struct pmm_model *m, int *p);
 
 
 

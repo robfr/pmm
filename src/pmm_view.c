@@ -840,7 +840,7 @@ set_plot_labels_ranges(gnuplot_ctrl *plot_handle, struct pmm_model *model,
         gnuplot_set_xlabel(plot_handle,
                            model->parent_routine->paramdef_array[0].name);
 
-        gnuplot_cmd(plot_handle, "set xrange[0:%lld]",
+        gnuplot_cmd(plot_handle, "set xrange[0:%d]",
                     model->parent_routine->paramdef_array[0].max);
 
         ret = asprintf(plot_title_buf, "%s model", model->parent_routine->name);
@@ -872,10 +872,10 @@ set_splot_labels_ranges(gnuplot_ctrl *plot_handle, struct pmm_model *model,
         gnuplot_set_ylabel(plot_handle,
                            model->parent_routine->paramdef_array[1].name);
 
-        gnuplot_cmd(plot_handle, "set xrange[0:%lld]",
+        gnuplot_cmd(plot_handle, "set xrange[0:%d]",
                     model->parent_routine->paramdef_array[0].max);
 
-        gnuplot_cmd(plot_handle, "set yrange[0:%lld]",
+        gnuplot_cmd(plot_handle, "set yrange[0:%d]",
                     model->parent_routine->paramdef_array[1].max);
 
         ret = asprintf(plot_title_buf, "%s model", model->parent_routine->name);
@@ -1040,7 +1040,7 @@ bench_in_slice(struct pmm_view_options *options, struct pmm_benchmark *b)
 
     for(i=0; i<options->slice_arr_size; i++) {
 
-        DBGPRINTF("i:%d slice_i_arr[i]:%d b-p[]:%lld slice_val:%lld\n",
+        DBGPRINTF("i:%d slice_i_arr[i]:%d b-p[]:%d slice_val:%d\n",
                   i, options->slice_i_arr[i], b->p[options->slice_i_arr[i]],
                   options->slice_val_arr[i]);
 

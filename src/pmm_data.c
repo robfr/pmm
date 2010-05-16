@@ -635,7 +635,7 @@ int is_benchmark_at_origin(int n, struct pmm_paramdef *pd_array,
 	}
 
 	for(i=0; i<n; i++) {
-        LOGPRINTF("b->p[%d]:%lld paramdef[%d].min:%lld\n", i, b->p[i], i,
+        LOGPRINTF("b->p[%d]:%d paramdef[%d].min:%d\n", i, b->p[i], i,
                   pd_array[i].min);
 		if(b->p[i] != pd_array[i].min) {
 			return 0;
@@ -774,7 +774,7 @@ benchmark_on_axis(struct pmm_model *m,
  * if on all axes (i.e. at origin), or -2 if on no boundaries
  */
 int
-param_on_axis(long long int *p,
+param_on_axis(int *p,
               int n,
               struct pmm_paramdef *pd_array)
 {
@@ -843,10 +843,10 @@ copy_paramdef(struct pmm_paramdef *dst, struct pmm_paramdef *src)
  *
  * @return  pointer to an array of parameters with all minimum values of size n
  */
-long long int*
+int*
 init_param_array_min(struct pmm_paramdef *pd_array, int n)
 {
-    long long int *p;
+    int *p;
 
     p = malloc(n * sizeof *p);
     if(p == NULL) {
@@ -868,10 +868,10 @@ init_param_array_min(struct pmm_paramdef *pd_array, int n)
  *
  * @return  pointer to an array of parameters with all minimum values of size n
  */
-long long int*
+int*
 init_param_array_max(struct pmm_paramdef *pd_array, int n)
 {
-    long long int *p;
+    int *p;
 
     p = malloc(n * sizeof *p);
     if(p == NULL) {
@@ -896,7 +896,7 @@ init_param_array_max(struct pmm_paramdef *pd_array, int n)
  * p array must be identical to the number of parameter definitions
  */
 void
-set_param_array_min(long long int *p, struct pmm_paramdef *pd_array, int n)
+set_param_array_min(int *p, struct pmm_paramdef *pd_array, int n)
 {
     int i;
 
@@ -919,7 +919,7 @@ set_param_array_min(long long int *p, struct pmm_paramdef *pd_array, int n)
  * p array must be identical to the number of parameter definitions
  */
 void
-set_param_array_max(long long int *p, struct pmm_paramdef *pd_array, int n)
+set_param_array_max(int *p, struct pmm_paramdef *pd_array, int n)
 {
     int i;
 
@@ -940,10 +940,10 @@ set_param_array_max(long long int *p, struct pmm_paramdef *pd_array, int n)
  * @return  pointer to copied parameter array or NULL on failure
  *
  */
-long long int*
-init_param_array_copy(long long int *src, int n)
+int*
+init_param_array_copy(int *src, int n)
 {
-    long long int *dst;
+    int *dst;
 
 
     dst = malloc(n * sizeof *dst);
@@ -969,7 +969,7 @@ init_param_array_copy(long long int *src, int n)
  * @pre src and dst arrays are of the same size (n)
  */
 void
-set_param_array_copy(long long int *dst, long long int *src, int n)
+set_param_array_copy(int *dst, int *src, int n)
 {
     int i;
 
@@ -999,10 +999,10 @@ set_param_array_copy(long long int *dst, long long int *src, int n)
  * & offset describing the parameter sequence.
  * 
  */
-long long int
-align_param(long long int param, struct pmm_paramdef *pd)
+int
+align_param(int param, struct pmm_paramdef *pd)
 {
-    long long int aligned;
+    int aligned;
     //int max_exceeded = 0;
 
     // if stride is 1 we can return the parameter as it will always be aligned
@@ -1055,7 +1055,7 @@ align_param(long long int param, struct pmm_paramdef *pd)
 
     // if aligned parameter is greater than the max
     if(aligned >= pd->max) {
-        //DBGPRINTF("greater than max:%lld\n", aligned);
+        //DBGPRINTF("greater than max:%d\n", aligned);
         aligned = pd->max;
 
         /*
@@ -1072,35 +1072,35 @@ align_param(long long int param, struct pmm_paramdef *pd)
     }
 
     if(aligned < pd->min) { // if aligned parameter is less than min
-        //DBGPRINTF("less than min: %lld\n", aligned);
+        //DBGPRINTF("less than min: %d\n", aligned);
         aligned = pd->min; //set to min
     }
 
 
-    //DBGPRINTF("param:%lld aligned:%lld\n", param, aligned);
+    //DBGPRINTF("param:%d aligned:%d\n", param, aligned);
 
     return aligned;
 }
 
 void
-align_params(long long int *params, struct pmm_paramdef *pd_array, int n_p)
+align_params(int *params, struct pmm_paramdef *pd_array, int n_p)
 {
     int i;
 
     //DBGPRINTF("n_p:%d\n", n_p);
 
     for(i=0; i<n_p; i++) {
-        //DBGPRINTF("params[%d]:%lld\n", i, params[i]);
+        //DBGPRINTF("params[%d]:%d\n", i, params[i]);
         params[i] = align_param(params[i], &(pd_array[i]));
     }
 
     return;
 }
 
-long long int*
-init_aligned_params(long long int *p, struct pmm_paramdef *pd_array, int n_p)
+int*
+init_aligned_params(int *p, struct pmm_paramdef *pd_array, int n_p)
 {
-    long long int *aligned_p;
+    int *aligned_p;
 
     aligned_p = init_param_array_copy(p, n_p);
     if(aligned_p == NULL) {
@@ -1418,7 +1418,7 @@ int flops_to_time_t(struct pmm_benchmark *b) {
  */
 struct pmm_benchmark*
 get_avg_bench_from_sorted_bench_list(struct pmm_benchmark *start,
-                                     long long int *param)
+                                     int *param)
 {
     struct pmm_benchmark *first_match, *last_match, *ret_b;
 
@@ -1472,7 +1472,7 @@ get_avg_bench_from_sorted_bench_list(struct pmm_benchmark *start,
  */
 int
 get_sublist_from_bench_list(struct pmm_bench_list *bl,
-                            long long int *param,
+                            int *param,
                             struct pmm_benchmark **first,
                             struct pmm_benchmark **last)
 {
@@ -1510,7 +1510,7 @@ get_sublist_from_bench_list(struct pmm_bench_list *bl,
 int
 search_sorted_bench_list(int direction,
                          struct pmm_benchmark *start,
-                         long long int *param,
+                         int *param,
                          int n_p,
                          struct pmm_benchmark **first,
                          struct pmm_benchmark **last)
@@ -1980,7 +1980,7 @@ isequal_paramdef(struct pmm_paramdef *a, struct pmm_paramdef *b)
  */
 struct pmm_benchmark*
 get_first_bench_from_bench_list(struct pmm_bench_list *bl,
-		                        long long int *p)
+		                        int *p)
 {
 	struct pmm_benchmark *b;
 
@@ -2012,7 +2012,7 @@ get_first_bench_from_bench_list(struct pmm_bench_list *bl,
  * @pre arrays must be of the same length and not NULL
  *
  */
-int params_cmp(long long int *p1, long long int *p2, int n)
+int params_cmp(int *p1, int *p2, int n)
 {
 	int i;
 
@@ -2084,7 +2084,7 @@ isequal_benchmarks(struct pmm_benchmark *b1, struct pmm_benchmark *b2)
  * model has been built in terms of
  */
 struct pmm_benchmark*
-get_first_bench(struct pmm_model *m, long long int *p)
+get_first_bench(struct pmm_model *m, int *p)
 {
 
 	struct pmm_benchmark *b;
@@ -2113,9 +2113,9 @@ get_first_bench(struct pmm_model *m, long long int *p)
  * model has been built in terms of
  */
 struct pmm_benchmark*
-get_avg_aligned_bench(struct pmm_model *m, long long int *param)
+get_avg_aligned_bench(struct pmm_model *m, int *param)
 {
-    long long int *p_aligned;
+    int *p_aligned;
     struct pmm_benchmark *b;
 
     b = (void*)NULL;
@@ -2150,7 +2150,7 @@ get_avg_aligned_bench(struct pmm_model *m, long long int *param)
  * model has been built in terms of
  */
 struct pmm_benchmark*
-get_avg_bench(struct pmm_model *m, long long int *p)
+get_avg_bench(struct pmm_model *m, int *p)
 {
 	struct pmm_benchmark *b;
 
@@ -2177,7 +2177,7 @@ get_avg_bench(struct pmm_model *m, long long int *p)
  * described by param
  */
 void
-calc_bench_exec_stats(struct pmm_model *m, long long int *param,
+calc_bench_exec_stats(struct pmm_model *m, int *param,
                       double *time_spent, int *num_execs)
 {
 	struct pmm_benchmark *b;
@@ -2232,7 +2232,7 @@ calc_bench_exec_stats(struct pmm_model *m, long long int *param,
  * benchmarks found and removed
  */
 int
-remove_benchmarks_at_param(struct pmm_model *m, long long int *p,
+remove_benchmarks_at_param(struct pmm_model *m, int *p,
                            struct pmm_benchmark ***removed_array)
 {
     int n, c;
@@ -2296,7 +2296,7 @@ remove_benchmarks_at_param(struct pmm_model *m, long long int *p,
  * NULL on error
  */
 struct pmm_benchmark *
-find_oldapprox(struct pmm_model *m, long long int *p)
+find_oldapprox(struct pmm_model *m, int *p)
 {
     struct pmm_benchmark *b;
     struct pmm_benchmark **removed_benchmarks_array; //array of pointers
@@ -2327,7 +2327,7 @@ find_oldapprox(struct pmm_model *m, long long int *p)
  * data at the point given by the array p (parameter values)
  *
  */
-struct pmm_benchmark* lookup_model(struct pmm_model *m, long long int *p)
+struct pmm_benchmark* lookup_model(struct pmm_model *m, int *p)
 {
 	struct pmm_benchmark *b;
 
@@ -2365,7 +2365,7 @@ struct pmm_benchmark* lookup_model(struct pmm_model *m, long long int *p)
  */
 struct pmm_benchmark*
 interpolate_1d_model(struct pmm_bench_list *bl,
-                     long long int *p)
+                     int *p)
 {
     struct pmm_benchmark *b, *cur;
 
@@ -2420,7 +2420,7 @@ interpolate_1d_model(struct pmm_bench_list *bl,
                 // yb = m(xb - x1) + y1
                 //
 				{
-					long long int x1, x2, xb;
+					int x1, x2, xb;
 					double y1, y2, yb;
 
 					double m;
@@ -2438,7 +2438,7 @@ interpolate_1d_model(struct pmm_bench_list *bl,
 
 					b->flops = yb;
 
-                    DBGPRINTF("interploated between %lld and %lld to %f\n",
+                    DBGPRINTF("interploated between %d and %d to %f\n",
                              x1, x2, b->flops);
                     return b;
 
@@ -2664,8 +2664,8 @@ int bench_cut_less(struct pmm_loadhistory *h, struct pmm_benchmark *b1,
 struct pmm_interval* init_interval(int plane,
                                   int n_p,
                                   enum pmm_interval_type type,
-                                  long long int *start,
-                                  long long int *end)
+                                  int *start,
+                                  int *end)
 {
     struct pmm_interval *i;
 
@@ -3083,9 +3083,9 @@ int interval_contains_bench(struct pmm_routine *r, struct pmm_interval *i,
  */
 /* TODO
 int
-is_collinear_params(long long int *a, long long int *b, long long int *c, int n)
+is_collinear_params(int *a, int *b, int *c, int n)
 {
-    long long int *d1, *d2, *c;
+    int *d1, *d2, *c;
 
     d1 = malloc
 
@@ -3182,12 +3182,12 @@ print_bench_list(struct pmm_bench_list *bl)
  *
  */
 void
-print_params(long long int *p, int n)
+print_params(int *p, int n)
 {
 	int i;
 
 	for(i=0; i<n; i++) {
-		LOGPRINTF("p[%d]: %lld\n", i, p[i]);
+		LOGPRINTF("p[%d]: %d\n", i, p[i]);
 	}
 }
 
@@ -3195,7 +3195,7 @@ void print_benchmark(struct pmm_benchmark *b) {
 	int i;
 
 	for(i=0; i<b->n_p; i++) {
-		printf("[print_benchmark] p[%d]: %lld\n", i, b->p[i]);
+		printf("[print_benchmark] p[%d]: %d\n", i, b->p[i]);
 	}
 	printf("[print_benchmark] flops: %f\n", b->flops);
 	printf("[print_benchmark] seconds: %f\n", b->seconds);
@@ -3243,8 +3243,8 @@ void print_paramdef(struct pmm_paramdef *pd)
 
 	printf("[print_paramdef]: order: %d\n", pd->order);
     printf("[print_paramdef]: fuzzy_max: %d\n", pd->fuzzy_max);
-	printf("[print_paramdef]: max: %lld\n", pd->max);
-	printf("[print_paramdef]: min: %lld\n", pd->min);
+	printf("[print_paramdef]: max: %d\n", pd->max);
+	printf("[print_paramdef]: min: %d\n", pd->min);
 	printf("[print_paramdef]: stride: %d\n", pd->stride);
 	printf("[print_paramdef]: offset: %d\n", pd->offset);
 }

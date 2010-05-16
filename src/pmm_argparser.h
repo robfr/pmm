@@ -39,7 +39,7 @@ typedef struct pmm_view_options {
     int plot_params_index;
 
     int *slice_i_arr;
-    long long int *slice_val_arr;
+    int *slice_val_arr;
     int slice_arr_size;
 
     char *model_file;

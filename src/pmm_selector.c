@@ -61,7 +61,7 @@
  * benchmark point based on that interval.
  */
 /*
-long long int gbbp_select_new_bench(struct pmm_routine *r) {
+int gbbp_select_new_bench(struct pmm_routine *r) {
 
 	struct pmm_interval *i;
 
@@ -105,10 +105,10 @@ long long int gbbp_select_new_bench(struct pmm_routine *r) {
  * point or NULL on error
  *
  */
-long long int*
+int*
 multi_naive_select_new_bench(struct pmm_routine *r)
 {
-    long long int *params;
+    int *params;
 
     struct pmm_interval_list *i_list;
     struct pmm_interval *new_i, *top_i;
@@ -271,7 +271,7 @@ naive_process_interval_list(struct pmm_routine *r, struct pmm_benchmark *b)
     struct pmm_model *m;
     struct pmm_interval *interval;
     struct pmm_interval *new_i;
-    long long int *aligned_params;
+    int *aligned_params;
     int i;
 
 
@@ -358,9 +358,9 @@ naive_process_interval_list(struct pmm_routine *r, struct pmm_benchmark *b)
  *     select a random parameter size based on the paramdef limits and return
  *
  */
-long long int* multi_random_select_new_bench(struct pmm_routine *r)
+int* multi_random_select_new_bench(struct pmm_routine *r)
 {
-    long long int *params;
+    int *params;
     int i;
 
 
@@ -409,7 +409,7 @@ long long int* multi_random_select_new_bench(struct pmm_routine *r)
 	return params;
 }
 
-long long int rand_between(long long int min, long long int max)
+int rand_between(int min, int max)
 {
 	if(min==max) {
 		return min;
@@ -421,15 +421,15 @@ long long int rand_between(long long int min, long long int max)
 		max = max-min; //max now equals original min
 	}
 
-	return (long long int)(rand()%(max-min))+min;
+	return (int)(rand()%(max-min))+min;
 
 }
 /*!
  */
-long long int*
+int*
 multi_gbbp_diagonal_select_new_bench(struct pmm_routine *r)
 {
-    long long int *params;
+    int *params;
 
 	struct pmm_interval_list *i_list;
 	struct pmm_interval *top_i, *new_i;
@@ -829,8 +829,7 @@ project_diagonal_intervals(struct pmm_model *m)
  *
  */
 struct pmm_interval*
-new_projection_interval(long long int *p, struct pmm_paramdef *pd, int d,
-                         int n)
+new_projection_interval(int *p, struct pmm_paramdef *pd, int d, int n)
                                  
 {
     struct pmm_interval *new_i;
@@ -891,10 +890,10 @@ new_projection_interval(long long int *p, struct pmm_paramdef *pd, int d,
  *
  *
  */
-long long int*
+int*
 multi_gbbp_select_new_bench(struct pmm_routine *r)
 {
-    long long int *params;
+    int *params;
 
 	struct pmm_interval_list *i_list;
 	struct pmm_interval *top_i, *new_i;
@@ -1127,7 +1126,7 @@ init_gbbp_boundary_intervals(struct pmm_routine *r)
 
 void mesh_boundary_models(struct pmm_model *m)
 {
-    long long int *params;
+    int *params;
     int n_p;
     int plane = 0;
 
@@ -1155,7 +1154,7 @@ void mesh_boundary_models(struct pmm_model *m)
 /*
  *
  */
-void recurse_mesh(struct pmm_model *m, long long int *p, int plane, int n_p)
+void recurse_mesh(struct pmm_model *m, int *p, int plane, int n_p)
 {
 
     /* TODO fix this to work without boundary models
@@ -1283,7 +1282,7 @@ process_interval_list(struct pmm_routine *r, struct pmm_benchmark *b,
 {
 
     struct pmm_interval *i, *i_prev;
-    long long int *temp_params;
+    int *temp_params;
     int done = 0, ret;
 
     i = r->model->interval_list->top;
@@ -1458,7 +1457,7 @@ process_it_gbbp_climb(struct pmm_routine *r, struct pmm_interval *i,
     struct pmm_model *m;
     struct pmm_interval *new_i;
     struct pmm_benchmark *b_avg, *b_left_0, *b_left_1, *b_left_2;
-    long long int *tmp_params;
+    int *tmp_params;
 
     m = r->model;
 
@@ -1552,7 +1551,7 @@ process_it_gbbp_climb(struct pmm_routine *r, struct pmm_interval *i,
         {
             DBGPRINTF("performance no longer climbing\n");
             DBGPRINTF("previous bench speeds:\n");
-            DBGPRINTF("%f@%lld %f@%lld %f@%lld\n",
+            DBGPRINTF("%f@%d %f@%d %f@%d\n",
                       b_left_0->flops, b_left_0->p[i->plane],
                       b_left_1->flops, b_left_1->p[i->plane],
                       b_left_2->flops, b_left_2->p[i->plane]);
@@ -1585,7 +1584,7 @@ process_it_gbbp_climb(struct pmm_routine *r, struct pmm_interval *i,
         else {
             DBGPRINTF("performance still climbing\n");
             DBGPRINTF("previous bench speeds:\n");
-            DBGPRINTF("%f@%lld %f@%lld %f@%lld\n",
+            DBGPRINTF("%f@%d %f@%d %f@%d\n",
                     b_left_0->flops, b_left_0->p[i->plane],
                     b_left_1->flops, b_left_1->p[i->plane],
                     b_left_2->flops, b_left_2->p[i->plane]);
@@ -1641,7 +1640,7 @@ process_it_gbbp_climb(struct pmm_routine *r, struct pmm_interval *i,
  * function is only intended to operate on IT_GBBP_CLIMB interval types
  */
 void
-set_params_step_along_climb_interval(long long int *params, int step, 
+set_params_step_along_climb_interval(int *params, int step, 
                              struct pmm_interval *i,
                              struct pmm_paramdef *pd_array, int n_p)
 {
@@ -1719,12 +1718,12 @@ set_params_step_along_climb_interval(long long int *params, int step,
         //             1 + (5/(300-1))*(1-1) = 
         //             1 + (5/(300-1))*(300-1) = 1+5 ...
 
-        DBGPRINTF("i->start[%d]:%lld i->end{%d]:%lld\n", j, i->start[j], j,
+        DBGPRINTF("i->start[%d]:%d i->end{%d]:%d\n", j, i->start[j], j,
                   i->end[j]);
-        DBGPRINTF("i->start[min_stride_i]:%lld i->end[min_stride_i]:%lld\n",
+        DBGPRINTF("i->start[min_stride_i]:%d i->end[min_stride_i]:%d\n",
                    i->start[min_stride_i], i->end[min_stride_i]);
 
-        DBGPRINTF("params[%d]:%lld\n", j, params[j]);
+        DBGPRINTF("params[%d]:%d\n", j, params[j]);
     }
 
     align_params(params, pd_array, n_p);
@@ -1747,7 +1746,7 @@ process_gbbp_bisect(struct pmm_routine *r, struct pmm_interval *i,
     struct pmm_interval *new_i;
     struct pmm_model *m;
     struct pmm_benchmark *b_avg, *b_oldapprox, *b_left, *b_right;
-    long long int *midpoint;
+    int *midpoint;
     int intersects_left, intersects_right;
 
     m = r->model;
@@ -2008,7 +2007,7 @@ process_gbbp_inflect(struct pmm_routine *r, struct pmm_interval *i,
     struct pmm_interval *new_i;
     struct pmm_model *m;
     struct pmm_benchmark *b_avg, *b_left, *b_right, *b_oldapprox;
-    long long int *midpoint;
+    int *midpoint;
     int intersects_left, intersects_right;
 
     m = r->model;
@@ -2273,8 +2272,8 @@ process_it_point(struct pmm_routine *r, struct pmm_interval *i)
 int
 is_interval_divisible(struct pmm_interval *i, struct pmm_routine *r)
 {
-    long long int *params;
-    long long int *start_aligned, *end_aligned;
+    int *params;
+    int *start_aligned, *end_aligned;
 
 
     switch (i->type) {
@@ -2347,7 +2346,7 @@ is_interval_divisible(struct pmm_interval *i, struct pmm_routine *r)
 int
 multi_gbbp_bench_from_interval(struct pmm_routine *r,
 		                       struct pmm_interval *interval,
-                               long long int *params)
+                               int *params)
 {
 
     //depending on interval type, set the param of the boundary plane
@@ -2424,7 +2423,7 @@ multi_gbbp_bench_from_interval(struct pmm_routine *r,
  * and end points set (IT_BISECT, IT_INFLECT)
  */
 void
-set_params_interval_midpoint(long long int *p, struct pmm_interval *i)
+set_params_interval_midpoint(int *p, struct pmm_interval *i)
 {
     int j;
 

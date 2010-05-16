@@ -744,7 +744,7 @@ parse_timeval_p(struct timeval *t, xmlDocPtr doc, xmlNodePtr node)
  *
  * @return 0 on succes, -1 on failure
  */
-int parse_parameter_array_p(long long int **p, int *n_p, xmlDocPtr doc, xmlNodePtr node)
+int parse_parameter_array_p(int **p, int *n_p, xmlDocPtr doc, xmlNodePtr node)
 {
 	char *key;
 	xmlNodePtr cnode;
@@ -2574,7 +2574,7 @@ write_paramdef_xtwp(xmlTextWriterPtr writer, struct pmm_paramdef *pd)
     }
 
     //add an element with name "min" and value of the min
-    rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "min", "%lld",
+    rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "min", "%d",
                                          pd->min);
     if (rc < 0) {
         ERRPRINTF("Error at xmlTextWriterWriteFormatElement (min)\n");
@@ -2582,7 +2582,7 @@ write_paramdef_xtwp(xmlTextWriterPtr writer, struct pmm_paramdef *pd)
     }
 
     //add an element with name "max" and value of the max
-    rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "max", "%lld",
+    rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "max", "%d",
                                          pd->max);
     if (rc < 0) {
         ERRPRINTF("Error at xmlTextWriterWriteFormatElement (max)\n");
@@ -2642,7 +2642,7 @@ write_paramdef_xtwp(xmlTextWriterPtr writer, struct pmm_paramdef *pd)
  * @return 0 on succes, -1 on failure
  */
 int
-write_parameter_array_xtwp(xmlTextWriterPtr writer, long long int *p, int n)
+write_parameter_array_xtwp(xmlTextWriterPtr writer, int *p, int n)
 {
     int rc;
     int i;
@@ -2666,7 +2666,7 @@ write_parameter_array_xtwp(xmlTextWriterPtr writer, long long int *p, int n)
     for(i=0; i<n; i++) {
         //add an element with name "parameter" and value of the param
         rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "parameter",
-                "%lld", p[i]);
+                "%d", p[i]);
         if (rc < 0) {
             ERRPRINTF("Error at xmlTextWriterWriteFormatElement "
                     "(parameter)\n");

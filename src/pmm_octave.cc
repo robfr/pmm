@@ -108,7 +108,7 @@ fill_octave_input_matrices(struct pmm_model *m)
 
 extern "C"
 double
-octave_interpolate(struct pmm_octave_data *oct_data, long long int *p, int n)
+octave_interpolate(struct pmm_octave_data *oct_data, int *p, int n)
 {
 
 	int i;
@@ -161,7 +161,7 @@ octave_interpolate(struct pmm_octave_data *oct_data, long long int *p, int n)
 		flops =  yi(0);
         DBGPRINTF("-------- INTERPOLATED FLOPS --------\n");
         for(i=0; i<n; i++) {
-            printf("p:%d:%lld ", i, p[i]);
+            printf("p:%d:%d ", i, p[i]);
         }
         printf("flops:%f (%f)\n", flops, yi(1));
 
@@ -176,7 +176,7 @@ octave_interpolate(struct pmm_octave_data *oct_data, long long int *p, int n)
 
 extern "C"
 struct pmm_benchmark*
-interpolate_griddatan(struct pmm_model *m, long long int *p)
+interpolate_griddatan(struct pmm_model *m, int *p)
 {
 	struct pmm_benchmark *ret_b;
 
@@ -206,7 +206,7 @@ interpolate_griddatan(struct pmm_model *m, long long int *p)
 	//fill xi and the return benchmark
 	ret_b = new_benchmark();
 	ret_b->n_p = m->n_p;
-	ret_b->p = (long long int*) malloc(ret_b->n_p * sizeof *(ret_b->p));
+	ret_b->p = (int*) malloc(ret_b->n_p * sizeof *(ret_b->p));
 
 	for(i=0; i<m->n_p; i++) {
 		xi(0, i) = p[i];

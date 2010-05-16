@@ -48,7 +48,7 @@ int
 write_paramdef_xtwp(xmlTextWriterPtr writer, struct pmm_paramdef *pd);
 
 int
-write_parameter_array_xtwp(xmlTextWriterPtr writer, long long int *p, int n);
+write_parameter_array_xtwp(xmlTextWriterPtr writer, int *p, int n);
 int write_interval_xtwp(xmlTextWriterPtr writer, struct pmm_interval *i);
 int write_timeval_xtwp(xmlTextWriterPtr writer, struct timeval *t);
 

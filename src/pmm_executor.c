@@ -61,8 +61,8 @@ extern pthread_mutex_t signal_quit_mutex;
 /* local functions */
 int my_popen(char *cmd, char **args, int n, pid_t *pid);
 int set_non_blocking(int fd);
-struct pmm_benchmark* parse_bench_output(char *output, int n_p,
-                                         long long int *rargs);
+struct pmm_benchmark* parse_bench_output(char *output, int n_p, int *rargs);
+                                         
 
 int read_benchmark_output(int fd, char **output_p, pid_t bench_pid);
 
@@ -198,15 +198,17 @@ void sig_childexit(int sig)
 
 //TODO seperate into seperate call
 //TODO permit detection of routine that benchmark pertains to
-struct pmm_benchmark* parse_bench_output(char *output, int n_p, long long int *rargs)
+struct pmm_benchmark* parse_bench_output(char *output, int n_p, int *rargs)
 {
 	struct timeval wall_t, used_t;
 	long long complexity;
 	int rc;
 	struct pmm_benchmark *b;
 
-	rc = sscanf(output, "%ld %ld\n%ld %ld\n%lld", &(wall_t.tv_sec), &(wall_t.tv_usec),
-	            &(used_t.tv_sec), &(used_t.tv_usec), &complexity);
+	rc = sscanf(output, "%ld %ld\n%ld %ld\n%lld", &(wall_t.tv_sec),
+                &(wall_t.tv_usec), &(used_t.tv_sec), &(used_t.tv_usec),
+                &complexity);
+	           
 	if(rc != 5) {
 		ERRPRINTF("Error parsing output\n");
 		return NULL;
@@ -277,7 +279,7 @@ double timeval_to_seconds(struct timeval tv)
  * spawned process, or -1 if there is an error
  */
 int
-spawn_benchmark_process(char *path, int n, long long int *params,
+spawn_benchmark_process(char *path, int n, int *params,
                         pid_t *bench_pid)
 {
 
@@ -293,10 +295,10 @@ spawn_benchmark_process(char *path, int n, long long int *params,
     arg_strings = malloc(n * sizeof *arg_strings);
     for(i=0; i<n; i++) {
 
-        arg_strings[i] = malloc((1+snprintf(NULL, 0, "%lld", params[i]))
+        arg_strings[i] = malloc((1+snprintf(NULL, 0, "%d", params[i]))
                 * sizeof *arg_strings[i]);
 
-        sprintf(arg_strings[i], "%lld", params[i]);
+        sprintf(arg_strings[i], "%d", params[i]);
 
     }
 
@@ -520,7 +522,7 @@ void *benchmark(void *scheduled_r) {
     int temp_ret;
 	struct pmm_routine *r;
 	struct pmm_benchmark *bmark;
-	long long int *rargs = NULL; //new benchmark point
+	int *rargs = NULL; //new benchmark point
 
     pid_t bench_pid;
     int bench_status;

@@ -347,14 +347,14 @@ parse_slice_str(char *slice_str, struct pmm_view_options *options)
 
     char *str_copy;
     const char *delimiters = ":,";
-    char *token, *endptr;
+    char *token;
     enum states {SLICE_PINDEX, SLICE_PVALUE} state;
 
 
     int i;
     int n; //number of tokens
     int p_index;
-    long long int p_value;
+    int p_value;
 
 
 
@@ -416,29 +416,14 @@ parse_slice_str(char *slice_str, struct pmm_view_options *options)
                 }
                 else {
 
-                    errno = 0;
-                    p_value = strtoll(token, &endptr, 10);
-
-                    if((errno == ERANGE && (p_value == LLONG_MAX ||
-                                    p_value == LLONG_MIN)))
-                    {
-                        ERRPRINTF("Out of range error.\n");
-                        free(str_copy);
-                        return -1;
-                    }
-
-                    if(endptr == token) {
-                        ERRPRINTF("No digits found in slice value token.\n");
-                        free(str_copy);
-                        return -1;
-                    }
+                    p_value = atoi(token);
 
                     options->slice_i_arr[i] = p_index;
                     options->slice_val_arr[i] = p_value;
                     i++;
                 }
 
-                DBGPRINTF("slice_i:%d slice_val:%lld i:%d\n",
+                DBGPRINTF("slice_i:%d slice_val:%d i:%d\n",
                            options->slice_i_arr[i-1],
                            options->slice_val_arr[i-1],
                            i-1);
