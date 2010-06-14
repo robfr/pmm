@@ -3681,7 +3681,8 @@ void print_config(struct pmm_config *cfg) {
 		printf("no\n");
 	}
 
-    printf("main sleep period: %ds %llds\n", cfg->ts_main_sleep_period.tv_sec,
+    printf("main sleep period: %ds %lds\n",
+                             (int) cfg->ts_main_sleep_period.tv_sec,
                                    cfg->ts_main_sleep_period.tv_nsec);
 	printf("log file: %s\n", cfg->logfile);
 	printf("config file: %s\n", cfg->configfile);
