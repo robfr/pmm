@@ -2,7 +2,7 @@
 #include "config.h"
 #endif
 
-#ifdef ENABLE_CONFIG
+#ifdef ENABLE_OCTAVE
 
 #include <stdio.h>
 
@@ -14,6 +14,7 @@ int main(void) {
 
    struct pmm_config *cfg;
    struct pmm_benchmark *b;
+   int i;
 
    int p[2];
 
@@ -31,10 +32,20 @@ int main(void) {
 
     print_config(cfg);
 
-    print_model(cfg->routines[1]->model);
+    for(i=0;i<cfg->used; i++) {
+        if(cfg->routines[i]->pd_set->n_p == 2) {
+            break;
+        }
+    }
+    if(i==cfg->used) {
+        printf("Could not find a 2-d routine.\n");
+        return -1;
+    }
+
+    print_model(cfg->routines[i]->model);
 
 
-    b = lookup_model(cfg->routines[1]->model, p);
+    b = lookup_model(cfg->routines[i]->model, p);
 
     printf("Interpolation of %d, %d:\n", p[0], p[1]);
 
@@ -42,7 +53,7 @@ int main(void) {
 
     printf(":-)\n");
 
-    free_config(cfg);
+    free_config(&cfg);
 
 
     return 1;
