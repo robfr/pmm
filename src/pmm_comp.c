@@ -135,7 +135,7 @@ correlate_models(struct pmm_model *approx_model, struct pmm_model *base_model)
         approx_speed[c] = octave_interpolate(oct_data, b_avg->p, b_avg->n_p);
 
 
-        free(b_avg); 
+        free_benchmark(b_avg); 
 
         b = get_next_different_bench(b);
         c++;

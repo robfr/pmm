@@ -316,6 +316,7 @@ count_tokens_in_str(char *str, char *delimiters)
     }
 
     free(str_copy);
+    str_copy = NULL;
     
     return count;
 }
@@ -398,7 +399,10 @@ parse_slice_str(char *slice_str, struct pmm_view_options *options)
                 }
                 else {
                     ERRPRINTF("Error parsing slice string.\n");
+
                     free(str_copy);
+                    str_copy = NULL;
+
                     return -1;
                 }
                 break;
@@ -443,7 +447,10 @@ parse_slice_str(char *slice_str, struct pmm_view_options *options)
     if(i != n) {
         ERRPRINTF("Unexpected number of slice tokens parsed (i:%d n:%d).\n",
                   i, n);
+
         free(str_copy);
+        str_copy = NULL;
+
         return -1;
     }
 

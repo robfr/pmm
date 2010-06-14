@@ -475,8 +475,13 @@ plot_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
     }
 
     free(plot_title_buf);
+    plot_title_buf = NULL;
+
     free(x);
+    x = NULL;
+
     free(y);
+    y = NULL;
 }
 
 void
@@ -585,7 +590,11 @@ plot_slice_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
     if(c == 0) {
         ERRPRINTF("No benchmarks found along specified slice.\n");
         free(x);
+        x = NULL;
+
         free(y);
+        y = NULL;
+
         return;
     }
 
@@ -605,8 +614,13 @@ plot_slice_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
     gnuplot_plot_xy(plot_handle, x, y, c, plot_title_buf);
 
     free(plot_title_buf);
+    plot_title_buf = NULL;
+
     free(x);
+    x = NULL;
+
     free(y);
+    y = NULL;
 }
 
 void
@@ -722,8 +736,13 @@ splot_slice_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
     if(c == 0) {
         ERRPRINTF("No benchmarks found along specified slice.\n");
         free(x);
+        x = NULL;
+
         free(y);
+        y = NULL;
+
         free(z);
+        z = NULL;
         return;
     }
 
@@ -743,9 +762,16 @@ splot_slice_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
     gnuplot_splot(plot_handle, x, y, z, c, plot_title_buf);
 
     free(plot_title_buf);
+    plot_title_buf = NULL;
+
     free(x);
+    x = NULL;
+
     free(y);
+    y = NULL;
+
     free(z);
+    z = NULL;
 
     return;
 }
@@ -824,9 +850,16 @@ splot_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
     }
 
     free(plot_title_buf);
+    plot_title_buf = NULL;
+
     free(x);
+    x = NULL;
+
     free(y);
+    y = NULL;
+
     free(z);
+    z = NULL;
 }
 
 void

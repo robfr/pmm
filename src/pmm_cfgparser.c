@@ -91,6 +91,8 @@ void parse_routine_periodic(node, doc, struct pmm_routine *r) {
 		}
 
 		free(key);
+        key = NULL;
+
 		node=node->next;
 	}
 }*/
@@ -198,6 +200,8 @@ parse_routine(xmlDocPtr doc, xmlNodePtr node)
 		}
 
 		free(key);
+        key = NULL;
+
 		cnode=cnode->next;
 	}
 
@@ -254,6 +258,8 @@ parse_paramdefs(struct pmm_paramdef **pd_array, int *n_p, xmlDocPtr doc,
 	}
 
 	free(key);
+    key = NULL;
+
 	cnode = cnode->next;
 
 
@@ -285,6 +291,8 @@ parse_paramdefs(struct pmm_paramdef **pd_array, int *n_p, xmlDocPtr doc,
 
 
 		free(key);
+        key = NULL;
+
 		cnode=cnode->next;
 	}
 
@@ -379,6 +387,8 @@ parse_paramdef(struct pmm_paramdef *pd_array, int n_p, xmlDocPtr doc,
 		}
 
 		free(key);
+        key = NULL;
+
 		cnode=cnode->next;
 	}
 
@@ -386,6 +396,8 @@ parse_paramdef(struct pmm_paramdef *pd_array, int n_p, xmlDocPtr doc,
 		ERRPRINTF("paramdef has an order that is out of bounds order:%d.\n",
 		           p.order);
         free(p.name);
+        p.name = NULL;
+
         return -1;
 	}
 
@@ -393,10 +405,13 @@ parse_paramdef(struct pmm_paramdef *pd_array, int n_p, xmlDocPtr doc,
 	if(copy_paramdef(&(pd_array[p.order]), &p) < 0) {
         ERRPRINTF("Error copying parsed paramdef into parameter array.\n");
         free(p.name);
+        p.name = NULL;
+
         return -1;
     }
 
 	free(p.name);
+    p.name = NULL;
 
 	return 0; //success
 
@@ -456,6 +471,8 @@ parse_routine_construction(struct pmm_routine *r, xmlDocPtr doc,
 		}
 
 		free(key);
+        key = NULL;
+
 		cnode=cnode->next;
 	}
 
@@ -521,6 +538,7 @@ parse_config(struct pmm_config *cfg) {
 		    key = (char *)xmlNodeListGetString(doc, cnode->xmlChildrenNode, 1);
 			cfg->main_sleep_period = atoi(key);
             free(key);
+            key = NULL;
 		}
 		if(!xmlStrcmp(cnode->name,
                       (const xmlChar *) "model_write_time_threshold"))
@@ -529,6 +547,7 @@ parse_config(struct pmm_config *cfg) {
 		    key = (char *)xmlNodeListGetString(doc, cnode->xmlChildrenNode, 1);
 			cfg->time_spend_threshold = atoi(key);
             free(key);
+            key = NULL;
 		}
 		if(!xmlStrcmp(cnode->name,
                       (const xmlChar *) "model_write_exec_threshold"))
@@ -537,6 +556,7 @@ parse_config(struct pmm_config *cfg) {
 		    key = (char *)xmlNodeListGetString(doc, cnode->xmlChildrenNode, 1);
 			cfg->num_execs_threshold = atoi(key);
             free(key);
+            key = NULL;
 		}
 		// if we get a "load_monitor" cnode parse the load monitor config
 		if(!xmlStrcmp(cnode->name, (const xmlChar *) "load_monitor")) {
@@ -634,6 +654,8 @@ parse_loadconfig(xmlDocPtr doc, xmlNodePtr node)
 		}
 
 		free(key);
+        key = NULL;
+
 		cnode=cnode->next;
 	}
 
@@ -683,6 +705,8 @@ struct timeval* parse_timeval(xmlDocPtr doc, xmlNodePtr node) {
 		}
 
 		free(key);
+        key = NULL;
+        
 		cnode = cnode->next;
 	}
 
@@ -726,6 +750,8 @@ parse_timeval_p(struct timeval *t, xmlDocPtr doc, xmlNodePtr node)
 		}
 
 		free(key);
+        key = NULL;
+
 		cnode = cnode->next;
 	}
 
@@ -777,6 +803,8 @@ int parse_parameter_array_p(int **p, int *n_p, xmlDocPtr doc, xmlNodePtr node)
 	}
 
 	free(key);
+    key = NULL;
+
 	cnode = cnode->next;
 
 
@@ -794,6 +822,8 @@ int parse_parameter_array_p(int **p, int *n_p, xmlDocPtr doc, xmlNodePtr node)
             else {
                 ERRPRINTF("Parsed more parameters than expected.\n");
                 free(key);
+                key = NULL;
+
                 return -1;
             }
 		}
@@ -804,6 +834,8 @@ int parse_parameter_array_p(int **p, int *n_p, xmlDocPtr doc, xmlNodePtr node)
 		}
 
 		free(key);
+        key = NULL;
+
 		cnode = cnode->next;
 	}
 
@@ -898,6 +930,8 @@ struct pmm_benchmark* parse_benchmark(xmlDocPtr doc, xmlNodePtr node) {
 		}
 
 		free(key);
+        key = NULL;
+
 		cnode=cnode->next;
 	}
 
@@ -905,6 +939,8 @@ struct pmm_benchmark* parse_benchmark(xmlDocPtr doc, xmlNodePtr node) {
 		if(!check_benchmark(b)) {
 			ERRPRINTF("Benchmark parsed incorrectly.\n");
 			free(key);
+            key = NULL;
+
 			exit(EXIT_FAILURE);
 		}
 	 */
@@ -997,6 +1033,8 @@ struct pmm_interval* parse_interval(xmlDocPtr doc, xmlNodePtr node) {
 		}
 
 		free(key);
+        key = NULL;
+
 		cnode=cnode->next;
 	}
 
@@ -1004,6 +1042,8 @@ struct pmm_interval* parse_interval(xmlDocPtr doc, xmlNodePtr node) {
 		if(!check_load(r)) {
 			ERRPRINTF("Load parsing error.\n");
 			free(key);
+            key = NULL;
+
 			exit(EXIT_FAILURE);
 		}
 	 */
@@ -1080,6 +1120,7 @@ struct pmm_load* parse_load(xmlDocPtr doc, xmlNodePtr node) {
 		}
 
 		free(key);
+        key = NULL;
 		cnode=cnode->next;
 	}
 
@@ -1087,6 +1128,8 @@ struct pmm_load* parse_load(xmlDocPtr doc, xmlNodePtr node) {
 	if(!check_load(r)) {
 		ERRPRINTF("Load parsing error.\n");
 		free(key);
+        key = NULL;
+
 		exit(EXIT_FAILURE);
 	}
 	 */
@@ -1206,6 +1249,7 @@ parse_history(struct pmm_loadhistory *h) {
 			// add load actually copys the load object into the history so we
 			// may free it at this point
 			free(l);
+            l = NULL;
 		}
 		else {
 			// probably a text : null tag
@@ -1261,6 +1305,8 @@ parse_bench_list(struct pmm_model *m, xmlDocPtr doc, xmlNodePtr node)
 	}
 
 	free(key);
+    key = NULL;
+
 	cnode = cnode->next;
 
 	// iterate through the rest of the children of the bench_list node
@@ -1536,6 +1582,8 @@ int parse_model(struct pmm_model *m)
 		}
 
 		free(key);
+        key = NULL;
+
 		cnode=cnode->next;
 	}
 
@@ -1788,6 +1836,8 @@ write_loadhistory(struct pmm_loadhistory *h)
         ERRPRINTF("filename too long: %s\n", temp_file);
 
         free(temp_file);
+        temp_file = NULL;
+
         return -1; //fail
     }
 
@@ -1809,6 +1859,7 @@ write_loadhistory(struct pmm_loadhistory *h)
         unlink(temp_file);
         close(temp_fd);
         free(temp_file);
+        temp_file = NULL;
 
         return -1; //fail
     }
@@ -1823,6 +1874,7 @@ write_loadhistory(struct pmm_loadhistory *h)
         unlink(temp_file);
         close(temp_fd);
         free(temp_file);
+        temp_file = NULL;
 
 		return -1; //fail
 	}
@@ -1835,6 +1887,7 @@ write_loadhistory(struct pmm_loadhistory *h)
         unlink(temp_file);
         close(temp_fd);
         free(temp_file);
+        temp_file = NULL;
 
 		return -1;
 	}
@@ -1848,6 +1901,7 @@ write_loadhistory(struct pmm_loadhistory *h)
 		xmlFreeTextWriter(writer);
         close(temp_fd);
         free(temp_file);
+        temp_file = NULL;
 
 		return -1;
 	}
@@ -1861,6 +1915,7 @@ write_loadhistory(struct pmm_loadhistory *h)
 
         close(temp_fd);
         free(temp_file);
+        temp_file = NULL;
 
         return -1;
 
@@ -1871,6 +1926,7 @@ write_loadhistory(struct pmm_loadhistory *h)
         ERRPRINTF("Error closing file, remove:%s manually\n", temp_file);
 
         free(temp_file);
+        temp_file = NULL;
         return -1;
     }
 
@@ -1880,6 +1936,7 @@ write_loadhistory(struct pmm_loadhistory *h)
         ERRPRINTF("Error opening load file: %s.\n", h->load_path);
 
         free(temp_file);
+        temp_file = NULL;
 
         return -1;
     }
@@ -1899,6 +1956,7 @@ write_loadhistory(struct pmm_loadhistory *h)
 
         close(hist_fd);
         free(temp_file);
+        temp_file = NULL;
 
         return -1;
     }
@@ -1911,11 +1969,13 @@ write_loadhistory(struct pmm_loadhistory *h)
 
         close(hist_fd);
         free(temp_file);
+        temp_file = NULL;
 
         return -1;
     }
 
     free(temp_file);
+    temp_file = NULL;
 
     //close and free lock
     if(close(hist_fd) < 0) {
@@ -2117,6 +2177,7 @@ write_model(struct pmm_model *m)
         ERRPRINTF("filename too long: %s\n", temp_file);
 
         free(temp_file);
+        temp_file = NULL;
         return -1; //fail
     }
 
@@ -2137,6 +2198,7 @@ write_model(struct pmm_model *m)
         unlink(temp_file);
         close(temp_fd);
         free(temp_file);
+        temp_file = NULL;
 
         return -1; //fail
     }
@@ -2149,6 +2211,7 @@ write_model(struct pmm_model *m)
         unlink(temp_file);
         close(temp_fd);
         free(temp_file);
+        temp_file = NULL;
 
 		return -1; //fail
 	}
@@ -2161,6 +2224,7 @@ write_model(struct pmm_model *m)
         unlink(temp_file);
         close(temp_fd);
         free(temp_file);
+        temp_file = NULL;
 
 		return -1;
 	}
@@ -2174,6 +2238,7 @@ write_model(struct pmm_model *m)
 		xmlFreeTextWriter(writer);
         close(temp_fd);
         free(temp_file);
+        temp_file = NULL;
 
 		return -1;
 	}
@@ -2187,6 +2252,7 @@ write_model(struct pmm_model *m)
 
         close(temp_fd);
         free(temp_file);
+        temp_file = NULL;
 
         return -1;
 
@@ -2197,6 +2263,7 @@ write_model(struct pmm_model *m)
         ERRPRINTF("Error closing file, remove:%s manually\n", temp_file);
 
         free(temp_file);
+        temp_file = NULL;
         return -1;
     }
 
@@ -2206,6 +2273,7 @@ write_model(struct pmm_model *m)
         ERRPRINTF("Error opening model file: %s.\n", m->model_path);
 
         free(temp_file);
+        temp_file = NULL;
 
         return -1;
     }
@@ -2224,6 +2292,7 @@ write_model(struct pmm_model *m)
 
         close(model_fd);
         free(temp_file);
+        temp_file = NULL;
 
         return -1;
     }
@@ -2236,11 +2305,13 @@ write_model(struct pmm_model *m)
 
         close(model_fd);
         free(temp_file);
+        temp_file = NULL;
 
         return -1;
     }
 
     free(temp_file);
+    temp_file = NULL;
 
     //close and free lock
     if(close(model_fd) < 0) {
@@ -2306,6 +2377,8 @@ sync_parent_dir(char *file_path)
         perror("strdup");
 
         free(dir_c);
+        dir_c = NULL;
+
         return -1;
     }
 
@@ -2317,6 +2390,8 @@ sync_parent_dir(char *file_path)
         perror("open");
 
         free(dir_c);
+        dir_c = NULL;
+
         return -1;
     }
 
@@ -2335,6 +2410,8 @@ sync_parent_dir(char *file_path)
     }
 
     free(dir_c);
+    dir_c = NULL;
+
     return ret;
 }
 

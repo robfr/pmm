@@ -59,7 +59,10 @@ struct pmm_config* new_config() {
 	c->routines = malloc(5 * sizeof *(c->routines));
 	if(c->routines == NULL) {
 		printf("allocation of memory to routine array failed.\n");
+
         free(c);
+        c = NULL;
+
         return NULL;
 	}
 	c->allocated = 5;
@@ -2131,6 +2134,8 @@ get_avg_aligned_bench(struct pmm_model *m, int *param)
     b = get_avg_bench(m, p_aligned);
 
     free(p_aligned);
+    p_aligned = NULL;
+
     return b;
 }
 
@@ -2766,6 +2771,7 @@ int free_interval_list(struct pmm_interval_list *l)
 	}
 
 	free(l);
+    l = NULL;
 
 	return 1; // success
 }*/
@@ -3478,8 +3484,10 @@ void free_config(struct pmm_config *cfg) {
 	}
 
 	free(cfg->routines);
+    cfg->routines = NULL;
 
 	free(cfg);
+    cfg = NULL;
 }
 
 void free_routine(struct pmm_routine *r) {
@@ -3489,12 +3497,16 @@ void free_routine(struct pmm_routine *r) {
 
 	//free some malloced 'strings'
 	free(r->name);
+    r->name = NULL;
+
 	free(r->exe_path);
+    r->exe_path = NULL;
 
 	//free paramdef array
 	free_paramdefs(r->paramdef_array, r->n_p);
 
 	free(r);
+    r = NULL;
 }
 
 void free_paramdefs(struct pmm_paramdef* pd_array, int n_p) {
@@ -3502,9 +3514,11 @@ void free_paramdefs(struct pmm_paramdef* pd_array, int n_p) {
 
 	for(i=0; i<n_p; i++) {
 		free(pd_array[i].name);
+        pd_array[i].name = NULL;
 	}
 
 	free(pd_array);
+    pd_array = NULL;
 
 }
 
@@ -3517,7 +3531,10 @@ void free_model(struct pmm_model *m) {
         free_interval_list(m->interval_list);
 
 	free(m->model_path);
+    m->model_path = NULL;
+
 	free(m);
+    m = NULL;
 }
 
 void free_interval_list(struct pmm_interval_list *il)
@@ -3536,16 +3553,22 @@ void free_interval_list(struct pmm_interval_list *il)
 	}
 
 	free(il);
+    il = NULL;
 }
 
 void free_interval(struct pmm_interval *i)
 {
-    if(i->start != NULL)
+    if(i->start != NULL) {
         free(i->start); 
-    if(i->end != NULL)
+        i->start = NULL;
+    }
+    if(i->end != NULL) {
         free(i->end);
+        i->end = NULL;
+    }
 
     free(i);
+    i = NULL;
 }
 
 void free_bench_list(struct pmm_bench_list *bl)
@@ -3554,6 +3577,7 @@ void free_bench_list(struct pmm_bench_list *bl)
     free_benchmark_list_backwards(bl->first);
 
 	free(bl);
+    bl = NULL;
 }
 
 void free_benchmark_list_forwards(struct pmm_benchmark *last_b) {
@@ -3587,11 +3611,19 @@ void free_benchmark_list_backwards(struct pmm_benchmark *first_b) {
 void free_benchmark(struct pmm_benchmark *b)
 {
 	free(b->p);
+    b->p = NULL;
+
 	free(b);
+    b = NULL;
 }
 
 void free_loadhistory(struct pmm_loadhistory *h) {
 	free(h->load_path);
+    h->load_path = NULL;
+
 	free(h->history);
+    h->history = NULL;
+
 	free(h);
+    h = NULL;
 }

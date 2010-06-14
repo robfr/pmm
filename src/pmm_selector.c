@@ -457,7 +457,10 @@ multi_gbbp_diagonal_select_new_bench(struct pmm_routine *r)
 
     if((top_i = read_top_interval(i_list)) == NULL) {
         ERRPRINTF("Error reading interval from head of list\n");
+
         free(params);
+        params = NULL;
+
         return NULL;
     }
 
@@ -487,14 +490,20 @@ multi_gbbp_diagonal_select_new_bench(struct pmm_routine *r)
                 //mesh boundary models to create points
                 if(project_diagonal_intervals(m) < 0) {
                     ERRPRINTF("Error projecting new intervals from diagonal\n");
+
                     free(params);
+                    params = NULL;
+
                     return NULL;
                 }
 
                 //read another top interval
                 if((top_i = read_top_interval(i_list)) == NULL) {
                     ERRPRINTF("Error reading interval from head of list\n");
+
                     free(params);
+                    params = NULL;
+
                     return NULL;
                 }
 
@@ -517,6 +526,7 @@ multi_gbbp_diagonal_select_new_bench(struct pmm_routine *r)
 
                     m->complete = 1;
                 }
+
                 free(params);
                 params = NULL;
             }
@@ -921,7 +931,10 @@ multi_gbbp_select_new_bench(struct pmm_routine *r)
 
     if((top_i = read_top_interval(i_list)) == NULL) {
         ERRPRINTF("Error reading interval from head of list\n");
+
         free(params);
+        params = NULL;
+
         return NULL;
     }
 
@@ -954,7 +967,10 @@ multi_gbbp_select_new_bench(struct pmm_routine *r)
                 //read another top interval
                 if((top_i = read_top_interval(i_list)) == NULL) {
                     ERRPRINTF("Error reading interval from head of list\n");
+
                     free(params);
+                    params = NULL;
+
                     return NULL;
                 }
 
@@ -977,6 +993,7 @@ multi_gbbp_select_new_bench(struct pmm_routine *r)
 
                     m->complete = 1;
                 }
+
                 free(params);
                 params = NULL;
             }
@@ -994,8 +1011,10 @@ multi_gbbp_select_new_bench(struct pmm_routine *r)
             ERRPRINTF("Invalid interval type: %s (%d)\n",
                        interval_type_to_string(top_i->type), top_i->type);
             print_interval(top_i);
+
             free(params);
             params = NULL;
+
             break;
     }
 
@@ -1304,7 +1323,10 @@ process_interval_list(struct pmm_routine *r, struct pmm_benchmark *b,
         ret = multi_gbbp_bench_from_interval(r, i, temp_params);
         if(ret < -1) {
             ERRPRINTF("Error getting benchmark from interval.\n");
+
             free(temp_params);
+            temp_params = NULL;
+
             return -1;
         }
 
@@ -1320,7 +1342,10 @@ process_interval_list(struct pmm_routine *r, struct pmm_benchmark *b,
             if(done < 0) {
 
                 ERRPRINTF("Error processing interval.\n");
+
                 free(temp_params);
+                temp_params = NULL;
+
                 return -1;
 
             }
@@ -1336,6 +1361,8 @@ process_interval_list(struct pmm_routine *r, struct pmm_benchmark *b,
     }
 
     free(temp_params);
+    temp_params = NULL;
+
     return 0;
 }
 
@@ -1523,6 +1550,7 @@ process_it_gbbp_climb(struct pmm_routine *r, struct pmm_interval *i,
                 free_benchmark(b_left_2);
 
             free(tmp_params);
+            tmp_params = NULL;
 
             return -1;
         }
@@ -1606,6 +1634,7 @@ process_it_gbbp_climb(struct pmm_routine *r, struct pmm_interval *i,
         free_benchmark(b_left_2);
 
         free(tmp_params);
+        tmp_params = NULL;
     }
 
 
@@ -1769,7 +1798,10 @@ process_gbbp_bisect(struct pmm_routine *r, struct pmm_interval *i,
     b_left = get_avg_aligned_bench(m, i->start);
     if(b_left == NULL) {
         ERRPRINTF("Error, no benchmark @ interval start\n");
+
         free(midpoint);
+        midpoint = NULL;
+
         free_benchmark(b_avg);
         return -1;
     }
@@ -1779,7 +1811,10 @@ process_gbbp_bisect(struct pmm_routine *r, struct pmm_interval *i,
     if(b_right == NULL) {
         ERRPRINTF("Error, no benchmark @ interval end\n");
         free_benchmark(b_left);
+
         free(midpoint);
+        midpoint = NULL;
+
         free_benchmark(b_avg);
         return -1;
     }
@@ -1973,8 +2008,10 @@ process_gbbp_bisect(struct pmm_routine *r, struct pmm_interval *i,
         }
     }
 
-    free(b_avg);
+    free_benchmark(b_avg);
+
     free(midpoint);
+    midpoint = NULL;
 
     if(b_left != NULL) {
         free_benchmark(b_left);
@@ -2040,7 +2077,10 @@ process_gbbp_inflect(struct pmm_routine *r, struct pmm_interval *i,
     b_left = get_avg_aligned_bench(m, i->start);
     if(b_left == NULL) {
         ERRPRINTF("Error, no benchmark @ interval start\n");
+
         free(midpoint);
+        midpoint = NULL;
+
         free_benchmark(b_oldapprox);
         free_benchmark(b_avg);
         return -1;
@@ -2051,7 +2091,10 @@ process_gbbp_inflect(struct pmm_routine *r, struct pmm_interval *i,
     if(b_right == NULL) {
         ERRPRINTF("Error, no benchmark @ interval end\n");
         free_benchmark(b_left);
+
         free(midpoint);
+        midpoint = NULL;
+
         free_benchmark(b_oldapprox);
         free_benchmark(b_avg);
         return -1;
@@ -2089,7 +2132,10 @@ process_gbbp_inflect(struct pmm_routine *r, struct pmm_interval *i,
                 ERRPRINTF("Error initialising new interval.\n");
                 free_benchmark(b_right);
                 free_benchmark(b_left);
+
                 free(midpoint);
+                midpoint = NULL;
+
                 free_benchmark(b_oldapprox);
                 free_benchmark(b_avg);
                 return -1;
@@ -2117,7 +2163,10 @@ process_gbbp_inflect(struct pmm_routine *r, struct pmm_interval *i,
                 ERRPRINTF("Error initialising new interval.\n");
                 free_benchmark(b_right);
                 free_benchmark(b_left);
+
                 free(midpoint);
+                midpoint = NULL;
+
                 free_benchmark(b_oldapprox);
                 free_benchmark(b_avg);
                 return -1;
@@ -2146,7 +2195,10 @@ process_gbbp_inflect(struct pmm_routine *r, struct pmm_interval *i,
                 ERRPRINTF("Error initialising new interval.\n");
                 free_benchmark(b_right);
                 free_benchmark(b_left);
+
                 free(midpoint);
+                midpoint = NULL;
+
                 free_benchmark(b_oldapprox);
                 free_benchmark(b_avg);
                 return -1;
@@ -2168,7 +2220,10 @@ process_gbbp_inflect(struct pmm_routine *r, struct pmm_interval *i,
                 ERRPRINTF("Error initialising new interval.\n");
                 free_benchmark(b_right);
                 free_benchmark(b_left);
+
                 free(midpoint);
+                midpoint = NULL;
+
                 free_benchmark(b_oldapprox);
                 free_benchmark(b_avg);
                 return -1;
@@ -2188,6 +2243,8 @@ process_gbbp_inflect(struct pmm_routine *r, struct pmm_interval *i,
     }
 
     free(midpoint);
+    midpoint = NULL;
+
     free_benchmark(b_avg);
 
     if(b_oldapprox != NULL) {

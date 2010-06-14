@@ -151,6 +151,7 @@ my_popen(char *cmd, char **args, int n, pid_t *pid)
 		close(p[1]); // close write pipe
 
         free(argv); //this has been copied into the child so we can free
+        argv = NULL;
 
 		return p[0]; // return read pipe
 	}
@@ -306,8 +307,11 @@ spawn_benchmark_process(char *path, int n, int *params,
 
     for(i=0; i<n; i++) {
         free(arg_strings[i]);
+        arg_strings[i] = NULL;
     }
+
     free(arg_strings);
+    arg_strings = NULL;
 
     return fd;
 }
@@ -391,6 +395,8 @@ read_benchmark_output(int fd, char **output_p, pid_t bench_pid)
             cleanup_benchmark_process(fp, bench_pid);
 
             free(output);
+            output = NULL;
+
             *output_p = NULL;
 
             return -1;
@@ -431,6 +437,8 @@ read_benchmark_output(int fd, char **output_p, pid_t bench_pid)
                         cleanup_benchmark_process(fp, bench_pid);
 
                         free(output);
+                        output = NULL;
+
                         *output_p = NULL;
 
                         return -1;
@@ -490,6 +498,8 @@ read_benchmark_output(int fd, char **output_p, pid_t bench_pid)
             cleanup_benchmark_process(fp, bench_pid);
 
             free(output);
+            output = NULL;
+
             *output_p = NULL;
 
             return 1;
@@ -575,6 +585,7 @@ void *benchmark(void *scheduled_r) {
                    bench_pid);
 
         free(rargs);
+        rargs = NULL;
 
         //TODO send kill to bench_pid, just to be sure?
 
@@ -594,6 +605,7 @@ void *benchmark(void *scheduled_r) {
         ERRPRINTF("Error reading benchmark output.\n");
 
         free(rargs);
+        rargs = NULL;
 
         set_executing_benchmark(0);
         *ret = -1; //failure
@@ -604,6 +616,7 @@ void *benchmark(void *scheduled_r) {
         DBGPRINTF("Recieved quit while reading benchmark output.\n");
 
         free(rargs);
+        rargs = NULL;
 
         set_executing_benchmark(0);
         *ret = 1; //sigquit received
@@ -626,7 +639,10 @@ void *benchmark(void *scheduled_r) {
         ERRPRINTF("output was:\n--------\n%s---------\n", output);
 
         free(output);
+        output = NULL;
+
         free(rargs);
+        rargs = NULL;
 
         set_executing_benchmark(0);
         *ret = -1; //failure
@@ -643,7 +659,10 @@ void *benchmark(void *scheduled_r) {
         ERRPRINTF("Error parsing benchmark output\n");
 
         free(output);
+        output = NULL;
+
         free(rargs);
+        rargs = NULL;
 
         set_executing_benchmark(0);
         *ret = -1; //failure
@@ -735,6 +754,7 @@ void *benchmark(void *scheduled_r) {
             ERRPRINTF("Error writing model to disk.\n");
 
             free(rargs);
+            rargs = NULL;
 
             set_executing_benchmark(0);
             *ret = -1; //failure
@@ -747,6 +767,7 @@ void *benchmark(void *scheduled_r) {
     }
 
     free(rargs);
+    rargs = NULL;
 
     LOGPRINTF("benchmark thread: finished.\n");
 

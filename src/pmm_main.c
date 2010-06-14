@@ -446,6 +446,7 @@ int main(int argc, char **argv) {
                     kill(getpid(), SIGINT);
 
                     free(b_thread_return);
+                    b_thread_return = NULL;
 
                     break;
                 }
@@ -454,6 +455,7 @@ int main(int argc, char **argv) {
                 b_thread_id = 0;
 
                 free(b_thread_return);
+                b_thread_return = NULL;
 
 			}
 

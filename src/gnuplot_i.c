@@ -225,7 +225,10 @@ gnuplot_ctrl * gnuplot_init(void)
     handle->gnucmd = popen(GNUPLOT_EXEC " -geometry \"640x480+0+0\"", "w") ;
     if (handle->gnucmd == NULL) {
         fprintf(stderr, "error starting gnuplot\n") ;
+
         free(handle) ;
+        handle = NULL;
+
         return NULL ;
     }
 #ifdef _WIN32
@@ -274,7 +277,10 @@ void gnuplot_close(gnuplot_ctrl * handle)
 #endif
         }
     }
+
     free(handle) ;
+    handle = NULL ;
+
     return ;
 }
 
