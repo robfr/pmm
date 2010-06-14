@@ -460,6 +460,8 @@ get_first_bench_from_bench_list(struct pmm_bench_list *bl,
 void
 calc_bench_exec_stats(struct pmm_model *m, int *param,
                       double *time_spent, int *num_execs);
+double
+calc_model_stats(struct pmm_model *m);
 
 struct pmm_benchmark *
 find_oldapprox(struct pmm_model *m, int *p);

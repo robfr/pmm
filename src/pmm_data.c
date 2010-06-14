@@ -2236,6 +2236,31 @@ calc_bench_exec_stats(struct pmm_model *m, int *param,
 }
 
 /*!
+ * Calculate some basic statistics about a model
+ *
+ * @param   m   pointer to the model
+ *
+ * @return time spend executing benchmarks in model
+ */
+double
+calc_model_stats(struct pmm_model *m)
+{
+    struct pmm_benchmark *b;
+    double total_time;
+
+    b = m->bench_list->first;
+
+    total_time = 0.0;
+    while(b != NULL) {
+        total_time += timeval_to_double(&(b->wall_t));
+
+        b = b->next;
+    }
+
+    return total_time;
+}
+
+/*!
  * Function removes benchmarks from a model that have parameters that match
  * a target set. Removed benchmarks are all not deallocated, their addresses
  * are stored in an array passed to the function as removed_array

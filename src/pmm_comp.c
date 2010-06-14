@@ -206,6 +206,10 @@ main(int argc, char **argv)
     correlation = correlate_models(approx_model, base_model);
 
     printf("model correlation:%f\n", correlation);
+    printf("base model points:%d\n", base_model->completion);
+    printf("base model execution time:%f\n", calc_model_stats(base_model));
+    printf("approx model points:%d\n", approx_model->completion);
+    printf("approx model execution time:%f\n", calc_model_stats(approx_model));
 
     xmlparser_cleanup();
 
