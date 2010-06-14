@@ -65,12 +65,15 @@ lib_LTLIBRARIES = libpmm.la
 libpmm_la_SOURCES = pmm_util.c pmm_data.c pmm_cfgparser.c pmm_cond.c \
 		pmm_octave.cc
 libpmm_la_LDFLAGS =  $(XML_LIBS) $(OCTAVE_LIBS) $(PAPI_LDFLAGS)
-libpmm_la_CPPFLAGS = $(XML_CFLAGS) $(PAPI_CPPFLAGS)
+libpmm_la_CPPFLAGS = $(XML_CFLAGS) $(PAPI_CPPFLAGS) -DPKGDATADIR=\"$(pkgdatadir)\"
 libpmm_la_CXXFLAGS = $(OCTAVE_CXXFLAGS)
+
+
+pkgdata_DATA = pmm_griddatan.m
 
 EXTRA_DIST	= pmm_argparser.h pmm_cfgparser.h pmm_cond.h pmm_data.h \
 		pmm_executor.h pmm_scheduler.h pmm_util.h pmm_selector.h gnuplot_i.h \
-		pmm_octave.h pmm_log.h
+		pmm_octave.h pmm_log.h pmm_griddatan.m
 
 ##pmm_LDADD	= $(top_builddir)/src/libpmm.a \
 ##		$(top_builddir)/replace/libreplace.a $(LIBADD_READLINE)

@@ -49,6 +49,25 @@ extern "C" {
 
 static int is_octave_initialised = 0;
 
+void octave_init();
+
+void octave_init()
+{
+	octave_value_list grid_in;
+    string_vector argv (2);
+    argv(0) = "octave_feval";
+    argv(1) = "-q";
+
+    octave_main (2, argv.c_str_vec(), 1);
+
+
+    // source custom griddatan file
+    grid_in(0) = PKGDATADIR "/pmm_griddatan.m";
+    feval("source", grid_in, 1);
+
+    is_octave_initialised = 1;
+}
+
 void add_benchmark_to_xy(int pos, int n, struct pmm_benchmark *b, Matrix &x,
                          ColumnVector &y)
 {
@@ -116,13 +135,7 @@ octave_interpolate(struct pmm_octave_data *oct_data, int *p, int n)
 	
 	// init octave
     if(is_octave_initialised == 0) {
-        string_vector argv (2);
-        argv(0) = "octave_feval";
-        argv(1) = "-q";
-
-        octave_main (2, argv.c_str_vec(), 1);
-
-        is_octave_initialised = 1;
+        octave_init();
     }
 	
 	// create a two row matrix for the lookup point
@@ -146,12 +159,14 @@ octave_interpolate(struct pmm_octave_data *oct_data, int *p, int n)
 	grid_in(2) = octave_value(xi);
     DBGPRINTF("Done.\nSetting up grid_in(3)\n");
 	grid_in(3) = octave_value("linear");
+    DBGPRINTF("Done.\nSetting up grid_in(4)\n");
+    grid_in(4) = octave_value("QbB");
     DBGPRINTF("Done.\n");
 	
 	
 	//execute octave function
-    DBGPRINTF("feval griddatan ...\n");
-	grid_out = feval("griddatan", grid_in, 1);
+    DBGPRINTF("feval pmm_griddatan ...\n");
+	grid_out = feval("pmm_griddatan", grid_in, 1);
     DBGPRINTF("Done.\n");
 	
 	Matrix yi;
@@ -167,7 +182,7 @@ octave_interpolate(struct pmm_octave_data *oct_data, int *p, int n)
 
 	}
 	else {
-		ERRPRINTF("Error calling griddatan in octave.\n");
+		ERRPRINTF("Error calling pmm_griddatan in octave.\n");
 		return -1.0;
 	}
 
@@ -186,13 +201,7 @@ interpolate_griddatan(struct pmm_model *m, int *p)
 	
 	// init octave
     if(is_octave_initialised == 0) {
-        string_vector argv (2);
-        argv(0) = "octave_feval";
-        argv(1) = "-q";
-
-        octave_main (2, argv.c_str_vec(), 1);
-
-        is_octave_initialised = 1;
+        octave_init();
     }
 	
     oct_data = fill_octave_input_matrices(m);
@@ -222,10 +231,11 @@ interpolate_griddatan(struct pmm_model *m, int *p)
 	grid_in(1) = octave_value(oct_data->y);
 	grid_in(2) = octave_value(xi);
 	grid_in(3) = octave_value("linear");
+    grid_in(4) = octave_value("QbB");
 	
 	
 	//execute octave function
-	grid_out = feval("griddatan", grid_in, 1);
+	grid_out = feval("pmm_griddatan", grid_in, 1);
 	
 	Matrix yi;
 	if(!error_state && grid_out.length() > 0) {
@@ -238,7 +248,7 @@ interpolate_griddatan(struct pmm_model *m, int *p)
 		return ret_b;
 	}
 	else {
-		ERRPRINTF("Error calling griddatan in octave.\n");
+		ERRPRINTF("Error calling pmm_griddatan in octave.\n");
 		free_benchmark(&ret_b);
 		return NULL;
 	}
