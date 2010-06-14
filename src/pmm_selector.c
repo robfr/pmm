@@ -30,6 +30,9 @@
 #include "pmm_selector.h"
 #include "pmm_log.h"
 
+#ifdef HAVE_MUPARSER
+#include "pmm_muparse.h"
+#endif
 /*******************************************************************************
  * gbbp_select_new_bench
  *
@@ -113,6 +116,7 @@ multi_naive_select_new_bench(struct pmm_routine *r)
     struct pmm_interval_list *i_list;
     struct pmm_interval *new_i, *top_i;
     struct pmm_model *m;
+    int i, pp;
 
 
     m = r->model;
@@ -134,6 +138,53 @@ multi_naive_select_new_bench(struct pmm_routine *r)
             free_interval(&new_i);
 
             return NULL;
+        }
+
+        // if pp min/max is defined
+        if(r->pd_set->pc_max != -1 || r->pd_set->pc_min != -1) {
+
+            i = 0;
+            while(i != new_i->n_p ) { // while not finished the naive space
+                pp = param_product(new_i->start, r->pd_set->n_p);
+
+                if(r->pd_set->pc_max != -1 &&
+                   r->pd_set->pc_min == -1) 
+                { //test only max
+                    if(pp > r->pd_set->pc_max) {
+                        i = naive_step_interval(r, new_i);
+                    }
+                    else {
+                        break; //finished
+                    }
+                }
+                else if(r->pd_set->pc_max == -1 &&
+                        r->pd_set->pc_min != -1)
+                { //test only min
+                    if(pp < r->pd_set->pc_min) {
+                        i = naive_step_interval(r, new_i);
+                    }
+                    else {
+                        break; //finished
+                    }
+                }
+                else
+                { //test both
+                    if(pp < r->pd_set->pc_min || pp > r->pd_set->pc_max) {
+                        i = naive_step_interval(r, new_i);
+                    }
+                    else {
+                        break;
+                    }
+                }
+            }
+            if(i == new_i->n_p) {
+                ERRPRINTF("Could not initialise naive start point given pp "
+                          "min/max restrictions.\n");
+
+                free_interval(&new_i);
+
+                return NULL;
+            }
         }
 
         add_top_interval(i_list, new_i);
@@ -275,7 +326,8 @@ naive_process_interval_list(struct pmm_routine *r, struct pmm_benchmark *b)
     struct pmm_interval *interval;
     struct pmm_interval *new_i;
     int *aligned_params;
-    int i;
+    int i, pp;
+    int direction;
 
 
     m = r->model;
@@ -302,22 +354,45 @@ naive_process_interval_list(struct pmm_routine *r, struct pmm_benchmark *b)
     // step the parameters the interval describes along by 'stride'
     //
     // iterate over all parameters
-    for(i=0; i<interval->n_p; i++) {
-        // if incrementing a parameter does not cause an overflow
-        if(interval->start[i]+r->paramdef_array[i].stride <=
-           r->paramdef_array[i].max)
-        {
-            // increment the parameter as tested and finish
-            interval->start[i] += r->paramdef_array[i].stride;
-            break;
+    if(r->pd_set->pc_max != -1 || r->pd_set->pc_min != -1) {
+
+        i = naive_step_interval(r, interval);
+        while(i != interval->n_p ) { // while not finished the naive space
+            pp = param_product(interval->start, r->pd_set->n_p);
+
+            if(r->pd_set->pc_max != -1 &&
+               r->pd_set->pc_min == -1) 
+            { //test only max
+                if(pp > r->pd_set->pc_max) {
+                    i = naive_step_interval(r, interval);
+                }
+                else {
+                    break; //finished
+                }
+            }
+            else if(r->pd_set->pc_max == -1 &&
+                    r->pd_set->pc_min != -1)
+            { //test only min
+                if(pp < r->pd_set->pc_min) {
+                    i = naive_step_interval(r, interval);
+                }
+                else {
+                    break; //finished
+                }
+            }
+            else
+            { //test both
+                if(pp < r->pd_set->pc_min || pp > r->pd_set->pc_max) {
+                    i = naive_step_interval(r, interval);
+                }
+                else {
+                    break;
+                }
+            }
         }
-        else {
-            //otherwise overflow would occur so set this parameter to
-            //it's minimum value and allow the overflow to cascade into the
-            //next parameter by continuing through the loop (and trying to
-            //iterate the next parameter)
-            interval->start[i] = r->paramdef_array[i].min;
-        }
+    }
+    else {
+        i = naive_step_interval(r, interval);
     }
 
     //if the most signicant parameter/digit also overflowed that means we
@@ -343,6 +418,55 @@ naive_process_interval_list(struct pmm_routine *r, struct pmm_benchmark *b)
     }
 
     return 0;
+}
+
+/*!
+ * Step the start point of a naive interval to the next benchmark point.
+ *
+ * @param   r           pointer to the routine
+ * @param   interval    pointer to the interval
+ *
+ * @return index of the last parameter that was incremented or N (the number of
+ * parameters) when all paramters overflowed, i.e. the start point could not
+ * be stepped and the last naive benchmark has been reached.
+ */
+int
+naive_step_interval(struct pmm_routine *r, struct pmm_interval *interval)
+{
+    int i;
+    int direction;
+
+    for(i=0; i<interval->n_p; i++) {
+        
+        if(r->pd_set->pd_array[i].start > r->pd_set->pd_array[i].end) {
+            direction = -1;
+        }
+        else {
+            direction = 1;
+        }
+
+        // if stepping a parameter does not cause it to leave its boundaries
+        if(param_within_paramdef(interval->start[i] +
+                                 direction*r->pd_set->pd_array[i].stride,
+                                 &(r->pd_set->pd_array[i])) == 1)
+        {
+            // increment the parameter as tested and finish
+            interval->start[i] += direction*r->pd_set->pd_array[i].stride;
+
+            print_params(interval->start, r->pd_set->n_p);
+
+            break; // we are done
+        }
+        else {
+            //otherwise overflow would occur so set this parameter to
+            //it's start value and allow the overflow to cascade into the
+            //next parameter by continuing through the loop (and trying to
+            //iterate the next parameter)
+            interval->start[i] = r->pd_set->pd_array[i].start;
+        }
+    }
+
+    return i;
 }
 
 /*
@@ -619,6 +743,17 @@ init_gbbp_diagonal_interval(struct pmm_routine *r)
         return -1;
     }
 
+    // if parameter product max is set, we must adjust the new interval so
+    // it satisfies the constraint
+    if(r->pd_set->pc_max != -1) {
+
+        adjust_interval_with_param_constraint_max(diag_i, r->pd_set);
+                                               
+
+    }
+    if(r->pd_set->pc_min != -1) {
+        adjust_interval_with_param_constraint_min(diag_i, r->pd_set);
+    }
 
     if(is_interval_divisible(diag_i, r) == 1) {
         add_top_interval(m->interval_list, diag_i);
@@ -717,6 +852,280 @@ init_gbbp_diagonal_interval(struct pmm_routine *r)
     return 0; //success
 }
 
+/*
+ * Step along an interval until the product of the parameters at the end/start
+ * point of the interval matches the minium parameter product 
+ *
+ * @param   i           pointer to the interval that is to be adjusted
+ * @param   pd_set      pointer to the parameter definition set
+ *
+ * @return 0 on success or -1 on failure
+ */
+int
+adjust_interval_with_param_constraint_min(struct pmm_interval *i,
+                                          struct pmm_paramdef_set *pd_set)
+{
+#ifdef HAVE_MUPARSER
+    int *pc_min_params;
+    double pp, start_pc, end_pc;
+    int step;
+    int ret;
+
+    // test to see if interval end point or start point exceed the pc_min
+    // if start exceeds, we adjust the start point, if end exceeds, we adjust
+    // the endpoint, if neither exceed, no adjustments need to be made, and
+    // if both exceed, there is an error
+
+    if(evaluate_constraint_with_params(pd_set->pc_parser, i->start, &start_pc)
+       < 0)
+    {
+        ERRPRINTF("Error evaluating parameter constraint.\n");
+        return -1;
+    }
+    if(evaluate_constraint_with_params(pd_set->pc_parser, i->end, &end_pc)
+       < 0)
+    {
+        ERRPRINTF("Error evaluating parameter constraint.\n");
+        return -1;
+    }
+
+    if(start_pc < pd_set->pc_min && end_pc < pd_set->pc_min) {
+        ERRPRINTF("Interval cannot be adjusted to fit parameter product "
+                  "constraint.\n");
+        return -1;
+    }
+    else if(start_pc < pd_set->pc_min) {
+    }
+    else if(end_pc < pd_set->pc_min) {
+    }
+    else {
+        DBGPRINTF("Interval already satisfies parameter product constraint.\n");
+    }
+
+    pc_min_params = malloc(pd_set->n_p * sizeof *pc_min_params);
+    if(pc_min_params == NULL) {
+        ERRPRINTF("Error allocating memory.\n");
+        return -1;
+    }
+
+
+
+    step = 0;
+    while(1) {
+
+        // if it is the start point we are adjusting step along start->end
+        if(start_pc < pd_set->pc_min) {
+            ret = set_params_step_between_params(pc_min_params,
+                                      i->start, i->end, step, pd_set);
+        }
+        // otherwise set along end->start
+        else {
+            ret = set_params_step_between_params(pc_min_params,
+                                      i->end, i->start, step, pd_set);
+        }
+                                                   
+        if(ret < 0) {
+            break;
+        }
+
+        // now calculate product at the stepped point
+        if(evaluate_constraint_with_params(pd_set->pc_parser, pc_min_params,
+                                           &pp) < 0)
+        {
+            ERRPRINTF("Error evaluating parameter constraint.\n");
+
+            free(pc_min_params);
+            pc_min_params = NULL;
+
+            return -1;
+        }
+
+        DBGPRINTF("param product:%f, param_product_min:%d\n", pp,
+                  pd_set->pc_min);
+
+        // stop when pp is greater or equal to pc_min, later we will set
+        // the start/end point to pc_min_params
+        if(pp >= pd_set->pc_min) {
+            break;
+        }
+
+        step++;
+    }
+
+    // if we never found a pp that satisfied pc_min, but ran out of steps, then
+    // just keep the interval as it is ...
+    if(ret < 0) {
+        DBGPRINTF("Parameter product was not exceeded by interval.\n");
+    }
+    // otherwise lets set the end/start point to the value at the step
+    // TODO couldn't we just set start/end to the current pc_min_params array?
+    else {
+        if(start_pc < pd_set->pc_min) {
+            ret = set_params_step_between_params(i->start,
+                                      i->start, i->end, step, pd_set);
+        }
+        else {
+            ret = set_params_step_between_params(i->end,
+                                      i->end, i->start, step, pd_set);
+        }
+    }
+
+
+    free(pc_min_params);
+    pc_min_params = NULL;
+
+    return 0;
+#else
+    ERRPRINTF("muParser not enabled at configure.\n");
+    return -1;
+#endif /* HAVE_MUPARSER */
+}
+
+/*
+ * Step along an interval until the product of the parameters at the end
+ * point of the interval matches the maximum parameter product (equal or less
+ * than if nonzero_max is set, or equal to or 1 step great than if nonzero_max
+ * is not set).
+ *
+ * @param   i           pointer to the interval that is to be adjusted
+ * @param   pd_set      pointer to the parameter definition set
+ *
+ * @return 0 on success or -1 on failure
+ */
+int
+adjust_interval_with_param_constraint_max(struct pmm_interval *i,
+                                          struct pmm_paramdef_set *pd_set)
+{
+#ifdef HAVE_MUPARSER
+    int *pc_max_params;
+    double pp, start_pc, end_pc;
+    int step;
+    int nonzero_end;
+    int ret;
+
+    // check if end point is fuzzy
+    nonzero_end = isnonzero_at_interval_end(i, pd_set);
+
+    // test to see if interval end point or start point exceed the pc_max
+    // if start exceeds, we adjust the start point, if end exceeds, we adjust
+    // the endpoint, if neither exceed, no adjustments need to be made, and
+    // if both exceed, there is an error
+    if(evaluate_constraint_with_params(pd_set->pc_parser, i->start, &start_pc)
+       < 0)
+    {
+        ERRPRINTF("Error evaluating parameter constraint.\n");
+        return -1;
+    }
+    if(evaluate_constraint_with_params(pd_set->pc_parser, i->end, &end_pc)
+       < 0)
+    {
+        ERRPRINTF("Error evaluating parameter constraint.\n");
+        return -1;
+    }
+
+    if(start_pc > pd_set->pc_max && end_pc > pd_set->pc_max) {
+        ERRPRINTF("Interval cannot be adjusted to fit parameter product "
+                  "constraint.\n");
+        return -1;
+    }
+    else if(start_pc > pd_set->pc_max) {
+    }
+    else if(end_pc > pd_set->pc_max) {
+    }
+    else {
+        DBGPRINTF("Interval already satisfies parameter product constraint.\n");
+    }
+
+    pc_max_params = malloc(pd_set->n_p * sizeof *pc_max_params);
+    if(pc_max_params == NULL) {
+        ERRPRINTF("Error allocating memory.\n");
+        return -1;
+    }
+
+
+
+    step = 0;
+    while(1) {
+
+        if(start_pc > pd_set->pc_max) {
+            ret = set_params_step_between_params(pc_max_params,
+                                      i->end, i->start, step, pd_set);
+        }
+        else {
+            ret = set_params_step_between_params(pc_max_params,
+                                      i->start, i->end, step, pd_set);
+        }
+                                                   
+        if(ret < 0) {
+            break;
+        }
+
+        // now calculate product at the stepped point
+        if(evaluate_constraint_with_params(pd_set->pc_parser, pc_max_params,
+                                           &pp) < 0)
+        {
+            ERRPRINTF("Error evaluating parameter constraint.\n");
+
+            free(pc_max_params);
+            pc_max_params = NULL;
+
+            return -1;
+        }
+
+        DBGPRINTF("param product:%f, param_product_max%d\n", pp,
+                  pd_set->pc_max);
+
+        // if fuzzy end (i.e. we bench at adjusted end point)
+        if(nonzero_end == 1) {
+
+            // stop when pp exceeds pc_max and take previous step. I.e. end
+            // point will be <= pc_max
+            if(pp > pd_set->pc_max) {
+                step--;
+                break;
+            }
+        }
+        // if fuzzy_end is not set and end point will have zero speed
+        else {
+            
+            // stop when pp exceeds or is equal to pc_max, this will now be
+            // the end point and have zero speed (step-1 will be benchmark-able
+            // and with a pp less than pc_max)
+            if(pp >= pd_set->pc_max) {
+                break;
+            }
+        }
+
+        step++;
+    }
+
+    // if we never found a pp that exceeded pc_max, but ran out of steps, then
+    // just keep the interval as it is ...
+    if(ret < 0) {
+        DBGPRINTF("Parameter product was not exceeded by interval.\n");
+    }
+    // otherwise lets set the end/start point to the value at the step
+    else {
+        if(start_pc > pd_set->pc_max) {
+            ret = set_params_step_between_params(i->start,
+                                      i->end, i->start, step, pd_set);
+        }
+        else {
+            ret = set_params_step_between_params(i->end,
+                                      i->start, i->end, step, pd_set);
+        }
+    }
+
+
+    free(pc_max_params);
+    pc_max_params = NULL;
+
+    return 0;
+#else
+    ERRPRINTF("muParser not enabled at configure.\n");
+    return -1;
+#endif /* HAVE_MUPARSER */
+}
 
 /*!
  * Test if the end point of an interval is nonzero or not. A nonzero end point
@@ -826,6 +1235,20 @@ project_diagonal_intervals(struct pmm_model *m)
                 ERRPRINTF("Error creating new projection interval.\n");
                 return -1;
             }
+
+            // if parameter product max is set, we adjust the new interval so
+            // it satisfies the constraint
+            if(r->pd_set->pc_max != -1) {
+
+                adjust_interval_with_param_constraint_max(new_i, r->pd_set);
+                                                      
+
+            }
+            if(r->pd_set->pc_min != -1) {
+                adjust_interval_with_param_constraint_min(new_i, r->pd_set);
+                                                       
+            }
+
 
             if(is_interval_divisible(new_i, r) == 1) {
                 DBGPRINTF("Adding diagonal projection interval.\n");

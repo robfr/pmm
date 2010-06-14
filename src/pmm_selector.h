@@ -43,12 +43,27 @@ int
 multi_naive_insert_bench(struct pmm_routine *r, struct pmm_benchmark *b);
 int
 naive_process_interval_list(struct pmm_routine *r, struct pmm_benchmark *b);
+int
+naive_step_interval(struct pmm_routine *r, struct pmm_interval *interval);
 
 
 int*
 multi_gbbp_diagonal_select_new_bench(struct pmm_routine *r);
 int
 init_gbbp_diagonal_interval(struct pmm_routine *r);
+
+int
+isfuzzy_at_interval_end(struct pmm_interval *i, struct pmm_paramdef *pd_array,
+                           int n);
+int
+adjust_interval_with_param_constraint_max(struct pmm_interval *i,
+                                          struct pmm_paramdef_set *pd_set);
+int
+adjust_interval_with_param_constraint_min(struct pmm_interval *i,
+                                          struct pmm_paramdef_set *pd_set);
+int
+isnonzero_at_interval_end(struct pmm_interval *i,
+                          struct pmm_paramdef_set *pd_set);
 int
 project_diagonal_intervals(struct pmm_model *m);
 struct pmm_interval*

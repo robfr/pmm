@@ -39,7 +39,7 @@
 #include "pmm_log.h"
 
 #include "pmm_cfgparser.h"
-
+#include "pmm_muparse.h"
 
 /******************************************************************************
  *
@@ -55,6 +55,9 @@ parse_paramdef_set(struct pmm_paramdef_set *pd_set, xmlDocPtr doc,
 int
 parse_paramdef(struct pmm_paramdef *pd_array, int n_p, xmlDocPtr doc,
                xmlNodePtr node);
+int
+parse_param_constraint(struct pmm_paramdef_set *pd_set, xmlDocPtr doc,
+                       xmlNodePtr node);
 
 int
 parse_bench_list(struct pmm_model *m, xmlDocPtr doc, xmlNodePtr node);
@@ -230,6 +233,7 @@ parse_paramdef_set(struct pmm_paramdef_set *pd_set, xmlDocPtr doc,
 	char *key;
 	xmlNodePtr cnode;
 	int i;
+    double d;
 
 	cnode = node->xmlChildrenNode;
 
@@ -283,7 +287,15 @@ parse_paramdef_set(struct pmm_paramdef_set *pd_set, xmlDocPtr doc,
             i++;
 
 		}
-		else {
+        else if(!xmlStrcmp(cnode->name, (const xmlChar *) "param_constraint"))
+        {
+            if(parse_param_constraint(pd_set, doc, cnode) < 0) {
+                ERRPRINTF("Error parsing parameter contraint.\n");
+                return -1;
+            }
+        }
+		else
+        {
 			// probably a text : null tag
 			// TODO suppress these and check everywhere else
 			//LOGPRINTF("unexpected tag: %s / %s\n", cnode->name, (char *)key);
@@ -296,16 +308,84 @@ parse_paramdef_set(struct pmm_paramdef_set *pd_set, xmlDocPtr doc,
 		cnode=cnode->next;
 	}
 
-    if(i != *n_p) {
+    if(i != pd_set->n_p) {
         ERRPRINTF("Parsed unexpected number of param_defs. (%d of %d).\n",
-                  i, *n_p);
+                  i, pd_set->n_p);
         return -1;
     }
+
+#ifdef HAVE_MUPARSER
+    // if the pc_formula is set, construct the muParser for it
+    if(pd_set->pc_formula != NULL) {
+        create_param_constraint_muparser(pd_set);
+
+        if(evaluate_constraint(pd_set->pc_parser, &d) == -1) {
+            ERRPRINTF("Error setting up param constraint formula parser.\n");
+            return -1;
+        }
+    }
+#endif
+
+
 
 	return 0; //success
 
 }
-//TODO change ambiguous params/param description of array/array-element
+
+/*!
+ * parse an xml parameter constraint defintiion into the paramdef set structure
+ *
+ * @param   pd_set      pointer to the paramdef set structure
+ * @param   doc         pointer to the xml document
+ * @param   node        pointer to the node of the xml document describing the
+ *                      parameter constraints
+ *
+ * @return 0 on success, -1 on failure
+ */
+int
+parse_param_constraint(struct pmm_paramdef_set *pd_set, xmlDocPtr doc,
+                       xmlNodePtr node)
+{
+	char *key;
+	xmlNodePtr cnode;
+
+	// get the children of the parameters node
+	cnode = node->xmlChildrenNode;
+
+
+	// iterate through the children of the routine node
+	while(cnode != NULL) {
+
+		// get the value associated with the each cnode
+		key = (char *)xmlNodeListGetString(doc, cnode->xmlChildrenNode, 1);
+
+		// if the name of the cnode is ... do something with the key
+		if(!xmlStrcmp(cnode->name, (const xmlChar *) "formula")) {
+			if(!set_str(&(pd_set->pc_formula), key)) {
+				ERRPRINTF("set_str failed setting name\n");
+                return -1;
+			}
+		}
+		else if(!xmlStrcmp(cnode->name, (const xmlChar *) "max")) {
+			pd_set->pc_max = atoi((char *)key);
+		}
+		else if(!xmlStrcmp(cnode->name, (const xmlChar *) "min")) {
+			pd_set->pc_min = atoi((char *)key);
+		}
+		else {
+			// probably a text : null tag
+			// TODO suppress these and check everywhere else
+			//LOGPRINTF("unexpected tag: %s / %s\n", cnode->name, (char *)key);
+		}
+
+		free(key);
+        key = NULL;
+
+		cnode=cnode->next;
+	}
+
+	return 0; //success
+}
 /*!
  * parse an xml parameter definition into the paramdef array of a routine
  *
@@ -2614,6 +2694,44 @@ write_paramdef_set_xtwp(xmlTextWriterPtr writer,
         }
     }
     
+    if(pd_set->pc_formula != NULL) {
+        // start and element named param_constraint
+        rc = xmlTextWriterStartElement(writer, BAD_CAST "param_constraint");
+        if (rc < 0) {
+            ERRPRINTF("Error @ xmlTextWriterStartElement (param_constraint)\n");
+            return rc;
+        }
+
+        // add an element with name "pc_formula" and value of the formula string
+        rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "formula",
+                "%s", pd_set->pc_formula);
+        if (rc < 0) {
+            ERRPRINTF("Error @ xmlTextWriterWriteFormatElement (pc_formula)\n");
+            return rc;
+        }
+        // add an element with name "pc_max" and value of max parameter product
+        rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "pc_max",
+                "%d", pd_set->pc_max);
+        if (rc < 0) {
+            ERRPRINTF("Error @ xmlTextWriterWriteFormatElement (pc_max)\n");
+            return rc;
+        }
+        // add an element with name "pc_min" and value of min parameter product
+        rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "pc_min",
+                "%d", pd_set->pc_min);
+        if (rc < 0) {
+            ERRPRINTF("Error @ xmlTextWriterWriteFormatElement (pc_min)\n");
+            return rc;
+        }
+
+        // Close the param_constraint element.
+        rc = xmlTextWriterEndElement(writer);
+        if (rc < 0) {
+            ERRPRINTF("Error @ xmlTextWriterEndElement\n");
+            return rc;
+        }
+    }
+
     // Close the parameters element.
     rc = xmlTextWriterEndElement(writer);
     if (rc < 0) {

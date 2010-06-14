@@ -129,6 +129,10 @@ struct pmm_paramdef_set* new_paramdef_set()
 
     pd_set->n_p = -1;
 
+    pd_set->pc_formula = (void *)NULL;
+    pd_set->pc_max = -1;
+    pd_set->pc_min = -1;
+
     return pd_set;
 }
 
@@ -2070,7 +2074,21 @@ int
 isequal_paramdef_set(struct pmm_paramdef_set *pds_a,
                      struct pmm_paramdef_set *pds_b)
 {
-    if(pds_a->n_p != pds_b->n_p)
+    if(pds_a->n_p != pds_b->n_p ||
+       pds_a->pc_max != pds_b->pc_max ||
+       pds_a->pc_min != pds_b->pc_min)
+    {
+        return 0;
+    }
+
+    if(pds_a->pc_formula != NULL && pds_b->pc_formula != NULL)
+    {
+        if(strcmp(pds_a->pc_formula, pds_b->pc_formula) != 0) {
+            return 0;
+        }
+    }
+    else if((pds_a->pc_formula == NULL && pds_b->pc_formula != NULL) ||
+            (pds_a->pc_formula != NULL && pds_b->pc_formula == NULL))
     {
         return 0;
     }
@@ -3451,6 +3469,14 @@ void print_paramdef_set(struct pmm_paramdef_set *pd_set)
     
 	print_paramdef_array(pd_set->pd_array, pd_set->n_p);
 
+    if(pd_set->pc_formula != NULL) {
+        printf("[print_paramdef_set]: pc_formula:%s\n", pd_set->pc_formula);
+    } else {
+        printf("[print_paramdef_set]: pc_formula:\n");
+    }
+
+    printf("[print_paramdef_set]: pc_max:%d\n", pd_set->pc_max);
+    printf("[print_paramdef_set]: pc_min:%d\n", pd_set->pc_min);
 }
 
 /*
@@ -3712,6 +3738,9 @@ void free_paramdef_set(struct pmm_paramdef_set **pd_set)
 
     if((*pd_set)->pd_array != NULL)
         free_paramdef_array(&(*pd_set)->pd_array, (*pd_set)->n_p);
+
+    free((*pd_set)->pc_formula);
+    (*pd_set)->pc_formula = NULL;
 
     free(*pd_set);
     *pd_set = NULL;

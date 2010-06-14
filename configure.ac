@@ -286,6 +286,59 @@ fi
 AC_SUBST(ENABLE_OCTAVE)
 
 
+# test for muParser library
+AC_ARG_WITH(muparser,
+    [  --with-muparser[=path]   specify use of (and optional path to) muParser],
+    ,with_muparser=check)
+if test "x$with-muparser" != "xno"; then # if muParser is not disabled
+
+    if test "x$with_muparser" != "xcheck"; then # if path for muPaser is spec'd
+        MUPARSER_CPPFLAGS="-I$with_muparser/include"
+        MUPARSER_LDFLAGS="-L$with_muparser/lib"
+    else
+        MUPARSER_CPPFLAGS=""
+        MUPARSER_LDFLAGS=""
+    fi
+
+
+    OLD_CPPFLAGS="$CPPFLAGS"
+    OLD_LDFLAGS="$LD_FLAGS"
+    CPPFLAGS="$MUPARSER_CPPFLAGS $CPPFLAGS"
+    LDFLAGS="$MUPARSER_LDFLAGS $LDFLAGS"
+
+    AC_CHECK_HEADERS([muParser/muParserDLL.h],
+    [
+
+        AC_CHECK_LIB([muparser], [_init],
+        [
+            MUPARSER_LIBS="-lmuparser"
+            HAVE_MUPARSER=yes
+            AC_DEFINE(HAVE_MUPARSER,1,[Have muParser])
+        ],
+        [
+            # fail if with-muparser was explicity set
+            if test "x$with_muparser" != "xcheck"; then
+                AC_MSG_ERROR([muParser not found.])
+            fi
+         ],)
+    ]
+    [
+        # fail if with-muparser was explicity set
+        if test "x$with_muparser" != "xcheck"; then
+            AC_MSG_ERROR([muParser not found.])
+        fi
+    ])
+
+    CPPFLAGS="$OLD_CPPFLAGS"
+    LDFLAGS="$OLD_LDFLAGS"
+fi
+AM_CONDITIONAL([HAVE_MUPARSER], [test x$HAVE_MUPARSER = xyes])
+AC_SUBST(MUPARSER_LIBS)
+AC_SUBST(MUPARSER_CPPFLAGS)
+AC_SUBST(MUPARSER_LDFLAGS)
+AC_SUBST(HAVE_MUPARSER)
+
+
 # test for Gnu Scientific Library
 AC_ARG_WITH(gsl,
     [  --with-gsl[=path]   specify use of (and optional path to) GSL],,

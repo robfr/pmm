@@ -81,6 +81,14 @@ typedef struct pmm_paramdef {
 typedef struct pmm_paramdef_set {
     int n_p;                            // number of parameters
     struct pmm_paramdef *pd_array;      // array of parameter definitions
+    char *pc_formula;                   // formula for parameter constraint
+    int pc_max;                         // max of parameter constraint
+    int pc_min;                         // min of parameter constraint
+
+#ifdef HAVE_MUPARSER
+    struct pmm_param_constraint_muparser *pc_parser;
+#endif
+
 } PMM_Paramdef_Set;
 
 
@@ -192,7 +200,6 @@ typedef struct pmm_routine {
 	char *name;
 	char *exe_path;
 
-    int param_product_constraint; /* maximum product of all parameters */
     struct pmm_paramdef_set *pd_set; // set of parameter defintions
 
 	//struct pmm_policy *policy; TODO implement policies
