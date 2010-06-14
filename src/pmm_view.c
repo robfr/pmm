@@ -909,7 +909,7 @@ set_plot_labels_ranges(gnuplot_ctrl *plot_handle, struct pmm_model *model,
         }
     }
 
-    gnuplot_cmd(plot_handle, "set yrange[-1:]");
+    gnuplot_cmd(plot_handle, "set yrange[-10:]");
     gnuplot_set_ylabel(plot_handle, "flops");
 }
 
@@ -953,6 +953,10 @@ draw_plot_intervals(gnuplot_ctrl *plot_handle, struct pmm_model *model)
             
 
     struct pmm_interval *interval;
+
+    // clear arrows and labels
+    gnuplot_cmd(plot_handle, "unset label");
+    gnuplot_cmd(plot_handle, "unset arrow");
 
     gnuplot_cmd(plot_handle, "set label \'point\' at screen 0.1,0.10 right");
     gnuplot_cmd(plot_handle, "set label \' \' at screen 0.2,0.10 point ps 1");
@@ -1017,6 +1021,10 @@ draw_splot_intervals(gnuplot_ctrl *plot_handle, struct pmm_model *model)
             
 
     struct pmm_interval *interval;
+
+    // clear arrows and labels
+    gnuplot_cmd(plot_handle, "unset label");
+    gnuplot_cmd(plot_handle, "unset arrow");
 
     gnuplot_cmd(plot_handle, "set label \'point\' at screen 0.1,0.10 right");
     gnuplot_cmd(plot_handle, "set label \' \' at screen 0.2,0.10 point ps 1");
