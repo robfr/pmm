@@ -533,12 +533,23 @@ int* multi_random_select_new_bench(struct pmm_routine *r)
 	return params;
 }
 
-int rand_between(int min, int max)
+
+/*!
+ * find a random integer between two values (inclusive)
+ *
+ * @param   min     first integer
+ * @param   max     second integer
+ *
+ * @return random integer between the two values passed
+ */
+int
+rand_between(int min, int max)
 {
 	if(min==max) {
 		return min;
 	}
 
+    // if min is greater than max, swap them around
 	if(min>max) {
 		max = max+min;
 		min = max-min; //min now equals original max
@@ -548,7 +559,289 @@ int rand_between(int min, int max)
 	return (int)(rand()%(max-min))+min;
 
 }
+
+
 /*!
+ * Returns a new point to benchmark using the Multidimensional Naive GBBP
+ * method. Briefly, this method initialises construction intervals in a grid
+ * form, through all possible points as defined by the parameter definitions.
+ * Then GBBP is applied to all construction intervals to select benchmark
+ * points, until the model has been built along all lines in the grid.
+ *
+ * @param   r   pointer to the routine for which we will find a new benchmark
+ *              point
+ *
+ * @return pointer to an array describing the new benchmark point or NULL on
+ * failure
+ */
+int*
+multi_gbbp_naive_select_new_bench(struct pmm_routine *r)
+{
+    int *params;
+
+	struct pmm_interval_list *i_list;
+	struct pmm_interval *top_i, *new_i;
+    struct pmm_model *m;
+
+    m = r->model;
+	i_list = m->interval_list;
+
+	//if model construction has not started, i_list will be empty
+	if(isempty_interval_list(i_list) == 1) {
+
+        DBGPRINTF("Interval list is empty, initializing new interval list.\n");
+
+        if(init_gbbp_naive_intervals(r) < 0) {
+            ERRPRINTF("Error initialising new construction intervals.\n");
+            return NULL;
+        }
+	}
+
+    params = malloc(r->pd_set->n_p * sizeof *params);
+    if(params == NULL) {
+        ERRPRINTF("Error allocating memory.\n");
+        return NULL;
+    }
+
+    if((top_i = read_top_interval(i_list)) == NULL) {
+        ERRPRINTF("Error reading interval from head of list\n");
+
+        free(params);
+        params = NULL;
+
+        return NULL;
+    }
+
+    DBGPRINTF("Choosing benchmark based on following interval:\n");
+    print_interval(top_i);
+
+    switch(top_i->type) {
+        case IT_GBBP_EMPTY :
+        case IT_GBBP_CLIMB :
+        case IT_GBBP_BISECT :
+        case IT_GBBP_INFLECT :
+
+            DBGPRINTF("Applying step of GBBP to benchmark selection.\n");
+
+            //apply GBBP
+            multi_gbbp_bench_from_interval(r, top_i, params);
+            break;
+
+
+        case IT_POINT :
+
+            DBGPRINTF("Benchmarking at point ...\n");
+            //benchmark at this point
+            multi_gbbp_bench_from_interval(r, top_i, params);
+            break;
+
+        default :
+            ERRPRINTF("Invalid interval type: %s (%d)\n",
+                       interval_type_to_string(top_i->type), top_i->type);
+            print_interval(top_i);
+
+            free(params);
+            params = NULL;
+
+            break;
+    }
+
+    return params;
+}
+
+/*!
+ * Function initialises a construction intervals in a grid form across the
+ * whole parameter space. To form the grid, for each parameter, for all
+ * possible parameter values on that axis, intervals are projected parallel to
+ * all other axes.
+ *
+ * Other intervals are added to benchmark neccessary extremeties of the
+ * parameter space and to tag the completion of the diagonal and the whole
+ * model in general.
+ *
+ * @return 0 on success or -1 on failure
+ */
+int
+init_gbbp_naive_intervals(struct pmm_routine *r)
+{
+    int j;
+    struct pmm_model *m;
+    struct pmm_interval_list *i_list;
+    struct pmm_interval *diag_i, *proj_i, *point_i;
+    struct pmm_benchmark *zero_b;
+
+    int ret;
+    int *step_params;
+    int step;
+
+    m = r->model;
+    i_list = m->interval_list;
+
+    step_params = malloc(r->pd_set->n_p * sizeof *step_params);
+    if(step_params == NULL) {
+        ERRPRINTF("Error allocating memory.\n");
+        return -1;
+    }
+
+    // first initialize a diagonal interval
+    diag_i = new_interval();
+    diag_i->type = IT_GBBP_EMPTY;
+
+    diag_i->n_p = r->pd_set->n_p;
+
+    diag_i->start = init_param_array_start(r->pd_set);
+    diag_i->end = init_param_array_end(r->pd_set);
+    if(diag_i->start == NULL || diag_i->end == NULL) {
+        ERRPRINTF("Error initializing start/end parameter array.\n");
+
+        free_interval(&diag_i);
+
+        free(step_params);
+        step_params = NULL;
+
+        return -1;
+    }
+
+    // adjust the diagonal for pc_max (but not pc_min)
+    if(r->pd_set->pc_max != -1) {
+
+        adjust_interval_with_param_constraint_max(diag_i, r->pd_set);
+
+    }
+
+
+    // now step along this diagonal
+    step = 0;
+    while((ret = set_params_step_along_climb_interval(step_params, step, diag_i,
+                                                      r->pd_set)) == 0)
+                                                      
+    {
+
+        // at each point, iterate through all parameters and project intervals
+        // perpendicular to all planes
+        for(j=0; j<r->pd_set->n_p; j++)
+        {
+
+
+            proj_i = new_projection_interval(step_params,
+                    &(r->pd_set->pd_array[j]),
+                    j, r->pd_set->n_p);
+
+            if(proj_i == NULL) {
+                ERRPRINTF("Error creating projection interval.\n");
+
+                free_interval(&diag_i);
+
+                free(step_params);
+                step_params = NULL;
+
+                return -1;
+            }
+
+            //adjust interval for pc_max / pc_min
+            if(r->pd_set->pc_max != -1) {
+                adjust_interval_with_param_constraint_max(proj_i, r->pd_set);
+                        
+            }
+            if(r->pd_set->pc_min != -1) {
+                adjust_interval_with_param_constraint_min(proj_i, r->pd_set);
+                        
+            }
+
+            // only add if the interval is not zero length and divisible
+            if(proj_i->start[j] != proj_i->end[j] &&
+                    is_interval_divisible(proj_i, r) == 1)
+            {
+                LOGPRINTF("adding interval:\n");
+                print_interval(proj_i);
+                add_bottom_interval(i_list, proj_i);
+
+            }
+            else {
+                LOGPRINTF("Interval not divisible, not adding.\n");
+                print_interval(proj_i);
+                free_interval(&proj_i);
+            }
+
+
+            // if the projection to a non zero end point (and we did not
+            // empty the proj_i because it was non-divisible ....
+            if(r->pd_set->pd_array[j].nonzero_end == 1 && proj_i != NULL)
+            {
+                //add an IT_POINT interval at the endpoint of the projected
+                //interval
+                point_i = init_interval(0, r->pd_set->n_p, IT_POINT, proj_i->end,
+                        NULL);
+                if(point_i == NULL) {
+                    ERRPRINTF("Error creating new point interval.\n");
+                    return -1;
+                }
+
+                DBGPRINTF("Adding non zero end interval naive projection\n");
+                print_interval(point_i);
+
+                add_top_interval(i_list, point_i);
+
+            }
+            else if(proj_i != NULL)
+            {
+                // create a zero speed point at end ...
+                zero_b = new_benchmark();
+                zero_b = init_zero_benchmark(proj_i->end, r->pd_set->n_p);
+                if(zero_b == NULL) {
+                    ERRPRINTF("Error allocating new benchmark.\n");
+                    return -1;
+                }
+
+                //add to model
+                if(insert_bench(r->model, zero_b) < 0) {
+                    ERRPRINTF("Error inserting a zero benchmark.\n");
+                    free_benchmark(&zero_b);
+
+                    return -1;
+                }
+            }
+        }
+
+            step++;
+    }
+
+    if(ret != -1) {
+        ERRPRINTF("Error stepping along diagonal interval.\n");
+
+        free_interval(&diag_i);
+
+        free(step_params);
+        step_params = NULL;
+
+        return -1;
+    }
+
+
+    free_interval(&diag_i);
+
+    free(step_params);
+    step_params = NULL;
+
+    return 0; //success
+}
+
+
+/*!
+ * Returns a new point to benchmark using the Multidimensional Diagonal GBBP
+ * method. Briefly, this method first constructs, using the GBBP algorithm,
+ * on an interval from the start point of all parameter definitions to the end
+ * point of those definitions. After construction along this interval is
+ * complete, all points that were measured along it are used to project new
+ * construction intervals. From each point N construction intervals are
+ * projected parallel to each of the N parameter axes. GBBP is then applied to
+ * these new construction intervals, completing the model.
+ *
+ * @param   r   pointer to the routine for which we will find a new benchmark
+ *              point
+ *
+ * @return pointer to an array describing the new benchmark point or NULL on
+ * failure
  */
 int*
 multi_gbbp_diagonal_select_new_bench(struct pmm_routine *r)
@@ -1977,6 +2270,12 @@ process_it_gbbp_empty(struct pmm_routine *r, struct pmm_interval *i)
 {
 
     i->type = IT_GBBP_CLIMB;
+
+    //check interval is divisible and remove if not
+    if(is_interval_divisible(i, r) != 1) {
+        DBGPRINTF("Interval not divisible, removing.\n");
+        remove_interval(r->model->interval_list, i);
+    }
 
     return 0;
 }

@@ -46,6 +46,10 @@ naive_process_interval_list(struct pmm_routine *r, struct pmm_benchmark *b);
 int
 naive_step_interval(struct pmm_routine *r, struct pmm_interval *interval);
 
+int*
+multi_gbbp_naive_select_new_bench(struct pmm_routine *r);
+int
+init_gbbp_naive_intervals(struct pmm_routine *r);
 
 int*
 multi_gbbp_diagonal_select_new_bench(struct pmm_routine *r);

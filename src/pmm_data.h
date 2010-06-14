@@ -58,6 +58,7 @@ typedef enum pmm_construction_method {
 	CM_NAIVE,
     CM_RAND,
 	CM_GBBP,
+	CM_GBBP_NAIVE,
     CM_INVALID
 } PMM_Construction_Method;
 

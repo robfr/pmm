@@ -113,6 +113,8 @@ int set_non_blocking(int fd) {
  *
  * @return file descriptor of the pipe opened to the command cmd.
  *
+ * TODO test for file not found
+ *
  */
 int
 my_popen(char *cmd, char **args, int n, pid_t *pid)
@@ -554,6 +556,9 @@ void *benchmark(void *scheduled_r) {
 	//	rargs = multi_gbbp_select_new_bench(r);
 		rargs = multi_gbbp_diagonal_select_new_bench(r);
 	}
+    else if(r->construction_method == CM_GBBP_NAIVE) {
+		rargs = multi_gbbp_naive_select_new_bench(r);
+    }
 	else if(r->construction_method == CM_RAND) {
 		rargs = multi_random_select_new_bench(r);
 	}
@@ -672,61 +677,29 @@ void *benchmark(void *scheduled_r) {
 
 
     free(output);
+    output = NULL;
 
     //DBGPRINTF("bmark:%p\n", bmark);
 
     //TODO might need a mutex here
+    temp_ret = 0;
     if(r->construction_method == CM_NAIVE) {
 
-        //DBGPRINTF("Inserting benchmark with naive construction method.\n");
+        DBGPRINTF("Inserting benchmark with naive construction method.\n");
+
         temp_ret = multi_naive_insert_bench(r, bmark);
 
-        if(temp_ret < 0) {
-            //interval processing failed, bench added though so we will write
-            //the model to save the result of the execution
-            if(temp_ret == -1) {
-                ERRPRINTF("Interval error when inserting new benchmark.\n");
-                write_model(r->model);
-            }
-            else {
-                ERRPRINTF("Error inserting new benchmark.\n");
-            }
-
-            free(rargs);
-
-            set_executing_benchmark(0);
-
-            *ret = -1; //failure
-
-            return (void *)ret;
-        }
-
     }
-    else if(r->construction_method == CM_GBBP) {
+    else if(r->construction_method == CM_GBBP ||
+            r->construction_method == CM_GBBP_NAIVE) {
+        // note, we can use the same insertion methods for GBBP Diagonal and
+        // GBBP Naive because all steps in the insertion phase are common to
+        // both methods.
 
-        //DBGPRINTF("Inserting benchmark with GBBP.\n");
+        DBGPRINTF("Inserting benchmark with GBBP.\n");
 
         temp_ret = multi_gbbp_insert_bench(NULL, r, bmark);
-        if(temp_ret < 0) {
 
-            //interval processing failed, bench added though so we will write
-            //the model to save the result of the execution
-            if(temp_ret == -1) {
-                ERRPRINTF("Interval error when inserting new benchmark.\n");
-                write_model(r->model);
-            }
-            else {
-                ERRPRINTF("Error inserting new benchmark.\n");
-            }
-
-            free(rargs);
-
-            set_executing_benchmark(0);
-
-            *ret = -1; //failure
-
-            return (void *)ret;
-        }
     }
     else if(r->construction_method == CM_RAND) {
         insert_bench(r->model, bmark);
@@ -734,8 +707,28 @@ void *benchmark(void *scheduled_r) {
     else { // default
         insert_bench(r->model, bmark);
     }
-    //print_model(r->model);
-    //
+
+    // check if benchmark insertion failed
+    if(temp_ret < 0) {
+        //interval processing failed, bench added though so we will write
+        //the model to save the result of the execution
+        if(temp_ret == -1) {
+            ERRPRINTF("Interval error when inserting new benchmark.\n");
+            write_model(r->model);
+        }
+        else {
+            ERRPRINTF("Error inserting new benchmark.\n");
+        }
+
+        free(rargs);
+        rargs = NULL;
+
+        set_executing_benchmark(0);
+
+        *ret = -1; //failure
+
+        return (void *)ret;
+    }
 
 
     //update number of unwritten benchmarks and the time spent benchmarking
