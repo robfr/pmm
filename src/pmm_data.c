@@ -75,7 +75,8 @@ struct pmm_config* new_config() {
     c->configfile = CFGDIR"/pmmd.conf";
 	c->logfile = "./pmmd.log"; //TODO  set default log file directory
 
-    c->main_sleep_period = 1;
+    c->ts_main_sleep_period.tv_sec = 1;
+    c->ts_main_sleep_period.tv_nsec = 0;
     c->num_execs_threshold = 20;
     c->time_spend_threshold = 60;
 
@@ -3499,7 +3500,8 @@ void print_config(struct pmm_config *cfg) {
 		printf("no\n");
 	}
 
-    printf("main sleep period: %d\n", cfg->main_sleep_period);
+    printf("main sleep period: %ds %llds\n", cfg->ts_main_sleep_period.tv_sec,
+                                   cfg->ts_main_sleep_period.tv_nsec);
 	printf("log file: %s\n", cfg->logfile);
 	printf("config file: %s\n", cfg->configfile);
 	printf("load path: %s\n", cfg->loadhistory->load_path);
