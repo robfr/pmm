@@ -72,7 +72,7 @@ struct pmm_config* new_config() {
 
 	c->daemon = 0;
     c->build_only = 0;
-    c->configfile = CFGDIR"/pmmd.conf";
+    c->configfile = SYSCONFDIR"/pmmd.conf";
 	c->logfile = "./pmmd.log"; //TODO  set default log file directory
 
     c->ts_main_sleep_period.tv_sec = 1;

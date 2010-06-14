@@ -65,7 +65,10 @@ lib_LTLIBRARIES = libpmm.la
 libpmm_la_SOURCES = pmm_util.c pmm_data.c pmm_cfgparser.c pmm_cond.c \
 		pmm_octave.cc
 libpmm_la_LDFLAGS =  $(XML_LIBS) $(OCTAVE_LIBS) $(PAPI_LDFLAGS)
-libpmm_la_CPPFLAGS = $(XML_CFLAGS) $(PAPI_CPPFLAGS) -DPKGDATADIR=\"$(pkgdatadir)\"
+libpmm_la_CPPFLAGS = $(XML_CFLAGS) $(PAPI_CPPFLAGS) \
+					 -DPKGDATADIR=\"$(pkgdatadir)\" \
+ 					 -DSYSCONFDIR=\"$(sysconfdir)\" \
+					 -DLOCALSTATEDIR=\"$(localstatedir)\"
 libpmm_la_CXXFLAGS = $(OCTAVE_CXXFLAGS)
 
 

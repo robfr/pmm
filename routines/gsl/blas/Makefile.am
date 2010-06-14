@@ -27,11 +27,7 @@ INCLUDES	= -I$(top_builddir) -I$(top_builddir)/src \
 LIBS += $(GSL_LIBS) $(XML_LIBS) -lpmm
 LDFLAGS += -L$(top_builddir)/src
 
-routinesdir = @ROUTINESDIR@
-
-routinedir = $(routinesdir)
-
-routine_PROGRAMS = dgemm dgemm2 dgemm3 dsyrk
+pkglib_PROGRAMS = dgemm dgemm2 dgemm3 dsyrk
 
 dgemm_SOURCES = dgemm.c
 

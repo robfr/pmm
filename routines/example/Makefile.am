@@ -28,11 +28,8 @@ INCLUDES	= -I$(top_builddir) -I$(top_builddir)/src \
 DEPENDS = \
   $(top_builddir)/src/libpmm.la
 
-routinesdir = @ROUTINESDIR@
 
-routinedir = $(routinesdir)
-
-routine_PROGRAMS	= example
+pkglib_PROGRAMS	= example
 
 example_SOURCES = example.c
 

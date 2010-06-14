@@ -22,11 +22,7 @@ INCLUDES	= -I$(top_builddir) -I$(top_builddir)/src \
 		-I$(top_srcdir) -I$(top_srcdir)/src \
 		$(CFLAGS)
 
-routinesdir = @ROUTINESDIR@
-
-routinedir = $(routinesdir)
-
-routine_PROGRAMS = dpotrf
+pkglib_PROGRAMS = dpotrf
 
 dpotrf_SOURCES = dpotrf.c
 

@@ -8,6 +8,9 @@ ENABLE_OCTAVE=@ENABLE_OCTAVE@
 BENCHGSLBLAS=@BENCHGSLBLAS@
 BENCHGOTOBLAS2=@BENCHGOTOBLAS2@
 
+LOCALSTATEDIR=$1
+PKGLIBDIR=$2
+
 echo "<?xml version=\"1.0\"?>
 
 <config>
@@ -18,15 +21,15 @@ echo "<?xml version=\"1.0\"?>
     <model_write_execs_threshold>20</model_write_execs_threshold>
 
 	<load_monitor>
-		<load_path>@LOCALSTATEDIR@/loadhistory</load_path>
+		<load_path>$LOCALSTATEDIR/loadhistory</load_path>
 		<write_period>60</write_period>
 		<history_size>60</history_size>
 	</load_monitor>
 
 	<routine>
 		<name>dgemm_sim_cpu</name>
-		<exe_path>@ROUTINESDIR@/dgemm_sim_cpu.sh</exe_path>
-		<model_path>@LOCALSTATEDIR@/dgemm_sim_cpu_model</model_path>
+		<exe_path>$PKGLIBDIR/dgemm_sim_cpu.sh</exe_path>
+		<model_path>$LOCALSTATEDIR/dgemm_sim_cpu_model</model_path>
 		<parameters>
 			<n_p>1</n_p>
 			<param>
@@ -47,8 +50,8 @@ echo "<?xml version=\"1.0\"?>
 	</routine>
 	<routine>
 		<name>dgemm_sim_gpu</name>
-		<exe_path>@ROUTINESDIR@/dgemm_sim_gpu.sh</exe_path>
-		<model_path>@LOCALSTATEDIR@/dgemm_sim_gpu_model</model_path>
+		<exe_path>$PKGLIBDIR/dgemm_sim_gpu.sh</exe_path>
+		<model_path>$LOCALSTATEDIR/dgemm_sim_gpu_model</model_path>
 		<parameters>
 			<n_p>1</n_p>
 			<param>
@@ -73,8 +76,8 @@ if [ "$BENCHGSLBLAS" = "yes" ]; then
     echo "
 	<routine>
 		<name>dgemm</name>
-		<exe_path>@ROUTINESDIR@/dgemm</exe_path>
-		<model_path>@LOCALSTATEDIR@/dgemm_model</model_path>
+		<exe_path>$PKGLIBDIR/dgemm</exe_path>
+		<model_path>$LOCALSTATEDIR/dgemm_model</model_path>
 		<parameters>
 			<n_p>1</n_p>
 			<param>
@@ -92,14 +95,13 @@ if [ "$BENCHGSLBLAS" = "yes" ]; then
 		<construction>
 			<method>gbbp</method>
 		</construction>
-	</routine>
-"
+	</routine>"
     if [ "$ENABLE_OCTAVE" = "yes" ]; then
         echo "
 	<routine>
 		<name>dgemm2</name>
-		<exe_path>@ROUTINESDIR@/dgemm2</exe_path>
-		<model_path>@LOCALSTATEDIR@/dgemm2_model</model_path>
+		<exe_path>$PKGLIBDIR/dgemm2</exe_path>
+		<model_path>$LOCALSTATEDIR/dgemm2_model</model_path>
 		<parameters>
 			<n_p>2</n_p>
 			<param>
@@ -129,8 +131,8 @@ if [ "$BENCHGSLBLAS" = "yes" ]; then
 	</routine>
 	<routine>
 		<name>dgemm2_naive</name>
-		<exe_path>@ROUTINESDIR@/dgemm2</exe_path>
-		<model_path>@LOCALSTATEDIR@/dgemm2_naive_model</model_path>
+		<exe_path>$PKGLIBDIR/dgemm2</exe_path>
+		<model_path>$LOCALSTATEDIR/dgemm2_naive_model</model_path>
 		<parameters>
 			<n_p>2</n_p>
 			<param>
@@ -202,8 +204,8 @@ fi
     echo "
 	<routine>
 		<name>dsyrk</name>
-		<exe_path>@ROUTINESDIR@/dsyrk</exe_path>
-		<model_path>@LOCALSTATEDIR@/dsyrk_model</model_path>
+		<exe_path>$PKGLIBDIR/dsyrk</exe_path>
+		<model_path>$LOCALSTATEDIR/dsyrk_model</model_path>
 		<parameters>
 			<n_p>1</n_p>
 			<param>
@@ -226,8 +228,8 @@ if [ "$BENCHGOTO2BLAS" = "yes" ]; then
     echo "
 	<routine>
 		<name>gotoblas2_dgemm</name>
-		<exe_path>@ROUTINESDIR@/gotoblas2_dgemm</exe_path>
-		<model_path>@LOCALSTATEDIR@/gotoblas2_dgemm_model</model_path>
+		<exe_path>$PKGLIBDIR/gotoblas2_dgemm</exe_path>
+		<model_path>$LOCALSTATEDIR/gotoblas2_dgemm_model</model_path>
 		<parameters>
 			<n_p>1</n_p>
 			<param>

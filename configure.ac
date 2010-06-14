@@ -126,51 +126,6 @@ AC_SUBST(GOTOBLAS2_SUBDIR)
 AC_SUBST(BENCHGOTOBLAS2)
 
 
-
-# deal with definition of prefix to NONE in some cases TODO investigate ...
-if test "x$prefix" = "xNONE"; then
-	prefix=$ac_default_prefix
-fi
-
-# TODO Maybe this is not used anywhere
-# location of main config files
-CFGDIR="/etc"
-if test "x$prefix" != "x"; then
-CFGDIR="$prefix/etc"
-fi
-AC_ARG_WITH(cfgdir, [  --with-cfgdir=DIR     Pmm main configuration files in DIR  (default /etc)], [CFGDIR="$withval"])
-AC_SUBST(CFGDIR)
-AC_DEFINE_UNQUOTED(CFGDIR,"$CFGDIR",[where to place config files])
-
-# TODO Maybe this is not used anywhere
-# location of shared files
-SHAREDIR="/usr/share"
-if test "x$prefix" != "x"; then
-SHAREDIR="$prefix/share"
-fi
-AC_ARG_WITH(sharedir, [  --with-sharedir=DIR    Pmm shared files in DIR  (default /usr/share)]. [SHAREDIR="$withval"])
-AC_SUBST(SHAREDIR)
-AC_DEFINE_UNQUOTED(SHAREDIR, "$SHAREDIR", [where to place shared files])
-
-# location of routine binaries
-ROUTINESDIR="/usr/lib/pmm"
-if test "x$prefix" != "x"; then
-ROUTINESDIR="$prefix/lib/pmm"
-fi
-AC_ARG_WITH(routinesdir, [  --with-routinesdir=DIR    Pmm routine binaries in DIR  (default /usr/lib/pmm)]. [ROUTINESDIR="$withval"])
-AC_SUBST(ROUTINESDIR)
-AC_DEFINE_UNQUOTED(ROUTINESDIR, "$ROUTINESDIR", [where to place routine binaries])
-
-# location of model data
-LOCALSTATEDIR="/var/pmm"
-if test "x$prefix" != "x"; then
-LOCALSTATEDIR="$prefix/var/pmm"
-fi
-AC_ARG_WITH(localstatedir, [  --with-localstatedir=DIR   Pmm model data in DIR (default /var/pmm)]. [LOCALSTATEDIR="$withval"])
-AC_SUBST(LOCALSTATEDIR)
-AC_DEFINE_UNQUOTED(LOCALSTATEDIR, "$LOCALSTATEDIR", [where to store model data])
-
-
 AC_PATH_PROG(GNUPLOT, gnuplot)
 if test "x$GNUPLOT" = "x"; then
     AC_MSG_ERROR([gnuplot not found])
@@ -222,6 +177,7 @@ fi
 if test "x$dbus_have_gnuc_varargs" = "xyes"; then
     AC_DEFINE(HAVE_GNUC_VARARGS,1,[Have GNU-style varargs macros])
 fi
+
 
 AC_ARG_WITH(papi,
     [  --with-papi[=path]   specify use of (and optional path to) PAPI],,

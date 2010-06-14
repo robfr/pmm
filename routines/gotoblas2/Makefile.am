@@ -20,11 +20,8 @@
 #
 INCLUDES = -I$(top_builddir)/src
 
-routinesdir = @ROUTINESDIR@
 
-routinedir = $(routinesdir)
-
-routine_PROGRAMS = gotoblas2_dgemm
+pkglib_PROGRAMS = gotoblas2_dgemm
 
 gotoblas2_dgemm_SOURCES = gotoblas2_dgemm.c
 

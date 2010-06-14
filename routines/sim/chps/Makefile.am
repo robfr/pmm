@@ -22,9 +22,9 @@ INCLUDES = -I$(top_builddir)/src
 
 SUBDIRS = data
 
-routinesdir = @ROUTINESDIR@
-
-routinedir = $(routinesdir)
+# workaround to install 'SCRIPT' and 'DATA' types to pkglibdir (which usually
+# only takes PROGRAMS/LIBRARIES/LTLIBRARIES and such ....
+routinedir = $(pkglibdir)
 
 dist_routine_SCRIPTS = dgemm_sim.pl dgemm_sim_cpu.sh dgemm_sim_gpu.sh
 dist_routine_DATA = dgemm_4096_gpu_cpu_data.csv

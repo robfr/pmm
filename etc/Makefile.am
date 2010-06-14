@@ -26,7 +26,7 @@
 sysconf_DATA = pmmd.conf
 
 pmmd.conf:
-	/bin/sh pmmd.conf.sh > $@
+	/bin/sh pmmd.conf.sh $(localstatedir) $(pkglibdir) > $@
 
 #EXTRA_DIST = $(sysconf_DATA)
 
@@ -38,7 +38,7 @@ CLEANFILES = pmmd.conf pmm.conf.sh
 
 # see clamav source
 install-sysconfDATA: $(sysconf_DATA)
-	$(mkinstalldirs) $(DESTDIR)$(CFGINST)
-	@test -f $(DESTDIR)$(CFGINST)/pmmd.conf || \
-	$(INSTALL_DATA) $(top_builddir)/etc/pmmd.conf $(DESTDIR)$(CFGINST)
-	$(INSTALL_DATA) $(top_builddir)/etc/pmmd.conf $(DESTDIR)$(CFGINST)/pmmd.conf.sample
+	$(mkinstalldirs) $(DESTDIR)$(sysconfdir)
+	@test -f $(DESTDIR)$(sysconfdir)/pmmd.conf || \
+	$(INSTALL_DATA) $(top_builddir)/etc/pmmd.conf $(DESTDIR)$(sysconfdir)
+	$(INSTALL_DATA) $(top_builddir)/etc/pmmd.conf $(DESTDIR)$(sysconfdir)/pmmd.conf.sample
