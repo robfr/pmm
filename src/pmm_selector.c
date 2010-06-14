@@ -757,7 +757,7 @@ project_diagonal_intervals(struct pmm_model *m)
                 zero_b->p = init_param_array_copy(b->p, b->n_p);
                 if(zero_b->p == NULL) {
                     ERRPRINTF("Error copying parameter array.\n");
-                    free_benchmark(zero_b);
+                    free_benchmark(&zero_b);
                     return -1;
                 }
                 //set parameter of the projection direction to max
@@ -809,8 +809,8 @@ project_diagonal_intervals(struct pmm_model *m)
         if(insert_bench(m, zero_b) < 0) {
             ERRPRINTF("Error inserting a zero benchmark.\n");
 
-            free_benchmark(zero_b);
-            free_benchmark_list_backwards(prev_b);
+            free_benchmark(&zero_b);
+            free_benchmark_list_backwards(&prev_b);
 
             return -1;
         }
@@ -857,7 +857,7 @@ new_projection_interval(int *p, struct pmm_paramdef *pd, int d, int n)
     new_i->start = init_param_array_copy(p, n);
     if(new_i->start == NULL) {
         ERRPRINTF("Error initialising interval start parameter.\n");
-        free_interval(new_i);
+        free_interval(&new_i);
         return NULL;
     }
     new_i->start[d] = pd->min;
@@ -865,7 +865,7 @@ new_projection_interval(int *p, struct pmm_paramdef *pd, int d, int n)
     new_i->end = init_param_array_copy(p, n);
     if(new_i->end == NULL) {
         ERRPRINTF("Error initialising interval end parameter.\n");
-        free_interval(new_i);
+        free_interval(&new_i);
         return NULL;
     }
     new_i->end[d] = pd->max;
@@ -1064,14 +1064,14 @@ init_gbbp_boundary_intervals(struct pmm_routine *r)
             new_i->start = init_param_array_min(r->paramdef_array, r->n_p);
             if(new_i->start == NULL) {
                 ERRPRINTF("Error initialising minimum parameter array.\n");
-                free_interval(new_i);
+                free_interval(&new_i);
                 return -1;
             }
 
             new_i->end = init_param_array_min(r->paramdef_array, r->n_p);
             if(new_i->end == NULL) {
                 ERRPRINTF("Error initialising minimum parameter array.\n");
-                free_interval(new_i);
+                free_interval(&new_i);
                 return -1;
             }
             new_i->end[j] = r->paramdef_array[j].max;
@@ -1082,7 +1082,7 @@ init_gbbp_boundary_intervals(struct pmm_routine *r)
             else {
                 LOGPRINTF("Interval not divisible, not adding.\n");
                 print_interval(new_i);
-                free_interval(new_i);
+                free_interval(&new_i);
             }
 
 
@@ -1094,7 +1094,7 @@ init_gbbp_boundary_intervals(struct pmm_routine *r)
             new_i->start = init_param_array_min(r->paramdef_array, r->n_p);
             if(new_i->start == NULL) {
                 ERRPRINTF("Error initialising minimum parameter array.\n");
-                free_interval(new_i);
+                free_interval(&new_i);
                 return -1;
             }
 
@@ -1115,14 +1115,14 @@ init_gbbp_boundary_intervals(struct pmm_routine *r)
             new_i->start = init_param_array_min(r->paramdef_array, r->n_p);
             if(new_i->start == NULL) {
                 ERRPRINTF("Error initialising minimum parameter array.\n");
-                free_interval(new_i);
+                free_interval(&new_i);
                 return -1; //failure
             }
 
             new_i->end = init_param_array_min(r->paramdef_array, r->n_p);
             if(new_i->end == NULL) {
                 ERRPRINTF("Error initialising minimum parameter array.\n");
-                free_interval(new_i);
+                free_interval(&new_i);
                 return -1; //failure
             }
             new_i->end[j] = r->paramdef_array[j].max;
@@ -1133,7 +1133,7 @@ init_gbbp_boundary_intervals(struct pmm_routine *r)
             else {
                 LOGPRINTF("Interval not divisible, not adding.\n");
                 print_interval(new_i);
-                free_interval(new_i);
+                free_interval(&new_i);
             }
 
         }
@@ -1540,14 +1540,14 @@ process_it_gbbp_climb(struct pmm_routine *r, struct pmm_interval *i,
         if(b_left_0 == NULL || b_left_1 == NULL || b_left_2 == NULL) {
             ERRPRINTF("Error, no benchmark @ a previous climb point\n");
 
-            free_benchmark(b_avg);
+            free_benchmark(&b_avg);
 
             if(b_left_0 != NULL)
-                free_benchmark(b_left_0);
+                free_benchmark(&b_left_0);
             if(b_left_1 != NULL)
-                free_benchmark(b_left_1);
+                free_benchmark(&b_left_1);
             if(b_left_2 != NULL)
-                free_benchmark(b_left_2);
+                free_benchmark(&b_left_2);
 
             free(tmp_params);
             tmp_params = NULL;
@@ -1601,7 +1601,7 @@ process_it_gbbp_climb(struct pmm_routine *r, struct pmm_interval *i,
             else {
                 LOGPRINTF("Interval not divisible, not adding.\n");
                 print_interval(i);
-                free_interval(new_i);
+                free_interval(&new_i);
             }
 
             remove_interval(m->interval_list, i);
@@ -1628,10 +1628,10 @@ process_it_gbbp_climb(struct pmm_routine *r, struct pmm_interval *i,
             }
         }
 
-        free_benchmark(b_avg);
-        free_benchmark(b_left_0);
-        free_benchmark(b_left_1);
-        free_benchmark(b_left_2);
+        free_benchmark(&b_avg);
+        free_benchmark(&b_left_0);
+        free_benchmark(&b_left_1);
+        free_benchmark(&b_left_2);
 
         free(tmp_params);
         tmp_params = NULL;
@@ -1789,7 +1789,7 @@ process_gbbp_bisect(struct pmm_routine *r, struct pmm_interval *i,
     midpoint = malloc(i->n_p * sizeof *midpoint);
     if(midpoint == NULL) {
         ERRPRINTF("Error allocating memory.\n");
-        free_benchmark(b_avg);
+        free_benchmark(&b_avg);
         return -1;
     }
     set_params_interval_midpoint(midpoint, i);
@@ -1802,7 +1802,7 @@ process_gbbp_bisect(struct pmm_routine *r, struct pmm_interval *i,
         free(midpoint);
         midpoint = NULL;
 
-        free_benchmark(b_avg);
+        free_benchmark(&b_avg);
         return -1;
     }
 
@@ -1810,12 +1810,12 @@ process_gbbp_bisect(struct pmm_routine *r, struct pmm_interval *i,
     b_right = get_avg_aligned_bench(m, i->end);
     if(b_right == NULL) {
         ERRPRINTF("Error, no benchmark @ interval end\n");
-        free_benchmark(b_left);
+        free_benchmark(&b_left);
 
         free(midpoint);
         midpoint = NULL;
 
-        free_benchmark(b_avg);
+        free_benchmark(&b_avg);
         return -1;
     }
 
@@ -1859,7 +1859,7 @@ process_gbbp_bisect(struct pmm_routine *r, struct pmm_interval *i,
         else {
             LOGPRINTF("Interval not divisible, not adding.\n");
             print_interval(new_i);
-            free_interval(new_i);
+            free_interval(&new_i);
         }
 
         DBGPRINTF("finished building from:\n");
@@ -1891,7 +1891,7 @@ process_gbbp_bisect(struct pmm_routine *r, struct pmm_interval *i,
         else {
             LOGPRINTF("Interval not divisible, not adding.\n");
             print_interval(new_i);
-            free_interval(new_i);
+            free_interval(&new_i);
         }
 
         DBGPRINTF("finished building from:\n");
@@ -1935,7 +1935,7 @@ process_gbbp_bisect(struct pmm_routine *r, struct pmm_interval *i,
             }
             else {
                 LOGPRINTF("Interval not divisible, not adding.\n");
-                free_interval(new_i);
+                free_interval(&new_i);
                 print_interval(new_i);
             }
 
@@ -1952,7 +1952,7 @@ process_gbbp_bisect(struct pmm_routine *r, struct pmm_interval *i,
             else {
                 LOGPRINTF("Interval not divisible, not adding.\n");
                 print_interval(new_i);
-                free_interval(new_i);
+                free_interval(&new_i);
             }
 
             remove_interval(m->interval_list, i);
@@ -1981,7 +1981,7 @@ process_gbbp_bisect(struct pmm_routine *r, struct pmm_interval *i,
             else {
                 LOGPRINTF("Interval not divisible, not adding.\n");
                 print_interval(new_i);
-                free_interval(new_i);
+                free_interval(&new_i);
             }
 
             new_i = init_interval(i->plane, i->n_p, IT_GBBP_BISECT,
@@ -1997,27 +1997,27 @@ process_gbbp_bisect(struct pmm_routine *r, struct pmm_interval *i,
             else {
                 LOGPRINTF("Interval not divisible, not adding.\n");
                 print_interval(new_i);
-                free_interval(new_i);
+                free_interval(&new_i);
             }
 
             remove_interval(m->interval_list, i);
         }
 
         if(b_oldapprox != NULL) {
-            free_benchmark(b_oldapprox);
+            free_benchmark(&b_oldapprox);
         }
     }
 
-    free_benchmark(b_avg);
+    free_benchmark(&b_avg);
 
     free(midpoint);
     midpoint = NULL;
 
     if(b_left != NULL) {
-        free_benchmark(b_left);
+        free_benchmark(&b_left);
     }
     if(b_right != NULL) {
-        free_benchmark(b_right);
+        free_benchmark(&b_right);
     }
 
     if(isempty_interval_list(m->interval_list)) {
@@ -2058,7 +2058,7 @@ process_gbbp_inflect(struct pmm_routine *r, struct pmm_interval *i,
     b_oldapprox = find_oldapprox(r->model, b->p);
     if(b_oldapprox == NULL) {
         ERRPRINTF("Error finding old approximation.\n");
-        free_benchmark(b_avg);
+        free_benchmark(&b_avg);
         return -1;
     }
 
@@ -2067,8 +2067,8 @@ process_gbbp_inflect(struct pmm_routine *r, struct pmm_interval *i,
     midpoint = malloc(i->n_p * sizeof *midpoint);
     if(midpoint == NULL) {
         ERRPRINTF("Error allocating memory.\n");
-        free_benchmark(b_oldapprox);
-        free_benchmark(b_avg);
+        free_benchmark(&b_oldapprox);
+        free_benchmark(&b_avg);
         return -1;
     }
     set_params_interval_midpoint(midpoint, i);
@@ -2081,8 +2081,8 @@ process_gbbp_inflect(struct pmm_routine *r, struct pmm_interval *i,
         free(midpoint);
         midpoint = NULL;
 
-        free_benchmark(b_oldapprox);
-        free_benchmark(b_avg);
+        free_benchmark(&b_oldapprox);
+        free_benchmark(&b_avg);
         return -1;
     }
 
@@ -2090,13 +2090,13 @@ process_gbbp_inflect(struct pmm_routine *r, struct pmm_interval *i,
     b_right = get_avg_aligned_bench(r->model, i->end);
     if(b_right == NULL) {
         ERRPRINTF("Error, no benchmark @ interval end\n");
-        free_benchmark(b_left);
+        free_benchmark(&b_left);
 
         free(midpoint);
         midpoint = NULL;
 
-        free_benchmark(b_oldapprox);
-        free_benchmark(b_avg);
+        free_benchmark(&b_oldapprox);
+        free_benchmark(&b_avg);
         return -1;
     }
 
@@ -2130,14 +2130,14 @@ process_gbbp_inflect(struct pmm_routine *r, struct pmm_interval *i,
                                   midpoint, i->end);
             if(new_i == NULL) {
                 ERRPRINTF("Error initialising new interval.\n");
-                free_benchmark(b_right);
-                free_benchmark(b_left);
+                free_benchmark(&b_right);
+                free_benchmark(&b_left);
 
                 free(midpoint);
                 midpoint = NULL;
 
-                free_benchmark(b_oldapprox);
-                free_benchmark(b_avg);
+                free_benchmark(&b_oldapprox);
+                free_benchmark(&b_avg);
                 return -1;
             }
             
@@ -2147,7 +2147,7 @@ process_gbbp_inflect(struct pmm_routine *r, struct pmm_interval *i,
             else {
                 LOGPRINTF("Interval not divisible, not adding.\n");
                 print_interval(new_i);
-                free_interval(new_i);
+                free_interval(&new_i);
             }
 
             remove_interval(m->interval_list, i);
@@ -2161,14 +2161,14 @@ process_gbbp_inflect(struct pmm_routine *r, struct pmm_interval *i,
 
             if(new_i == NULL) {
                 ERRPRINTF("Error initialising new interval.\n");
-                free_benchmark(b_right);
-                free_benchmark(b_left);
+                free_benchmark(&b_right);
+                free_benchmark(&b_left);
 
                 free(midpoint);
                 midpoint = NULL;
 
-                free_benchmark(b_oldapprox);
-                free_benchmark(b_avg);
+                free_benchmark(&b_oldapprox);
+                free_benchmark(&b_avg);
                 return -1;
             }
 
@@ -2178,7 +2178,7 @@ process_gbbp_inflect(struct pmm_routine *r, struct pmm_interval *i,
             else {
                 LOGPRINTF("Interval not divisible, not adding.\n");
                 print_interval(new_i);
-                free_interval(new_i);
+                free_interval(&new_i);
             }
 
             remove_interval(m->interval_list, i);
@@ -2193,14 +2193,14 @@ process_gbbp_inflect(struct pmm_routine *r, struct pmm_interval *i,
 
             if(new_i == NULL) {
                 ERRPRINTF("Error initialising new interval.\n");
-                free_benchmark(b_right);
-                free_benchmark(b_left);
+                free_benchmark(&b_right);
+                free_benchmark(&b_left);
 
                 free(midpoint);
                 midpoint = NULL;
 
-                free_benchmark(b_oldapprox);
-                free_benchmark(b_avg);
+                free_benchmark(&b_oldapprox);
+                free_benchmark(&b_avg);
                 return -1;
             }
 
@@ -2210,7 +2210,7 @@ process_gbbp_inflect(struct pmm_routine *r, struct pmm_interval *i,
             else {
                 LOGPRINTF("Interval not divisible, not adding.\n");
                 print_interval(new_i);
-                free_interval(new_i);
+                free_interval(&new_i);
             }
 
             new_i = init_interval(i->plane, i->n_p, IT_GBBP_BISECT,
@@ -2218,14 +2218,14 @@ process_gbbp_inflect(struct pmm_routine *r, struct pmm_interval *i,
 
             if(new_i == NULL) {
                 ERRPRINTF("Error initialising new interval.\n");
-                free_benchmark(b_right);
-                free_benchmark(b_left);
+                free_benchmark(&b_right);
+                free_benchmark(&b_left);
 
                 free(midpoint);
                 midpoint = NULL;
 
-                free_benchmark(b_oldapprox);
-                free_benchmark(b_avg);
+                free_benchmark(&b_oldapprox);
+                free_benchmark(&b_avg);
                 return -1;
             }
 
@@ -2235,7 +2235,7 @@ process_gbbp_inflect(struct pmm_routine *r, struct pmm_interval *i,
             else {
                 LOGPRINTF("Interval not divisible, not adding.\n");
                 print_interval(new_i);
-                free_interval(new_i);
+                free_interval(&new_i);
             }
 
             remove_interval(m->interval_list, i);
@@ -2245,16 +2245,16 @@ process_gbbp_inflect(struct pmm_routine *r, struct pmm_interval *i,
     free(midpoint);
     midpoint = NULL;
 
-    free_benchmark(b_avg);
+    free_benchmark(&b_avg);
 
     if(b_oldapprox != NULL) {
-        free_benchmark(b_oldapprox);
+        free_benchmark(&b_oldapprox);
     }
     if(b_left != NULL) {
-        free_benchmark(b_left);
+        free_benchmark(&b_left);
     }
     if(b_right != NULL) {
-        free_benchmark(b_right);
+        free_benchmark(&b_right);
     }
 
     if(isempty_interval_list(m->interval_list)) {

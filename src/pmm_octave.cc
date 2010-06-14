@@ -239,7 +239,7 @@ interpolate_griddatan(struct pmm_model *m, int *p)
 	}
 	else {
 		ERRPRINTF("Error calling griddatan in octave.\n");
-		free_benchmark(ret_b);
+		free_benchmark(&ret_b);
 		return NULL;
 	}
 }

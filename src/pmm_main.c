@@ -550,7 +550,7 @@ int main(int argc, char **argv) {
 	xmlparser_cleanup();
 
 	//free memory
-	free_config(cfg);
+	free_config(&cfg);
 
 
 }

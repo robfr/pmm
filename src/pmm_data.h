@@ -497,17 +497,17 @@ void print_config(struct pmm_config *cfg);
 void print_loadhistory(struct pmm_loadhistory *h);
 void print_load(struct pmm_load *l);
 
-void free_model(struct pmm_model *m);
-void free_interval_list(struct pmm_interval_list *il);
-void free_interval(struct pmm_interval *i);
-void free_bench_list(struct pmm_bench_list *bl);
-void free_benchmark_list_backwards(struct pmm_benchmark *first_b);
-void free_benchmark_list_forwards(struct pmm_benchmark *last_b);
-void free_benchmark(struct pmm_benchmark *b);
-void free_paramdefs(struct pmm_paramdef *pd_array, int n_p);
-void free_routine(struct pmm_routine *r);
-void free_config(struct pmm_config *cfg);
-void free_loadhistory(struct pmm_loadhistory *h);
+void free_model(struct pmm_model **m);
+void free_interval_list(struct pmm_interval_list **il);
+void free_interval(struct pmm_interval **i);
+void free_bench_list(struct pmm_bench_list **bl);
+void free_benchmark_list_backwards(struct pmm_benchmark **first_b);
+void free_benchmark_list_forwards(struct pmm_benchmark **last_b);
+void free_benchmark(struct pmm_benchmark **b);
+void free_paramdefs(struct pmm_paramdef **pd_array, int n_p);
+void free_routine(struct pmm_routine **r);
+void free_config(struct pmm_config **cfg);
+void free_loadhistory(struct pmm_loadhistory **h);
 
 #endif /*PMM_DATA_H_*/
 

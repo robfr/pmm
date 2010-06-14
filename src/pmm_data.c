@@ -229,7 +229,7 @@ init_bench_list(struct pmm_model *m, struct pmm_paramdef *pd_array, int n_p)
             b->p = init_param_array_min(pd_array, n_p);
             if(b->p == NULL) {
                 ERRPRINTF("Error allocating memory.\n");
-                free_benchmark(b);
+                free_benchmark(&b);
                 return -1; //failure
             }
         
@@ -239,7 +239,7 @@ init_bench_list(struct pmm_model *m, struct pmm_paramdef *pd_array, int n_p)
 
             if(insert_bench_into_list(m->bench_list, b) < 0) {
                 ERRPRINTF("Error inserting max axial point into list.\n");
-                //free_benchmark(b); not sure about freeing here ....
+                //free_benchmark(&b); not sure about freeing here ....
                 return -1;
             }
 
@@ -269,7 +269,7 @@ init_bench_list(struct pmm_model *m, struct pmm_paramdef *pd_array, int n_p)
         ret = insert_bench_into_list(m->bench_list, b);
         if(ret < 0) {
             ERRPRINTF("Error inserting initial bench into list.\n");
-            //free_benchmark(b) not sure about freeing here ...
+            //free_benchmark(&b) not sure about freeing here ...
             return -1;
         }
     }
@@ -2231,7 +2231,7 @@ calc_bench_exec_stats(struct pmm_model *m, int *param,
 
     *time_spent = timeval_to_double(&(b->wall_t));
 
-    free_benchmark(b);
+    free_benchmark(&b);
 
     return;
 }
@@ -2736,7 +2736,7 @@ struct pmm_interval* init_interval(int plane,
         default :
             ERRPRINTF("Interval type not supported; %s\n",
                                              interval_type_to_string(i->type));
-            free_interval(i);
+            free_interval(&i);
             return NULL;
     }
 
@@ -2805,7 +2805,7 @@ int isempty_interval_list(struct pmm_interval_list *l)
 /* freeing the interval list by removing intervals from it requires extra
  * pointer maniuplations that are not required for total removal of the list
  *
-int free_interval_list(struct pmm_interval_list *l)
+int free_interval_list(struct pmm_interval_list **l)
 {
 	while(remove_top_interval(l) != 0) {
 
@@ -2857,7 +2857,7 @@ int remove_top_interval(struct pmm_interval_list *l)
 
 		}
 
-        free_interval(zombie);
+        free_interval(&zombie);
 
 		l->size -= 1;
 
@@ -2888,7 +2888,7 @@ int remove_interval(struct pmm_interval_list *l, struct pmm_interval *i)
 
 
     //free interval
-	free_interval(i);
+	free_interval(&i);
 	l->size -= 1;
 
     LOGPRINTF("size: %d\n", l->size);
@@ -3515,157 +3515,157 @@ void print_config(struct pmm_config *cfg) {
 	return;
 }
 
-void free_config(struct pmm_config *cfg) {
+void free_config(struct pmm_config **cfg) {
 	int i;
 
-    if(cfg->loadhistory != NULL)
-	    free_loadhistory(cfg->loadhistory);
+    if((*cfg)->loadhistory != NULL)
+	    free_loadhistory(&((*cfg)->loadhistory));
 
-	for(i=0; i<cfg->used; i++) {
-		free_routine(cfg->routines[i]);
+	for(i=0; i<(*cfg)->used; i++) {
+		free_routine(&((*cfg)->routines[i]));
 	}
 
-	free(cfg->routines);
-    cfg->routines = NULL;
+	free((*cfg)->routines);
+    (*cfg)->routines = NULL;
 
-	free(cfg);
-    cfg = NULL;
+	free(*cfg);
+    *cfg = NULL;
 }
 
-void free_routine(struct pmm_routine *r) {
+void free_routine(struct pmm_routine **r) {
 
-    if(r->model != NULL)
-	    free_model(r->model);
+    if((*r)->model != NULL)
+	    free_model(&((*r)->model));
 
 	//free some malloced 'strings'
-	free(r->name);
-    r->name = NULL;
+	free((*r)->name);
+    (*r)->name = NULL;
 
-	free(r->exe_path);
-    r->exe_path = NULL;
+	free((*r)->exe_path);
+    (*r)->exe_path = NULL;
 
 	//free paramdef array
-	free_paramdefs(r->paramdef_array, r->n_p);
+	free_paramdefs(&((*r)->paramdef_array), (*r)->n_p);
 
-	free(r);
-    r = NULL;
+	free(*r);
+    *r = NULL;
 }
 
-void free_paramdefs(struct pmm_paramdef* pd_array, int n_p) {
+void free_paramdefs(struct pmm_paramdef **pd_array, int n_p) {
 	int i;
 
 	for(i=0; i<n_p; i++) {
-		free(pd_array[i].name);
-        pd_array[i].name = NULL;
+		free((*pd_array)[i].name);
+        (*pd_array)[i].name = NULL;
 	}
 
-	free(pd_array);
-    pd_array = NULL;
+	free(*pd_array);
+    *pd_array = NULL;
 
 }
 
-void free_model(struct pmm_model *m) {
+void free_model(struct pmm_model **m) {
 
-    if(m->bench_list != NULL)
-	    free_bench_list(m->bench_list);
+    if((*m)->bench_list != NULL)
+	    free_bench_list(&((*m)->bench_list));
 
-    if(m->interval_list != NULL)
-        free_interval_list(m->interval_list);
+    if((*m)->interval_list != NULL)
+        free_interval_list(&((*m)->interval_list));
 
-	free(m->model_path);
-    m->model_path = NULL;
+	free((*m)->model_path);
+    (*m)->model_path = NULL;
 
-	free(m);
-    m = NULL;
+	free(*m);
+    *m = NULL;
 }
 
-void free_interval_list(struct pmm_interval_list *il)
+void free_interval_list(struct pmm_interval_list **il)
 {
 
 	struct pmm_interval *this, *next;
 
-	this = il->top;
+	this = (*il)->top;
 
 	while(this != NULL) {
 		next = this->next;
 
-		free_interval(this);
+		free_interval(&this);
 
 		this = next;
 	}
 
-	free(il);
-    il = NULL;
+	free(*il);
+    *il = NULL;
 }
 
-void free_interval(struct pmm_interval *i)
+void free_interval(struct pmm_interval **i)
 {
-    if(i->start != NULL) {
-        free(i->start); 
-        i->start = NULL;
+    if((*i)->start != NULL) {
+        free((*i)->start); 
+        (*i)->start = NULL;
     }
-    if(i->end != NULL) {
-        free(i->end);
-        i->end = NULL;
+    if((*i)->end != NULL) {
+        free((*i)->end);
+        (*i)->end = NULL;
     }
 
-    free(i);
-    i = NULL;
+    free(*i);
+    *i = NULL;
 }
 
-void free_bench_list(struct pmm_bench_list *bl)
+void free_bench_list(struct pmm_bench_list **bl)
 {
 
-    free_benchmark_list_backwards(bl->first);
+    free_benchmark_list_backwards(&((*bl)->first));
 
-	free(bl);
-    bl = NULL;
+	free(*bl);
+    *bl = NULL;
 }
 
-void free_benchmark_list_forwards(struct pmm_benchmark *last_b) {
+void free_benchmark_list_forwards(struct pmm_benchmark **last_b) {
     struct pmm_benchmark *this, *next;
     
-    this = last_b;
+    this = *last_b;
 
     while(this != NULL) {
         next = this->next;
-        free_benchmark(this);
+        free_benchmark(&this);
         this = next;
     }
 
     return;
 }
 
-void free_benchmark_list_backwards(struct pmm_benchmark *first_b) {
+void free_benchmark_list_backwards(struct pmm_benchmark **first_b) {
     struct pmm_benchmark *this, *prev;
     
-    this = first_b;
+    this = *first_b;
 
     while(this != NULL) {
         prev = this->previous;
-        free_benchmark(this);
+        free_benchmark(&this);
         this = prev;
     }
 
     return;
 }
 
-void free_benchmark(struct pmm_benchmark *b)
+void free_benchmark(struct pmm_benchmark **b)
 {
-	free(b->p);
-    b->p = NULL;
+	free((*b)->p);
+    (*b)->p = NULL;
 
-	free(b);
-    b = NULL;
+	free(*b);
+    *b = NULL;
 }
 
-void free_loadhistory(struct pmm_loadhistory *h) {
-	free(h->load_path);
-    h->load_path = NULL;
+void free_loadhistory(struct pmm_loadhistory **h) {
+	free((*h)->load_path);
+    (*h)->load_path = NULL;
 
-	free(h->history);
-    h->history = NULL;
+	free((*h)->history);
+    (*h)->history = NULL;
 
-	free(h);
-    h = NULL;
+	free(*h);
+    *h = NULL;
 }

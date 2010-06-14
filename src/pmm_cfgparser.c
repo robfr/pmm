@@ -884,42 +884,42 @@ struct pmm_benchmark* parse_benchmark(xmlDocPtr doc, xmlNodePtr node) {
 		if(!xmlStrcmp(cnode->name, (const xmlChar *) "parameter_array")) {
 			if(parse_parameter_array_p(&(b->p), &(b->n_p), doc, cnode) < 0) {
 				ERRPRINTF("Error parsing parameter_array.\n");
-                free_benchmark(b);
+                free_benchmark(&b);
                 return NULL;
 			}
 		}
 		else if(!xmlStrcmp(cnode->name, (const xmlChar *) "complexity")) {
 			if(sscanf((char *)key, "%lld", &(b->complexity)) != 1) {
 				ERRPRINTF("Error parsing complexity.\n");
-                free_benchmark(b);
+                free_benchmark(&b);
                 return NULL;
 			}
 		}
 		else if(!xmlStrcmp(cnode->name, (const xmlChar *) "flops")) {
 			if(sscanf((char *)key, "%lf", &(b->flops)) != 1) {
 				ERRPRINTF("Error parsing flops.\n");
-                free_benchmark(b);
+                free_benchmark(&b);
                 return NULL;
 			}
 		}
 		else if(!xmlStrcmp(cnode->name, (const xmlChar *) "seconds")) {
 			if(sscanf((char *)key, "%lf", &(b->seconds)) != 1) {
 				ERRPRINTF("Error parsing seconds.\n");
-                free_benchmark(b);
+                free_benchmark(&b);
                 return NULL;
 			}
 		}
 		else if(!xmlStrcmp(cnode->name, (const xmlChar *) "used_time")) {
 			if(parse_timeval_p(&(b->used_t), doc, cnode) < 0) {
 				ERRPRINTF("Error parsing used_time timeval.\n");
-                free_benchmark(b);
+                free_benchmark(&b);
                 return NULL;
 			}
 		}
 		else if(!xmlStrcmp(cnode->name, (const xmlChar *) "wall_time")) {
 			if(parse_timeval_p(&(b->wall_t), doc, cnode) < 0) {
 				ERRPRINTF("Error parsing wall_time timeval.\n");
-                free_benchmark(b);
+                free_benchmark(&b);
                 return NULL;
 			}
 		}
@@ -1324,7 +1324,7 @@ parse_bench_list(struct pmm_model *m, xmlDocPtr doc, xmlNodePtr node)
 
 			ret = insert_bench_into_list(m->bench_list, b);
             if(ret < 0) {
-                free_benchmark(b);
+                free_benchmark(&b);
                 ERRPRINTF("Error inserting bench into bench list.\n");
                 return -1;
             }
@@ -1555,7 +1555,7 @@ int parse_model(struct pmm_model *m)
             }
 
             // finished with the parsed model parameter definitions now
-            free_paramdefs(pd_array, n_pd);
+            free_paramdefs(&pd_array, n_pd);
 
         }
 		else if(!xmlStrcmp(cnode->name, (const xmlChar *) "bench_list")) {

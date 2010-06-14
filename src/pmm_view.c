@@ -358,10 +358,10 @@ int main(int argc, char **argv) {
 
 
         if(options.action == PMM_VIEW_DISPLAY_ROUTINE) {
-            free_config(cfg);
+            free_config(&cfg);
         }
         else if(options.action == PMM_VIEW_DISPLAY_FILE) {
-            free_model(model);
+            free_model(&model);
         }
 
         gnuplot_close(plot_handle);
@@ -378,12 +378,12 @@ void empty_model(struct pmm_model *m)
 {
 
     if(m->bench_list != NULL) {
-        free_bench_list(m->bench_list);
+        free_bench_list(&(m->bench_list));
         m->bench_list = NULL;
     }
 
     if(m->interval_list != NULL) {
-        free_interval_list(m->interval_list);
+        free_interval_list(&(m->interval_list));
         m->interval_list = new_interval_list();
     }
 
@@ -451,7 +451,7 @@ plot_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
         c++;
 
         if(options->plot_average == 1) {
-            free_benchmark(b_avg);
+            free_benchmark(&b_avg);
             b = get_next_different_bench(b);
         }
         else {
@@ -579,7 +579,7 @@ plot_slice_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
         c++;
 
         if(options->plot_average == 1) {
-            free_benchmark(b_avg);
+            free_benchmark(&b_avg);
             b = get_next_different_bench(b);
         }
         else {
@@ -725,7 +725,7 @@ splot_slice_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
         c++;
 
         if(options->plot_average == 1) {
-            free_benchmark(b_avg);
+            free_benchmark(&b_avg);
             b = get_next_different_bench(b);
         }
         else {
@@ -830,7 +830,7 @@ splot_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
         c++;
 
         if(options->plot_average == 1) {
-            free_benchmark(b_avg);
+            free_benchmark(&b_avg);
             b = get_next_different_bench(b);
         }
         else {
