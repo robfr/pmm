@@ -483,7 +483,8 @@ AC_CONFIG_FILES([
     routines/lapack/double/Makefile
 	routines/gotoblas2/Makefile
     routines/sim/Makefile
-    routines/sim/data/Makefile
+    routines/sim/chps/Makefile
+    routines/sim/chps/data/Makefile
 	src/Makefile
 	test/Makefile
 ])

@@ -20,4 +20,13 @@
 #
 INCLUDES = -I$(top_builddir)/src
 
-SUBDIRS = chps
+SUBDIRS = data
+
+routinesdir = @ROUTINESDIR@
+
+routinedir = $(routinesdir)
+
+dist_routine_SCRIPTS = dgemm_sim.pl dgemm_sim_cpu.sh dgemm_sim_gpu.sh
+dist_routine_DATA = dgemm_4096_gpu_cpu_data.csv
+
+DIST_SUBDIRS = data
