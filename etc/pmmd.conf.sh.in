@@ -5,6 +5,7 @@
 #
 
 ENABLE_OCTAVE=@ENABLE_OCTAVE@
+HAVE_MUPARSER=@HAVE_MUPARSER@
 BENCHGSLBLAS=@BENCHGSLBLAS@
 BENCHGOTOBLAS2=@BENCHGOTOBLAS2@
 
@@ -25,7 +26,47 @@ echo "<?xml version=\"1.0\"?>
 		<write_period>60</write_period>
 		<history_size>60</history_size>
 	</load_monitor>
+"
+    if [ "$ENABLE_OCTAVE" = "yes" -a "$HAVE_MUPARSER" = "yes" ]; then
+        echo "
+	<routine>
+		<name>ben_dgemm_5000_icc_mkl</name>
+		<exe_path>$PKGLIBDIR/dgemm_ben_5000_icc_mkl.pl</exe_path>
+		<model_path>$LOCALSTATEDIR/dgemm_ben_5000_icc_mkl</model_path>
+		<parameters>
+			<n_p>2</n_p>
+			<param>
+				<order>0</order>
+				<name>mkl_thds</name>
+				<start>128</start>
+				<end>1</end>
+                <stride>1</stride>
+                <nonzero_end>true</nonzero_end>
+			</param>
+			<param>
+				<order>1</order>
+				<name>omp_thds</name>
+				<start>128</start>
+				<end>1</end>
+                <stride>1</stride>
+                <nonzero_end>true</nonzero_end>
+			</param>
 
+            <param_constraint>
+                <formula>mkl_thds*omp_thds</formula>
+                <min>16</min>
+                <max>128</max>
+            </param_constraint>
+		</parameters>
+		
+		<condition>now</condition>
+		<priority>50</priority>
+		<construction>
+			<method>gbbp</method>
+		</construction>
+	</routine>"
+fi
+    echo "
 	<routine>
 		<name>dgemm_sim_cpu</name>
 		<exe_path>$PKGLIBDIR/dgemm_sim_cpu.sh</exe_path>
@@ -35,10 +76,10 @@ echo "<?xml version=\"1.0\"?>
 			<param>
 				<order>0</order>
 				<name>k</name>
-				<min>16</min>
-				<max>4080</max>
+				<start>16</start>
+				<end>4080</end>
                 <stride>16</stride>
-                <fuzzy_max>true</fuzzy_max>
+                <nonzero_end>true</nonzero_end>
 			</param>
 		</parameters>
 		
@@ -57,10 +98,10 @@ echo "<?xml version=\"1.0\"?>
 			<param>
 				<order>0</order>
 				<name>k</name>
-				<min>16</min>
-				<max>4080</max>
+				<start>16</start>
+				<end>4080</end>
                 <stride>16</stride>
-                <fuzzy_max>true</fuzzy_max>
+                <nonzero_end>true</nonzero_end>
 			</param>
 		</parameters>
 		
@@ -83,10 +124,10 @@ if [ "$BENCHGSLBLAS" = "yes" ]; then
 			<param>
 				<order>0</order>
 				<name>n</name>
-				<min>50</min>
-				<max>3000</max>
+				<start>50</start>
+				<end>3000</end>
                 <stride>50</stride>
-                <fuzzy_max>true</fuzzy_max>
+                <nonzero_end>true</nonzero_end>
 			</param>
 		</parameters>
 		
@@ -107,22 +148,30 @@ if [ "$BENCHGSLBLAS" = "yes" ]; then
 			<param>
 				<order>0</order>
 				<name>m</name>
-				<min>50</min>
-				<max>1000</max>
+				<start>50</start>
+				<end>11535</end>
                 <stride>50</stride>
                 <offset>0</offset>
 			</param>
 			<param>
 				<order>1</order>
 				<name>n</name>
-				<min>50</min>
-				<max>1000</max>
+				<start>50</start>
+				<end>1342152</end>
                 <stride>50</stride>
                 <offset>0</offset>
-			</param>
+			</param>"
+            if [ "$HAVE_MUPARSER" = "yes" ]; then
+                echo "
+            <param_constraint>
+                <formula>8*(m*n+n*m+m*m)</formula>
+                <max>1073741824</max>
+            </param_constraint>"
+            fi
+    echo "
 		</parameters>
 		<condition>now</condition>
-		<priority>30</priority>
+		<priority>100</priority>
 		<construction>
 			<method>gbbp</method>
             <min_sample_num>5</min_sample_num>
@@ -138,16 +187,16 @@ if [ "$BENCHGSLBLAS" = "yes" ]; then
 			<param>
 				<order>0</order>
 				<name>m</name>
-				<min>50</min>
-				<max>1000</max>
+				<start>50</start>
+				<end>1000</end>
                 <stride>50</stride>
                 <offset>0</offset>
 			</param>
 			<param>
 				<order>1</order>
 				<name>n</name>
-				<min>50</min>
-				<max>1000</max>
+				<start>50</start>
+				<end>1000</end>
                 <stride>50</stride>
                 <offset>0</offset>
 			</param>
@@ -162,31 +211,31 @@ if [ "$BENCHGSLBLAS" = "yes" ]; then
 	</routine>
 	<routine>
 		<name>dgemm3</name>
-		<exe_path>@ROUTINESDIR@/dgemm3</exe_path>
-		<model_path>@LOCALSTATEDIR@/dgemm3_model</model_path>
+		<exe_path>$PKGLIBDIR/dgemm3</exe_path>
+		<model_path>$LOCALSTATEDIR/dgemm3_model</model_path>
 		<parameters>
 			<n_p>3</n_p>
 			<param>
 				<order>0</order>
 				<name>n</name>
-				<min>5</min>
-				<max>1000</max>
+				<start>5</start>
+				<end>1000</end>
                 <stride>5</stride>
                 <offset>0</offset>
 			</param>
 			<param>
 				<order>1</order>
 				<name>k</name>
-				<min>5</min>
-				<max>1000</max>
+				<start>5</start>
+				<end>1000</end>
                 <stride>5</stride>
                 <offset>0</offset>
 			</param>
 			<param>
 				<order>2</order>
 				<name>m</name>
-				<min>5</min>
-				<max>1000</max>
+				<start>5</start>
+				<end>1000</end>
                 <stride>5</stride>
                 <offset>0</offset>
 			</param>
@@ -211,8 +260,8 @@ fi
 			<param>
 			<order>0</order>
 				<name>n</name>
-				<min>50</min>
-				<max>3000</max>
+				<start>50</start>
+				<end>3000</end>
                 <stride>50</stride>
 			</param>
 		</parameters>
@@ -235,9 +284,9 @@ if [ "$BENCHGOTO2BLAS" = "yes" ]; then
 			<param>
 				<order>0</order>
 				<name>n</name>
-				<min>1</min>
-				<max>3000</max>
-                <fuzzy_max>true<fuzzy_max>
+				<start>1</start>
+				<end>3000</end>
+                <nonzero_end>true<nonzero_end>
 			</param>
 		</parameters>
 		
