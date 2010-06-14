@@ -98,8 +98,7 @@ new_routine()
     r->name = NULL;
     r->exe_path = NULL;
 
-    r->n_p = -1;
-    r->paramdef_array = NULL;
+    r->pd_set = new_paramdef_set();
 
     r->condition = PMM_INVALID;
     r->priority = -1;
@@ -117,13 +116,30 @@ new_routine()
 }
 
 /*!
+ * Create an empty parameter definition set structure. Note pd_array will
+ * not yet be allocated
+ *
+ * @return pointer to newly allocated structure
+ */
+struct pmm_paramdef_set* new_paramdef_set()
+{
+    struct pmm_paramdef_set *pd_set;
+
+    pd_set = malloc(sizeof *pd_set);
+
+    pd_set->n_p = -1;
+
+    return pd_set;
+}
+
+
+/*!
  * Create a new model structure. Note pmm_bench_list member will not yet be
  * allocated.
  *
  * @return  pointer to newly allocated pmm_model structure
  */
-struct pmm_model*
-new_model()
+struct pmm_model* new_model()
 {
 	struct pmm_model *m;
 
@@ -177,16 +193,16 @@ new_bench_list(struct pmm_model *m,
 }
 
 /*!
- * Initialise a the model benchmark list with zero speed benchmarks at relevant
- * points. For each parameter definition if the maximum value of a parameter is
- * defined as having a zero speed (i.e. it is not a 'fuzzy_max'), then create
- * zero speed benchmarks at the maximum point on that parameter axis, i.e. for
+ * Initialise the model benchmark list with zero speed benchmarks at relevant
+ * points. For each parameter definition if the end value of a parameter is
+ * defined as having a zero speed (i.e. it is not a 'nonzero_end'), then create
+ * zero speed benchmarks at the end point on that parameter axis, i.e. for
  * parameter i create a zero speed benchmark at at:
  *
- * min_0,min_1,...,max_i,...,min_n-1,min_n.
+ * start_0,start_1,...,end_i,...,start_n-1,start_n.
  *
- * The, if any parameter has a zero speed maximum defined, assume we cannot
- * ever benchmark at max_0,max_1,...,max_n and set a zero speed benchmark at
+ * The, if any parameter has a zero speed end defined, assume we cannot
+ * ever benchmark at end_0,end_1,...,end_n and set a zero speed benchmark at
  * this point also.
  *
  * @param   m           pointer to the model that the bench list belongs to 
@@ -196,11 +212,11 @@ new_bench_list(struct pmm_model *m,
  * @return 0 on success, -1 on failure
  */
 int
-init_bench_list(struct pmm_model *m, struct pmm_paramdef *pd_array, int n_p)
+init_bench_list(struct pmm_model *m, struct pmm_paramdef_set *pd_set)
 {
 	int i;
     int ret;
-    int fuzzy_max;
+    int all_nonzero_end;
 	struct pmm_benchmark *b;
 
 	m->bench_list = malloc(sizeof *(m->bench_list));
@@ -210,56 +226,54 @@ init_bench_list(struct pmm_model *m, struct pmm_paramdef *pd_array, int n_p)
 	}
 
 	m->bench_list->size = 0;
-	m->bench_list->n_p = n_p;
+	m->bench_list->n_p = pd_set->n_p;
 
 	m->bench_list->first = NULL;
 	m->bench_list->last = NULL;
 
 	m->bench_list->parent_model = m;
 
-    // check if any parameters are set to fuzzy max (bench at this point
+    // check if any parameters are set to nonzero end (bench at this point
     // instead of assuming it to have zero speed)
-    fuzzy_max = 0;
-    for(i=0; i<n_p; i++) {
-        if(pd_array[i].fuzzy_max != 1) {
+    all_nonzero_end = 1;
+    for(i=0; i<pd_set->n_p; i++) {
+        if(pd_set->pd_array[i].nonzero_end != 1) {
             b = new_benchmark();
 
-            b->n_p = n_p;
+            b->n_p = pd_set->n_p;
 
-            b->p = init_param_array_min(pd_array, n_p);
+            b->p = init_param_array_start(pd_set);
             if(b->p == NULL) {
                 ERRPRINTF("Error allocating memory.\n");
                 free_benchmark(&b);
                 return -1; //failure
             }
         
-            b->p[i] = pd_array[i].max;
+            b->p[i] = pd_set->pd_array[i].end;
 
             b->flops = 0.;
 
             if(insert_bench_into_list(m->bench_list, b) < 0) {
-                ERRPRINTF("Error inserting max axial point into list.\n");
+                ERRPRINTF("Error inserting end axial point into list.\n");
                 //free_benchmark(&b); not sure about freeing here ....
                 return -1;
             }
 
-        }
-        else {
-            fuzzy_max = 1; //set fuzzy max to true for later
+            all_nonzero_end = 0;
+
         }
     }
 
-    //if no fuzzy_max is set we will never benchmark at max,max,...max ...
-	//set up benchmark at max,max .... max with zero speed 
-    //TODO should this be the other way arround ... if ANY fuzzy_max == 0
-    if(fuzzy_max == 0) {
+    // if not all parameters have nonzero_end set, then we should not benchmark
+    // at the end,end...,end point, so set a zero speed benchmark here.
+    if(all_nonzero_end != 1) {
 
         b = new_benchmark();
 
-        b->n_p = n_p;
-        b->p = init_param_array_max(pd_array, n_p);
+        b->n_p = pd_set->n_p;
+        b->p = init_param_array_end(pd_set);
         if(b->p == NULL) {
-            ERRPRINTF("Error initialising max parameters.\n");
+            ERRPRINTF("Error initialising end parameters.\n");
             return -1;
         }
 
@@ -335,6 +349,44 @@ new_benchmark()
 
 	return b;
 }
+
+/*!
+ * Initialize and return a benchmark structure with zero speed in a position
+ * described by the parameter array argument (params).
+ *
+ * @param   params      pointer to parameter array describing benchmark position
+ * @param   n_p         number of parameters
+ *
+ * @return  pointer to a newly allocated benchmark structure with zero speed in
+ * given position
+ */
+struct pmm_benchmark*
+init_zero_benchmark(int *params, int n_p)
+{
+    struct pmm_benchmark *b;
+
+    b = new_benchmark();
+
+    if(b == NULL) {
+        ERRPRINTF("Error allocating new zero speed benchmark.\n");
+        return NULL;
+    }
+
+    b->n_p = n_p;
+    b->p = init_param_array_copy(params, n_p);
+    if(b->p == NULL) {
+        ERRPRINTF("Error copy parameter array.\n");
+
+        free_benchmark(&b);
+
+        return NULL;
+    }
+
+    b->flops = 0.;
+
+    return b;
+}
+
 
 /*!
  * Allocates and initialises memory for a new load history structure. This is
@@ -623,7 +675,7 @@ insert_bench(struct pmm_model *m, struct pmm_benchmark *b)
 
 /*
  * returns:
- *      0 if benchmark is not at the origin of the model (all min values)
+ *      0 if benchmark is not at the origin of the model (all start values)
  *      1 if benchmark is at the origin of the model
  *      -1 if there is a mismatch between number of parameters
  *
@@ -639,24 +691,24 @@ int is_benchmark_at_origin(int n, struct pmm_paramdef *pd_array,
 	}
 
 	for(i=0; i<n; i++) {
-        LOGPRINTF("b->p[%d]:%d paramdef[%d].min:%d\n", i, b->p[i], i,
-                  pd_array[i].min);
-		if(b->p[i] != pd_array[i].min) {
+        LOGPRINTF("b->p[%d]:%d paramdef[%d].start:%d\n", i, b->p[i], i,
+                  pd_array[i].start);
+		if(b->p[i] != pd_array[i].start) {
 			return 0;
 		}
 	}
 
-	return 1; // all bench parameters are min, bench is at origin
+	return 1; // all bench parameters are start, bench is at origin
 }
 
 /*!
  * An empty model is defined as one that has no experimentally obtained
  * benchmark points in it. Thus:
  *
- * The bench list may only have: points at the max parameter values on each
- * parameter axis, e.g. [0,0,max] for the 3rd axis of a 3 parameter
- * model, and a single point at the max parameter value of all boundaries,
- * i.e. [max,max,max] of a 3 parameter model
+ * The bench list may only have: points at the end parameter values on each
+ * parameter axis, e.g. [0,0,end] for the 3rd axis of a 3 parameter
+ * model, and a single point at the end parameter value of all boundaries,
+ * i.e. [end,end,end] of a 3 parameter model
  *
  * This is slightly complicated to test however, another property of non-
  * experimental points in the model is that they all have zero speed. Just test
@@ -749,7 +801,7 @@ count_unique_benchmarks_in_sorted_list(struct pmm_benchmark *first)
 
 /*!
  * Test if a benchmark is on one of the parameter axes of the model (i.e. all
- * but one parameter is at a minimum),
+ * but one parameter is at a start),
  *
  * @param   m   pointer to the model the benchmark belongs to
  * @param   b   pointer to the benchmark
@@ -761,13 +813,13 @@ int
 benchmark_on_axis(struct pmm_model *m,
                   struct pmm_benchmark *b)
 {
-	return param_on_axis(b->p, b->n_p, m->parent_routine->paramdef_array);
+	return param_on_axis(b->p, b->n_p, m->parent_routine->pd_set->pd_array);
 }
 
 /*!
  * Test if a set of parameters lies on one of the parameter axes of the model,
- * i.e. all but one parameter is at a minimum or all parameters are minimum
- * (origin).
+ * i.e. all but one parameter is at a start or all parameters are start
+ * (i.e. at the origin).
  *
  * @param   p           pointer to the parameter array
  * @param   n           number of elements in the parameter array
@@ -786,18 +838,18 @@ param_on_axis(int *p,
 	int plane = -1;
 
 	for(i=0; i<n; i++) {
-		// if a parameter is not a minimum
-		if(p[i] != pd_array[i].min) {
+		// if a parameter is not a start
+		if(p[i] != pd_array[i].start) {
 
 			//
-			// and if it is the first non-min parameter encountered then set
+			// and if it is the first non-start parameter encountered then set
 			// the possible axis index to the parameter's index
 			//
 			if(plane == -1) {
 				plane = i; // set axis index
 			}
 			//
-			// else if it is the second non-min encounted we can conclude
+			// else if it is the second non-start encounted we can conclude
 			// that the benchmark is not on parameter axis and return negative
 			//
 			else {
@@ -808,6 +860,58 @@ param_on_axis(int *p,
 
 	return plane;
 
+}
+
+/*!
+ * Test if a set of parameters is within the limits defined by the parameter
+ * definitions or outside them
+ *
+ * @param   p       pointer to parameter array
+ * @param   n       number of parameters
+ * @param   pd_array    pointer to parameter definition array
+ *
+ * @returns 1 if parameter p is within the parameter space defined by the
+ * parameter definitions, 0 if it is not
+ *
+ */
+int
+params_within_paramdefs(int *p, int n, struct pmm_paramdef *pd_array)
+{
+    int i;
+
+    for(i=0; i<n; i++) {
+        if(param_within_paramdef(p[i], &pd_array[i]) == 0) {
+            return 0;
+        }
+    }
+
+    return 1;
+
+}
+
+/*!
+ * Test if a single parameter is within the limits defined by a parameter
+ * definition
+ *
+ * @param   p   the parameter
+ * @param   pd  pointer to the parameter definition
+ *
+ * @return 1 if parameter is within the parameter space defined by the
+ * parameter defintion. I.e. it is between the start and end points
+ */
+int
+param_within_paramdef(int p, struct pmm_paramdef *pd) {
+    int dist;
+
+    dist = abs(pd->end - pd->start);
+
+    if(abs(p - pd->end) > dist ||
+       abs(p - pd->start) > dist)
+    {
+        return 0;
+    }
+
+    return 1;
 }
 
 /*!
@@ -823,10 +927,10 @@ param_on_axis(int *p,
 int
 copy_paramdef(struct pmm_paramdef *dst, struct pmm_paramdef *src)
 {
-	dst->max = src->max;
-	dst->min = src->min;
+	dst->end = src->end;
+	dst->start = src->start;
 	dst->order = src->order;
-    dst->fuzzy_max = src->fuzzy_max;
+    dst->nonzero_end = src->nonzero_end;
     dst->stride = src->stride;
     dst->offset = src->offset;
 
@@ -839,96 +943,92 @@ copy_paramdef(struct pmm_paramdef *dst, struct pmm_paramdef *src)
 }
 
 /*!
- * Initialise a parameter array to all minimum values, as descripted by the
+ * Initialise a parameter array to all start values, as descripted by the
  * parameter definitions
  *
- * @param   pd_array    pointer to an array of parameter defintions
- * @param   n           number of parameters/parameter definitions
+ * @param   pd_array    pointer to parameter definition set
  *
- * @return  pointer to an array of parameters with all minimum values of size n
+ * @return  pointer to an array of parameters with all start values of size n
  */
 int*
-init_param_array_min(struct pmm_paramdef *pd_array, int n)
+init_param_array_start(struct pmm_paramdef_set *pd_set)
 {
     int *p;
 
-    p = malloc(n * sizeof *p);
+    p = malloc(pd_set->n_p * sizeof *p);
     if(p == NULL) {
         ERRPRINTF("Error allocating memory.\n");
         return NULL;
     }
 
-    set_param_array_min(p, pd_array, n);
+    set_param_array_start(p, pd_set);
 
     return p;
 }
 
 /*!
- * Initialise a parameter array to all maximum values, as descripted by the
+ * Initialise a parameter array to all end values, as descripted by the
  * parameter definitions
  *
- * @param   pd_array    pointer to an array of parameter defintions
- * @param   n           number of parameters/parameter definitions
+ * @param   pd_set      pointer to parameter definition set structure
  *
- * @return  pointer to an array of parameters with all minimum values of size n
+ * @return  pointer to an array of parameters with all end values of size n
  */
 int*
-init_param_array_max(struct pmm_paramdef *pd_array, int n)
+init_param_array_end(struct pmm_paramdef_set *pd_set)
 {
     int *p;
 
-    p = malloc(n * sizeof *p);
+    p = malloc(pd_set->n_p * sizeof *p);
     if(p == NULL) {
         ERRPRINTF("Error allocating memory.\n");
         return NULL;
     }
 
-    set_param_array_max(p, pd_array, n);
+    set_param_array_end(p, pd_set);
 
     return p;
 }
 
 /*!
- * Set a parameter array to all minimum values, as described by the parameter
+ * Set a parameter array to all start values, as described by the parameter
  * definitions
  *
  * @param   p           pointer to an array of parameters
- * @param   pd_array    pointer to an array of parameter definitions
- * @param   n           number of parameters/parameter definitions
+ * @param   pd_set      pointer to parameter definitions set structure
  *
  * @pre p must be a pointer to allocated memory, the number of elements in the
  * p array must be identical to the number of parameter definitions
  */
 void
-set_param_array_min(int *p, struct pmm_paramdef *pd_array, int n)
+set_param_array_start(int *p, struct pmm_paramdef_set *pd_set)
 {
     int i;
 
-    for(i=0; i<n; i++) {
-        p[i] = pd_array[i].min;
+    for(i=0; i<pd_set->n_p; i++) {
+        p[i] = pd_set->pd_array[i].start;
     }
 
     return;
 }
 
 /*!
- * Set a parameter array to all maximum values, as described by the parameter
+ * Set a parameter array to all end values, as described by the parameter
  * definitions
  *
  * @param   p           pointer to an array of parameters
- * @param   pd_array    pointer to an array of parameter definitions
- * @param   n           number of parameters/parameter definitions
+ * @param   pd_set      pointer to parameter definitions set structure
  *
  * @pre p must be a pointer to allocated memory, the number of elements in the
  * p array must be identical to the number of parameter definitions
  */
 void
-set_param_array_max(int *p, struct pmm_paramdef *pd_array, int n)
+set_param_array_end(int *p, struct pmm_paramdef_set *pd_set)
 {
     int i;
 
-    for(i=0; i<n; i++) {
-        p[i] = pd_array[i].max;
+    for(i=0; i<pd_set->n_p; i++) {
+        p[i] = pd_set->pd_array[i].end;
     }
 
     return;
@@ -994,12 +1094,12 @@ set_param_array_copy(int *dst, int *src, int n)
  * @return the aligned parameter, or -1 on failure
  *
  * @post the return value is aligned as closely as possible to the passed param.
- * In cases where the aligned parameter is greater than the max, the parameter
- * is decremented by the stride until it is within the max bound. If fuzzy
- * max is set, the max point is considered a valid point and the parameter is
+ * In cases where the aligned parameter is greater than the end, the parameter
+ * is decremented by the stride until it is within the end bound. If nonzero en
+ * is set, the end point is considered a valid point and the parameter is
  * aligned to this, regardless if it is within the stride & offset describing
- * the parameter sequence. If the aligned parameter is less than the minimum
- * it is set to the min value, regardless of whether this is within the stride
+ * the parameter sequence. If the aligned parameter is less than the start
+ * it is set to the start value, regardless of whether this is within the stride
  * & offset describing the parameter sequence.
  * 
  */
@@ -1007,7 +1107,7 @@ int
 align_param(int param, struct pmm_paramdef *pd)
 {
     int aligned;
-    //int max_exceeded = 0;
+    //int end_exceeded = 0;
 
     // if stride is 1 we can return the parameter as it will always be aligned
     // while we limit input scalars to int types
@@ -1057,27 +1157,27 @@ align_param(int param, struct pmm_paramdef *pd)
 
 
 
-    // if aligned parameter is greater than the max
-    if(aligned >= pd->max) {
-        //DBGPRINTF("greater than max:%d\n", aligned);
-        aligned = pd->max;
+    // if aligned parameter is greater than the end
+    if(aligned >= pd->end) {
+        //DBGPRINTF("greater than end:%d\n", aligned);
+        aligned = pd->end;
 
         /*
-        if(pd->fuzzy_max == 1) {
-            aligned = pd->max-1; //set to max as this is a valid point, even
+        if(pd->nonzero_end == 1) {
+            aligned = pd->end-1; //set to end as this is a valid point, even
                                  //if it is not in the sequence
         }
         else {
-            aligned = pd->max;
-            while(aligned >= pd->max) { //decrement until it is less than max
+            aligned = pd->endx;
+            while(aligned >= pd->end) { //decrement until it is less than end 
                 aligned -= pd->stride;
             }
         }*/
     }
 
-    if(aligned < pd->min) { // if aligned parameter is less than min
-        //DBGPRINTF("less than min: %d\n", aligned);
-        aligned = pd->min; //set to min
+    if(aligned < pd->start) { // if aligned parameter is less than start
+        //DBGPRINTF("less than start: %d\n", aligned);
+        aligned = pd->start; //set to start 
     }
 
 
@@ -1087,32 +1187,32 @@ align_param(int param, struct pmm_paramdef *pd)
 }
 
 void
-align_params(int *params, struct pmm_paramdef *pd_array, int n_p)
+align_params(int *params, struct pmm_paramdef_set *pd_set)
 {
     int i;
 
     //DBGPRINTF("n_p:%d\n", n_p);
 
-    for(i=0; i<n_p; i++) {
+    for(i=0; i<pd_set->n_p; i++) {
         //DBGPRINTF("params[%d]:%d\n", i, params[i]);
-        params[i] = align_param(params[i], &(pd_array[i]));
+        params[i] = align_param(params[i], &(pd_set->pd_array[i]));
     }
 
     return;
 }
 
 int*
-init_aligned_params(int *p, struct pmm_paramdef *pd_array, int n_p)
+init_aligned_params(int *p, struct pmm_paramdef_set *pd_set)
 {
     int *aligned_p;
 
-    aligned_p = init_param_array_copy(p, n_p);
+    aligned_p = init_param_array_copy(p, pd_set->n_p);
     if(aligned_p == NULL) {
         ERRPRINTF("Error copying param array.\n");
         return NULL;
     }
 
-    align_params(aligned_p, pd_array, n_p);
+    align_params(aligned_p, pd_set);
 
     return aligned_p;
 }
@@ -1957,6 +2057,55 @@ timeval_cmp(struct timeval *a, struct timeval *b)
     return 0;
 }
 
+
+/*!
+ * Check if two parameter definition sets are identical
+ *
+ * @param   pds_a   pointer to first parameter definition set
+ * @param   pds_b   pointer to second parameter definition set
+ *
+ * @return 0 if not identical, 1 if identical
+ */
+int
+isequal_paramdef_set(struct pmm_paramdef_set *pds_a,
+                     struct pmm_paramdef_set *pds_b)
+{
+    if(pds_a->n_p != pds_b->n_p)
+    {
+        return 0;
+    }
+
+    if(!isequal_paramdef_array(pds_a->pd_array, pds_b->pd_array, pds_a->n_p)) {
+        return 0;
+    }
+
+    return 1;
+}
+
+/*!
+ * Check if two parameter definition arrays are equal.
+ *
+ * @param   pd_array_a  pointer to first parameter array
+ * @param   pd_array_b  pointer to second parameter array
+ *
+ * @return 0 if arrays contain different parameter definitions, 1 if they
+ * are identical
+ */
+int
+isequal_paramdef_array(struct pmm_paramdef *pd_array_a,
+                       struct pmm_paramdef *pd_array_b, int n_p)
+{
+    int i;
+
+    for(i=0; i<n_p; i++) {
+        if(!isequal_paramdef(&(pd_array_a[i]), &(pd_array_b[i]))) {
+            return 0;
+        }
+    }
+
+    return 1;
+}
+
 /*!
  * Check if two parameter definitions are identical
  *
@@ -1972,9 +2121,9 @@ isequal_paramdef(struct pmm_paramdef *a, struct pmm_paramdef *b)
     if(strcmp(a->name, b->name) != 0 ||
        //a->type != b->type || TODO implement parameter types
        a->order != b->order ||
-       a->fuzzy_max != b->fuzzy_max ||
-       a->max != b->max ||
-       a->min != b->min ||
+       a->nonzero_end != b->nonzero_end ||
+       a->end != b->end ||
+       a->start != b->start ||
        a->stride != b->stride ||
        a->offset != b->offset)
     {
@@ -2145,7 +2294,7 @@ get_avg_aligned_bench(struct pmm_model *m, int *param)
         return NULL;
     }
 
-    align_params(p_aligned, m->parent_routine->paramdef_array, m->n_p);
+    align_params(p_aligned, m->parent_routine->pd_set);
 
     b = get_avg_bench(m, p_aligned);
 
@@ -2496,7 +2645,7 @@ interpolate_1d_model(struct pmm_bench_list *bl,
                 //list model. We will assume speed for a smaller size is
                 //equal to the first benchmark.
 				b->flops = cur->flops;
-                DBGPRINTF("< than min bench, interpolated to:%f\n", b->flops);
+                DBGPRINTF("< than first bench, interpolated to:%f\n", b->flops);
                 return b;
             }
         }
@@ -2505,10 +2654,10 @@ interpolate_1d_model(struct pmm_bench_list *bl,
 
     //we have searched through the model and not found a benchmark
     //greater than the target, at minimum, the model will have a zero
-    //speed benchmark at paramdef.max so we can assume that the target is
+    //speed benchmark at paramdef.end so we can assume that the target is
     //greater than this and speed is zero
     //
-    //TODO this may not be best if fuzzy max is set and the max bench is
+    //TODO this may not be best if nonzero end is set and the end bench is
     //not actually 0 speed.
     //
 
@@ -3289,11 +3438,19 @@ void print_paramdef(struct pmm_paramdef *pd)
 	printf("\n");
 
 	printf("[print_paramdef]: order: %d\n", pd->order);
-    printf("[print_paramdef]: fuzzy_max: %d\n", pd->fuzzy_max);
-	printf("[print_paramdef]: max: %d\n", pd->max);
-	printf("[print_paramdef]: min: %d\n", pd->min);
+    printf("[print_paramdef]: nonzero_end: %d\n", pd->nonzero_end);
+	printf("[print_paramdef]: end: %d\n", pd->end);
+	printf("[print_paramdef]: start: %d\n", pd->start);
 	printf("[print_paramdef]: stride: %d\n", pd->stride);
 	printf("[print_paramdef]: offset: %d\n", pd->offset);
+}
+
+void print_paramdef_set(struct pmm_paramdef_set *pd_set)
+{
+    printf("[print_paramdef_set]: n_p:%d\n", pd_set->n_p);
+    
+	print_paramdef_array(pd_set->pd_array, pd_set->n_p);
+
 }
 
 /*
@@ -3304,16 +3461,14 @@ void print_paramdef(struct pmm_paramdef *pd)
 void print_routine(struct pmm_routine *r) {
 
 	printf("[print_routine]: -- rountine --\n");
-	printf("[print_rotuine]: name: %s\n", r->name);
+	printf("[print_routine]: name: %s\n", r->name);
 	printf("[print_routine]: exe_path: %s\n", r->exe_path);
 
-    printf("[print_routine]: n_p: %d\n", r->n_p);
-	print_paramdef_array(r->paramdef_array, r->n_p);
+    print_paramdef_set(r->pd_set);
 
 	printf("[print_routine]: condition:%d\n", r->condition);
 	printf("[print_routine]: priority:%d\n", r->priority);
 	printf("[print_routine]: model completion:%d\n", r->model->completion);
-
 
 
 	//print_model(r->model);
@@ -3465,7 +3620,7 @@ time_t parseISO8601Date(char *date) {
 int check_routine(struct pmm_routine *r) {
 	int ret = 1;
 
-	if(r->n_p <= 0) {
+	if(r->pd_set->n_p <= 0) {
 		printf("Number of paramaters for routine not set correctly.\n");
 		print_routine(r);
 		ret = 0;
@@ -3544,14 +3699,26 @@ void free_routine(struct pmm_routine **r) {
 	free((*r)->exe_path);
     (*r)->exe_path = NULL;
 
-	//free paramdef array
-	free_paramdefs(&((*r)->paramdef_array), (*r)->n_p);
+	//free paramdef set
+    free_paramdef_set(&(*r)->pd_set);
 
 	free(*r);
     *r = NULL;
 }
 
-void free_paramdefs(struct pmm_paramdef **pd_array, int n_p) {
+void free_paramdef_set(struct pmm_paramdef_set **pd_set)
+{
+	int i;
+
+    if((*pd_set)->pd_array != NULL)
+        free_paramdef_array(&(*pd_set)->pd_array, (*pd_set)->n_p);
+
+    free(*pd_set);
+    *pd_set = NULL;
+
+}
+
+void free_paramdef_array(struct pmm_paramdef **pd_array, int n_p) {
 	int i;
 
 	for(i=0; i<n_p; i++) {

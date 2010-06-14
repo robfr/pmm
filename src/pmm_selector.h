@@ -83,10 +83,13 @@ process_it_point(struct pmm_routine *r, struct pmm_interval *i);
 int
 is_interval_divisible(struct pmm_interval *i, struct pmm_routine *r);
 
-void
+int
+set_params_step_between_params(int *params, int *start, int *end,
+                               int step, struct pmm_paramdef_set *pd_set);
+int
 set_params_step_along_climb_interval(int *params, int step, 
                              struct pmm_interval *i,
-                             struct pmm_paramdef *pd_array, int n_p);
+                             struct pmm_paramdef_set *pd_set);
 int
 multi_gbbp_bench_from_interval(struct pmm_routine *r,
 		                       struct pmm_interval *interval,

@@ -50,8 +50,8 @@ struct pmm_loadhistory* parse_loadconfig(xmlDocPtr, xmlNodePtr node);
 int sync_parent_dir(char *file_path);
 
 int
-parse_paramdefs(struct pmm_paramdef **pd_array, int *n_p, xmlDocPtr doc,
-                xmlNodePtr node);
+parse_paramdef_set(struct pmm_paramdef_set *pd_set, xmlDocPtr doc,
+                   xmlNodePtr node);
 int
 parse_paramdef(struct pmm_paramdef *pd_array, int n_p, xmlDocPtr doc,
                xmlNodePtr node);
@@ -149,7 +149,7 @@ parse_routine(xmlDocPtr doc, xmlNodePtr node)
 			}
 		}
 		else if(!xmlStrcmp(cnode->name, (const xmlChar *) "parameters")) {
-			if(parse_paramdefs(&(r->paramdef_array), &(r->n_p), doc, cnode) < 0)
+			if(parse_paramdef_set(r->pd_set, doc, cnode) < 0)
             {
                 ERRPRINTF("Error parsing parameter definitions.\n");
                 return NULL;
@@ -216,8 +216,7 @@ parse_routine(xmlDocPtr doc, xmlNodePtr node)
 /*!
  * Parse multiple xml parameter definitions into a paramdef array
  *
- * @param   pd_array    pointer to array pointer of parameter definitions
- * @param   n_p         pointer to integer describing number of parameters
+ * @param   pd_set      pointer to parameter definition set structure
  * @param   doc         pointer to the xml document to parse
  * @param   node        pointer to the node of the xml tree describing the
  *                      parameter definitions
@@ -225,8 +224,8 @@ parse_routine(xmlDocPtr doc, xmlNodePtr node)
  * @return 0 on success, -1 on failure
  */
 int
-parse_paramdefs(struct pmm_paramdef **pd_array, int *n_p, xmlDocPtr doc,
-                xmlNodePtr node)
+parse_paramdef_set(struct pmm_paramdef_set *pd_set, xmlDocPtr doc,
+                   xmlNodePtr node)
 {
 	char *key;
 	xmlNodePtr cnode;
@@ -238,16 +237,16 @@ parse_paramdefs(struct pmm_paramdef **pd_array, int *n_p, xmlDocPtr doc,
 
 	// if the name of the cnode is ... do something with the key
 	if(!xmlStrcmp(cnode->name, (const xmlChar *) "n_p")) {
-		*n_p = atoi((char *)key);
+		pd_set->n_p = atoi((char *)key);
 
-		if(*n_p <= 0) {
+		if(pd_set->n_p <= 0) {
 			ERRPRINTF("Number of parameters must be greater than 0.\n");
 			return -1;
 		}
 
-		*pd_array = malloc((*n_p) * sizeof *(*pd_array));
+		pd_set->pd_array = malloc(pd_set->n_p * sizeof *(pd_set->pd_array));
 
-		if(*pd_array == NULL) {
+		if(pd_set->pd_array == NULL) {
 			ERRPRINTF("Error allocating memory.\n");
 			return -1;
 		}
@@ -274,9 +273,10 @@ parse_paramdefs(struct pmm_paramdef **pd_array, int *n_p, xmlDocPtr doc,
 		key = (char *)xmlNodeListGetString(doc, cnode->xmlChildrenNode, 1);
 
 		// if the name of the cnode is ... do something with the key
-		if(!xmlStrcmp(cnode->name, (const xmlChar *) "param")) {
+        if(!xmlStrcmp(cnode->name, (const xmlChar *) "param"))
+        {
 
-			if(parse_paramdef(*pd_array, *n_p, doc, cnode) < 0) {
+			if(parse_paramdef(pd_set->pd_array, pd_set->n_p, doc, cnode) < 0) {
                 ERRPRINTF("Error parsring parameter defintion.\n");
                 return -1;
             }
@@ -328,7 +328,7 @@ parse_paramdef(struct pmm_paramdef *pd_array, int n_p, xmlDocPtr doc,
 	cnode = node->xmlChildrenNode;
 
 	p.order = -1; // check this after parsing xml
-    p.fuzzy_max = 0; // default is that max is specific ... not 'fuzzy'
+    p.nonzero_end = 0; // default is that end is zero speed
     p.stride = 1; //default stride is 1
     p.offset = 0; //default offset is 0
 
@@ -349,11 +349,13 @@ parse_paramdef(struct pmm_paramdef *pd_array, int n_p, xmlDocPtr doc,
                 return -1;
 			}
 		}
-		else if(!xmlStrcmp(cnode->name, (const xmlChar *) "max")) {
-			p.max = atoll((char *)key);
+		else if(!xmlStrcmp(cnode->name, (const xmlChar *) "max") ||
+                !xmlStrcmp(cnode->name, (const xmlChar *) "end")) {
+			p.end = atoi((char *)key);
 		}
-		else if(!xmlStrcmp(cnode->name, (const xmlChar *) "min")) {
-			p.min = atoll((char *)key);
+		else if(!xmlStrcmp(cnode->name, (const xmlChar *) "min") ||
+                !xmlStrcmp(cnode->name, (const xmlChar *) "start")) {
+			p.start = atoi((char *)key);
 		}
 		else if(!xmlStrcmp(cnode->name, (const xmlChar *) "stride")) {
 			p.stride = atoi((char *)key);
@@ -361,22 +363,23 @@ parse_paramdef(struct pmm_paramdef *pd_array, int n_p, xmlDocPtr doc,
 		else if(!xmlStrcmp(cnode->name, (const xmlChar *) "offset")) {
 			p.offset = atoi((char *)key);
 		}
-		else if(!xmlStrcmp(cnode->name, (const xmlChar *) "fuzzy_max")) {
+		else if(!xmlStrcmp(cnode->name, (const xmlChar *) "fuzzy_max") ||
+                !xmlStrcmp(cnode->name, (const xmlChar *) "nonzero_end")) {
 			if(strcmp("yes", key) == 0 ||
                strcmp("true", key) == 0 ||
                strcmp("1", key) == 0)
             {
-                p.fuzzy_max = 1;
+                p.nonzero_end = 1;
 			}
             else if(strcmp("false", key) == 0 ||
                     strcmp("no", key) == 0 ||
                     strcmp("0", key) == 0)
             {
-                p.fuzzy_max = 0;
+                p.nonzero_end = 0;
 
             }
             else {
-                ERRPRINTF("Error parsing fuzzy_max value : %s\n", key);
+                ERRPRINTF("Error parsing nonzero_end value : %s\n", key);
                 return -1;
             }
 		}
@@ -444,16 +447,24 @@ parse_routine_construction(struct pmm_routine *r, xmlDocPtr doc,
 
 		// if the name of the cnode is ... do something with the key
 		if(!xmlStrcmp(cnode->name, (const xmlChar *) "method")) {
-			if(!xmlStrcmp((const xmlChar *) "naive", (xmlChar *) key)) {
+			if(!xmlStrcmp((const xmlChar *) "naive", (xmlChar *) key))
+            {
 				r->construction_method = CM_NAIVE;
 			}
-			else if(!xmlStrcmp((const xmlChar *) "gbbp", (xmlChar *) key)) {
+			else if(!xmlStrcmp((const xmlChar *) "gbbp", (xmlChar *) key))
+            {
 				r->construction_method = CM_GBBP;
 			}
-			else if(!xmlStrcmp((const xmlChar *) "rand", (xmlChar *) key)) {
+			else if(!xmlStrcmp((const xmlChar *) "gbbp_naive", (xmlChar *) key))
+            {
+				r->construction_method = CM_GBBP_NAIVE;
+			}
+			else if(!xmlStrcmp((const xmlChar *) "rand", (xmlChar *) key))
+            {
 				r->construction_method = CM_RAND;
 			}
-			else {
+			else
+            {
 				LOGPRINTF("construction method unrecognised: %s\n", key);
 				r->construction_method = CM_NAIVE;
 			}
@@ -1413,9 +1424,9 @@ int parse_model(struct pmm_model *m)
 
 	int completion;
 
-    int n_pd;
-    struct pmm_paramdef *pd_array;
-    int i;
+    struct pmm_paramdef_set *pd_set;
+
+    pd_set = new_paramdef_set();
 
     if(m->bench_list != NULL) {
         ERRPRINTF("Error, attempting to parse model file into non empty model:"
@@ -1505,9 +1516,11 @@ int parse_model(struct pmm_model *m)
 		if(!xmlStrcmp(cnode->name, (const xmlChar *) "n_p")) {
 			m->n_p = atoi((char *)key);
 
-			if(m->parent_routine != NULL && m->n_p != m->parent_routine->n_p) {
+			if(m->parent_routine != NULL &&
+               m->n_p != m->parent_routine->pd_set->n_p)
+            {
 				ERRPRINTF("model / routine parameter mismatch m:%d r:%d.\n",
-				          m->n_p, m->parent_routine->n_p);
+				          m->n_p, m->parent_routine->pd_set->n_p);
 		        xmlFreeDoc(doc);
                 return -2; //failure
 			}
@@ -1521,41 +1534,42 @@ int parse_model(struct pmm_model *m)
 			m->complete = atoi((char *)key);
 		}
         else if(!xmlStrcmp(cnode->name, (const xmlChar *) "parameters")) {
-            n_pd = -1;
 
 
-            if(parse_paramdefs(&pd_array, &n_pd, doc, cnode) < 0) {
+            if(parse_paramdef_set(pd_set, doc, cnode) < 0)
+            {
                 ERRPRINTF("Error parsing parameter definitions.\n");
 		        xmlFreeDoc(doc);
                 return -2; //failure
             }
 
 
-            if(n_pd != m->n_p) {
+            if(pd_set->n_p != m->n_p) {
                 ERRPRINTF("Parameter definition and model mismatch.\n");
             }
 
             // if we have a parent routine, check that the param definitions
             // in the model match the routine
             if(m->parent_routine != NULL) {
-                for(i=0; i<n_pd; i++) {
-                    if(isequal_paramdef(&(m->parent_routine->paramdef_array[i]),
-                                &(pd_array[i])) != 0)
-                    {
-                        ERRPRINTF("Current parameters do not match model. "
-                                "Resolve by deleting model.\n");
-                        ERRPRINTF("model:\n");
-                        print_paramdef_array(pd_array, n_pd);
-                        ERRPRINTF("routine:\n");
-                        print_paramdef_array(m->parent_routine->paramdef_array,
-                                m->parent_routine->n_p);
-                        return -2; // failure
-                    }
+                if(isequal_paramdef_set(m->parent_routine->pd_set, pd_set) != 0)
+                {
+                    ERRPRINTF("Current parameter definitions do not match "
+                              "those initially used to build model.\n");
+
+                    ERRPRINTF("model:\n");
+                    print_paramdef_set(pd_set);
+
+                    ERRPRINTF("routine:\n");
+                    print_paramdef_set(m->parent_routine->pd_set);
+
+                    free_paramdef_set(&pd_set);
+
+                    return -2; // failure
                 }
             }
 
             // finished with the parsed model parameter definitions now
-            free_paramdefs(&pd_array, n_pd);
+            free_paramdef_set(&pd_set);
 
         }
 		else if(!xmlStrcmp(cnode->name, (const xmlChar *) "bench_list")) {
@@ -1625,8 +1639,8 @@ int parse_models(struct pmm_config *c)
 			    //model parsing failed, so initialize model with definitions
 			    //from routine
 
-			    m->n_p = r->n_p;
-			    if(init_bench_list(m, r->paramdef_array, r->n_p) <0){
+			    m->n_p = r->pd_set->n_p;
+			    if(init_bench_list(m, r->pd_set) < 0){
                     ERRPRINTF("Error initialising bench list.\n");
                     return -1; //failure
                 }
@@ -2462,10 +2476,9 @@ int write_model_xtwp(xmlTextWriterPtr writer, struct pmm_model *m)
 	}
 
     // write the parameter definitions from the parent routine
-    rc = write_paramdef_array_xtwp(writer, m->parent_routine->paramdef_array,
-                                   m->parent_routine->n_p);
+    rc = write_paramdef_set_xtwp(writer, m->parent_routine->pd_set);
     if(rc < 0) {
-        ERRPRINTF("Error in write_paramdef_array_xtwp.\n");
+        ERRPRINTF("Error in write_paramdef_set_xtwp.\n");
         return rc;
     }
 
@@ -2563,18 +2576,16 @@ int write_bench_list_xtwp(xmlTextWriterPtr writer,
  */
 
 /*!
- * Write an array of parameter definitions to an xmlTextWriterPtr object
+ * Write the parameter definition set to an xmlTextWriterPtr object
  *
  * @param   writer      xmlTextWriter pointer
- * @param   pd_array    pointer to array of parameter defintions
- * @param   n           number of parameter definitions
+ * @param   pd_set      pointer to the parameter defintion set
  *
  * @returns 0 on success, -1 on failure
  */
 int
-write_paramdef_array_xtwp(xmlTextWriterPtr writer,
-                          struct pmm_paramdef *pd_array,
-                          int n)
+write_paramdef_set_xtwp(xmlTextWriterPtr writer,
+                        struct pmm_paramdef_set *pd_set)
 {
     int rc;
     int i;
@@ -2588,15 +2599,15 @@ write_paramdef_array_xtwp(xmlTextWriterPtr writer,
 
     // add an element with name "n_p" and value number of parameters
     rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "n_p",
-            "%d", n);
+            "%d", pd_set->n_p);
     if (rc < 0) {
         ERRPRINTF("Error @ xmlTextWriterWriteFormatElement (n_p)\n");
         return rc;
     }
 
     //write each parameter definition
-    for(i=0; i<n; i++) {
-        rc = write_paramdef_xtwp(writer, &(pd_array[i]));
+    for(i=0; i<pd_set->n_p; i++) {
+        rc = write_paramdef_xtwp(writer, &(pd_set->pd_array[i]));
         if (rc < 0) {
             ERRPRINTF("Error writing parameter definition\n");
             return rc;
@@ -2650,19 +2661,19 @@ write_paramdef_xtwp(xmlTextWriterPtr writer, struct pmm_paramdef *pd)
         return rc;
     }
 
-    //add an element with name "min" and value of the min
-    rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "min", "%d",
-                                         pd->min);
+    //add an element with name "start" and value of the start
+    rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "start", "%d",
+                                         pd->start);
     if (rc < 0) {
-        ERRPRINTF("Error at xmlTextWriterWriteFormatElement (min)\n");
+        ERRPRINTF("Error @ xmlTextWriterWriteFormatElement (start)\n");
         return rc;
     }
 
-    //add an element with name "max" and value of the max
-    rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "max", "%d",
-                                         pd->max);
+    //add an element with name "end" and value of the end
+    rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "end", "%d",
+                                         pd->end);
     if (rc < 0) {
-        ERRPRINTF("Error at xmlTextWriterWriteFormatElement (max)\n");
+        ERRPRINTF("Error @ xmlTextWriterWriteFormatElement (end)\n");
         return rc;
     }
 
@@ -2870,7 +2881,8 @@ int write_timeval_xtwp(xmlTextWriterPtr writer, struct timeval *t)
 
 }
 
-void xmlparser_init() {
+void xmlparser_init()
+{
     xmlInitParser();
 }
 

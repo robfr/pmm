@@ -281,10 +281,10 @@ int main(int argc, char **argv) {
                         }
                         else {
                             if(options.slice_val_arr[i] == -1) {
-                                options.slice_val_arr[i] = model->parent_routine->paramdef_array[options.slice_i_arr[i]].max;
+                                options.slice_val_arr[i] = model->parent_routine->pd_set->pd_array[options.slice_i_arr[i]].end;
                             }
                             else if(options.slice_val_arr[i] == -2) {
-                                options.slice_val_arr[i] = model->parent_routine->paramdef_array[options.slice_i_arr[i]].min;
+                                options.slice_val_arr[i] = model->parent_routine->pd_set->pd_array[options.slice_i_arr[i]].start;
                             }
                             else {
                                 ERRPRINTF("Slice value should positive.\n");
@@ -891,10 +891,13 @@ set_plot_labels_ranges(gnuplot_ctrl *plot_handle, struct pmm_model *model,
     if(model->parent_routine != NULL) {
 
         gnuplot_set_xlabel(plot_handle,
-                           model->parent_routine->paramdef_array[0].name);
+                           model->parent_routine->pd_set->pd_array[0].name);
 
         gnuplot_cmd(plot_handle, "set xrange[0:%d]",
-                    model->parent_routine->paramdef_array[0].max);
+                    model->parent_routine->pd_set->pd_array[0].end >
+                    model->parent_routine->pd_set->pd_array[0].start ?
+                    model->parent_routine->pd_set->pd_array[0].end :
+                    model->parent_routine->pd_set->pd_array[0].start);
 
         ret = asprintf(plot_title_buf, "%s model", model->parent_routine->name);
         if(ret < 0) {
@@ -921,15 +924,21 @@ set_splot_labels_ranges(gnuplot_ctrl *plot_handle, struct pmm_model *model,
 
     if(model->parent_routine != NULL) {
         gnuplot_set_xlabel(plot_handle,
-                           model->parent_routine->paramdef_array[0].name);
+                           model->parent_routine->pd_set->pd_array[0].name);
         gnuplot_set_ylabel(plot_handle,
-                           model->parent_routine->paramdef_array[1].name);
+                           model->parent_routine->pd_set->pd_array[1].name);
 
         gnuplot_cmd(plot_handle, "set xrange[0:%d]",
-                    model->parent_routine->paramdef_array[0].max);
+                    model->parent_routine->pd_set->pd_array[0].end >
+                    model->parent_routine->pd_set->pd_array[0].start ?
+                    model->parent_routine->pd_set->pd_array[0].end :
+                    model->parent_routine->pd_set->pd_array[0].start);
 
-        gnuplot_cmd(plot_handle, "set yrange[0:%d]",
-                    model->parent_routine->paramdef_array[1].max);
+        gnuplot_cmd(plot_handle, "set yrange[-10:%d]",
+                    model->parent_routine->pd_set->pd_array[1].end >
+                    model->parent_routine->pd_set->pd_array[1].start ?
+                    model->parent_routine->pd_set->pd_array[1].end :
+                    model->parent_routine->pd_set->pd_array[1].start);
 
         ret = asprintf(plot_title_buf, "%s model", model->parent_routine->name);
         if(ret < 0) {

@@ -61,12 +61,6 @@ typedef enum pmm_construction_method {
     CM_INVALID
 } PMM_Construction_Method;
 
-typedef struct pmm_paramdef_list {
-	int n_param;
-	struct pmm_paramdef *first;
-	struct pmm_paramdef *last;
-} PMM_Paramdef_List;
-
 //
 //TODO allow definition of a mathematical sequence to govern permissable
 //parameters. At present stride and offset allow a sequence equvilent to:
@@ -77,12 +71,17 @@ typedef struct pmm_paramdef {
 	char *name;
 	int type;
 	int order;
-    int fuzzy_max;
-	int max;
-	int min;
+    int nonzero_end;
+	int end;
+	int start;
     int stride;
     int offset;
 } PMM_Paramdef;
+
+typedef struct pmm_paramdef_set {
+    int n_p;                            // number of parameters
+    struct pmm_paramdef *pd_array;      // array of parameter definitions
+} PMM_Paramdef_Set;
 
 
 /*! \struct pmm_benchmark
@@ -193,10 +192,8 @@ typedef struct pmm_routine {
 	char *name;
 	char *exe_path;
 
-	int n_p; /* number of parameters of the model */
-	struct pmm_paramdef *paramdef_array; /* array of model parameters */
     int param_product_constraint; /* maximum product of all parameters */
-
+    struct pmm_paramdef_set *pd_set; // set of parameter defintions
 
 	//struct pmm_policy *policy; TODO implement policies
 	int condition;
@@ -297,6 +294,7 @@ typedef struct pmm_load {
  */
 struct pmm_config* new_config();
 struct pmm_routine* new_routine();
+struct pmm_paramdef_set* new_paramdef_set();
 struct pmm_model* new_model();
 struct pmm_benchmark* new_benchmark();
 struct pmm_load* new_load();
@@ -312,7 +310,7 @@ new_bench_list(struct pmm_model *m,
 int init_loadhistory(struct pmm_loadhistory *h, int size);
 
 int
-init_bench_list(struct pmm_model *m, struct pmm_paramdef *pd_array, int n_p);
+init_bench_list(struct pmm_model *m, struct pmm_paramdef_set *pd_set);
 
 struct pmm_interval* init_interval(int plane,
                                   int n_p,
@@ -320,13 +318,13 @@ struct pmm_interval* init_interval(int plane,
                                   int *start,
                                   int *end);
 int*
-init_param_array_min(struct pmm_paramdef *pd_array, int n);
+init_param_array_start(struct pmm_paramdef_set *pds);
 int*
-init_param_array_max(struct pmm_paramdef *pd_array, int n);
+init_param_array_end(struct pmm_paramdef_set *pds);
 void
-set_param_array_min(int *p, struct pmm_paramdef *pd_array, int n);
+set_param_array_start(int *p, struct pmm_paramdef_set *pds);
 void
-set_param_array_max(int *p, struct pmm_paramdef *pd_array, int n);
+set_param_array_end(int *p, struct pmm_paramdef_set *pds);
 
 int isempty_model(struct pmm_model *m);
 
@@ -371,11 +369,11 @@ set_param_array_copy(int *dst, int *src, int n);
 int params_cmp(int *p1, int *p2, int n);
 
 void
-align_params(int *params, struct pmm_paramdef *pd_array, int n_p);
+align_params(int *params, struct pmm_paramdef_set *pd_set);
 int
 align_param(int param, struct pmm_paramdef *pd);
 int*
-init_aligned_params(int *p, struct pmm_paramdef *pd_array, int n_p);
+init_aligned_params(int *p, struct pmm_paramdef_set *pd_set);
 
 
 int
@@ -417,6 +415,11 @@ param_on_axis(int *p,
               int n,
               struct pmm_paramdef *pd_array);
 
+int
+params_within_paramdefs(int *p, int n, struct pmm_paramdef *pd_array);
+int
+param_within_paramdef(int p, struct pmm_paramdef *pd_array);
+
 int benchmark_on_axis(struct pmm_model *m, struct pmm_benchmark *b);
 
 int is_benchmark_at_origin(int n, struct pmm_paramdef *paramdef_array,
@@ -424,6 +427,13 @@ int is_benchmark_at_origin(int n, struct pmm_paramdef *paramdef_array,
 
 
 int isequal_benchmarks(struct pmm_benchmark *b1, struct pmm_benchmark *b2);
+
+int
+isequal_paramdef_set(struct pmm_paramdef_set *pds_a,
+                     struct pmm_paramdef_set *pds_b);
+int
+isequal_paramdef_array(struct pmm_paramdef *pd_array_a,
+                       struct pmm_paramdef *pd_array_b, int n_p);
 int
 isequal_paramdef(struct pmm_paramdef *a, struct pmm_paramdef *b);
 
@@ -491,6 +501,7 @@ int check_routine(struct pmm_routine *r);
 int check_loadhistory(struct pmm_loadhistory *h);
 
 void print_params(int *p, int n);
+void print_paramdef_set(struct pmm_paramdef_set *pd_set);
 void print_paramdef_array(struct pmm_paramdef *pd_array, int n);
 void print_paramdef(struct pmm_paramdef *pd);
 void print_config(struct pmm_config *cfg);
@@ -504,7 +515,8 @@ void free_bench_list(struct pmm_bench_list **bl);
 void free_benchmark_list_backwards(struct pmm_benchmark **first_b);
 void free_benchmark_list_forwards(struct pmm_benchmark **last_b);
 void free_benchmark(struct pmm_benchmark **b);
-void free_paramdefs(struct pmm_paramdef **pd_array, int n_p);
+void free_paramdef_set(struct pmm_paramdef_set **pd_set);
+void free_paramdef_array(struct pmm_paramdef **pd_array, int n_p);
 void free_routine(struct pmm_routine **r);
 void free_config(struct pmm_config **cfg);
 void free_loadhistory(struct pmm_loadhistory **h);

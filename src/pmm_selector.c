@@ -118,18 +118,21 @@ multi_naive_select_new_bench(struct pmm_routine *r)
     m = r->model;
     i_list = m->interval_list;
 
-    // if interval list is empty initialise with a point interval at the min
+    // if interval list is empty initialise with a point interval at the start
     // parameter point
     if(isempty_interval_list(i_list) == 1) {
         DBGPRINTF("Interval list is empty, initialising new interval list.\n");
 
         new_i = new_interval();
         new_i->type = IT_POINT;
-        new_i->n_p = r->n_p;
-        new_i->start = init_param_array_min(r->paramdef_array, r->n_p);
+        new_i->n_p = r->pd_set->n_p;
+        new_i->start = init_param_array_start(r->pd_set);
 
         if(new_i->start == NULL) {
-            ERRPRINTF("Error initialising minimum parameter array.\n");
+            ERRPRINTF("Error initialising start parameter array.\n");
+
+            free_interval(&new_i);
+
             return NULL;
         }
 
@@ -157,7 +160,7 @@ multi_naive_select_new_bench(struct pmm_routine *r)
                 return NULL;
             }
 
-            align_params(params, r->paramdef_array, r->n_p);
+            align_params(params, r->pd_set);
 
             return params;
 
@@ -243,7 +246,7 @@ multi_naive_insert_bench(struct pmm_routine *r, struct pmm_benchmark *b)
  * parameter space described by the parameter definitions. In general, this
  * set of points P is given by the n-ary Cartesian product of the sets of
  * each of the n parameters, p_0, p_1, p_n, where such sets are defined by
- * our parameter definitions in terms of minimum values, maximum values, stride
+ * our parameter definitions in terms of start values, end values, stride
  * and offsets.
  *
  * We iterate through such a set of points in lexicographical order, i.e.
@@ -253,9 +256,9 @@ multi_naive_insert_bench(struct pmm_routine *r, struct pmm_benchmark *b)
  *  (\exists\ m > 0) \ (\forall\ i < m) (a_i = b_i) \land (a_m <_m b_m) 
  *
  * Given a point p, incrementing it to p' involves the following: Increment
- * the first term, if this incremented value is greater than the max defined
- * for the first term (i.e. it has overflowed), set the term to the minimum
- * value and equal min_1 and apply this overflow by incrementing the next
+ * the first term, if this incremented value is greater than the end defined
+ * for the first term (i.e. it has overflowed), set the term to the start
+ * value and equal start_1 and apply this overflow by incrementing the next
  * term, testing that the next term has not also overflowed, and letting any 
  * overflow cascade through terms of the point. You may recognise this kind
  * of process in the natural way one counts :-)
@@ -278,8 +281,7 @@ naive_process_interval_list(struct pmm_routine *r, struct pmm_benchmark *b)
     m = r->model;
     interval = m->interval_list->top;
 
-    aligned_params = init_aligned_params(interval->start, r->paramdef_array,
-                                         interval->n_p);
+    aligned_params = init_aligned_params(interval->start, r->pd_set);
     if(aligned_params == NULL) {
         ERRPRINTF("Error initialising aligned param array.\n");
         return -1;
@@ -350,7 +352,7 @@ naive_process_interval_list(struct pmm_routine *r, struct pmm_benchmark *b)
  * Alogirthm description:
  *
  * if model is empty
- *   select minimum values for all parameters and return benchmark point
+ *   select start values for all parameters and return benchmark point
  * else
  *   seed random generator
  *
@@ -365,7 +367,7 @@ int* multi_random_select_new_bench(struct pmm_routine *r)
 
 
 	//allocate parameter return array
-    params = malloc(r->n_p * sizeof *params);
+    params = malloc(r->pd_set->n_p * sizeof *params);
     if(params == NULL) {
         ERRPRINTF("Error allocating memory.\n");
 		return NULL;
@@ -377,9 +379,7 @@ int* multi_random_select_new_bench(struct pmm_routine *r)
 	if(isempty_model(r->model)) {
 
 		//set paremeter reutrn array to the origin point
-		for(i=0; i<r->n_p; i++) {
-			params[i] = r->paramdef_array[i].min;
-		}
+        set_param_array_start(params, r->pd_set);
 
 	}
 	else {
@@ -390,18 +390,18 @@ int* multi_random_select_new_bench(struct pmm_routine *r)
 		//choose a random set of params within the parmdef limits
 		//make sure choosen random params are not already in the model
 		//do {
-		//	for(i=0; i<r->n_p; i++) {
-		//		params[i] = rand_between(r->paramdef_array[i].min,
-		//		                         r->paramdef_array[i].max);
+		//	for(i=0; i<r->pd_set->n_p; i++) {
+		//		params[i] = rand_between(r->pd_set->pd_array[i].start,
+		//		                         r->pd_set->pd_array[i].end);
 		//	}
 		//} while(get_bench(r->model, params) != NULL); //test in model already
 
-		for(i=0; i<r->n_p; i++) {
-			params[i] = rand_between(r->paramdef_array[i].min,
-			                         r->paramdef_array[i].max);
+		for(i=0; i<r->pd_set->n_p; i++) {
+			params[i] = rand_between(r->pd_set->pd_array[i].start,
+			                         r->pd_set->pd_array[i].end);
 		}
 
-        align_params(params, r->paramdef_array, r->n_p);
+        align_params(params, r->pd_set);
 
 	}
 
@@ -449,7 +449,7 @@ multi_gbbp_diagonal_select_new_bench(struct pmm_routine *r)
         }
 	}
 
-    params = malloc(r->n_p * sizeof *params);
+    params = malloc(r->pd_set->n_p * sizeof *params);
     if(params == NULL) {
         ERRPRINTF("Error allocating memory.\n");
         return NULL;
@@ -486,7 +486,7 @@ multi_gbbp_diagonal_select_new_bench(struct pmm_routine *r)
             //remove top interval
             remove_interval(i_list, top_i);
 
-            if(r->n_p > 1) {
+            if(r->pd_set->n_p > 1) {
                 //mesh boundary models to create points
                 if(project_diagonal_intervals(m) < 0) {
                     ERRPRINTF("Error projecting new intervals from diagonal\n");
@@ -544,28 +544,53 @@ multi_gbbp_diagonal_select_new_bench(struct pmm_routine *r)
             ERRPRINTF("Invalid interval type: %s (%d)\n",
                        interval_type_to_string(top_i->type), top_i->type);
             print_interval(top_i);
+
             free(params);
             params = NULL;
+
             break;
     }
 
     return params;
 }
 
+/*!
+ * Function initialises a construction interval between two points which form
+ * a diagonal through the parameter space defined by the parameter definitions.
+ * For $n$ parameters with defintions of start points $s_i$ and end points
+ * $e_i$, the diagonal starts at:
+ *
+ *     $(s_0, s_1, ..., s_n)$
+ *
+ * and ends at:
+ *
+ *     $(e_0, e_1, ..., e_n)$
+ *
+ * @param   r   pointer to the routine for which the interval will be
+ *              initialised
+ *
+ * Other intervals are added to benchmark neccessary extremeties of the
+ * parameter space and to tag the completion of the diagonal and the whole
+ * model in general.
+ *
+ * @return 0 on success or -1 on failure
+ */
 int
 init_gbbp_diagonal_interval(struct pmm_routine *r)
 {
     int j;
+    int all_nonzero_end;
     struct pmm_model *m;
     struct pmm_interval_list *i_list;
-    struct pmm_interval *new_i;
+    struct pmm_interval *new_i, *diag_i;
+    struct pmm_benchmark *zero_b;
 
     m = r->model;
     i_list = m->interval_list;
 
     //models with more than 1 boundary need a tag to indicate mesh stage
     //of construction
-    if(r->n_p > 1) {
+    if(r->pd_set->n_p > 1) {
         new_i = new_interval();
         new_i->type = IT_BOUNDARY_COMPLETE;
         add_top_interval(i_list, new_i);
@@ -573,87 +598,116 @@ init_gbbp_diagonal_interval(struct pmm_routine *r)
 
 
 
-    // add an empty interval from min -> max along a diagonal through
+    // add an empty interval from start -> end along a diagonal through
     // the parameter space
-    new_i = new_interval(); 
-    new_i->type = IT_GBBP_EMPTY; 
+    diag_i = new_interval(); 
+    diag_i->type = IT_GBBP_EMPTY; 
 
-    new_i->n_p = r->n_p;
+    diag_i->n_p = r->pd_set->n_p;
 
-    new_i->start = init_param_array_min(r->paramdef_array, r->n_p);
-    if(new_i->start == NULL) {
-        ERRPRINTF("Error initialising minimum parameter array.\n");
-        free_interval(new_i);
+    diag_i->start = init_param_array_start(r->pd_set);
+    if(diag_i->start == NULL) {
+        ERRPRINTF("Error initialising start parameter array.\n");
+        free_interval(&diag_i);
         return -1;
     }
 
-    new_i->end = init_param_array_max(r->paramdef_array, r->n_p);
-    if(new_i->end == NULL) {
-        ERRPRINTF("Error initialising maximum parameter array.\n");
-        free_interval(new_i);
+    diag_i->end = init_param_array_end(r->pd_set);
+    if(diag_i->end == NULL) {
+        ERRPRINTF("Error initialising end parameter array.\n");
+        free_interval(&diag_i);
         return -1;
     }
 
-    if(is_interval_divisible(new_i, r) == 1) {
-        add_top_interval(m->interval_list, new_i);
+
+    if(is_interval_divisible(diag_i, r) == 1) {
+        add_top_interval(m->interval_list, diag_i);
     }
     else {
         LOGPRINTF("Interval not divisible, not adding.\n");
-        print_interval(new_i);
-        free_interval(new_i);
+        print_interval(diag_i);
+        free_interval(&diag_i);
     }
 
 
-    // when fuzzy_max is set there will be no zero-speed benchmarks that
+
+    // nonzero_end is set there will be no zero-speed benchmarks that
     // bound the parameter space of the model. So we must benchmark at these
     // points so that or model has a fully bounded space before the GBBP
     // algorithm begins
     //
-    // if fuzzy_max is set on any of the parameters the then we will benchmark
-    // at max of all parameters. A POINT interval at max_0,max_1,...,max_n will
-    // be added to the top of the interval stack so that it is measured before
-    // GBBP diagonal construction proceeds
-    for(j=0; j<r->n_p; j++) {
-        if(r->paramdef_array[j].fuzzy_max == 1) {
-            DBGPRINTF("fuzzy max on param:%d\n", j);
-            // add benchmark at max of all parameters
+    // for each parameter, if nonzer end is set, create a POINT interval at
+    // a end value for that parameter along its axis, i.e.
+    // start_0,start_1,...,end_i,...start_n,
+    // 
+    // Also, if nonzero_end is NOT set, set all_nonzer_end to 0/false
+    all_nonzero_end = 1;
+    for(j=0; j<r->pd_set->n_p; j++) {
+        if(r->pd_set->pd_array[j].nonzero_end == 1) {
+            // add benchmark at end on axis boundary (nonzero end)
             new_i = new_interval();
             new_i->type = IT_POINT;
-            new_i->n_p = r->n_p;
+            new_i->n_p = r->pd_set->n_p;
 
-            new_i->start = init_param_array_max(r->paramdef_array, r->n_p);
+            new_i->start = init_param_array_start(r->pd_set);
             if(new_i->start == NULL) {
-                ERRPRINTF("Error initialising maximum parameter array.\n");
-                free_interval(new_i);
+                ERRPRINTF("Error initialising start parameter array.\n");
+                free_interval(&new_i);
                 return -1;
             }
 
-            add_top_interval(i_list, new_i);
+            new_i->start[j] = r->pd_set->pd_array[j].end;
 
-            break;
+            add_top_interval(i_list, new_i);
+        }
+        else {
+            all_nonzero_end = 0;
         }
     }
 
-    // now for each parameter, if fuzzy max is set, create a POINT interval at
-    // a max value for that parameter along its axis, i.e.
-    // min,min,...,max_i,...,min_n
-    for(j=0; j<r->n_p; j++) {
-        if(r->paramdef_array[j].fuzzy_max == 1) {
-            // add benchmark at max on axis boundary (fuzzy max)
-            new_i = new_interval();
-            new_i->type = IT_POINT;
-            new_i->n_p = r->n_p;
+    
+    // if nonzero_end is set on all parameters the then we will benchmark
+    // at the end point of the diagonal interval. This should be added
+    // to the top of the interval stack so that it is measured before
+    // GBBP diagonal construction proceeds
+    if(all_nonzero_end == 1 && diag_i != NULL) {
+        DBGPRINTF("nonzero end on all params\n");
 
-            new_i->start = init_param_array_min(r->paramdef_array, r->n_p);
-            if(new_i->start == NULL) {
-                ERRPRINTF("Error initialising minimum parameter array.\n");
-                free_interval(new_i);
+        // add benchmark at end of diagonal
+        new_i = new_interval();
+        new_i->type = IT_POINT;
+        new_i->n_p = r->pd_set->n_p;
+
+        new_i->start = init_param_array_copy(diag_i->end, r->pd_set->n_p);
+        if(new_i->start == NULL) {
+            ERRPRINTF("Error initialising end point parameter array.\n");
+            free_interval(&new_i);
+            return -1;
+        }
+
+        add_top_interval(i_list, new_i);
+
+    }
+    else if(diag_i != NULL) {
+        // if we made an adjustment to max,max,...max via the param
+        // constraints
+        if(r->pd_set->pc_max != -1) {
+
+            // create a zero speed point at interval end ...
+            zero_b = new_benchmark();
+            zero_b = init_zero_benchmark(diag_i->end, r->pd_set->n_p);
+            if(zero_b == NULL) {
+                ERRPRINTF("Error allocating new benchmark.\n");
                 return -1;
             }
 
-            new_i->start[j] = r->paramdef_array[j].max;
+            //add to model
+            if(insert_bench(r->model, zero_b) < 0) {
+                ERRPRINTF("Error inserting a zero benchmark.\n");
+                free_benchmark(&zero_b);
 
-            add_top_interval(i_list, new_i);
+                return -1;
+            }
         }
     }
 
@@ -663,22 +717,68 @@ init_gbbp_diagonal_interval(struct pmm_routine *r)
     return 0; //success
 }
 
+
+/*!
+ * Test if the end point of an interval is nonzero or not. A nonzero end point
+ * means we will benchmark at this point rather than set its speed to be zero.
+ * 
+ * The line between start and end points may be perpendicular to some axes
+ * of the parameter space, or to none at all. Any parameter-axis that the
+ * interval-line is perpendicular to, is not considered in the determination of
+ * the end point 'fuzziness'.
+ *
+ * The end point is declared nonzero then, if all parameters that may be
+ * considered have nonzero property set to true. Other wise, the end point
+ * is not fuzzy and should have a speed set to be zero in the model.
+ *
+ *
+ * @param   i           pointer to the interval
+ * @param   pd_set      pointer to the parameter defintion set
+ * @param   n           number of parameters
+ *
+ * @return 0 if not zero end point, 1 if nonzero end point
+ *
+ */
+int
+isnonzero_at_interval_end(struct pmm_interval *i,
+                          struct pmm_paramdef_set *pd_set)
+{
+    int j;
+    int all_nonzero_end;
+
+    all_nonzero_end = 1;
+
+    for(j=0; j<pd_set->n_p; j++) {
+        if(i->start[j] != i->end[j]) { // if interval is not perpendicular to
+                                       // this axis
+
+            if(pd_set->pd_array[j].nonzero_end != 1) {
+                all_nonzero_end = 0;
+                break;
+            }
+
+        }
+    }
+
+    return all_nonzero_end;
+}
+
 /*!
  * Assuming all points in the model are along a diagonal constructed by
- * GBBP from min_0, min_1, ..., min_n to max_0, max_1, ..., max_n, project
+ * GBBP from start_0, start_1, ..., start_n to end_0, end_1, ..., end_n, project
  * construction intervals through each diagonal point, along mutually
  * perpendicular lines.
  *
- * Or more formally, given a set n parameter definitions, describing maximum
- * and minimum values:
- *      MAX = max_0, max_1, ..., max_n
- *      MIN = min_0, min_1, ..., min_n
+ * Or more formally, given a set n parameter definitions, describing start
+ * and end values values:
+ *      START = start_0, start_1, ..., start_n
+ *      END = end_0, end_1, ..., end_n
  *
- * For each point p along a diagonal from a point (min_0, min_1, ...,min_n) to
- * (max_0, max_1, ..., max_n)
+ * For each point p along a diagonal from a point (start_0,start_1,...,start_n)
+ * to (end_0, end_1, ..., end_n)
  *    For each element p_i of a point p = (p_0, p_1, ..., p_n)
- *       find a point a by replacing p_i in the point p with min_i
- *       find a point b by replacing p_i in the point p with max_i
+ *       find a point a by replacing p_i in the point p with start_i
+ *       find a point b by replacing p_i in the point p with end_i
  *       create a construction interval between a and b
  *
  * @param   m   pointer to the model
@@ -704,10 +804,23 @@ project_diagonal_intervals(struct pmm_model *m)
     b = m->bench_list->first;
     while(b != NULL) {
 
+        if(benchmark_on_axis(m, b) < 0) {
+            // don't skip, bench is at origin or not on an axis
+
+        }
+        else {
+            // bench is on axis, skip it
+            do {
+                b = get_next_different_bench(b);
+            } while(b != NULL && b->flops == 0.0);
+
+            continue;
+        }
+
         for(j=0; j<m->n_p; j++) {
 
             new_i = new_projection_interval(b->p,
-                                       &(m->parent_routine->paramdef_array[j]),
+                                       &(m->parent_routine->pd_set->pd_array[j]),
                                        j, b->n_p);
             if(new_i == NULL) {
                 ERRPRINTF("Error creating new projection interval.\n");
@@ -722,49 +835,38 @@ project_diagonal_intervals(struct pmm_model *m)
             else {
                 LOGPRINTF("Interval not divisible, not adding.\n");
                 print_interval(new_i);
-                free_interval(new_i);
+                free_interval(&new_i);
             }
 
-            if(m->parent_routine->paramdef_array[j].fuzzy_max == 1) {
-                //add an IT_POINT interval to benchmark at max
-                //
-                new_i = init_interval(0, b->n_p, IT_POINT, b->p, NULL);
+            if(r->pd_set->pd_array[j].nonzero_end == 1 && new_i != NULL)
+            {
+                //add an IT_POINT interval at the endpoint of the projected
+                //interval ... careful re-use of new_i pointer!
+                new_i = init_interval(0, b->n_p, IT_POINT, new_i->end, NULL);
                 if(new_i == NULL) {
                     ERRPRINTF("Error creating new point interval.\n");
                     return -1;
                 }
 
-                new_i->start[j] = m->parent_routine->paramdef_array[j].max;
+                DBGPRINTF("Adding nonzero end interval in diagonal "
+                          "projection\n");
 
-
-                DBGPRINTF("Adding fuzzy max interval in diagonal projection\n");
                 print_interval(new_i);
 
                 add_top_interval(m->interval_list, new_i);
 
             }
             else {
-                // create a zero speed point at max ...
+                // create a zero speed point at end ...
                 //
-                zero_b = new_benchmark();
+                zero_b = init_zero_benchmark(b->p, b->n_p);
                 if(zero_b == NULL) {
                     ERRPRINTF("Error allocating new benchmark.\n");
                     return -1;
                 }
 
-                //copy parameters from current benchmark
-                zero_b->n_p = b->n_p;
-                zero_b->p = init_param_array_copy(b->p, b->n_p);
-                if(zero_b->p == NULL) {
-                    ERRPRINTF("Error copying parameter array.\n");
-                    free_benchmark(&zero_b);
-                    return -1;
-                }
-                //set parameter of the projection direction to max
-                zero_b->p[j] = m->parent_routine->paramdef_array[j].max;
-
-                //make speed zero
-                zero_b->flops = 0.;
+                //set parameter of the projection direction to end
+                zero_b->p[j] = r->pd_set->pd_array[j].end;
 
                 //in this phase of this projection of intervals, the model
                 //must only contain benchmarks on the diagonal. So we will add
@@ -834,8 +936,8 @@ project_diagonal_intervals(struct pmm_model *m)
  * @param   d   index of the perpendicular plane
  * @param   n   number of elements in the point
  *
- * @return pointer to a new interval going from p_0,p_1, ... min_d, ... p_n
- * to p_0, p_1, .... max_d, ... p_n
+ * @return pointer to a new interval going from p_0,p_1, ... start_d, ... p_n
+ * to p_0, p_1, .... end_d, ... p_n
  *
  */
 struct pmm_interval*
@@ -860,7 +962,7 @@ new_projection_interval(int *p, struct pmm_paramdef *pd, int d, int n)
         free_interval(&new_i);
         return NULL;
     }
-    new_i->start[d] = pd->min;
+    new_i->start[d] = pd->start;
 
     new_i->end = init_param_array_copy(p, n);
     if(new_i->end == NULL) {
@@ -868,7 +970,7 @@ new_projection_interval(int *p, struct pmm_paramdef *pd, int d, int n)
         free_interval(&new_i);
         return NULL;
     }
-    new_i->end[d] = pd->max;
+    new_i->end[d] = pd->end;
 
     return new_i;
 }
@@ -923,7 +1025,7 @@ multi_gbbp_select_new_bench(struct pmm_routine *r)
         }
 	}
 
-    params = malloc(r->n_p * sizeof *params);
+    params = malloc(r->pd_set->n_p * sizeof *params);
     if(params == NULL) {
         ERRPRINTF("Error allocating memory.\n");
         return NULL;
@@ -960,7 +1062,7 @@ multi_gbbp_select_new_bench(struct pmm_routine *r)
             //remove top interval
             remove_interval(i_list, top_i);
 
-            if(r->n_p > 1) {
+            if(r->pd_set->n_p > 1) {
                 //mesh boundary models to create points
                 mesh_boundary_models(m);
 
@@ -1034,47 +1136,47 @@ init_gbbp_boundary_intervals(struct pmm_routine *r)
 
     //models with more than 1 boundary need a tag to indicate mesh stage
     //of construction
-    if(r->n_p > 1) {
+    if(r->pd_set->n_p > 1) {
         new_i = new_interval();
         new_i->type = IT_BOUNDARY_COMPLETE;
         add_top_interval(i_list, new_i);
     }
 
     // for each parameter of the routine
-    for(j=0; j<r->n_p; j++) {
+    for(j=0; j<r->pd_set->n_p; j++) {
         //push boundary model of that parameter onto the interval stack
 
 
-        // if fuzzy_max is set then we will benchmark at max and build
-        // the model between this point and min. EMPTY interval will range
-        // from min to max and a POINT interval at max will be added to
+        // if nonzero_end is set then we will benchmark at end and build
+        // the model between this point and start. EMPTY interval will range
+        // from start to end and a POINT interval at end will be added to
         // the top of the interval stack so that it is measured before GBBP
         // construction proceeds
-        if(r->paramdef_array[j].fuzzy_max == 1) {
+        if(r->pd_set->pd_array[j].nonzero_end == 1) {
 
-            DBGPRINTF("fuzzy max on param:%d\n", j);
+            DBGPRINTF("nonzero_end on param:%d\n", j);
 
-            // add an empty interval from min -> max along boundary
+            // add an empty interval from start -> end along boundary
             new_i = new_interval(); 
             new_i->type = IT_GBBP_EMPTY; 
 
             new_i->plane = j;
-            new_i->n_p = r->n_p;
+            new_i->n_p = r->pd_set->n_p;
 
-            new_i->start = init_param_array_min(r->paramdef_array, r->n_p);
+            new_i->start = init_param_array_start(r->pd_set);
             if(new_i->start == NULL) {
-                ERRPRINTF("Error initialising minimum parameter array.\n");
+                ERRPRINTF("Error initialising start parameter array.\n");
                 free_interval(&new_i);
                 return -1;
             }
 
-            new_i->end = init_param_array_min(r->paramdef_array, r->n_p);
+            new_i->end = init_param_array_start(r->pd_set);
             if(new_i->end == NULL) {
-                ERRPRINTF("Error initialising minimum parameter array.\n");
+                ERRPRINTF("Error initialising start parameter array.\n");
                 free_interval(&new_i);
                 return -1;
             }
-            new_i->end[j] = r->paramdef_array[j].max;
+            new_i->end[j] = r->pd_set->pd_array[j].end;
 
             if(is_interval_divisible(new_i, r) == 1) {
                 add_top_interval(m->interval_list, new_i);
@@ -1086,46 +1188,46 @@ init_gbbp_boundary_intervals(struct pmm_routine *r)
             }
 
 
-            // add benchmark at max on boundary (fuzzy max)
+            // add benchmark at end on boundary (nonzero end)
             new_i = new_interval();
             new_i->type = IT_POINT;
-            new_i->n_p = r->n_p;
+            new_i->n_p = r->pd_set->n_p;
 
-            new_i->start = init_param_array_min(r->paramdef_array, r->n_p);
+            new_i->start = init_param_array_start(r->pd_set);
             if(new_i->start == NULL) {
-                ERRPRINTF("Error initialising minimum parameter array.\n");
+                ERRPRINTF("Error initialising start parameter array.\n");
                 free_interval(&new_i);
                 return -1;
             }
 
-            new_i->start[j] = r->paramdef_array[j].max;
+            new_i->start[j] = r->pd_set->pd_array[j].end;
 
             add_top_interval(i_list, new_i);
 
 
         }
         else {
-            // add an empty interval from min -> max along boundary
+            // add an empty interval from start -> end along boundary
             new_i = new_interval(); 
             new_i->type = IT_GBBP_EMPTY; 
 
             new_i->plane = j;
-            new_i->n_p = r->n_p;
+            new_i->n_p = r->pd_set->n_p;
 
-            new_i->start = init_param_array_min(r->paramdef_array, r->n_p);
+            new_i->start = init_param_array_start(r->pd_set);
             if(new_i->start == NULL) {
-                ERRPRINTF("Error initialising minimum parameter array.\n");
+                ERRPRINTF("Error initialising start parameter array.\n");
                 free_interval(&new_i);
                 return -1; //failure
             }
 
-            new_i->end = init_param_array_min(r->paramdef_array, r->n_p);
+            new_i->end = init_param_array_start(r->pd_set);
             if(new_i->end == NULL) {
-                ERRPRINTF("Error initialising minimum parameter array.\n");
+                ERRPRINTF("Error initialising start parameter array.\n");
                 free_interval(&new_i);
                 return -1; //failure
             }
-            new_i->end[j] = r->paramdef_array[j].max;
+            new_i->end[j] = r->pd_set->pd_array[j].end;
 
             if(is_interval_divisible(new_i, r) == 1) {
                 add_top_interval(m->interval_list, new_i);
@@ -1150,7 +1252,7 @@ void mesh_boundary_models(struct pmm_model *m)
     int plane = 0;
 
 
-    n_p = m->parent_routine->n_p;
+    n_p = m->parent_routine->pd_set->n_p;
 
     //no need to build a mesh of boundary models when there is only 1 boundary!
     if(n_p == 1) {
@@ -1194,7 +1296,7 @@ void recurse_mesh(struct pmm_model *m, int *p, int plane, int n_p)
             //skip benchmarks at the 'origin' of the model as meshing these only
             //create benchmarks along the boundaries which have already been
             //measured
-            if(is_benchmark_at_origin(n_p, m->parent_routine->paramdef_array,
+            if(is_benchmark_at_origin(n_p, m->parent_routine->pd_set->pd_array,
                                       b) == 1)
             {
                 b = get_previous_different_bench(b); //this should return a NULL
@@ -1306,7 +1408,7 @@ process_interval_list(struct pmm_routine *r, struct pmm_benchmark *b,
 
     i = r->model->interval_list->top;
 
-    temp_params = malloc(r->n_p * sizeof *temp_params);
+    temp_params = malloc(r->pd_set->n_p * sizeof *temp_params);
     if(temp_params == NULL) {
         ERRPRINTF("Error allocating memory.\n");
         return -1;
@@ -1336,7 +1438,7 @@ process_interval_list(struct pmm_routine *r, struct pmm_benchmark *b,
 
             DBGPRINTF("Interval found:\n");
             print_interval(i);
-            print_params(temp_params, r->n_p);
+            print_params(temp_params, r->pd_set->n_p);
 
             done = process_interval(r, i, b, h);
             if(done < 0) {
@@ -1433,11 +1535,11 @@ process_interval(struct pmm_routine *r, struct pmm_interval *i,
  * it replaces.
  *
  * Note, the new interval must be inserted inplace of the old one, not at the
- * top of the interval list. The min,min,...,min set of parameters match all
- * IT_GBBP_EMPTY intervals for all different boundary planes. We will process
- * all of these intervals, not just the first occurance in the interval list.
- * However, not all of the planes are ready for construction (e.g. their
- * fuzzy_max benchmark may not be executed yet). Inserting the next interval
+ * top of the interval list. The start,start,...,start set of parameters match
+ * all IT_GBBP_EMPTY intervals for all different boundary planes. We will
+ * process all of these intervals, not just the first occurance in the interval
+ * list.  However, not all of the planes are ready for construction (e.g. their
+ * nonzero_end benchmark may not be executed yet). Inserting the next interval
  * (IT_GBBP_CLIMP) inplace of the IT_GBBP_EMPTY interval resolves this issue.
  *
  * @param   r   pointer to the parent routine
@@ -1517,24 +1619,24 @@ process_it_gbbp_climb(struct pmm_routine *r, struct pmm_interval *i,
         //starting points of intervals (on boundaries)
         tmp_params = malloc(b->n_p * sizeof *tmp_params);
         if(tmp_params == NULL) {
-            ERRPRINTF("Error initialising minimum parameter array.\n");
+            ERRPRINTF("Error allocating parameter array.\n");
             return -1;
         }
 
         // get avg of benchmarks to the left of the new benchmark, set params
         // to the current climb step ...
         set_params_step_along_climb_interval(tmp_params, i->climb_step, i,
-                r->paramdef_array, r->n_p);
+                                             r->pd_set);
         b_left_0 = get_avg_bench(m, tmp_params);
 
         //get parameters for previous climb step to current
         set_params_step_along_climb_interval(tmp_params, i->climb_step-1, i,
-                r->paramdef_array, r->n_p);
+                                             r->pd_set);
         b_left_1 = get_avg_bench(m, tmp_params);
 
         //get parameters for 2nd previous climb step to current
         set_params_step_along_climb_interval(tmp_params, i->climb_step-2, i,
-                r->paramdef_array, r->n_p);
+                                             r->pd_set);
         b_left_2 = get_avg_bench(m, tmp_params);
 
         if(b_left_0 == NULL || b_left_1 == NULL || b_left_2 == NULL) {
@@ -1653,30 +1755,52 @@ process_it_gbbp_climb(struct pmm_routine *r, struct pmm_interval *i,
 
 
 /*!
- * Step alogn the climb interval, from the start point forwards or
- * backwards, a number of times.
+ * Step between two points, according to a minimum step size defined in
+ * the parameter definitions.
  *
  * @param   params      pointer to an array to store the parameters at the n-th
- *                      step along the interval
+ *                      step between the start and end points
+ * @param   start       pointer to array describing the start point
+ * @param   end         pointer to array describing the start point
  * @param   step        number of steps to take along the interval (- to step
  *                      backwards, + to step forwards)
- * @param   i           pointer to the interval to step along
  * @param   pd_array    pointer to the parameter definition array
  * @param   n_p         number of parameters
  *
- * @pre interval should have start and end points set (i.e. be of the type
- * IT_EMTPY, IT_GBBP_CLIMB, IT_GBBP_BISECT, IT_GBBP_INFLECT) though the
- * function is only intended to operate on IT_GBBP_CLIMB interval types
+ * @return 0 on success, -1 if the step will exceed the end-point of the
+ * interval or -2 on error
  */
-void
-set_params_step_along_climb_interval(int *params, int step, 
-                             struct pmm_interval *i,
-                             struct pmm_paramdef *pd_array, int n_p)
+int
+set_params_step_between_params(int *params, int *start, int *end,
+                               int step, struct pmm_paramdef_set *pd_set)
 {
     int j;
-    int min_stride;    //value of the minimum stride
-    int min_stride_i;  //parameter index of the minimum stride
+    int min_stride;        //value of the minimum stride
+    int min_stride_i;      //parameter index of the minimum stride
+    int min_stride_i_dist; //distance from start and end minstride parameters
+    int *direction;        //direction of stride for each parameter (+1/-1)
 
+    //
+    // The increment along the line from start->end will be achived by
+    // adding a value to start. If start > end, for a component of that line
+    // then that component should be decremented, not incremented. We control
+    // this by way of a direction factor, +1 for increment, -1 for decriment
+    //
+    direction = malloc(pd_set->n_p * sizeof *direction);
+    if(direction == NULL) {
+        ERRPRINTF("Error allocating memory.\n");
+        return -2;
+    }
+    for(j=0; j<pd_set->n_p; j++) {
+        if(start[j] > end[j]) {
+            DBGPRINTF("parameter:%d will be decremented.\n", j);
+            direction[j] = -1;
+        }
+        else {
+            DBGPRINTF("parameter:%d will be incremented.\n", j);
+            direction[j] = +1;
+        }
+    }
 
     //
     // The increment along a line drawn from start->end is determined
@@ -1693,17 +1817,26 @@ set_params_step_along_climb_interval(int *params, int step,
     //
     min_stride = INT_MAX;
     min_stride_i = -1;
-    for(j=0; j<n_p; j++) {
-        if(i->start[j] != i->end[j]) {
-            if(pd_array[j].stride < min_stride) {
-                min_stride = pd_array[j].stride;
+    for(j=0; j<pd_set->n_p; j++) {
+        if(start[j] != end[j]) {
+            if(pd_set->pd_array[j].stride < min_stride) {
+                min_stride = pd_set->pd_array[j].stride;
                 min_stride_i = j;
             }
         }
     }
 
-    DBGPRINTF("min_stride:%d, min_stride_i:%d\n", min_stride, min_stride_i);
 
+
+    DBGPRINTF("min_stride:%d, min_stride_i:%d\n", min_stride, min_stride_i);
+    if(min_stride_i == -1) {
+        DBGPRINTF("start and end points identical, cannot stride.\n");
+
+        free(direction);
+        direction = NULL;
+
+        return -1;
+    }
     //
     // Now that we have identified the parameter and stride we will
     // increment along we must calculate the position of the incremented
@@ -1732,35 +1865,105 @@ set_params_step_along_climb_interval(int *params, int step,
     //
     //   I_x = s_x + inc*((e_x-s_x)/(e_i-s_i))
     //
+    // let:
+    //
+    //   divisor = e_i-s_i;
+    //
+    // So finally:
+    //   I_x = s_x + inc*((e_x-s_x)/divisor)
+    //
     
     // to get the 1st/2nd/nth next/previous climb point
     min_stride = min_stride*step;
+    min_stride_i_dist = end[min_stride_i] - start[min_stride_i];
 
-    DBGPRINTF("step:%d min_stride:%d\n", step, min_stride);
+    DBGPRINTF("step:%d min_stride:%d min_stride_i_dist:%d\n",
+              step, min_stride, min_stride_i_dist);
 
-    for(j=0; j<n_p; j++) {
-        params[j] = i->start[j] + (min_stride *
-                                     ((i->end[j] - i->start[j]) /
-                                            (i->end[min_stride_i] - 
-                                             i->start[min_stride_i])));
+
+
+
+    for(j=0; j<pd_set->n_p; j++) {
+        params[j] = start[j] +  direction[j] *
+                                    (min_stride *
+                                        ((end[j] - start[j]) /
+                                         min_stride_i_dist
+                                        )
+                                    );
 
         //             1 + (5/(300-1))*(1-1) = 
         //             1 + (5/(300-1))*(300-1) = 1+5 ...
 
-        DBGPRINTF("i->start[%d]:%d i->end{%d]:%d\n", j, i->start[j], j,
-                  i->end[j]);
-        DBGPRINTF("i->start[min_stride_i]:%d i->end[min_stride_i]:%d\n",
-                   i->start[min_stride_i], i->end[min_stride_i]);
+        DBGPRINTF("start[%d]:%d end{%d]:%d direction[%d]:%d\n", j, start[j], j,
+                  end[j], j, direction[j]);
+        DBGPRINTF("start[min_stride_i]:%d end[min_stride_i]:%d\n",
+                   start[min_stride_i], end[min_stride_i]);
 
         DBGPRINTF("params[%d]:%d\n", j, params[j]);
     }
 
-    align_params(params, pd_array, n_p);
+
+    //check that params are within the range of the interval
+    {
+        int start_to_end;
+
+        for(j=0; j<pd_set->n_p; j++) {
+            start_to_end = abs(end[j] - start[j]);
+            if(abs(end[j]-params[j]) > start_to_end ||
+               abs(start[j]-params[j]) > start_to_end)
+            {
+
+                DBGPRINTF("stepped params are outside interval limits\n");
+
+                free(direction);
+                direction = NULL;
+
+                return -1;
+            }
+        }
+    }
+
+    align_params(params, pd_set);
 
     DBGPRINTF("aligned params:\n");
-    print_params(params, n_p);
+    print_params(params, pd_set->n_p);
 
-    return;
+    free(direction);
+    direction = NULL;
+
+    return 0; // success
+
+}
+
+
+/*!
+ * Step along the climb interval, from the start point towards the end point, 
+ * forwards or backwards, a number of times.
+ *
+ * @param   params      pointer to an array to store the parameters at the n-th
+ *                      step along the interval
+ * @param   step        number of steps to take along the interval (- to step
+ *                      backwards, + to step forwards)
+ * @param   i           pointer to the interval to step along
+ * @param   pd_array    pointer to the parameter definition array
+ * @param   n_p         number of parameters
+ *
+ * @pre interval should have start and end points set (i.e. be of the type
+ * IT_EMTPY, IT_GBBP_CLIMB, IT_GBBP_BISECT, IT_GBBP_INFLECT) though the
+ * function is only intended to operate on IT_GBBP_CLIMB interval types
+ *
+ * @return 0 on success, -1 if the step will exceed the end-point of the
+ * interval or -2 on error
+ */
+int
+set_params_step_along_climb_interval(int *params, int step, 
+                             struct pmm_interval *i,
+                             struct pmm_paramdef_set *pd_set)
+{
+
+
+    return set_params_step_between_params(params,i->start, i->end, step,
+                                          pd_set);
 
 }
 
@@ -1935,8 +2138,8 @@ process_gbbp_bisect(struct pmm_routine *r, struct pmm_interval *i,
             }
             else {
                 LOGPRINTF("Interval not divisible, not adding.\n");
-                free_interval(&new_i);
                 print_interval(new_i);
+                free_interval(&new_i);
             }
 
             new_i = init_interval(i->plane, i->n_p, IT_GBBP_INFLECT,
@@ -2336,23 +2539,22 @@ is_interval_divisible(struct pmm_interval *i, struct pmm_routine *r)
     switch (i->type) {
         case IT_GBBP_EMPTY:
             return 1;
-
         case IT_GBBP_CLIMB:
         case IT_GBBP_BISECT:
         case IT_GBBP_INFLECT:
 
             // allocate/init some memory
-            params = malloc(r->n_p * sizeof *params);
-            start_aligned = init_param_array_copy(i->start, r->n_p);
-            end_aligned = init_param_array_copy(i->end, r->n_p);
+            params = malloc(r->pd_set->n_p * sizeof *params);
+            start_aligned = init_param_array_copy(i->start, r->pd_set->n_p);
+            end_aligned = init_param_array_copy(i->end, r->pd_set->n_p);
             if(params == NULL || start_aligned == NULL || end_aligned == NULL) {
                 ERRPRINTF("Error allocating memory.\n");
                 return -1;
             }
 
             //align start/end
-            align_params(start_aligned, r->paramdef_array, r->n_p);
-            align_params(end_aligned, r->paramdef_array, r->n_p);
+            align_params(start_aligned, r->pd_set);
+            align_params(end_aligned, r->pd_set);
             
             // find the GBBP point of the interval
             if(multi_gbbp_bench_from_interval(r, i, params) < 0) {
@@ -2363,8 +2565,8 @@ is_interval_divisible(struct pmm_interval *i, struct pmm_routine *r)
             // TODO maybe test if the point is > start and < end
 
             // test that point is not equal to aligned start or end of interval
-            if(params_cmp(start_aligned, params, r->n_p) == 0 ||
-               params_cmp(end_aligned, params, r->n_p) == 0)
+            if(params_cmp(start_aligned, params, r->pd_set->n_p) == 0 ||
+               params_cmp(end_aligned, params, r->pd_set->n_p) == 0)
             {
                 return 0; //not divisible
             }
@@ -2410,9 +2612,9 @@ multi_gbbp_bench_from_interval(struct pmm_routine *r,
     switch (interval->type) {
         case IT_GBBP_EMPTY : // empty, return the interval's start
 
-            DBGPRINTF("assigning minimum problem size.\n");
+            DBGPRINTF("assigning start problem size.\n");
 
-            set_param_array_copy(params, interval->start, r->n_p);
+            set_param_array_copy(params, interval->start, r->pd_set->n_p);
 
             return 0;
 
@@ -2422,9 +2624,9 @@ multi_gbbp_bench_from_interval(struct pmm_routine *r,
 
 
             set_params_step_along_climb_interval(params, interval->climb_step+1,
-                                           interval, r->paramdef_array, r->n_p);
+                                           interval, r->pd_set);
 
-            align_params(params, r->paramdef_array, r->n_p);
+            align_params(params, r->pd_set);
 
             return 0;
 
@@ -2435,7 +2637,7 @@ multi_gbbp_bench_from_interval(struct pmm_routine *r,
             set_params_interval_midpoint(params, interval);
 
             //align midpoint
-            align_params(params, r->paramdef_array, r->n_p);
+            align_params(params, r->pd_set);
 
             DBGPRINTF("assigned midpoint of interval from start:\n");
             print_params(interval->start, interval->n_p);
@@ -2450,7 +2652,7 @@ multi_gbbp_bench_from_interval(struct pmm_routine *r,
 
             DBGPRINTF("assigning copy of interval 'point'.\n");
 
-            set_param_array_copy(params, interval->start, r->n_p);
+            set_param_array_copy(params, interval->start, r->pd_set->n_p);
 
             return 0;
 

@@ -41,9 +41,8 @@ int write_bench_list_xtwp(xmlTextWriterPtr writer,
 		                  struct pmm_bench_list *bench_list);
 int write_benchmark_xtwp(xmlTextWriterPtr writer, struct pmm_benchmark *b);
 int
-write_paramdef_array_xtwp(xmlTextWriterPtr writer,
-                          struct pmm_paramdef *pd_array,
-                          int n);
+write_paramdef_set_xtwp(xmlTextWriterPtr writer,
+                        struct pmm_paramdef_set *pd_set);
 int
 write_paramdef_xtwp(xmlTextWriterPtr writer, struct pmm_paramdef *pd);
 

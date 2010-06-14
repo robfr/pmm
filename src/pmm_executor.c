@@ -579,7 +579,7 @@ void *benchmark(void *scheduled_r) {
     //print_params(rargs, r->n_p);
 
 
-    fd = spawn_benchmark_process(r->exe_path, r->n_p, rargs, &bench_pid);
+    fd = spawn_benchmark_process(r->exe_path,r->pd_set->n_p, rargs, &bench_pid);
     if(fd == -1) {
         ERRPRINTF("Error spawning benchmark process, fd:%d pid:%d\n", (int)fd,
                    bench_pid);
@@ -655,7 +655,7 @@ void *benchmark(void *scheduled_r) {
 
 
     //parse benchmark output
-    if((bmark = parse_bench_output(output, r->n_p, rargs)) == NULL) {
+    if((bmark = parse_bench_output(output, r->pd_set->n_p, rargs)) == NULL) {
         ERRPRINTF("Error parsing benchmark output\n");
 
         free(output);
