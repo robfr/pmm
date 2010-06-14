@@ -1654,7 +1654,7 @@ int write_interval_xtwp(xmlTextWriterPtr writer, struct pmm_interval *i)
 	// Start an element named interval
 	rc = xmlTextWriterStartElement(writer, BAD_CAST "interval");
 	if (rc < 0) {
-		ERRPRINTF("Error at xmlTextWriterStartElement (interval)\n");
+		ERRPRINTF("Error @ xmlTextWriterStartElement (interval)\n");
 		return rc;
 	}
 
@@ -1701,7 +1701,7 @@ int write_interval_xtwp(xmlTextWriterPtr writer, struct pmm_interval *i)
     }
 
     if (rc < 0) {
-        ERRPRINTF("Error at xmlTextWriterWriteFormatElement (type)\n");
+        ERRPRINTF("Error @ xmlTextWriterWriteFormatElement (type)\n");
         return rc;
     }
 
@@ -1713,7 +1713,7 @@ int write_interval_xtwp(xmlTextWriterPtr writer, struct pmm_interval *i)
             rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "climb_step",
                     "%d", i->climb_step);
             if (rc < 0) {
-                ERRPRINTF("Error at xmlTextWriterWriteFormatElement (plane)\n");
+                ERRPRINTF("Error @ xmlTextWriterWriteFormatElement (plane)\n");
                 return rc;
             }
         case IT_GBBP_BISECT :
@@ -1722,7 +1722,7 @@ int write_interval_xtwp(xmlTextWriterPtr writer, struct pmm_interval *i)
             rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "plane",
                     "%d", i->plane);
             if (rc < 0) {
-                ERRPRINTF("Error at xmlTextWriterWriteFormatElement (plane)\n");
+                ERRPRINTF("Error @ xmlTextWriterWriteFormatElement (plane)\n");
                 return rc;
             }
 
@@ -1730,7 +1730,7 @@ int write_interval_xtwp(xmlTextWriterPtr writer, struct pmm_interval *i)
             // Add an element with name "start" 
             rc = xmlTextWriterStartElement(writer, BAD_CAST "start");
             if (rc < 0) {
-                ERRPRINTF("Error at xmlTextWriterStartElement (start)\n");
+                ERRPRINTF("Error @ xmlTextWriterStartElement (start)\n");
                 return rc;
             }
             // write the start parameter array
@@ -1742,7 +1742,7 @@ int write_interval_xtwp(xmlTextWriterPtr writer, struct pmm_interval *i)
             // Close the start element
             rc = xmlTextWriterEndElement(writer);
             if (rc < 0) {
-                ERRPRINTF("Error at xmlTextWriterEndElement\n");
+                ERRPRINTF("Error @ xmlTextWriterEndElement\n");
                 return rc;
             }
 
@@ -1750,7 +1750,7 @@ int write_interval_xtwp(xmlTextWriterPtr writer, struct pmm_interval *i)
             // Add an element with name "end" 
             rc = xmlTextWriterStartElement(writer, BAD_CAST "end");
             if (rc < 0) {
-                ERRPRINTF("Error at xmlTextWriterStartElement (end)\n");
+                ERRPRINTF("Error @ xmlTextWriterStartElement (end)\n");
                 return rc;
             }
             // write the end parameter array
@@ -1762,7 +1762,7 @@ int write_interval_xtwp(xmlTextWriterPtr writer, struct pmm_interval *i)
             // Close the end element
             rc = xmlTextWriterEndElement(writer);
             if (rc < 0) {
-                ERRPRINTF("Error at xmlTextWriterEndElement\n");
+                ERRPRINTF("Error @ xmlTextWriterEndElement\n");
                 return rc;
             }
 
@@ -1772,7 +1772,7 @@ int write_interval_xtwp(xmlTextWriterPtr writer, struct pmm_interval *i)
             // Add an element with name "start" 
             rc = xmlTextWriterStartElement(writer, BAD_CAST "start");
             if (rc < 0) {
-                ERRPRINTF("Error at xmlTextWriterStartElement (start)\n");
+                ERRPRINTF("Error @ xmlTextWriterStartElement (start)\n");
                 return rc;
             }
             // write the start parameter array
@@ -1784,7 +1784,7 @@ int write_interval_xtwp(xmlTextWriterPtr writer, struct pmm_interval *i)
             // Close the start element
             rc = xmlTextWriterEndElement(writer);
             if (rc < 0) {
-                ERRPRINTF("Error at xmlTextWriterEndElement\n");
+                ERRPRINTF("Error @ xmlTextWriterEndElement\n");
                 return rc;
             }
 
@@ -1808,7 +1808,7 @@ int write_interval_xtwp(xmlTextWriterPtr writer, struct pmm_interval *i)
 	// Close the interval element.
 	rc = xmlTextWriterEndElement(writer);
 	if (rc < 0) {
-		ERRPRINTF("Error at xmlTextWriterEndElement\n");
+		ERRPRINTF("Error @ xmlTextWriterEndElement\n");
 		return rc;
 	}
 
@@ -2011,14 +2011,14 @@ int write_loadhistory_xtwp(xmlTextWriterPtr writer, struct pmm_loadhistory *h)
 	// start document with standard version/enconding
 	rc = xmlTextWriterStartDocument(writer, NULL, "ISO-8859-1", NULL);
 	if (rc < 0) {
-		ERRPRINTF("Error at xmlTextWriterStartDocument\n");
+		ERRPRINTF("Error @ xmlTextWriterStartDocument\n");
 		return rc;
 	}
 
 	// start root element loadhistory
 	rc = xmlTextWriterStartElement(writer, BAD_CAST "loadhistory");
 	if (rc < 0) {
-		ERRPRINTF("Error at xmlTextWriterStartElement (loadhistory)\n");
+		ERRPRINTF("Error @ xmlTextWriterStartElement (loadhistory)\n");
 		return rc;
 	}
 
@@ -2028,7 +2028,7 @@ int write_loadhistory_xtwp(xmlTextWriterPtr writer, struct pmm_loadhistory *h)
 		// Start an element named load as child of loadhistory.
 		rc = xmlTextWriterStartElement(writer, BAD_CAST "load");
 		if (rc < 0) {
-			ERRPRINTF("Error at xmlTextWriterStartElement (load)\n");
+			ERRPRINTF("Error @ xmlTextWriterStartElement (load)\n");
 			return rc;
 		}
 
@@ -2046,7 +2046,7 @@ int write_loadhistory_xtwp(xmlTextWriterPtr writer, struct pmm_loadhistory *h)
 		rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "time",
 				"%s", time_str);
 		if (rc < 0) {
-			ERRPRINTF("Error at xmlTextWriterWriteFormatElement (time)\n");
+			ERRPRINTF("Error @ xmlTextWriterWriteFormatElement (time)\n");
 			return rc;
 		}
 
@@ -2054,7 +2054,7 @@ int write_loadhistory_xtwp(xmlTextWriterPtr writer, struct pmm_loadhistory *h)
 		//rc = xmlTextWriterWriteFormatComment(writer, "%s",
 		//		ctime((time_t*)&(h->history[i].time)));
 		//if(rc < 0) {
-		//	ERRPRINTF("Error at xmlTextWriterFormatComment (time)\n");
+		//	ERRPRINTF("Error @ xmlTextWriterFormatComment (time)\n");
 		//	return rc;
 		//}
 
@@ -2063,28 +2063,28 @@ int write_loadhistory_xtwp(xmlTextWriterPtr writer, struct pmm_loadhistory *h)
 		rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "one_min",
 				"%f", h->history[i].load[0]);
 		if (rc < 0) {
-			ERRPRINTF("Error at xmlTextWriterWriteFormatElement (one_min)\n");
+			ERRPRINTF("Error @ xmlTextWriterWriteFormatElement (one_min)\n");
 			return rc;
 		}
 		// Add an element with name five_min and value to load
 		rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "five_min",
 				"%f", h->history[i].load[1]);
 		if (rc < 0) {
-			ERRPRINTF("Error at xmlTextWriterWriteFormatElement (five_min)\n");
+			ERRPRINTF("Error @ xmlTextWriterWriteFormatElement (five_min)\n");
 			return rc;
 		}
 		// Add an element with name fifteen_min and value to load
 		rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "fifteen_min",
 				"%f", h->history[i].load[2]);
 		if (rc < 0) {
-			ERRPRINTF("Error at xmlTextWriterWriteFormatElement (fifteen_min)\n");
+			ERRPRINTF("Error @ xmlTextWriterWriteFormatElement (fifteen_min)\n");
 			return rc;
 		}
 
 		// Close the load element.
 		rc = xmlTextWriterEndElement(writer);
 		if (rc < 0) {
-			ERRPRINTF("Error at xmlTextWriterEndElement\n");
+			ERRPRINTF("Error @ xmlTextWriterEndElement\n");
 			return rc;
 		}
 
@@ -2095,7 +2095,7 @@ int write_loadhistory_xtwp(xmlTextWriterPtr writer, struct pmm_loadhistory *h)
 	// Close the root element named loadhistory (and all other open tags).
 	rc = xmlTextWriterEndDocument(writer);
 	if (rc < 0) {
-		ERRPRINTF("Error at xmlTextWriterEndDocument\n");
+		ERRPRINTF("Error @ xmlTextWriterEndDocument\n");
 		return rc;
 	}
 
@@ -2426,14 +2426,14 @@ int write_model_xtwp(xmlTextWriterPtr writer, struct pmm_model *m)
 	// start document with standard version/enconding
 	rc = xmlTextWriterStartDocument(writer, NULL, "ISO-8859-1", NULL);
 	if (rc < 0) {
-		ERRPRINTF("Error at xmlTextWriterStartDocument\n");
+		ERRPRINTF("Error @ xmlTextWriterStartDocument\n");
 		return rc;
 	}
 
 	// start root element model
 	rc = xmlTextWriterStartElement(writer, BAD_CAST "model");
 	if (rc < 0) {
-		ERRPRINTF("Error at xmlTextWriterStartElement (model)\n");
+		ERRPRINTF("Error @ xmlTextWriterStartElement (model)\n");
 		return rc;
 	}
 
@@ -2441,7 +2441,7 @@ int write_model_xtwp(xmlTextWriterPtr writer, struct pmm_model *m)
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "completion",
 			"%d", m->completion);
 	if (rc < 0) {
-		ERRPRINTF("Error at xmlTextWriterWriteFormatElement (completion)\n");
+		ERRPRINTF("Error @ xmlTextWriterWriteFormatElement (completion)\n");
 		return rc;
 	}
 
@@ -2449,7 +2449,7 @@ int write_model_xtwp(xmlTextWriterPtr writer, struct pmm_model *m)
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "n_p",
 			"%d", m->n_p);
 	if (rc < 0) {
-		ERRPRINTF("Error at xmlTextWriterWriteFormatElement (n_p)\n");
+		ERRPRINTF("Error @ xmlTextWriterWriteFormatElement (n_p)\n");
 		return rc;
 	}
 
@@ -2457,7 +2457,7 @@ int write_model_xtwp(xmlTextWriterPtr writer, struct pmm_model *m)
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "complete",
 			"%d", m->complete);
 	if (rc < 0) {
-		ERRPRINTF("Error at xmlTextWriterWriteFormatElement (complete)\n");
+		ERRPRINTF("Error @ xmlTextWriterWriteFormatElement (complete)\n");
 		return rc;
 	}
 
@@ -2479,7 +2479,7 @@ int write_model_xtwp(xmlTextWriterPtr writer, struct pmm_model *m)
 	// start interval_list element
 	rc = xmlTextWriterStartElement(writer, BAD_CAST "interval_list");
 	if (rc < 0) {
-		ERRPRINTF("Error at xmlTextWriterStartElement (interval_list)\n");
+		ERRPRINTF("Error @ xmlTextWriterStartElement (interval_list)\n");
 		return rc;
 	}
 
@@ -2499,14 +2499,14 @@ int write_model_xtwp(xmlTextWriterPtr writer, struct pmm_model *m)
 	// Close the interval_list element
 	rc = xmlTextWriterEndElement(writer);
 	if (rc < 0) {
-		ERRPRINTF("Error at xmlTextWriterEndElement\n");
+		ERRPRINTF("Error @ xmlTextWriterEndElement\n");
 		return rc;
 	}
 
 	// Close the root element named model (and all other open tags).
 	rc = xmlTextWriterEndDocument(writer);
 	if (rc < 0) {
-		ERRPRINTF("Error at xmlTextWriterEndDocument\n");
+		ERRPRINTF("Error @ xmlTextWriterEndDocument\n");
 		return rc;
 	}
 
@@ -2524,7 +2524,7 @@ int write_bench_list_xtwp(xmlTextWriterPtr writer,
 	// start bench_list element
 	rc = xmlTextWriterStartElement(writer, BAD_CAST "bench_list");
 	if(rc < 0) {
-		ERRPRINTF("Error at xmlTextWriterStartElement (bench_list)\n");
+		ERRPRINTF("Error @ xmlTextWriterStartElement (bench_list)\n");
 		return rc;
 	}
 
@@ -2532,7 +2532,7 @@ int write_bench_list_xtwp(xmlTextWriterPtr writer,
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "size", "%d",
 			bench_list->size);
 	if (rc < 0) {
-		ERRPRINTF("Error at xmlTextWriterWriteFormatElement (size)\n");
+		ERRPRINTF("Error @ xmlTextWriterWriteFormatElement (size)\n");
 		return rc;
 	}
 
@@ -2551,7 +2551,7 @@ int write_bench_list_xtwp(xmlTextWriterPtr writer,
 	// Close the bench_list element
 	rc = xmlTextWriterEndElement(writer);
 	if (rc < 0) {
-		ERRPRINTF("Error at xmlTextWriterEndElement (bench_list)\n");
+		ERRPRINTF("Error @ xmlTextWriterEndElement (bench_list)\n");
 		return rc;
 	}
 
@@ -2582,7 +2582,7 @@ write_paramdef_array_xtwp(xmlTextWriterPtr writer,
     // start and element named parameters
     rc = xmlTextWriterStartElement(writer, BAD_CAST "parameters");
     if (rc < 0) {
-        ERRPRINTF("Error at xmlTextWriterStartElement (parameters)\n");
+        ERRPRINTF("Error @ xmlTextWriterStartElement (parameters)\n");
         return rc;
     }
 
@@ -2590,7 +2590,7 @@ write_paramdef_array_xtwp(xmlTextWriterPtr writer,
     rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "n_p",
             "%d", n);
     if (rc < 0) {
-        ERRPRINTF("Error at xmlTextWriterWriteFormatElement (n_p)\n");
+        ERRPRINTF("Error @ xmlTextWriterWriteFormatElement (n_p)\n");
         return rc;
     }
 
@@ -2606,7 +2606,7 @@ write_paramdef_array_xtwp(xmlTextWriterPtr writer,
     // Close the parameters element.
     rc = xmlTextWriterEndElement(writer);
     if (rc < 0) {
-        ERRPRINTF("Error at xmlTextWriterEndElement\n");
+        ERRPRINTF("Error @ xmlTextWriterEndElement\n");
         return rc;
     }
 
@@ -2629,7 +2629,7 @@ write_paramdef_xtwp(xmlTextWriterPtr writer, struct pmm_paramdef *pd)
     // start an element named param
     rc = xmlTextWriterStartElement(writer, BAD_CAST "param");
     if (rc < 0) {
-        ERRPRINTF("Error at xmlTextWriterStartElement (param)\n");
+        ERRPRINTF("Error @ xmlTextWriterStartElement (param)\n");
         return rc;
     }
 
@@ -2638,7 +2638,7 @@ write_paramdef_xtwp(xmlTextWriterPtr writer, struct pmm_paramdef *pd)
     rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "order", "%d",
                                          pd->order);
     if (rc < 0) {
-        ERRPRINTF("Error at xmlTextWriterWriteFormatElement (order)\n");
+        ERRPRINTF("Error @ xmlTextWriterWriteFormatElement (order)\n");
         return rc;
     }
 
@@ -2646,7 +2646,7 @@ write_paramdef_xtwp(xmlTextWriterPtr writer, struct pmm_paramdef *pd)
     rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "name", "%s",
                                          pd->name);
     if (rc < 0) {
-        ERRPRINTF("Error at xmlTextWriterWriteFormatElement (name)\n");
+        ERRPRINTF("Error @ xmlTextWriterWriteFormatElement (name)\n");
         return rc;
     }
 
@@ -2670,7 +2670,7 @@ write_paramdef_xtwp(xmlTextWriterPtr writer, struct pmm_paramdef *pd)
     rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "stride", "%d",
                                          pd->stride);
     if (rc < 0) {
-        ERRPRINTF("Error at xmlTextWriterWriteFormatElement (stride)\n");
+        ERRPRINTF("Error @ xmlTextWriterWriteFormatElement (stride)\n");
         return rc;
     }
 
@@ -2678,22 +2678,22 @@ write_paramdef_xtwp(xmlTextWriterPtr writer, struct pmm_paramdef *pd)
     rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "offset", "%d",
                                          pd->offset);
     if (rc < 0) {
-        ERRPRINTF("Error at xmlTextWriterWriteFormatElement (offset)\n");
+        ERRPRINTF("Error @ xmlTextWriterWriteFormatElement (offset)\n");
         return rc;
     }
 
-    //add an element with name "fuzzy_max" and value of the fuzzy_max
-    rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "fuzzy_max", "%d",
-                                         pd->fuzzy_max);
+    //add an element with name "nonzero_end" and value of the nonzero_end 
+    rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "nonzero_end", "%d",
+                                         pd->nonzero_end);
     if (rc < 0) {
-        ERRPRINTF("Error at xmlTextWriterWriteFormatElement (fuzzy_max)\n");
+        ERRPRINTF("Error @ xmlTextWriterWriteFormatElement (nonzero_end)\n");
         return rc;
     }
 
     // Close the param element.
     rc = xmlTextWriterEndElement(writer);
     if (rc < 0) {
-        ERRPRINTF("Error at xmlTextWriterEndElement\n");
+        ERRPRINTF("Error @ xmlTextWriterEndElement\n");
         return rc;
     }
 
@@ -2728,7 +2728,7 @@ write_parameter_array_xtwp(xmlTextWriterPtr writer, int *p, int n)
     // start and element named parameter_array
     rc = xmlTextWriterStartElement(writer, BAD_CAST "parameter_array");
     if (rc < 0) {
-        ERRPRINTF("Error at xmlTextWriterStartElement (parameter_array)\n");
+        ERRPRINTF("Error @ xmlTextWriterStartElement (parameter_array)\n");
         return rc;
     }
 
@@ -2736,7 +2736,7 @@ write_parameter_array_xtwp(xmlTextWriterPtr writer, int *p, int n)
     rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "n_p",
             "%d", n);
     if (rc < 0) {
-        ERRPRINTF("Error at xmlTextWriterWriteFormatElement (n_p)\n");
+        ERRPRINTF("Error @ xmlTextWriterWriteFormatElement (n_p)\n");
         return rc;
     }
 
@@ -2745,7 +2745,7 @@ write_parameter_array_xtwp(xmlTextWriterPtr writer, int *p, int n)
         rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "parameter",
                 "%d", p[i]);
         if (rc < 0) {
-            ERRPRINTF("Error at xmlTextWriterWriteFormatElement "
+            ERRPRINTF("Error @ xmlTextWriterWriteFormatElement "
                     "(parameter)\n");
             return rc;
         }
@@ -2754,7 +2754,7 @@ write_parameter_array_xtwp(xmlTextWriterPtr writer, int *p, int n)
     // Close the parameter_array element.
     rc = xmlTextWriterEndElement(writer);
     if (rc < 0) {
-        ERRPRINTF("Error at xmlTextWriterEndElement\n");
+        ERRPRINTF("Error @ xmlTextWriterEndElement\n");
         return rc;
     }
 
@@ -2769,7 +2769,7 @@ int write_benchmark_xtwp(xmlTextWriterPtr writer, struct pmm_benchmark *b)
 	// Start an element named benchmark
 	rc = xmlTextWriterStartElement(writer, BAD_CAST "benchmark");
 	if (rc < 0) {
-		ERRPRINTF("Error at xmlTextWriterStartElement (bench)\n");
+		ERRPRINTF("Error @ xmlTextWriterStartElement (bench)\n");
 		return rc;
 	}
 
@@ -2784,7 +2784,7 @@ int write_benchmark_xtwp(xmlTextWriterPtr writer, struct pmm_benchmark *b)
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "complexity",
 			"%lld", b->complexity);
 	if (rc < 0) {
-		ERRPRINTF("Error at xmlTextWriterWriteFormatElement (complexity)\n");
+		ERRPRINTF("Error @ xmlTextWriterWriteFormatElement (complexity)\n");
 		return rc;
 	}
 
@@ -2792,21 +2792,21 @@ int write_benchmark_xtwp(xmlTextWriterPtr writer, struct pmm_benchmark *b)
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "flops",
 			"%f", b->flops);
 	if (rc < 0) {
-		ERRPRINTF("Error at xmlTextWriterWriteFormatElement (flops)\n");
+		ERRPRINTF("Error @ xmlTextWriterWriteFormatElement (flops)\n");
 		return rc;
 	}
 	// Add an element with name seconds and value to benchmark
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "seconds",
 			"%f", b->seconds);
 	if (rc < 0) {
-		ERRPRINTF("Error at xmlTextWriterWriteFormatElement (seconds)\n");
+		ERRPRINTF("Error @ xmlTextWriterWriteFormatElement (seconds)\n");
 		return rc;
 	}
 
 	// Start an element named used_time
 	rc = xmlTextWriterStartElement(writer, BAD_CAST "used_time");
 	if (rc < 0) {
-		ERRPRINTF("Error at xmlTextWriterStartElement (used_time)\n");
+		ERRPRINTF("Error @ xmlTextWriterStartElement (used_time)\n");
 		return rc;
 	}
 
@@ -2815,14 +2815,14 @@ int write_benchmark_xtwp(xmlTextWriterPtr writer, struct pmm_benchmark *b)
 	// Close the used_time element.
 	rc = xmlTextWriterEndElement(writer);
 	if (rc < 0) {
-		ERRPRINTF("Error at xmlTextWriterEndElement\n");
+		ERRPRINTF("Error @ xmlTextWriterEndElement\n");
 		return rc;
 	}
 
 	// Start an element named wall_time
 	rc = xmlTextWriterStartElement(writer, BAD_CAST "wall_time");
 	if (rc < 0) {
-		ERRPRINTF("Error at xmlTextWriterStartElement (wall_time)\n");
+		ERRPRINTF("Error @ xmlTextWriterStartElement (wall_time)\n");
 		return rc;
 	}
 
@@ -2831,14 +2831,14 @@ int write_benchmark_xtwp(xmlTextWriterPtr writer, struct pmm_benchmark *b)
 	// Close the wall_time element.
 	rc = xmlTextWriterEndElement(writer);
 	if (rc < 0) {
-		ERRPRINTF("Error at xmlTextWriterEndElement\n");
+		ERRPRINTF("Error @ xmlTextWriterEndElement\n");
 		return rc;
 	}
 
 	// Close the benchmark element.
 	rc = xmlTextWriterEndElement(writer);
 	if (rc < 0) {
-		ERRPRINTF("Error at xmlTextWriterEndElement\n");
+		ERRPRINTF("Error @ xmlTextWriterEndElement\n");
 		return rc;
 	}
 
@@ -2854,7 +2854,7 @@ int write_timeval_xtwp(xmlTextWriterPtr writer, struct timeval *t)
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "secs",
 			"%ld", t->tv_sec);
 	if (rc < 0) {
-		ERRPRINTF("Error at xmlTextWriterWriteFormatElement (secs)\n");
+		ERRPRINTF("Error @ xmlTextWriterWriteFormatElement (secs)\n");
 		return rc;
 	}
 
@@ -2862,7 +2862,7 @@ int write_timeval_xtwp(xmlTextWriterPtr writer, struct timeval *t)
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "usecs",
 			"%ld", t->tv_usec);
 	if (rc < 0) {
-		ERRPRINTF("Error at xmlTextWriterWriteFormatElement (usecs)\n");
+		ERRPRINTF("Error @ xmlTextWriterWriteFormatElement (usecs)\n");
 		return rc;
 	}
 
