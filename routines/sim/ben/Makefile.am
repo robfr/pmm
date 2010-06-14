@@ -20,4 +20,14 @@
 #
 INCLUDES = -I$(top_builddir)/src
 
-SUBDIRS = chps ben
+SUBDIRS = data
+
+
+# workaround to install 'SCRIPT' and 'DATA' types to pkglibdir (which usually
+# only takes PROGRAMS/LIBRARIES/LTLIBRARIES and such ....
+routinedir = $(pkglibdir)
+
+dist_routine_SCRIPTS = dgemm_ben_5000_icc_mkl.pl
+dist_routine_DATA = hoja_dgemm_5000_icc_mkl.csv
+
+DIST_SUBDIRS = data

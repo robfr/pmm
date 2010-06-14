@@ -441,6 +441,8 @@ AC_CONFIG_FILES([
     routines/sim/Makefile
     routines/sim/chps/Makefile
     routines/sim/chps/data/Makefile
+    routines/sim/ben/Makefile
+    routines/sim/ben/data/Makefile
 	src/Makefile
 	test/Makefile
 ])
