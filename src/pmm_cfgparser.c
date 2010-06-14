@@ -536,7 +536,7 @@ parse_config(struct pmm_config *cfg) {
 		if(!xmlStrcmp(cnode->name, (const xmlChar *) "main_sleep_period")) {
 		    // get the value associated with the cnode
 		    key = (char *)xmlNodeListGetString(doc, cnode->xmlChildrenNode, 1);
-			cfg->main_sleep_period = atoi(key);
+            double_to_timespec(atof(key), &(cfg->ts_main_sleep_period));
             free(key);
             key = NULL;
 		}

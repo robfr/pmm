@@ -512,7 +512,7 @@ int main(int argc, char **argv) {
 		}
 
 		// sleep for a period
-		sleep(cfg->main_sleep_period);
+        nanosleep(&(cfg->ts_main_sleep_period), NULL);
 
 
 

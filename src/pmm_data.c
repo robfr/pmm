@@ -1869,6 +1869,21 @@ double_to_timeval(double d, struct timeval *tv)
 }
 
 /*!
+ * Convert a double to a timespec
+ *
+ * @param   d   double value to convert
+ * @param   ts  pointer to timespec
+ */
+void
+double_to_timespec(double d, struct timespec *ts)
+{
+    ts->tv_sec = (int)d;
+    ts->tv_nsec = (long)(1000000000.0 * (d - ts->tv_sec));
+
+    return;
+}
+
+/*!
  * Add two timevals, to another, tv_res = tv_a + tv_b
  *
  * @param   tv_a    first timeval to add

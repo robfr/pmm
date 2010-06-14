@@ -45,7 +45,7 @@ typedef struct pmm_config {
 	int daemon;
     int build_only;
 
-    int main_sleep_period;
+    struct timespec ts_main_sleep_period;
     int time_spend_threshold;
     int num_execs_threshold;
 
@@ -346,12 +346,16 @@ void div_bench(struct pmm_benchmark *b, double d, struct pmm_benchmark *res);
 int sum_bench_list(struct pmm_benchmark *start, struct pmm_benchmark *end,
                struct pmm_benchmark *sum);
 
+int
+param_product(int *p, int n);
+
 void avg_bench_list(struct pmm_benchmark *start, struct pmm_benchmark *end,
                    struct pmm_benchmark *avg_b);
 
 void copy_timeval(struct timeval *src, struct timeval *dst);
 double timeval_to_double(struct timeval *tv);
 void double_to_timeval(double d, struct timeval *tv);
+void double_to_timespec(double d, struct timespec *ts);
 void timeval_add(struct timeval *tv_a, struct timeval *tv_b,
                  struct timeval *tv_res);
 void timeval_div(struct timeval *tv, double d);
