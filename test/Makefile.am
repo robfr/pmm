@@ -26,7 +26,7 @@ if ENABLE_OCTAVE
 bin_PROGRAMS = octave_test #executor_test #test_cfgparser timer_test
 
 octave_test_SOURCES = octave_test.c
-octave_test_LDADD = -L$(top_builddir)/src $(XML_LIBS) $(LIBS)
-octave_test_LDFLAGS = -lpmm $(XML_CFLAGS) $(CFLAGS)
+octave_test_LDADD = -L$(top_builddir)/src $(XML_LIBS) $(LIBS) $(OCTAVE_LIBS)
+octave_test_LDFLAGS = -lpmm $(XML_CFLAGS) $(CFLAGS) $(OCTAVE_LIBS)
 octave_test_CPPFLAGS = $(XML_CFLAGS)
 endif
