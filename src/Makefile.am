@@ -76,7 +76,7 @@ pkgdata_DATA = pmm_griddatan.m
 
 EXTRA_DIST	= pmm_argparser.h pmm_cfgparser.h pmm_cond.h pmm_data.h \
 		pmm_executor.h pmm_scheduler.h pmm_util.h pmm_selector.h gnuplot_i.h \
-		pmm_octave.h pmm_log.h pmm_muparser.h pmm_griddatan.m
+		pmm_octave.h pmm_log.h pmm_muparse.h pmm_griddatan.m
 
 ##pmm_LDADD	= $(top_builddir)/src/libpmm.a \
 ##		$(top_builddir)/replace/libreplace.a $(LIBADD_READLINE)
