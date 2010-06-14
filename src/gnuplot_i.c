@@ -392,7 +392,8 @@ void gnuplot_setstyle(gnuplot_ctrl * h, char * plot_style)
         strcmp(plot_style, "steps") &&
         strcmp(plot_style, "errorbars") &&
         strcmp(plot_style, "boxes") &&
-        strcmp(plot_style, "boxerrorbars")) {
+        strcmp(plot_style, "boxerrorbars") &&
+        strcmp(plot_style, "points palette")) {
         fprintf(stderr, "warning: unknown requested style: using points\n") ;
         strcpy(h->pstyle, "points") ;
     } else {

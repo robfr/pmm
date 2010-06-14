@@ -37,6 +37,7 @@ typedef struct pmm_view_options {
     int plot_intervals;
     int plot_params[2];
     int plot_params_index;
+    int plot_palette;
 
     int *slice_i_arr;
     int *slice_val_arr;

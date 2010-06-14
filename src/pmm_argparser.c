@@ -124,6 +124,7 @@ void usage_pmm_view()
     printf("  -i         : plot intervals (not supported in slice plot)\n");
     printf("  -I         : enter interactive mode after plotting\n");
     printf("  -p param   : specify a parameter axis to plot (max 2)\n");
+    printf("  -P         : plot using palette\n");
     printf("  -s slice   : specify a slice of model to plot (see man page)\n");
 	printf("  -w wait    : replot model every 'wait' seconds\n");
     printf("  -o file    : write plot to file (with png or ps extension)\n");
@@ -147,6 +148,7 @@ parse_pmm_view_args(struct pmm_view_options *options,
     options->plot_intervals = 0;
     options->plot_params_index = -1;
     options->slice_arr_size = -1;
+    options->plot_palette = 0;
 
 	while(1) {
 		static struct option long_options[] =
@@ -160,6 +162,7 @@ parse_pmm_view_args(struct pmm_view_options *options,
             {"plot-intervals", no_argument, 0, 'i'},
             {"interactive-mode", no_argument, 0, 'I'},
             {"param-index", required_argument, 0, 'p'},
+            {"palette", no_argument, 0, 'P'},
             {"slice", required_argument, 0, 's'},
             {"wait-period", required_argument, 0, 'w'},
             {"output-file", required_argument, 0, 'o'},
@@ -168,7 +171,7 @@ parse_pmm_view_args(struct pmm_view_options *options,
 
 		option_index = 0;
 
-		c = getopt_long(argc, argv, "c:f:hlr:aiIp:s:w:o:", long_options,
+		c = getopt_long(argc, argv, "c:f:hlr:aiIp:Ps:w:o:", long_options,
                         &option_index);
 
 		// getopt_long returns -1 when arg list is exhausted
@@ -222,6 +225,10 @@ parse_pmm_view_args(struct pmm_view_options *options,
 
             options->plot_params_index++;
             options->plot_params[options->plot_params_index] = atoi(optarg);
+            break;
+
+        case 'P':
+            options->plot_palette = 1;
             break;
 
         case 's':
