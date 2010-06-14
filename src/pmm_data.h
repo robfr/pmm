@@ -319,6 +319,8 @@ int init_loadhistory(struct pmm_loadhistory *h, int size);
 
 int
 init_bench_list(struct pmm_model *m, struct pmm_paramdef_set *pd_set);
+struct pmm_benchmark*
+init_zero_benchmark(int *params, int n_p);
 
 struct pmm_interval* init_interval(int plane,
                                   int n_p,

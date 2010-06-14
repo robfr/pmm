@@ -327,7 +327,6 @@ naive_process_interval_list(struct pmm_routine *r, struct pmm_benchmark *b)
     struct pmm_interval *new_i;
     int *aligned_params;
     int i, pp;
-    int direction;
 
 
     m = r->model;
@@ -580,7 +579,7 @@ multi_gbbp_naive_select_new_bench(struct pmm_routine *r)
     int *params;
 
 	struct pmm_interval_list *i_list;
-	struct pmm_interval *top_i, *new_i;
+	struct pmm_interval *top_i;
     struct pmm_model *m;
 
     m = r->model;
@@ -786,7 +785,6 @@ init_gbbp_naive_intervals(struct pmm_routine *r)
             else if(proj_i != NULL)
             {
                 // create a zero speed point at end ...
-                zero_b = new_benchmark();
                 zero_b = init_zero_benchmark(proj_i->end, r->pd_set->n_p);
                 if(zero_b == NULL) {
                     ERRPRINTF("Error allocating new benchmark.\n");
@@ -1122,7 +1120,6 @@ init_gbbp_diagonal_interval(struct pmm_routine *r)
         if(r->pd_set->pc_max != -1) {
 
             // create a zero speed point at interval end ...
-            zero_b = new_benchmark();
             zero_b = init_zero_benchmark(diag_i->end, r->pd_set->n_p);
             if(zero_b == NULL) {
                 ERRPRINTF("Error allocating new benchmark.\n");

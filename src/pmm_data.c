@@ -3735,7 +3735,6 @@ void free_routine(struct pmm_routine **r) {
 
 void free_paramdef_set(struct pmm_paramdef_set **pd_set)
 {
-	int i;
 
     if((*pd_set)->pd_array != NULL)
         free_paramdef_array(&(*pd_set)->pd_array, (*pd_set)->n_p);
