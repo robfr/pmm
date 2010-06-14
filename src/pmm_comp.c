@@ -203,7 +203,7 @@ main(int argc, char **argv)
     }
 
 
-    correlation = correlate_models(base_model, approx_model);
+    correlation = correlate_models(approx_model, base_model);
 
     printf("model correlation:%f\n", correlation);
 
