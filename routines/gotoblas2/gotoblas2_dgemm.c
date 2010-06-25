@@ -53,7 +53,7 @@ int main(int argc, char **argv) {
 	n = (size_t)arg;
 
 	/* calculate complexity */
-	complexity = 3*n*n*(long long)n;
+	complexity = 2*n*n*(long long)n;
 
 	/* initialise data */
     a = malloc(n*n * sizeof *a);
