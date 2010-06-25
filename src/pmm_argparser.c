@@ -49,6 +49,7 @@ void usage() {
 	printf("  -d         : run in daemon (background) mode\n");
 	printf("  -h         : print this help\n");
     printf("  -b         : exit after all models are built\n");
+    printf("  -p         : pause after each benchmark execution\n");
 	printf("\n");
 }
 
@@ -68,12 +69,13 @@ void parse_args(struct pmm_config *cfg, int argc, char **argv) {
 			{"log-file", required_argument, 0, 'l'},
 			{"help", no_argument, 0, 'h'},
             {"build-only", no_argument, 0, 'b'},
+            {"pause", no_argument, 0, 'p'},
 			{0, 0, 0, 0}
 		};
 
 		option_index = 0;
 
-		c = getopt_long(argc, argv, "dc:l:hb", long_options, &option_index);
+		c = getopt_long(argc, argv, "dc:l:hbp", long_options, &option_index);
 
 		// getopt_long returns -1 when arg list is exhausted
 		if(c == -1) {
@@ -95,6 +97,10 @@ void parse_args(struct pmm_config *cfg, int argc, char **argv) {
 
         case 'b':
             cfg->build_only = 1;
+            break;
+
+        case 'p':
+            cfg->pause = 1;
             break;
 
 		case 'h':

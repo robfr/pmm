@@ -457,6 +457,11 @@ int main(int argc, char **argv) {
                 free(b_thread_return);
                 b_thread_return = NULL;
 
+                if(cfg->pause == 1) {
+                    printf("Press enter to continue ...");
+                    getchar();
+                }
+
 			}
 
 			scheduled_status = schedule_routine(&scheduled_r, cfg->routines,

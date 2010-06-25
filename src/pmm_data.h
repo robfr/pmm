@@ -52,6 +52,8 @@ typedef struct pmm_config {
 	char *logfile;
 	char *configfile;
 
+    int pause;
+
 } PMM_Config;
 
 typedef enum pmm_construction_method {

@@ -80,6 +80,8 @@ struct pmm_config* new_config() {
     c->num_execs_threshold = 20;
     c->time_spend_threshold = 60;
 
+    c->pause = 0;
+
 	return c;
 }
 
@@ -3741,6 +3743,8 @@ void print_config(struct pmm_config *cfg) {
 	printf("load path: %s\n", cfg->loadhistory->load_path);
 	printf("routine array size: %d\n", cfg->allocated);
 	printf("routine array used: %d\n", cfg->used);
+    
+    printf("pause: %d\n", cfg->pause);
 
 	for(i=0; i<cfg->used; i++) {
 		print_routine(cfg->routines[i]);
