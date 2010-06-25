@@ -641,7 +641,7 @@ parse_config(struct pmm_config *cfg) {
             key = NULL;
 		}
 		if(!xmlStrcmp(cnode->name,
-                      (const xmlChar *) "model_write_exec_threshold"))
+                      (const xmlChar *) "model_write_execs_threshold"))
         {
 		    // get the value associated with the cnode
 		    key = (char *)xmlNodeListGetString(doc, cnode->xmlChildrenNode, 1);

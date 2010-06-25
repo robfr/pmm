@@ -756,7 +756,13 @@ void *benchmark(void *scheduled_r) {
         }
     }
     else {
-        DBGPRINTF("Not writing model ...\n");
+        DBGPRINTF("Not writing model "
+                  "(unwritten_num_execs/thres:%d/%d "
+                  "unwritten_time_spend/thres:%f/%d) ...\n",
+                  r->model->unwritten_num_execs,
+                  r->parent_config->num_execs_threshold,
+                  r->model->unwritten_time_spend,
+                  r->parent_config->time_spend_threshold);
     }
 
     free(rargs);
