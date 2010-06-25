@@ -302,7 +302,7 @@ if test "x$with-muparser" != "xno"; then # if muParser is not disabled
 
 
     OLD_CPPFLAGS="$CPPFLAGS"
-    OLD_LDFLAGS="$LD_FLAGS"
+    OLD_LDFLAGS="$LDFLAGS"
     CPPFLAGS="$MUPARSER_CPPFLAGS $CPPFLAGS"
     LDFLAGS="$MUPARSER_LDFLAGS $LDFLAGS"
 
@@ -355,7 +355,7 @@ if test "x$with_gsl" != "xno"; then #if gsl is not disabled
 
 
     OLD_CPPFLAGS="$CPPFLAGS"
-    OLD_LDFLAGS="$LD_FLAGS"
+    OLD_LDFLAGS="$LDFLAGS"
     CPPFLAGS="$GSL_CPPFLAGS $CPPFLAGS"
     LDFLAGS="$GSL_LDFLAGS $LDFLAGS"
 
