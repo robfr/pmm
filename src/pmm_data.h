@@ -456,6 +456,9 @@ get_avg_bench(struct pmm_model *m, int *param);
 struct pmm_benchmark*
 get_avg_bench_from_sorted_bench_list(struct pmm_benchmark *start,
                                      int *param);
+struct pmm_benchmark*
+find_max_bench_in_sorted_bench_list(struct pmm_benchmark *start,
+                                     int *param);
 int
 search_sorted_bench_list(int direction,
                          struct pmm_benchmark *start,

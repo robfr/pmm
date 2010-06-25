@@ -1508,6 +1508,58 @@ int flops_to_time_t(struct pmm_benchmark *b) {
 #define SEARCH_BACKWARDS 1
 
 /*!
+ * Searches a sorted bench list for the fastest instance of a benchmark with 
+ * matching parameters and returns a pointer to that benchmark
+ *
+ * @param   start   pointer to start bench to commence search
+ * @param   param   the parameter array to search for
+ *
+ * @return pointer to the fastest benchmark in the list, in place, or NULL on
+ * error
+ *
+ * @pre start must point to a benchmark that is positioned in the sorted list
+ * before, or as the very first instance of a benchmark matching the target
+ * parameters, otherwise the max returned may not be correct
+ *
+ */
+struct pmm_benchmark*
+find_max_bench_in_sorted_bench_list(struct pmm_benchmark *start,
+                                     int *param)
+{
+    int done;
+    struct pmm_benchmark *first_match, *last_match, *ret_b, *tmp_b;
+
+    search_sorted_bench_list(SEARCH_FORWARDS, start, param, start->n_p,
+                             &first_match, &last_match);
+
+    if(first_match == NULL) { //no match was found
+        return NULL;
+    }
+    else if(last_match == NULL) { //only one match was found
+        ret_b = first_match;
+
+        return ret_b;
+    }
+    else { //multiple matches were found ranging from first to last
+        ret_b = first_match;
+        tmp_b = first_match->next;
+
+        done = 0;
+        while(!done) {
+            if(tmp_b->flops > ret_b->flops) {
+                ret_b = tmp_b;
+            }
+            if(tmp_b == last_match) {
+                done = 1;
+            }
+            tmp_b = tmp_b->next;
+        }
+
+        return ret_b;
+    }
+}
+
+/*!
  * Searches a sorted bench list for multiple instances of a benchmark with 
  * matching parameters and returns a newly allocated benchmark that represents 
  * an average of the search hits.

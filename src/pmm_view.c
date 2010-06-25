@@ -403,9 +403,11 @@ plot_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
     int n, c;
 	char *plot_title_buf;
 
-    struct pmm_benchmark *b, *b_avg;
+    struct pmm_benchmark *b, *b_plot;
 
-    if(options->plot_average == 1) {
+    if(options->plot_average == 1 ||
+       options->plot_max == 1)
+    {
         n = count_unique_benchmarks_in_sorted_list(model->bench_list->first);
     }
     else {
@@ -431,27 +433,41 @@ plot_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
     while(b != NULL && c < n) {
 
         if(options->plot_average == 1) {
-            b_avg = get_avg_bench_from_sorted_bench_list(b, b->p);
+            b_plot = get_avg_bench_from_sorted_bench_list(b, b->p);
 
-            if(b_avg == NULL) {
+            if(b_plot == NULL) {
                 ERRPRINTF("Error getting average of benchmark:\n");
                 print_benchmark(b);
                 exit(EXIT_FAILURE);
             }
         }
+        else if(options->plot_max == 1) {
+            b_plot = NULL;
+            b_plot = find_max_bench_in_sorted_bench_list(b, b->p);
+
+            if(b_plot == NULL) {
+                ERRPRINTF("Error getting max of benchmark:\n");
+                print_benchmark(b);
+                exit(EXIT_FAILURE);
+            }
+        }
         else {
-            b_avg = b;
+            b_plot = b;
         }
 
         x[c] = (double)b->p[0];
-        y[c] = b_avg->flops;
+        y[c] = b_plot->flops;
 
         printf("c:%d/%d x:%f y:%f\n", c, n, x[c], y[c]);
 
         c++;
 
-        if(options->plot_average == 1) {
-            free_benchmark(&b_avg);
+        if(options->plot_average == 1)
+        {
+            free_benchmark(&b_plot);
+            b = get_next_different_bench(b);
+        }
+        else if(options->plot_max == 1) {
             b = get_next_different_bench(b);
         }
         else {
@@ -504,7 +520,7 @@ plot_slice_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
     int p0; // the planes that we will plot (should those not speficied in
             // the slice
 
-    struct pmm_benchmark *b, *b_avg;
+    struct pmm_benchmark *b, *b_plot;
 
 
     p0=-1;
@@ -532,7 +548,9 @@ plot_slice_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
         ERRPRINTF("Not found enough free parameters.\n");
     }
 
-    if(options->plot_average == 1) {
+    if(options->plot_average == 1 ||
+       options->plot_max == 1)
+    {
         n = count_unique_benchmarks_in_sorted_list(model->bench_list->first);
     }
     else {
@@ -551,7 +569,9 @@ plot_slice_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
     while(b != NULL) {
 
         while(b != NULL && bench_in_slice(options, b) == 0) {
-            if(options->plot_average == 1) {
+            if(options->plot_average == 1 ||
+               options->plot_max == 1)
+            {
                 b = get_next_different_bench(b);
             }
             else {
@@ -564,27 +584,40 @@ plot_slice_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
         
 
         if(options->plot_average == 1) {
-            b_avg = get_avg_bench_from_sorted_bench_list(b, b->p);
+            b_plot = get_avg_bench_from_sorted_bench_list(b, b->p);
 
-            if(b_avg == NULL) {
+            if(b_plot == NULL) {
                 ERRPRINTF("Error getting average of benchmark!\n");
                 print_benchmark(b);
                 exit(EXIT_FAILURE);
             }
         }
+        else if(options->plot_max == 1) {
+            b_plot = NULL;
+            b_plot = find_max_bench_in_sorted_bench_list(b, b->p);
+
+            if(b_plot == NULL) {
+                ERRPRINTF("Error getting max of benchmark:\n");
+                print_benchmark(b);
+                exit(EXIT_FAILURE);
+            }
+        }
         else {
-            b_avg = b;
+            b_plot = b;
         }
 
         x[c] = (double)b->p[p0];
-        y[c] = b_avg->flops;
+        y[c] = b_plot->flops;
 
         printf("c:%d/%d x:%f y:%f\n", c, n, x[c], y[c]);
 
         c++;
 
         if(options->plot_average == 1) {
-            free_benchmark(&b_avg);
+            free_benchmark(&b_plot);
+            b = get_next_different_bench(b);
+        }
+        else if(options->plot_max == 1) {
             b = get_next_different_bench(b);
         }
         else {
@@ -649,7 +682,7 @@ splot_slice_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
     int p0, p1; // the planes that we will plot (should those not speficied in
                 // the slice
 
-    struct pmm_benchmark *b, *b_avg;
+    struct pmm_benchmark *b, *b_plot;
 
 
     p0=-1; p1=-1;
@@ -680,7 +713,9 @@ splot_slice_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
         ERRPRINTF("Not found enough free parameters.\n");
     }
 
-    if(options->plot_average == 1) {
+    if(options->plot_average == 1 ||
+       options->plot_max == 1)
+    {
         n = count_unique_benchmarks_in_sorted_list(model->bench_list->first);
                 
     }
@@ -701,7 +736,9 @@ splot_slice_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
     while(b != NULL) {
 
         while(b != NULL && bench_in_slice(options, b) == 0) {
-            if(options->plot_average == 1) {
+            if(options->plot_average == 1 ||
+               options->plot_max == 1)
+            {
                 b = get_next_different_bench(b);
             }
             else {
@@ -714,28 +751,41 @@ splot_slice_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
         
 
         if(options->plot_average == 1) {
-            b_avg = get_avg_bench_from_sorted_bench_list(b, b->p);
+            b_plot = get_avg_bench_from_sorted_bench_list(b, b->p);
 
-            if(b_avg == NULL) {
+            if(b_plot == NULL) {
                 ERRPRINTF("Error getting average of benchmark!\n");
                 print_benchmark(b);
                 exit(EXIT_FAILURE);
             }
         }
+        else if(options->plot_max == 1) {
+            b_plot = NULL;
+            b_plot = find_max_bench_in_sorted_bench_list(b, b->p);
+
+            if(b_plot == NULL) {
+                ERRPRINTF("Error getting max of benchmark:\n");
+                print_benchmark(b);
+                exit(EXIT_FAILURE);
+            }
+        }
         else {
-            b_avg = b;
+            b_plot = b;
         }
 
         x[c] = (double)b->p[p0];
         y[c] = (double)b->p[p1];
-        z[c] = b_avg->flops;
+        z[c] = b_plot->flops;
 
         printf("c:%d/%d x:%f y:%f z:%f\n", c, n, x[c], y[c], z[c]);
 
         c++;
 
         if(options->plot_average == 1) {
-            free_benchmark(&b_avg);
+            free_benchmark(&b_plot);
+            b = get_next_different_bench(b);
+        }
+        else if(options->plot_max == 1) {
             b = get_next_different_bench(b);
         }
         else {
@@ -802,9 +852,11 @@ splot_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
     int n;
 	char *plot_title_buf;
 
-    struct pmm_benchmark *b, *b_avg;
+    struct pmm_benchmark *b, *b_plot;
 
-    if(options->plot_average == 1) {
+    if(options->plot_average == 1 ||
+       options->plot_max == 1)
+    {
         n = count_unique_benchmarks_in_sorted_list(model->bench_list->first);
     }
     else {
@@ -824,28 +876,41 @@ splot_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
     while(b != NULL) {
 
         if(options->plot_average == 1) {
-            b_avg = get_avg_bench_from_sorted_bench_list(b, b->p);
+            b_plot = get_avg_bench_from_sorted_bench_list(b, b->p);
 
-            if(b_avg == NULL) {
+            if(b_plot == NULL) {
                 ERRPRINTF("Error getting average of benchmark!\n");
                 print_benchmark(b);
                 exit(EXIT_FAILURE);
             }
         }
+        else if(options->plot_max == 1) {
+            b_plot = NULL;
+            b_plot = find_max_bench_in_sorted_bench_list(b, b->p);
+
+            if(b_plot == NULL) {
+                ERRPRINTF("Error getting max of benchmark:\n");
+                print_benchmark(b);
+                exit(EXIT_FAILURE);
+            }
+        }
         else {
-            b_avg = b;
+            b_plot = b;
         }
 
         x[c] = (double)b->p[0];
         y[c] = (double)b->p[1];
-        z[c] = b_avg->flops;
+        z[c] = b_plot->flops;
 
         printf("c:%d/%d x:%f y:%f z:%f\n", c, n, x[c], y[c], z[c]);
 
         c++;
 
         if(options->plot_average == 1) {
-            free_benchmark(&b_avg);
+            free_benchmark(&b_plot);
+            b = get_next_different_bench(b);
+        }
+        else if(options->plot_max == 1) {
             b = get_next_different_bench(b);
         }
         else {
