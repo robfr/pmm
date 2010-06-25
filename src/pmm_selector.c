@@ -3278,6 +3278,14 @@ is_interval_divisible(struct pmm_interval *i, struct pmm_routine *r)
             // find the GBBP point of the interval
             if(multi_gbbp_bench_from_interval(r, i, params) < 0) {
                 ERRPRINTF("Error getting GBBP bench point from interval.\n");
+
+                free(start_aligned);
+                start_aligned = NULL;
+                free(end_aligned);
+                end_aligned = NULL;
+                free(params);
+                params = NULL;
+
                 return -1;
             }
 
@@ -3287,9 +3295,23 @@ is_interval_divisible(struct pmm_interval *i, struct pmm_routine *r)
             if(params_cmp(start_aligned, params, r->pd_set->n_p) == 0 ||
                params_cmp(end_aligned, params, r->pd_set->n_p) == 0)
             {
+                free(start_aligned);
+                start_aligned = NULL;
+                free(end_aligned);
+                end_aligned = NULL;
+                free(params);
+                params = NULL;
+
                 return 0; //not divisible
             }
             else {
+                free(start_aligned);
+                start_aligned = NULL;
+                free(end_aligned);
+                end_aligned = NULL;
+                free(params);
+                params = NULL;
+
                 return 1; //divisible
             }
 
