@@ -2897,7 +2897,7 @@ process_gbbp_bisect(struct pmm_routine *r, struct pmm_interval *i,
                 return -1;
             }
 
-            if(is_interval_divisible(new_i, r) == 0) {
+            if(is_interval_divisible(new_i, r) == 1) {
                 add_top_interval(m->interval_list, new_i);
             }
             else {
