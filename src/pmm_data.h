@@ -356,9 +356,6 @@ void div_bench(struct pmm_benchmark *b, double d, struct pmm_benchmark *res);
 int sum_bench_list(struct pmm_benchmark *start, struct pmm_benchmark *end,
                struct pmm_benchmark *sum);
 
-int
-param_product(int *p, int n);
-
 void avg_bench_list(struct pmm_benchmark *start, struct pmm_benchmark *end,
                    struct pmm_benchmark *avg_b);
 

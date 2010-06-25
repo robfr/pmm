@@ -116,7 +116,8 @@ multi_naive_select_new_bench(struct pmm_routine *r)
     struct pmm_interval_list *i_list;
     struct pmm_interval *new_i, *top_i;
     struct pmm_model *m;
-    int i, pp;
+    int i;
+    double pc;
 
 
     m = r->model;
@@ -140,17 +141,26 @@ multi_naive_select_new_bench(struct pmm_routine *r)
             return NULL;
         }
 
-        // if pp min/max is defined
+        // if pc min/max is defined
         if(r->pd_set->pc_max != -1 || r->pd_set->pc_min != -1) {
-
+#ifdef HAVE_MUPARSER
             i = 0;
             while(i != new_i->n_p ) { // while not finished the naive space
-                pp = param_product(new_i->start, r->pd_set->n_p);
+
+                if(evaluate_constraint_with_params(r->pd_set->pc_parser,
+                                                   new_i->start, &pc) < 0)
+                {
+                    ERRPRINTF("Error evalutating parameter constraint.\n");
+
+                    free_interval(&new_i);
+
+                    return NULL;
+                }
 
                 if(r->pd_set->pc_max != -1 &&
                    r->pd_set->pc_min == -1) 
                 { //test only max
-                    if(pp > r->pd_set->pc_max) {
+                    if(pc > r->pd_set->pc_max) {
                         i = naive_step_interval(r, new_i);
                     }
                     else {
@@ -160,7 +170,7 @@ multi_naive_select_new_bench(struct pmm_routine *r)
                 else if(r->pd_set->pc_max == -1 &&
                         r->pd_set->pc_min != -1)
                 { //test only min
-                    if(pp < r->pd_set->pc_min) {
+                    if(pc < r->pd_set->pc_min) {
                         i = naive_step_interval(r, new_i);
                     }
                     else {
@@ -169,7 +179,7 @@ multi_naive_select_new_bench(struct pmm_routine *r)
                 }
                 else
                 { //test both
-                    if(pp < r->pd_set->pc_min || pp > r->pd_set->pc_max) {
+                    if(pc < r->pd_set->pc_min || pc > r->pd_set->pc_max) {
                         i = naive_step_interval(r, new_i);
                     }
                     else {
@@ -178,13 +188,20 @@ multi_naive_select_new_bench(struct pmm_routine *r)
                 }
             }
             if(i == new_i->n_p) {
-                ERRPRINTF("Could not initialise naive start point given pp "
+                ERRPRINTF("Could not initialise naive start point given pc "
                           "min/max restrictions.\n");
 
                 free_interval(&new_i);
 
                 return NULL;
             }
+#else
+            ERRPRINTF("muParser not enabled at configure.\n");
+
+            free_interval(&new_i);
+
+            return NULL;
+#endif /* HAVE_MUPARSER */
         }
 
         add_top_interval(i_list, new_i);
@@ -326,7 +343,8 @@ naive_process_interval_list(struct pmm_routine *r, struct pmm_benchmark *b)
     struct pmm_interval *interval;
     struct pmm_interval *new_i;
     int *aligned_params;
-    int i, pp;
+    int i;
+    double pc;
 
 
     m = r->model;
@@ -354,15 +372,21 @@ naive_process_interval_list(struct pmm_routine *r, struct pmm_benchmark *b)
     //
     // iterate over all parameters
     if(r->pd_set->pc_max != -1 || r->pd_set->pc_min != -1) {
-
+#ifdef HAVE_MUPARSER
         i = naive_step_interval(r, interval);
         while(i != interval->n_p ) { // while not finished the naive space
-            pp = param_product(interval->start, r->pd_set->n_p);
+
+            if(evaluate_constraint_with_params(r->pd_set->pc_parser,
+                        interval->start, &pc) < 0)
+            {
+                ERRPRINTF("Error evalutating parameter constraint.\n");
+                return -1;
+            }
 
             if(r->pd_set->pc_max != -1 &&
                r->pd_set->pc_min == -1) 
             { //test only max
-                if(pp > r->pd_set->pc_max) {
+                if(pc > r->pd_set->pc_max) {
                     i = naive_step_interval(r, interval);
                 }
                 else {
@@ -372,7 +396,7 @@ naive_process_interval_list(struct pmm_routine *r, struct pmm_benchmark *b)
             else if(r->pd_set->pc_max == -1 &&
                     r->pd_set->pc_min != -1)
             { //test only min
-                if(pp < r->pd_set->pc_min) {
+                if(pc < r->pd_set->pc_min) {
                     i = naive_step_interval(r, interval);
                 }
                 else {
@@ -381,7 +405,7 @@ naive_process_interval_list(struct pmm_routine *r, struct pmm_benchmark *b)
             }
             else
             { //test both
-                if(pp < r->pd_set->pc_min || pp > r->pd_set->pc_max) {
+                if(pc < r->pd_set->pc_min || pc > r->pd_set->pc_max) {
                     i = naive_step_interval(r, interval);
                 }
                 else {
@@ -389,6 +413,10 @@ naive_process_interval_list(struct pmm_routine *r, struct pmm_benchmark *b)
                 }
             }
         }
+#else
+        ERRPRINTF("muParser not enabled at configure.\n");
+        return -1;
+#endif /* HAVE_MUPARSER */
     }
     else {
         i = naive_step_interval(r, interval);
