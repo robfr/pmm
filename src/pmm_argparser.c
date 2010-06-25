@@ -133,6 +133,7 @@ void usage_pmm_view()
     printf("  -p param   : specify a parameter axis to plot (max 2)\n");
     printf("  -P         : plot using palette\n");
     printf("  -s slice   : specify a slice of model to plot (see man page)\n");
+    printf("  -S style   : specify a gnuplot plot style (see gnuplot help)\n");
 	printf("  -w wait    : replot model every 'wait' seconds\n");
     printf("  -o file    : write plot to file (with png or ps extension)\n");
 	printf("\n");
@@ -155,6 +156,7 @@ parse_pmm_view_args(struct pmm_view_options *options,
     options->plot_intervals = 0;
     options->plot_params_index = -1;
     options->plot_max = 0;
+    options->plot_style = (void*)NULL;
     options->slice_arr_size = -1;
     options->plot_palette = 0;
 
@@ -173,6 +175,7 @@ parse_pmm_view_args(struct pmm_view_options *options,
             {"param-index", required_argument, 0, 'p'},
             {"palette", no_argument, 0, 'P'},
             {"slice", required_argument, 0, 's'},
+            {"plot-style", required_argument, 0, 'S'},
             {"wait-period", required_argument, 0, 'w'},
             {"output-file", required_argument, 0, 'o'},
 			{0, 0, 0, 0}
@@ -180,7 +183,7 @@ parse_pmm_view_args(struct pmm_view_options *options,
 
 		option_index = 0;
 
-		c = getopt_long(argc, argv, "c:f:hlr:aiImp:Ps:w:o:", long_options,
+		c = getopt_long(argc, argv, "c:f:hlr:aiImp:Ps:S:w:o:", long_options,
                         &option_index);
 
 		// getopt_long returns -1 when arg list is exhausted
@@ -249,6 +252,9 @@ parse_pmm_view_args(struct pmm_view_options *options,
             break;
 
         case 'P':
+            if(options->plot_style != NULL) {
+                ERRPRINTF("Cannot specify palette plot and style together.\n");
+            }
             options->plot_palette = 1;
             break;
 
@@ -263,6 +269,14 @@ parse_pmm_view_args(struct pmm_view_options *options,
                 ERRPRINTF("Error parsing slice string\n");
                 return -1;
             }
+            break;
+
+        case 'S':
+            if(options->plot_palette != 0) {
+                ERRPRINTF("Cannot specify palette plot and style together.\n");
+                return -1;
+            }
+            options->plot_style = optarg;
             break;
 
         case 'f':

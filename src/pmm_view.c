@@ -488,6 +488,9 @@ plot_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
         gnuplot_cmd(plot_handle, "set palette");
         gnuplot_setstyle(plot_handle, "points palette");
     }
+    else if(options->plot_style != NULL) {
+        gnuplot_setstyle(plot_handle, options->plot_style);
+    }
                        
     gnuplot_plot_xy(plot_handle, x, y, n, plot_title_buf);
 
@@ -652,6 +655,9 @@ plot_slice_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
     if(options->plot_palette == 1) {
         gnuplot_cmd(plot_handle, "set palette");
         gnuplot_setstyle(plot_handle, "points palette");
+    }
+    else if(options->plot_style != NULL) {
+        gnuplot_setstyle(plot_handle, options->plot_style);
     }
 
     gnuplot_plot_xy(plot_handle, x, y, c, plot_title_buf);
@@ -823,6 +829,9 @@ splot_slice_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
         gnuplot_cmd(plot_handle, "set palette");
         gnuplot_setstyle(plot_handle, "points palette");
     }
+    else if(options->plot_style != NULL) {
+        gnuplot_setstyle(plot_handle, options->plot_style);
+    }
 
     gnuplot_splot(plot_handle, x, y, z, c, plot_title_buf);
 
@@ -923,6 +932,9 @@ splot_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
     if(options->plot_palette == 1) {
         gnuplot_cmd(plot_handle, "set palette");
         gnuplot_setstyle(plot_handle, "points palette");
+    }
+    else if(options->plot_style != NULL) {
+        gnuplot_setstyle(plot_handle, options->plot_style);
     }
 
     //gnuplot_cmd(plot_handle, "set multiplot");

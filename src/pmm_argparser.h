@@ -40,6 +40,8 @@ typedef struct pmm_view_options {
     int plot_max;
     int plot_palette;
 
+    char *plot_style;
+
     int *slice_i_arr;
     int *slice_val_arr;
     int slice_arr_size;
