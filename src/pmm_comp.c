@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <getopt.h>
+#include <math.h>
 #include <gsl/gsl_statistics_double.h>
 
 
@@ -96,19 +97,25 @@ correlate_models(struct pmm_model *approx_model, struct pmm_model *base_model)
 {
     int n; /* number of unique points in base model b */
     int c; /* counter */
+    int i, j;
+    double correlation;
     double *base_speed, *approx_speed;
+
+    int **base_points;
+
     struct pmm_benchmark *b, *b_avg;
     struct pmm_octave_data *oct_data;
+
+    octave_init();
 
     b = base_model->bench_list->first;
 
     n = count_unique_benchmarks_in_sorted_list(b);
 
-
+    base_points = malloc(n * sizeof *base_points);
     base_speed = malloc(n * sizeof *base_speed);
-    approx_speed = malloc(n * sizeof *approx_speed);
 
-    if(base_speed == NULL || approx_speed == NULL) {
+    if(base_speed == NULL || base_points == NULL) {
         ERRPRINTF("Error allocating memory.\n");
         return -1.0;
     }
@@ -119,6 +126,10 @@ correlate_models(struct pmm_model *approx_model, struct pmm_model *base_model)
         return -1.0;
     }
 
+    if(octave_triangulate(oct_data) < 0) {
+        ERRPRINTF("Error calcuating triangulation of data.\n");
+        return -1.0;
+    }
 
     c = 0;
     while(b != NULL && c < n) {
@@ -132,8 +143,7 @@ correlate_models(struct pmm_model *approx_model, struct pmm_model *base_model)
 
         base_speed[c] = b_avg->flops;
 
-        approx_speed[c] = octave_interpolate(oct_data, b_avg->p, b_avg->n_p);
-
+        base_points[c] = init_param_array_copy(b_avg->p, b_avg->n_p);
 
         free_benchmark(&b_avg); 
 
@@ -146,8 +156,38 @@ correlate_models(struct pmm_model *approx_model, struct pmm_model *base_model)
         return -1.0;
     }
 
+    approx_speed = octave_interp_array(oct_data, base_points,
+                                       base_model->n_p, n);
 
-    return gsl_stats_correlation(base_speed, 1, approx_speed, 1, n);
+    if(approx_speed == NULL) {
+        ERRPRINTF("Error interpolating approximation\n");
+        return -1.0;
+    }
+
+    correlation = gsl_stats_correlation(base_speed, 1, approx_speed, 1, n);
+
+    for(j=0; j<base_model->n_p; j++) 
+        printf("p%d ", j);
+
+    printf("base_speed approx_speed diff %%diff\n");
+
+    for(i=0; i<n; i++) {
+
+        for(j=0; j<base_model->n_p; j++)
+            printf("%d ", base_points[i][j]);
+
+        printf("%f %f %f %f\n", base_speed[i], approx_speed[i], fabs(base_speed[i]-approx_speed[i]), fabs(base_speed[i]-approx_speed[i])/base_speed[i]);
+        free(base_points[i]);
+        base_points[i] = NULL;
+    }
+    free(base_points);
+    base_points = NULL;
+    free(base_speed);
+    base_speed = NULL;
+    free(approx_speed);
+    approx_speed = NULL;
+
+    return correlation;
 }
 
 int

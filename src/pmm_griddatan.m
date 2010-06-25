@@ -85,6 +85,57 @@ function yi = pmm_griddatan (x, y, xi, method, varargin)
 
 endfunction
 
+function yi = pmm_triinterpn (tri, x, y, xi, method)
+
+  if (nargin == 4)
+    method = "linear";
+  endif
+  if (nargin < 4) 
+    print_usage ();
+  endif
+
+  if (ischar (method))
+    method = tolower (method);
+  endif
+
+  [m, n] = size (x);
+  [mi, ni] = size (xi);
+  
+  if (n != ni || size (y, 1) != m || size (y, 2) != 1)
+    error ("pmm_triinterpn: dimensional mismatch");
+  endif
+ 
+  yi = nan (mi, 1);
+  
+  if (strcmp (method, "nearest"))
+    ## search index of nearest point
+    idx = dsearchn (x, tri, xi);
+    valid = !isnan (idx);
+    yi(valid) = y(idx(valid));
+
+  elseif (strcmp (method, "linear"))
+    ## search for every point the enclosing triangle
+    [tri_list, bary_list] = tsearchn (x, tri, xi);
+
+    ## only keep the points within triangles.
+    valid = !isnan (tri_list);
+    tri_list = tri_list(!isnan (tri_list));
+    bary_list = bary_list(!isnan (tri_list), :);
+    nr_t = rows (tri_list);
+
+    ## assign x,y for each point of simplex
+    xt =  reshape (x(tri(tri_list,:),:), [nr_t, n+1, n]);
+    yt = y(tri(tri_list,:));
+
+    ## Use barycentric coordinate of point to calculate yi
+    yi(valid) = sum (y(tri(tri_list,:)) .* bary_list, 2);
+
+  else
+    error ("pmm_triinterpn: unknown interpolation method");
+  endif
+
+endfunction
+
 %!test
 %! [xx,yy] = meshgrid(linspace(-1,1,32));
 %! xi = [xx(:), yy(:)];

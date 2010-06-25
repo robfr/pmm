@@ -49,8 +49,8 @@ extern "C" {
 
 static int is_octave_initialised = 0;
 
-void octave_init();
 
+extern "C"
 void octave_init()
 {
 	octave_value_list grid_in;
@@ -123,6 +123,175 @@ fill_octave_input_matrices(struct pmm_model *m)
 
     return oct_data;
 
+}
+
+/*!
+ * Calcuate and store the triangulation of a matrix of points stored in the
+ * pmm_octave_data structure
+ *
+ * @param   oct_data    pointer to octave data structure containing matrix
+ *                      of points, values at points and the triangulation
+ *
+ * @pre octave is initialized and oct_data contains valid matrix x
+ * @post triangulation is stored in oct_data structure
+ *
+ * @return 0 on success, -1 on failure
+ */
+extern "C"
+int
+octave_triangulate(struct pmm_octave_data *oct_data)
+{
+    octave_value_list oct_in, oct_out;
+
+    if(is_octave_initialised == 0) {
+        ERRPRINTF("Octave not initialised.\n");
+        return -1;
+    }
+
+    oct_in(0) = octave_value(oct_data->x);
+    oct_in(1) = octave_value("QbB");
+
+    oct_out = feval("delaunayn", oct_in, 1);
+
+    if(!error_state && oct_out.length() > 0) {
+        oct_data->tri = oct_out(0).matrix_value();
+
+        return 0;
+    }
+    else {
+        ERRPRINTF("Error calculating triangulation of data.\n");
+        return -1;
+    }
+}
+
+/*!
+ * Interpolate a previously calculated triangulation at a set of points defined
+ * by the array p
+ *
+ * @param   oct_data    octave data structure containing data points and the
+ *                      calculated triangulation of those points
+ * @param   p           pointer to multi-dimensional array of points, each
+ *                      element being an interpolation point
+ * @param   n           number of dimensions of a single point
+ * @param   l           number of points
+ *
+ * @return array of interpolated values at points described by p
+ */
+extern "C"
+double*
+octave_interp_array(struct pmm_octave_data *oct_data, int **p, int n, int l)
+{
+
+	int i, j;
+    double *flops;
+	
+	// init octave
+    if(is_octave_initialised == 0) {
+        ERRPRINTF("Octave not initialised");
+        return NULL;
+    }
+
+    flops = new double[l];
+    if(flops == NULL) {
+        ERRPRINTF("Error allocating memory.\n");
+        return NULL;
+    }
+	
+	// create a two row matrix for the lookup point
+	// TODO for some reason we cannot interpolate at a single point successfully
+	// interpolate at two identical points as a workaround
+	Matrix xi = Matrix(l, n);
+	
+	for(i=0; i<l; i++) {
+        for(j=0; j<n; j++) {
+		    xi(i, j) = p[i][j];
+        }
+	}
+	
+	//set up input and output objects for call to griddatan octave call
+	octave_value_list oct_in, oct_out;
+	
+    oct_in(0) = octave_value(oct_data->tri);
+	oct_in(1) = octave_value(oct_data->x);
+	oct_in(2) = octave_value(oct_data->y);
+	oct_in(3) = octave_value(xi);
+	oct_in(4) = octave_value("linear");
+	
+	
+	//execute octave function
+	oct_out = feval("pmm_triinterpn", oct_in, 1);
+	
+	Matrix yi;
+	if(!error_state && oct_out.length() > 0) {
+		yi = oct_out(0).matrix_value();
+
+        for(i=0; i<l; i++) {
+            flops[i] = yi(i);
+        }
+	}
+	else {
+		ERRPRINTF("Error calling pmm_triinterpn in octave.\n");
+		return NULL;
+	}
+
+    return flops;
+}
+
+extern "C"
+double
+octave_interp(struct pmm_octave_data *oct_data, int *p, int n)
+{
+
+	int i;
+    double flops;
+	
+	// init octave
+    if(is_octave_initialised == 0) {
+        ERRPRINTF("Octave not initialised");
+        return -1.0;
+    }
+	
+	// create a two row matrix for the lookup point
+	// TODO for some reason we cannot interpolate at a single point successfully
+	// interpolate at two identical points as a workaround
+	Matrix xi = Matrix(2, n);
+	
+	for(i=0; i<n; i++) {
+		xi(0, i) = p[i];
+		xi(1, i) = p[i];
+	}
+	
+	//set up input and output objects for call to griddatan octave call
+	octave_value_list oct_in, oct_out;
+	
+    oct_in(0) = octave_value(oct_data->tri);
+	oct_in(1) = octave_value(oct_data->x);
+	oct_in(2) = octave_value(oct_data->y);
+	oct_in(3) = octave_value(xi);
+	oct_in(4) = octave_value("linear");
+	
+	
+	//execute octave function
+	oct_out = feval("pmm_triinterpn", oct_in, 1);
+	
+	Matrix yi;
+	if(!error_state && oct_out.length() > 0) {
+		yi = oct_out(0).matrix_value();
+
+		flops =  yi(0);
+        DBGPRINTF("-------- INTERPOLATED FLOPS --------\n");
+        for(i=0; i<n; i++) {
+            printf("p:%d:%d ", i, p[i]);
+        }
+        printf("flops:%f (%f)\n", flops, yi(1));
+
+	}
+	else {
+		ERRPRINTF("Error calling pmm_triinterpn in octave.\n");
+		return -1.0;
+	}
+
+    return flops;
 }
 
 extern "C"

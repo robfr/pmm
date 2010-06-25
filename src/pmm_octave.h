@@ -52,11 +52,19 @@ typedef struct ColumnVector {} ColumnVector;
 typedef struct pmm_octave_data {
     Matrix x;
     ColumnVector y;
+    Matrix tri;
 } PMM_Octave_Data;
 
 
+void octave_init();
 struct pmm_octave_data*
 fill_octave_input_matrices(struct pmm_model *m);
+int
+octave_triangulate(struct pmm_octave_data *oct_data);
+double
+octave_interp(struct pmm_octave_data *oct_data, int *p, int n);
+double*
+octave_interp_array(struct pmm_octave_data *oct_data, int **p, int n, int l);
 
 double
 octave_interpolate(struct pmm_octave_data *oct_data, int *p, int n);
