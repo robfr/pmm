@@ -145,6 +145,12 @@ parse_routine(xmlDocPtr doc, xmlNodePtr node)
                 return NULL;
 			}
 		}
+		else if(!xmlStrcmp(cnode->name, (const xmlChar *) "exe_args")) {
+			if(!set_str(&(r->exe_args), key)) {
+				ERRPRINTF("set_str failed setting exe_args\n");
+                return NULL;
+			}
+		}
 		else if(!xmlStrcmp(cnode->name, (const xmlChar *) "model_path")) {
 			if(!set_str(&(r->model->model_path), key)) {
 				ERRPRINTF("set_str failed failed setting model_path\n");

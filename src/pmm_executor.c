@@ -21,7 +21,7 @@
 #include "config.h"
 #endif
 
-//#include <string.h> //for basename
+#include <string.h>
 //#include <stdio.h>
 #include <stdlib.h>
 #include <signal.h>
@@ -127,7 +127,6 @@ my_popen(char *cmd, char **args, int n, pid_t *pid)
 		ERRPRINTF("Error creating pipe.\n");
 		return -1;
 	}
-
 
 
 	/* build up argv for calling command */
@@ -273,8 +272,7 @@ double timeval_to_seconds(struct timeval tv)
 /*!
  * Convert params to an array of strings and call my_popen
  *
- * @param   path        path to executable as a string
- * @param   n           number of parameters
+ * @param   r           pointer to routine that will be executed
  * @param   params      pointer to array of parameters
  * @param   bench_pid   pointer to pid_t to store spawned process pid
  *
@@ -282,32 +280,118 @@ double timeval_to_seconds(struct timeval tv)
  * spawned process, or -1 if there is an error
  */
 int
-spawn_benchmark_process(char *path, int n, int *params,
+spawn_benchmark_process(struct pmm_routine *r, int *params,
                         pid_t *bench_pid)
 {
 
     char **arg_strings;
-    int i;
+    int arg_n;
+    int i, j;
     int fd;
 
-    LOGPRINTF("exe_path:%s\n", path);
-    print_params(params, n);
+    LOGPRINTF("exe_path:%s\n", r->exe_path);
+    print_params(params, r->pd_set->n_p);
 
+    // if we have some static args specified we need to count them and add
+    // them to the arg array
+    if(r->exe_args != NULL) {
+        char *tmp_args;
+        int tmp_args_len;
+        char *sep = " "; // tokenise on space, no quoted arguments supported
+        char *last = NULL;
+        char *tok;
+        int count;
 
-    //build argument array strings to pass to the command
-    arg_strings = malloc(n * sizeof *arg_strings);
-    for(i=0; i<n; i++) {
+        // copy the static args as strtok* modifies its inputs
+        tmp_args = strdup(r->exe_args);
+        if(tmp_args == NULL) {
+            ERRPRINTF("Error duplicating exe arg string.\n");
+            return -1;
+        }
 
-        arg_strings[i] = malloc((1+snprintf(NULL, 0, "%d", params[i]))
-                * sizeof *arg_strings[i]);
+        // check length of string for later
+        tmp_args_len = (int)strlen(tmp_args) +1;
 
-        sprintf(arg_strings[i], "%d", params[i]);
+        // tokenise string, counting as we go
+        count=0;
+        tok = strtok_r(tmp_args, sep, &last);
+        DBGPRINTF("token %d:%s\n", count, tok);
+        while(tok != NULL) {
+            count++;
+
+            tok = strtok_r(NULL, sep, &last);
+        }
+
+        // allocate array for number of static args (from tokens) and parameters
+        // of model
+        arg_n = r->pd_set->n_p+count;
+        arg_strings = malloc(arg_n * sizeof *arg_strings);
+        if(arg_strings == NULL) {
+            ERRPRINTF("Error allocating argument array.\n");
+            return -1;
+        }
+
+        DBGPRINTF("arg_n:%d\n", arg_n);
+
+        // strtok_r will have placed '\0' (null) characters in the tmp_args
+        // character array, uses these to find the tokens and copy each token
+        // to an element of the arg array
+        int new_find = 0;
+        j = 0;
+        for(i=0; i<tmp_args_len; i++) {
+            if(new_find == 0) {
+               if(tmp_args[i] != '\0') {
+                   arg_strings[j++] = strdup(&tmp_args[i]);
+               }
+               new_find = 1;
+            }
+            if(new_find == 1) {
+                if(tmp_args[i] == '\0') {
+                    new_find = 0;
+                }
+            }
+
+            DBGPRINTF("%d:%c\n", i, tmp_args[i]);
+        }
+
+        //check we got expected number of tokens
+        if(j!=count) {
+            ERRPRINTF("Error copying tokens into array.\n");
+            return -1;
+        }
+
+        free(tmp_args);
+        tmp_args = NULL;
+
+        //copy the routine parameters in the array after the static arguments
+        for(j=0; i<arg_n; i++, j++) {
+            arg_strings[i] = malloc((1+snprintf(NULL, 0, "%d", params[j])) *
+                                    sizeof *arg_strings[i]);
+
+            sprintf(arg_strings[i], "%d", params[j]);
+
+            DBGPRINTF("arg_strings[%d]:%s\n", i, arg_strings[i]);
+        }
 
     }
+    else {
+        arg_n = r->pd_set->n_p;
 
-    fd = my_popen(path, arg_strings, n, bench_pid);
+        //build argument array strings to pass to the command
+        arg_strings = malloc(arg_n * sizeof *arg_strings);
+        for(i=0; i<arg_n; i++) {
 
-    for(i=0; i<n; i++) {
+            arg_strings[i] = malloc((1+snprintf(NULL, 0, "%d", params[i]))
+                    * sizeof *arg_strings[i]);
+
+            sprintf(arg_strings[i], "%d", params[i]);
+
+        }
+    }
+
+    fd = my_popen(r->exe_path, arg_strings, arg_n, bench_pid);
+
+    for(i=0; i>arg_n; i++) {
         free(arg_strings[i]);
         arg_strings[i] = NULL;
     }
@@ -584,7 +668,7 @@ void *benchmark(void *scheduled_r) {
     //print_params(rargs, r->n_p);
 
 
-    fd = spawn_benchmark_process(r->exe_path,r->pd_set->n_p, rargs, &bench_pid);
+    fd = spawn_benchmark_process(r, rargs, &bench_pid);
     if(fd == -1) {
         ERRPRINTF("Error spawning benchmark process, fd:%d pid:%d\n", (int)fd,
                    bench_pid);

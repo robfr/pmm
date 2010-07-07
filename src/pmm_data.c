@@ -99,6 +99,7 @@ new_routine()
 
     r->name = NULL;
     r->exe_path = NULL;
+    r->exe_args = NULL;
 
     r->pd_set = new_paramdef_set();
 
@@ -3544,6 +3545,9 @@ void print_routine(struct pmm_routine *r) {
 	printf("[print_routine]: name: %s\n", r->name);
 	printf("[print_routine]: exe_path: %s\n", r->exe_path);
 
+    if(r->exe_args != NULL)
+        printf("[print_routine]: exe_args: %s\n", r->exe_args);
+
     print_paramdef_set(r->pd_set);
 
 	printf("[print_routine]: condition:%d\n", r->condition);
@@ -3778,6 +3782,11 @@ void free_routine(struct pmm_routine **r) {
 	//free some malloced 'strings'
 	free((*r)->name);
     (*r)->name = NULL;
+
+    if((*r)->exe_args != NULL) {
+        free((*r)->exe_args);
+        (*r)->exe_args = NULL;
+    }
 
 	free((*r)->exe_path);
     (*r)->exe_path = NULL;

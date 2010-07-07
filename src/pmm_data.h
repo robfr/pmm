@@ -202,6 +202,7 @@ typedef struct pmm_routine {
 
 	char *name;
 	char *exe_path;
+    char *exe_args;
 
     struct pmm_paramdef_set *pd_set; // set of parameter defintions
 
