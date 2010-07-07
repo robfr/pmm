@@ -618,7 +618,7 @@ void gnuplot_plot_x(
                 fprintf(stderr,"error writing to temp file\n");
             }
             else {
-                fprintf(stderr,"could not complete write %d of %d bytes written\n", ret, strlen(line));
+                fprintf(stderr,"could not complete write %d of %d bytes written\n", ret, (int)strlen(line));
             }
             close(tmpfd);
             return;
@@ -725,7 +725,7 @@ void gnuplot_plot_xy(
                 fprintf(stderr,"error writing to temp file:\n");
             }
             else {
-                fprintf(stderr,"could not complete write %d of %d bytes written\n", ret, strlen(line));
+                fprintf(stderr,"could not complete write %d of %d bytes written\n", ret, (int)strlen(line));
             }
             close(tmpfd);
             return;
@@ -827,7 +827,7 @@ int gnuplot_splot(gnuplot_ctrl *handle, double *x, double *y, double *z, int n, 
                 fprintf(stderr,"error writing to temp file\n");
             }
             else {
-                fprintf(stderr,"could not complete write %d of %d bytes written\n", ret, strlen(line));
+                fprintf(stderr,"could not complete write %d of %d bytes written\n", ret, (int)strlen(line));
             }
             close(tmpfd);
             return 1;
@@ -908,7 +908,7 @@ int gnuplot_splot_grid(gnuplot_ctrl *handle, double *points, int rows, int cols,
                     fprintf(stderr,"error writing to file temp file\n");
                 }
                 else {
-                    fprintf(stderr,"could not complete write %d of %d bytes written\n", ret, strlen(line));
+                    fprintf(stderr,"could not complete write %d of %d bytes written\n", ret, (int)strlen(line));
                 }
                 close(tmpfd);
                 return 1;
@@ -921,7 +921,7 @@ int gnuplot_splot_grid(gnuplot_ctrl *handle, double *points, int rows, int cols,
                 fprintf(stderr,"error writing to temp file\n");
             }
             else {
-                fprintf(stderr,"could not complete write %d of %d bytes written\n", ret, strlen(line));
+                fprintf(stderr,"could not complete write %d of %d bytes written\n", ret, (int)strlen(line));
             }
             close(tmpfd);
             return 1;
@@ -1026,7 +1026,7 @@ int gnuplot_contour_plot(gnuplot_ctrl *handle, double *x, double *y, double *z, 
                     fprintf(stderr,"error writing to temp file\n");
                 }
                 else {
-                    fprintf(stderr,"could not complete write %d of %d bytes written\n", ret, strlen(line));
+                    fprintf(stderr,"could not complete write %d of %d bytes written\n", ret, (int)strlen(line));
                 }
                 close(tmpfd);
                 return 1;
@@ -1039,7 +1039,7 @@ int gnuplot_contour_plot(gnuplot_ctrl *handle, double *x, double *y, double *z, 
                 fprintf(stderr,"error writing to temp file\n");
             }
             else {
-                fprintf(stderr,"could not complete write %d of %d bytes written\n", ret, strlen(line));
+                fprintf(stderr,"could not complete write %d of %d bytes written\n", ret, (int)strlen(line));
             }
             close(tmpfd);
             return 1;
@@ -1132,7 +1132,7 @@ int gnuplot_splot_obj(gnuplot_ctrl *handle,
                 fprintf(stderr,"error writing to temp file\n");
             }
             else {
-                fprintf(stderr,"could not complete write %d of %d bytes written\n", ret, strlen(line));
+                fprintf(stderr,"could not complete write %d of %d bytes written\n", ret, (int)strlen(line));
             }
             close(tmpfd);
             return 1;
@@ -1244,7 +1244,7 @@ int gnuplot_plot_obj_xy(
                 fprintf(stderr,"error writing to temp file\n");
             }
             else {
-                fprintf(stderr,"could not complete write %d of %d bytes written\n", ret, strlen(line));
+                fprintf(stderr,"could not complete write %d of %d bytes written\n", ret, (int)strlen(line));
             }
             close(tmpfd);
             return 1;
