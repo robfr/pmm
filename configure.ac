@@ -128,8 +128,13 @@ AC_SUBST(BENCHGOTOBLAS2)
 
 AC_PATH_PROG(GNUPLOT, gnuplot)
 if test "x$GNUPLOT" = "x"; then
-    AC_MSG_ERROR([gnuplot not found])
+    AC_MSG_WARN([gnuplot not found, model viewing tool will not be built])
+    HAVE_GNUPLOT=no
+else
+    HAVE_GNUPLOT=yes
 fi
+AM_CONDITIONAL([HAVE_GNUPLOT], [test x$HAVE_GNUPLOT = xyes])
+AC_SUBST(HAVE_GNUPLOT)
 
 AC_PATH_PROG(PERL, perl)
 if test "x$PERL" = "x"; then

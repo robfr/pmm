@@ -29,12 +29,16 @@ CC		= $(PTHREAD_CC)
 # noinst_HEADERS	= pmm_argparser.h pmm_cfgparser.h pmm_cond.h pmm_data.h \
 #		pmm_executor.h pmm_scheduler.h pmm_util.h
 
-bin_PROGRAMS	= pmmd pmm_view
+bin_PROGRAMS	= pmmd
 
 if ENABLE_OCTAVE
 if HAVE_GSL
 bin_PROGRAMS += pmm_comp
 endif
+endif
+
+if HAVE_GNUPLOT
+bin_PROGRAMS += pmm_view
 endif
 
 pmmd_DEPEDENCIES = libpmm.la
