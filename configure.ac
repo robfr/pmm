@@ -72,33 +72,6 @@ if test "x$enable_debug" = "xyes"; then
 fi
 
 
-AC_ARG_ENABLE(benchlapack,
-    [   --disable-benchlapack  do not build LAPACK benchmark problems],
-    enable_benchlapack=$enableval, enable_benchlapack=yes)
-# AM_CONDITIONAL(ENABLE_BENCHLAPACK, test "x$enable_benchlapack" = xyes)
-if test "x$enable_benchlapack" = "xyes"; then
-    AC_CHECK_LIB([cblas],[cblas_dsyrk],
-    [
-        AC_CHECK_LIB([lapack_atlas],[clapack_dpotrf],
-        [
-            AC_SUBST(LAPACK_LIBS, "-llapack_atlas -lcblas -lm")
-            LAPACK_DIR=lapack
-            BENCHLAPACK=yes
-        ],
-        [
-            AC_MSG_ERROR([LAPACK not found.])
-        ],
-        [-lblas -lm])
-    ],
-    [
-        AC_MSG_ERROR([libblas not found.])
-    ],
-    -lm)
-fi
-AC_SUBST(LAPACK_SUBDIR)
-AC_SUBST(BENCHLAPACK)
-
-
 AC_ARG_ENABLE(benchgotoblas2,
     [  --enable-benchgotoblas2    build GotoBLAS2 benchmark problems],,
     enable_benchgotoblas2=no)
@@ -342,6 +315,61 @@ AC_SUBST(MUPARSER_LIBS)
 AC_SUBST(MUPARSER_CPPFLAGS)
 AC_SUBST(MUPARSER_LDFLAGS)
 AC_SUBST(HAVE_MUPARSER)
+
+# test for LAPACK ... not sure about this ... maybe test for 
+AC_ARG_WITH(lapack,
+    [  --with-lapack[=path] specify use of (and optional path to) LAPACK],,
+    with_lapack=check)
+if test "xwith_lapack" != "xno"; then # if lapack is not disabled
+
+    if test "xwith_lapack" != "xcheck"; then # if a path has been specified
+        LAPACK_CPPFLAGS="-I$with_lapack/include"
+        LAPACK_LDFLAGS="-L$with_lapack/lib";
+    else
+        LAPACK_CPPFLAGS=""
+        LAPACK_LDFLAGS=""
+    fi
+
+    OLD_CPPFLAGS="$CPPFLAGS"
+    OLD_LDFLAGS="$LDFLAGS"
+    CPPFLAGS="$LAPACK_CPPFLAGS $CPPFLAGS"
+    LDFLAGS="$LAPACK_LDFLAGS $LDFLAGS"
+
+    AC_CHECK_LIB([cblas],[cblas_dsyrk],
+    [
+        AC_CHECK_LIB([lapack_atlas],[clapack_dpotrf],
+        [
+            LAPACK_LIBS="-llapack_atlas -lcblas -lm"
+            LAPACK_DIR=lapack
+            HAVE_LAPACK=yes
+            BENCHLAPACK=yes
+        ],
+        [
+            if test "x$with_lapack" != "xcheck"; then
+                AC_MSG_ERROR([LAPACK not found.])
+            fi
+        ],
+        [-lblas -lm])
+    ],
+    [
+        if test "x$with_lapack" != "xcheck"; then
+            AC_MSG_ERROR([libblas not found.])
+        fi
+    ],
+    -lm)
+
+    CPPFLAGS="$OLD_CPPFLAGS"
+    LDFLAGS="$OLD_LDFLAGS"
+
+fi
+AM_CONDITIONAL([HAVE_LAPACK], [test x$HAVE_LAPACK = xyes])
+AC_SUBST(LAPACK_LIBS)
+AC_SUBST(LAPACK_CPPFLAGS)
+AC_SUBST(LAPACK_LDFLAGS)
+AC_SUBST(LAPACK_SUBDIR)
+AC_SUBST(HAVE_LAPACK)
+AC_SUBST(BENCHLAPACK)
+
 
 
 # test for Gnu Scientific Library
