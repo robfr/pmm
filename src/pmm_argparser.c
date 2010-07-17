@@ -159,6 +159,7 @@ parse_pmm_view_args(struct pmm_view_options *options,
     options->plot_style = (void*)NULL;
     options->slice_arr_size = -1;
     options->plot_palette = 0;
+    options->n_plots = 0;
 
 	while(1) {
 		static struct option long_options[] =
@@ -219,12 +220,26 @@ parse_pmm_view_args(struct pmm_view_options *options,
             break;
 
 		case 'r':
-            if(options->action != PMM_VIEW_NULL) { //action should be unset
+            // if no action set, set to DISPLAY_ROUTINE
+            if(options->action == PMM_VIEW_NULL) {
+                options->action = PMM_VIEW_DISPLAY_ROUTINE;
+            }
+            // otherwise, test that it is already set to DISPLAY_ROUTINE
+            else if(options->action != PMM_VIEW_DISPLAY_ROUTINE) {
+                ERRPRINTF("Cannot do more than one action (list routines, "
+                           "view routines or view model files.\n");
                 return -1;
             }
 
-            options->action = PMM_VIEW_DISPLAY_ROUTINE;
-			options->routine_name = optarg;
+			options->routine_names[options->n_plots] = optarg;
+
+            options->n_plots = options->n_plots + 1;
+
+            if(options->n_plots >= PMM_MAX_PLOTS) {
+                ERRPRINTF("Cannot plot more than %d routines at once.\n",
+                          PMM_MAX_PLOTS);
+                return -1;
+            }
 			break;
 
         case 'm':
@@ -280,11 +295,27 @@ parse_pmm_view_args(struct pmm_view_options *options,
             break;
 
         case 'f':
-            if(options->action != PMM_VIEW_NULL) { //action should be unset
+            // if no action set, set to DISPLAY_FILE
+            if(options->action == PMM_VIEW_NULL) {
+                options->action = PMM_VIEW_DISPLAY_FILE;
+            }
+            // otherwise, test that it is already set to DISPLAY_FILE
+            else if(options->action != PMM_VIEW_DISPLAY_FILE) {
+                ERRPRINTF("Cannot do more than one action (list routines, "
+                           "view routines or view model files.\n");
                 return -1;
             }
-            options->action = PMM_VIEW_DISPLAY_FILE;
-            options->model_file = optarg;
+
+			options->model_files[options->n_plots] = optarg;
+
+            options->n_plots = options->n_plots + 1;
+
+            if(options->n_plots >= PMM_MAX_PLOTS) {
+                ERRPRINTF("Cannot plot more than %d routines at once.\n",
+                          PMM_MAX_PLOTS);
+                return -1;
+            }
+			break;
             break;
 
         case 'w':
@@ -296,10 +327,16 @@ parse_pmm_view_args(struct pmm_view_options *options,
             break;
 
         case 'l':
-            if(options->action != PMM_VIEW_NULL) { //action should be unset
+            // if option is NULL set to PRINT_LIST
+            if(options->action == PMM_VIEW_NULL) { 
+                options->action = PMM_VIEW_PRINT_LIST;
+            }
+            // otherwise, action has already been set, this is error
+            else {
+                ERRPRINTF("Cannot do more than one action (list routines, "
+                           "view routines or view model files.\n");
                 return -1;
             }
-            options->action = PMM_VIEW_PRINT_LIST;
             break;
         case 'o':
             options->plot_output_file = optarg;

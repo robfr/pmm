@@ -95,16 +95,16 @@ pthread_rwlock_t history_rwlock;
 
 int main(int argc, char **argv) {
 
-    struct pmm_view_options options;
-	struct pmm_config *cfg;
+    struct pmm_view_options options;    // structure containing all options
+	struct pmm_config *cfg;             // pointer to pmm configuration
 
-	struct pmm_routine *routine;
-	struct pmm_model *model;
+	struct pmm_model **models;          // array of models to plot
+    int n_p;                            // number of parameters to models
 
-	gnuplot_ctrl *plot_handle;
+	gnuplot_ctrl *plot_handle;          // handle to the gnuplot process
 
     int ret;
-	int i;
+	int i, j;
 
 	// parse arguments
 	ret = parse_pmm_view_args(&options, argc, argv);
@@ -142,16 +142,26 @@ int main(int argc, char **argv) {
     else if(options.action == PMM_VIEW_DISPLAY_ROUTINE ||
             options.action == PMM_VIEW_DISPLAY_FILE) {
 
-        if(options.action == PMM_VIEW_DISPLAY_ROUTINE) {
-            printf("Displaying model for routine: %s\n", options.routine_name);
 
-            model = NULL;
+        models = malloc(options.n_plots * sizeof *models);
+        if(models == NULL) {
+            ERRPRINTF("Error allocating memory.\n");
+            exit(EXIT_FAILURE);
+        }
+
+        if(options.action == PMM_VIEW_DISPLAY_ROUTINE) {
+            for(i = 0; i < options.n_plots; i++) {
+                printf("Displaying model for routine: %s\n",
+                        options.routine_names[i]);
+            }
+
             cfg = new_config();
 
             if(options.config_file != NULL) {
                 ret = asprintf(&(cfg->configfile), "%s", options.config_file);
                 if(ret < 0) {
-                    ERRPRINTF("Error: asprintf failed with return code: %d\n", ret);
+                    ERRPRINTF("Error: asprintf failed with return code: %d\n",
+                              ret);
                     exit(EXIT_FAILURE);
                 }
             }
@@ -159,49 +169,97 @@ int main(int argc, char **argv) {
             //read config
             parse_config(cfg);
 
-            // search for specified routine
-            for(i=0; i<cfg->used; i++) {
+            // for each routine specified on command line
+            for(j = 0; j < options.n_plots; j++) {
 
-                if(strcmp(options.routine_name, cfg->routines[i]->name) == 0) {
-                    routine = cfg->routines[i];
-                    model = routine->model;
+                models[j] = NULL; // set this to null so we can test later
+
+                // search for routine in config
+                for(i = 0; i < cfg->used; i++) {
+
+                    if(strcmp(options.routine_names[j], cfg->routines[i]->name)
+                          == 0)
+                    {
+                        models[j] = cfg->routines[i]->model;
+                    }
                 }
-            }
 
-            if(model == NULL) {
-                printf("Failed to find model for routine: %s.\n",
-                       options.routine_name);
-                exit(EXIT_FAILURE);
+                // if we done fine the routine, exit
+                if(models[j] == NULL) {
+                    printf("Failed to find model for routine: %s.\n",
+                            options.routine_names[j]);
+                    exit(EXIT_FAILURE);
+                }
+
+
             }
 
         }
         else if(options.action == PMM_VIEW_DISPLAY_FILE) {
-            model = new_model();
+            for(i = 0; i < options.n_plots; i++) {
+                models[i] = new_model();
 
-            // use asprintf as free_model must free model_path pointer
-            ret = asprintf(&(model->model_path), "%s", options.model_file);
-            if(ret < 0) {
-                ERRPRINTF("Error: asprintf failed with return code: %d\n", ret);
-                exit(EXIT_FAILURE);
+                if(models[i] == NULL) {
+                    ERRPRINTF("Error allocating model.\n");
+                    exit(EXIT_FAILURE);
+                }
+
+                // use asprintf as free_model must free model_path pointer
+                ret = asprintf(&(models[i]->model_path), "%s",
+                               options.model_files[i]);
+                if(ret < 0) {
+                    ERRPRINTF("Error: asprintf failed with return code: %d\n",
+                              ret);
+                    exit(EXIT_FAILURE);
+                }
+
+                printf("Displaying model from file: %s\n",
+                        options.model_files[i]);
             }
         }
 
 
-        ret = parse_model(model);
-        if(ret == -1) {
-            ERRPRINTF("Error file does not exist:%s\n", model->model_path);
-            exit(EXIT_FAILURE);
-        }
-        else if(ret < -1) {
-            ERRPRINTF("Error parsing model.\n");
-            exit(EXIT_FAILURE);
+        // parse models from files on disk
+        n_p=0;
+        for(i = 0; i < options.n_plots; i++) {
+
+            // if model has not yet been parsed ...
+            if(models[i]->completion == 0) {
+
+                ret = parse_model(models[i]);
+                if(ret == -1) {
+                    ERRPRINTF("Error file does not exist:%s\n",
+                            models[i]->model_path);
+                    exit(EXIT_FAILURE);
+                }
+                else if(ret < -1) {
+                    ERRPRINTF("Error parsing models[%d]: %s.\n",
+                            i, models[i]->model_path);
+                    exit(EXIT_FAILURE);
+                }
+
+            }
+
+            // test number of  parameters are all the same and all not greater
+            // than 2 (where no slices are specified)
+            if(n_p == 0) {
+                n_p = models[i]->n_p;
+
+                if(n_p > 2 && options.slice_arr_size == -1) {
+                    printf("Cannot plot full models in terms of >2 parameters, "
+                           "specify a slice to view.\n");
+                    exit(EXIT_FAILURE);
+                }
+            }
+            else if(n_p != models[i]->n_p) {
+                ERRPRINTF("Cannot plot models with different numbers of "
+                          "parameters together");
+                exit(EXIT_FAILURE);
+            }
+
         }
 
-        if(model->n_p > 2 && options.slice_arr_size == -1) {
-            printf("Cannot plot full models in terms of >2 parameters, "
-                   "specify a slice to view.\n");
-            exit(EXIT_FAILURE);
-        }
+        
 
 
         // init gnuplot handle and plot models
@@ -248,27 +306,32 @@ int main(int argc, char **argv) {
 
 
             if(options.slice_arr_size != -1) {
-                if(options.slice_arr_size >= model->n_p) {
+                if(options.slice_arr_size >= n_p) {
                     ERRPRINTF("Too many parameteres defined in slice (%d) of "
                               "model with %d parameters.\n",
                               options.slice_arr_size,
-                              model->n_p);
+                              n_p);
                     exit(EXIT_FAILURE);
                 }
 
-                if(options.slice_arr_size < model->n_p-2) {
+                if(options.slice_arr_size < n_p-2) {
                     ERRPRINTF("Not enough parameters defined in slice (%d) of "
                               "model with %d parameters.\n",
                               options.slice_arr_size,
-                              model->n_p);
+                              n_p);
                     exit(EXIT_FAILURE);
                 }
 
                 for(i=0; i<options.slice_arr_size; i++) {
                     if(options.slice_i_arr[i] < 0 ||
-                       options.slice_i_arr[i] > model->n_p-1) {
+                       options.slice_i_arr[i] > n_p-1) {
                         ERRPRINTF("Slice parameter index %d out of bounds.\n",
                                   options.slice_i_arr[i]);
+                        exit(EXIT_FAILURE);
+                    }
+                    else if(options.n_plots != 1) {
+                        ERRPRINTF("Cannot plot slices for more than 1 model"
+                                " at present.\n");
                         exit(EXIT_FAILURE);
                     }
 
@@ -281,10 +344,10 @@ int main(int argc, char **argv) {
                         }
                         else {
                             if(options.slice_val_arr[i] == -1) {
-                                options.slice_val_arr[i] = model->parent_routine->pd_set->pd_array[options.slice_i_arr[i]].end;
+                                options.slice_val_arr[i] = models[0]->parent_routine->pd_set->pd_array[options.slice_i_arr[i]].end;
                             }
                             else if(options.slice_val_arr[i] == -2) {
-                                options.slice_val_arr[i] = model->parent_routine->pd_set->pd_array[options.slice_i_arr[i]].start;
+                                options.slice_val_arr[i] = models[0]->parent_routine->pd_set->pd_array[options.slice_i_arr[i]].start;
                             }
                             else {
                                 ERRPRINTF("Slice value should positive.\n");
@@ -296,23 +359,25 @@ int main(int argc, char **argv) {
                     }
                 }
 
-                if(options.slice_arr_size == model->n_p-1) {
-                    plot_slice_model(plot_handle, model, &options);
+                if(options.slice_arr_size == n_p-1) {
+                    plot_slice_model(plot_handle, models[0], &options);
                 }
                 else {
-                    splot_slice_model(plot_handle, model, &options);
+                    splot_slice_model(plot_handle, models[0], &options);
                 }
             }
-            else if(model->n_p == 1 ||
-               (model->n_p <= 1 && options.plot_params_index == 0))
+            else if(n_p == 1 || (n_p <= 1 && options.plot_params_index == 0))
             {
-                plot_model(plot_handle, model, &options);
+                for(i = 0; i < options.n_plots; i++) {
+                    plot_model(plot_handle, models[i], &options);
+                }
 
             }
-            else if(model->n_p == 2 ||
-                    (model->n_p <= 2 && options.plot_params_index == 1))
+            else if(n_p == 2 || (n_p <= 2 && options.plot_params_index == 1))
             {
-                splot_model(plot_handle, model, &options);
+                for(i = 0; i < options.n_plots; i++) {
+                    splot_model(plot_handle, models[i], &options);
+                }
             }
 
 
@@ -332,26 +397,32 @@ int main(int argc, char **argv) {
 
                 gnuplot_resetplot(plot_handle);
 
-                if(model->n_p == 1) {
-                    plot_model(plot_handle, model, &options);
+                if(n_p == 1) {
+                    for(i = 0; i < options.n_plots; i++) {
+                        plot_model(plot_handle, models[i], &options);
+                    }
 
                 }
-                else if(model->n_p == 2) {
-                    splot_model(plot_handle, model, &options);
+                else if(n_p == 2) {
+                    for(i = 0; i < options.n_plots; i++) {
+                        splot_model(plot_handle, models[i], &options);
+                    }
                 }
 
                 printf("replotting in %d seconds.\n", options.wait_period);
 
                 sleep(options.wait_period);
 
-                empty_model(model);
-
-                ret = parse_model(model);
-                if(ret == -1) {
-                    ERRPRINTF("Error: model file does not exist:%s\n", model->model_path);
-                }
-                else if(ret < -1) {
-                    ERRPRINTF("Error parsing model.\n");
+                for(i = 0; i < options.n_plots; i++) {
+                    empty_model(models[i]);
+                    ret = parse_model(models[i]);
+                    if(ret == -1) {
+                        ERRPRINTF("Error: model file does not exist:%s\n",
+                                  models[i]->model_path);
+                    }
+                    else if(ret < -1) {
+                        ERRPRINTF("Error parsing model.\n");
+                    }
                 }
             }
         }
@@ -361,7 +432,9 @@ int main(int argc, char **argv) {
             free_config(&cfg);
         }
         else if(options.action == PMM_VIEW_DISPLAY_FILE) {
-            free_model(&model);
+            for(i = 0; i < options.n_plots; i++) {
+                free_model(&(models[i]));
+            }
         }
 
         gnuplot_close(plot_handle);

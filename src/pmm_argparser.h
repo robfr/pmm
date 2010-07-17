@@ -29,6 +29,8 @@
 #define PMM_VIEW_DISPLAY_ROUTINE 2
 #define PMM_VIEW_DISPLAY_FILE 3
 
+#define PMM_MAX_PLOTS 32
+
 typedef struct pmm_view_options {
     int action;
     int wait_period;
@@ -46,8 +48,9 @@ typedef struct pmm_view_options {
     int *slice_val_arr;
     int slice_arr_size;
 
-    char *model_file;
-    char *routine_name;
+    char *model_files[PMM_MAX_PLOTS];
+    char *routine_names[PMM_MAX_PLOTS];
+    int n_plots;
     char *config_file;
     char *plot_output_file;
 } PMM_View_Options;
