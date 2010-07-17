@@ -404,9 +404,9 @@ AC_SUBST(HAVE_ATLAS)
 AC_ARG_WITH(lapack,
     [  --with-lapack[=path] specify use of (and optional path to) LAPACK],,
     with_lapack=check)
-if test "xwith_lapack" != "xno"; then # if lapack is not disabled
+if test "x$with_lapack" != "xno"; then # if lapack is not disabled
 
-    if test "xwith_lapack" != "xcheck"; then # if a path has been specified
+    if test "x$with_lapack" != "xcheck"; then # if a path has been specified
         LAPACK_CPPFLAGS="-I$with_lapack/include"
         LAPACK_LDFLAGS="-L$with_lapack/lib";
     else
