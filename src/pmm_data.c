@@ -24,6 +24,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <limits.h>
 //#include <sys/time.h>
 #include <ctype.h> //for isdigit
 #include <string.h>
@@ -58,7 +59,7 @@ struct pmm_config* new_config() {
 
 	c->routines = malloc(5 * sizeof *(c->routines));
 	if(c->routines == NULL) {
-		printf("allocation of memory to routine array failed.\n");
+		ERRPRINTF("allocation of memory to routine array failed.\n");
 
         free(c);
         c = NULL;
@@ -480,9 +481,9 @@ init_loadhistory(struct pmm_loadhistory *h, int size)
 void add_load(struct pmm_loadhistory *h, struct pmm_load *l)
 {
 #ifdef ENABLE_DEBUG
-	print_load(l);
-	printf("h:%p\n", h);
-	printf("h->end_i: %d\n", h->end_i);
+	print_load(PMM_DBG, l);
+	DBGPRINTF("h:%p\n", h);
+	DBGPRINTF("h->end_i: %d\n", h->end_i);
 #endif
 
 	h->history[h->end_i].time = l->time;
@@ -638,8 +639,8 @@ insert_bench_into_list(struct pmm_bench_list *bl,
 {
 
     if(insert_bench_into_sorted_list(&(bl->first), &(bl->last), b) < 0) {
-        print_bench_list(bl);
-        print_benchmark(b);
+        print_bench_list(PMM_ERR, bl);
+        print_benchmark(PMM_ERR, b);
         ERRPRINTF("Error inserting bench into list.\n");
         return -1;
     }
@@ -1796,7 +1797,7 @@ get_next_different_bench(struct pmm_benchmark *b)
         }
         else { //this really should never happen
             ERRPRINTF("Could not find b when searching itself.\n");
-            print_benchmark(b);
+            print_benchmark(PMM_ERR, b);
             exit(EXIT_FAILURE);
             next = NULL;
         }
@@ -1838,7 +1839,7 @@ get_previous_different_bench(struct pmm_benchmark *b)
     }
     else { //this should never happen
         ERRPRINTF("Could not find b when searching itself!\n");
-        print_benchmark(b);
+        print_benchmark(PMM_ERR, b);
         exit(EXIT_FAILURE);
         previous = NULL;
     }
@@ -2527,7 +2528,7 @@ remove_benchmarks_at_param(struct pmm_model *m, int *p,
     c = 0;
     while(c < n) {
         DBGPRINTF("removing %p temporarily\n", this);
-        print_benchmark(this);
+        print_benchmark(PMM_DBG, this);
 
         // store the next as this will be unplugged by remove_bench_...
         temp = this->next;
@@ -3174,7 +3175,7 @@ add_bottom_interval(struct pmm_interval_list *l, struct pmm_interval *i)
 }
 
 
-void print_interval_list(struct pmm_interval_list *l)
+void print_interval_list(const char *output, struct pmm_interval_list *l)
 {
 	struct pmm_interval *i;
     int c;
@@ -3183,9 +3184,9 @@ void print_interval_list(struct pmm_interval_list *l)
 
     c=0;
 	while(i != NULL) {
-        LOGPRINTF("%d of %d intervals ...\n", c, l->size);
+        SWITCHPRINTF(output, "%d of %d intervals ...\n", c, l->size);
 
-		print_interval(i);
+		print_interval(output, i);
 
 		i = i->previous;
         c++;
@@ -3217,30 +3218,30 @@ char* interval_type_to_string(enum pmm_interval_type type)
 
 }
 
-void print_interval(struct pmm_interval *i) {
+void print_interval(const char *output, struct pmm_interval *i) {
 
-    LOGPRINTF("type: %s\n", interval_type_to_string(i->type));
+    SWITCHPRINTF(output, "type: %s\n", interval_type_to_string(i->type));
 
     switch (i->type) {
         case IT_GBBP_EMPTY :
         case IT_GBBP_CLIMB :
-            LOGPRINTF("climb_step: %d\n", i->climb_step);
+            SWITCHPRINTF(output, "climb_step: %d\n", i->climb_step);
         case IT_GBBP_BISECT :
         case IT_GBBP_INFLECT :
-	        LOGPRINTF("plane: %d\n", i->plane);
-            LOGPRINTF("n_p: %d\n", i->n_p);
-            LOGPRINTF("start:\n");
-            print_params(i->start, i->n_p);
-            LOGPRINTF("end:\n");
-            print_params(i->end, i->n_p);
+	        SWITCHPRINTF(output, "plane: %d\n", i->plane);
+            SWITCHPRINTF(output, "n_p: %d\n", i->n_p);
+            SWITCHPRINTF(output, "start:\n");
+            print_params(output, i->start, i->n_p);
+            SWITCHPRINTF(output, "end:\n");
+            print_params(output, i->end, i->n_p);
             break;
         case IT_BOUNDARY_COMPLETE:
             break;
         case IT_COMPLETE:
             break;
         case IT_POINT:
-            LOGPRINTF("n_p: %d\n", i->n_p);
-            print_params(i->start, i->n_p);
+            SWITCHPRINTF(output, "n_p: %d\n", i->n_p);
+            print_params(output, i->start, i->n_p);
             break;
         default:
             break;
@@ -3368,47 +3369,47 @@ is_collinear_params(int *a, int *b, int *c, int n)
 }
 */
 
-void print_loadhistory(struct pmm_loadhistory *h) {
+void print_loadhistory(const char *output, struct pmm_loadhistory *h) {
 	int i;
 
-	LOGPRINTF("history:%p size: %d start_i:%d end_i:%d\n",
-			h->history, h->size, h->start_i, h->end_i);
-	LOGPRINTF("load_path: %s\n", h->load_path);
+	SWITCHPRINTF(output, "history:%p size: %d start_i:%d end_i:%d\n",
+		       	 h->history, h->size, h->start_i, h->end_i);
+	SWITCHPRINTF(output, "load_path: %s\n", h->load_path);
 
 	i = h->start_i;
 	while(i != h->end_i) {
-		print_load(&h->history[i]);
+		print_load(output, &h->history[i]);
 		i = (i + 1) % h->size_mod;
 	}
 	//print_load(&h->history[c]);
 
 }
 
-void print_load(struct pmm_load *l) {
-	LOGPRINTF("time:%d loads:%.2f %.2f %.2f\n", (int)l->time, l->load[0],
-			l->load[1], l->load[2]);
+void print_load(const char *output, struct pmm_load *l) {
+	SWITCHPRINTF(output, "time:%d loads:%.2f %.2f %.2f\n", (int)l->time,
+            l->load[0], l->load[1], l->load[2]);
 }
 
 /*
  * prints the linked list of benchmark points in a pmm_model
  */
-void print_model(struct pmm_model *m) {
+void print_model(const char *output, struct pmm_model *m) {
 
-	printf("[print_model]: path: %s\n", m->model_path);
-	printf("[print_model]: unwritten execs: %d\n", m->unwritten_num_execs);
-    printf("[print_model]: unwritten time: %f\n", m->unwritten_time_spend);
+	SWITCHPRINTF(output, "path: %s\n", m->model_path);
+	SWITCHPRINTF(output, "unwritten execs: %d\n", m->unwritten_num_execs);
+    SWITCHPRINTF(output, "unwritten time: %f\n", m->unwritten_time_spend);
 
-	printf("[print_model]: completion:%d\n", m->completion);
-
-
-	printf("[print_model]: --- bench list ---\n");
-	print_bench_list(m->bench_list);
-	printf("[print_model]: --- end bench list ---\n");
+	SWITCHPRINTF(output, "completion:%d\n", m->completion);
 
 
-	printf("[print_model]: --- interval list ---\n");
-	print_interval_list(m->interval_list);
-	printf("[print_model]: --- end interval list ---\n");
+	SWITCHPRINTF(output, "--- bench list ---\n");
+	print_bench_list(output, m->bench_list);
+	SWITCHPRINTF(output, "--- end bench list ---\n");
+
+
+	SWITCHPRINTF(output, "--- interval list ---\n");
+	print_interval_list(output, m->interval_list);
+	SWITCHPRINTF(output, "--- end interval list ---\n");
 
 
 }
@@ -3419,26 +3420,26 @@ void print_model(struct pmm_model *m) {
  * @param   bl  pointer to the pmm_bench_list structure
  */
 void
-print_bench_list(struct pmm_bench_list *bl)
+print_bench_list(const char *output, struct pmm_bench_list *bl)
 {
 	struct pmm_benchmark *b;
 
-	LOGPRINTF("size: %d\n", bl->size);
-	LOGPRINTF("n_p: %d\n", bl->n_p);
+	SWITCHPRINTF(output, "size: %d\n", bl->size);
+	SWITCHPRINTF(output, "n_p: %d\n", bl->n_p);
 
-	LOGPRINTF("first: %p\n", bl->first);
-	LOGPRINTF("last: %p\n", bl->last);
+	SWITCHPRINTF(output, "first: %p\n", bl->first);
+	SWITCHPRINTF(output, "last: %p\n", bl->last);
 
-	LOGPRINTF("--- begin benchmarks ---\n");
+	SWITCHPRINTF(output, "--- begin benchmarks ---\n");
 
 	b = bl->first;
 
 	while(b != NULL) {
-		print_benchmark(b);
+		print_benchmark(output, b);
 		b = b->next;
 	}
 
-	LOGPRINTF("--- end benchmarks ---\n");
+	SWITCHPRINTF(output, "--- end benchmarks ---\n");
 
 	return;
 }
@@ -3451,87 +3452,80 @@ print_bench_list(struct pmm_bench_list *bl)
  *
  */
 void
-print_params(int *p, int n)
+print_params(const char *output, int *p, int n)
 {
 	int i;
 
 	for(i=0; i<n; i++) {
-		LOGPRINTF("p[%d]: %d\n", i, p[i]);
+		SWITCHPRINTF(output, "p[%d]: %d\n", i, p[i]);
 	}
 }
 
-void print_benchmark(struct pmm_benchmark *b) {
+void
+print_benchmark(const char *output, struct pmm_benchmark *b) {
 	int i;
 
+    SWITCHPRINTF(output, "----benchmark----\n");
 	for(i=0; i<b->n_p; i++) {
-		printf("[print_benchmark] p[%d]: %d\n", i, b->p[i]);
+		SWITCHPRINTF(output, "p[%d]: %d\n", i, b->p[i]);
 	}
-	printf("[print_benchmark] flops: %f\n", b->flops);
-	printf("[print_benchmark] seconds: %f\n", b->seconds);
-	printf("[print_benchmark] wall sec:%ld wall usec:%ld\n", b->wall_t.tv_sec,
-			b->wall_t.tv_usec);
-	printf("[print_benchmark] used sec:%ld used usec:%ld\n", b->used_t.tv_sec,
-			b->used_t.tv_usec);
-	/*
-	if(b->previous) {
-		printf("[print_benchmark] previous:%p\n", b->previous);
-	} else {
-		printf("[print_benchmark] previous:(nil)\n");
-	}*/
-	printf("[print_benchmark] previous:%p\n", b->previous);
+	SWITCHPRINTF(output, "flops: %f\n", b->flops);
+	SWITCHPRINTF(output, "seconds: %f\n", b->seconds);
+	SWITCHPRINTF(output, "wall sec:%ld wall usec:%ld\n", b->wall_t.tv_sec,
+			     b->wall_t.tv_usec);
+	SWITCHPRINTF(output, "used sec:%ld used usec:%ld\n", b->used_t.tv_sec,
+			     b->used_t.tv_usec);
 
-	printf("[print_benchmark] current:%p\n", b);
+	SWITCHPRINTF(output, "previous:%p\n", b->previous);
 
-	/*
-	if(b->next) {
-		printf("[print_benchmark] next:%p\n", b->next);
-	} else {
-		printf("[print_benchmark] next:(nil)\n");
-	}*/
-	printf("[print_benchmark] next:%p\n----\n", b->next);
+	SWITCHPRINTF(output, "current:%p\n", b);
+
+	SWITCHPRINTF(output, "next:%p\n", b->next);
+    SWITCHPRINTF(output, "--end-benchmark--\n");
 }
 
-void print_paramdef_array(struct pmm_paramdef *pd_array, int n)
+void
+print_paramdef_array(const char *output, struct pmm_paramdef *pd_array, int n)
 {
 	int i;
 
+    SWITCHPRINTF(output, "---paramdef-array---\n");
+    SWITCHPRINTF(output, "n: %d\n", n);
 	for(i=0; i<n; i++) {
-		print_paramdef(&(pd_array[i]));
+		print_paramdef(output, &(pd_array[i]));
 	}
 }
 
-void print_paramdef(struct pmm_paramdef *pd)
+void print_paramdef(const char *output, struct pmm_paramdef *pd)
 {
-	printf("[print_paramdef]: name :%s\n", pd->name);
-	printf("[print_paramdef]: type :");
+	SWITCHPRINTF(output, "name :%s\n", pd->name);
+	SWITCHPRINTF(output, "type :");
 
 	if(pd->type == -1) {
         //TODO implement parameter types
 	}
-	printf("\n");
-
-	printf("[print_paramdef]: order: %d\n", pd->order);
-    printf("[print_paramdef]: nonzero_end: %d\n", pd->nonzero_end);
-	printf("[print_paramdef]: end: %d\n", pd->end);
-	printf("[print_paramdef]: start: %d\n", pd->start);
-	printf("[print_paramdef]: stride: %d\n", pd->stride);
-	printf("[print_paramdef]: offset: %d\n", pd->offset);
+	SWITCHPRINTF(output,"order: %d\n", pd->order);
+    SWITCHPRINTF(output, "nonzero_end: %d\n", pd->nonzero_end);
+	SWITCHPRINTF(output, "end: %d\n", pd->end);
+	SWITCHPRINTF(output, "start: %d\n", pd->start);
+	SWITCHPRINTF(output, "stride: %d\n", pd->stride);
+	SWITCHPRINTF(output, "offset: %d\n", pd->offset);
 }
 
-void print_paramdef_set(struct pmm_paramdef_set *pd_set)
+void print_paramdef_set(const char *output, struct pmm_paramdef_set *pd_set)
 {
-    printf("[print_paramdef_set]: n_p:%d\n", pd_set->n_p);
+    SWITCHPRINTF(output, "n_p:%d\n", pd_set->n_p);
     
-	print_paramdef_array(pd_set->pd_array, pd_set->n_p);
+	print_paramdef_array(output, pd_set->pd_array, pd_set->n_p);
 
     if(pd_set->pc_formula != NULL) {
-        printf("[print_paramdef_set]: pc_formula:%s\n", pd_set->pc_formula);
+        SWITCHPRINTF(output, "pc_formula:%s\n", pd_set->pc_formula);
     } else {
-        printf("[print_paramdef_set]: pc_formula:\n");
+        SWITCHPRINTF(output, "pc_formula:\n");
     }
 
-    printf("[print_paramdef_set]: pc_max:%d\n", pd_set->pc_max);
-    printf("[print_paramdef_set]: pc_min:%d\n", pd_set->pc_min);
+    SWITCHPRINTF(output, "pc_max:%d\n", pd_set->pc_max);
+    SWITCHPRINTF(output, "pc_min:%d\n", pd_set->pc_min);
 }
 
 /*
@@ -3539,25 +3533,25 @@ void print_paramdef_set(struct pmm_paramdef_set *pd_set)
  *
  * TODO add printing of model?
  */
-void print_routine(struct pmm_routine *r) {
+void print_routine(const char *output, struct pmm_routine *r) {
 
-	printf("[print_routine]: -- rountine --\n");
-	printf("[print_routine]: name: %s\n", r->name);
-	printf("[print_routine]: exe_path: %s\n", r->exe_path);
+	SWITCHPRINTF(output, "-- rountine --\n");
+	SWITCHPRINTF(output, "name: %s\n", r->name);
+	SWITCHPRINTF(output, "exe_path: %s\n", r->exe_path);
 
     if(r->exe_args != NULL)
-        printf("[print_routine]: exe_args: %s\n", r->exe_args);
+        SWITCHPRINTF(output, "exe_args: %s\n", r->exe_args);
 
-    print_paramdef_set(r->pd_set);
+    print_paramdef_set(output, r->pd_set);
 
-	printf("[print_routine]: condition:%d\n", r->condition);
-	printf("[print_routine]: priority:%d\n", r->priority);
-	printf("[print_routine]: model completion:%d\n", r->model->completion);
+	SWITCHPRINTF(output, "condition:%d\n", r->condition);
+	SWITCHPRINTF(output, "priority:%d\n", r->priority);
+	SWITCHPRINTF(output, "model completion:%d\n", r->model->completion);
 
 
 	//print_model(r->model);
 
-	printf("[print_routine]: -- end routine --\n");
+	SWITCHPRINTF(output, "-- end routine --\n");
 	return;
 }
 
@@ -3705,20 +3699,20 @@ int check_routine(struct pmm_routine *r) {
 	int ret = 1;
 
 	if(r->pd_set->n_p <= 0) {
-		printf("Number of paramaters for routine not set correctly.\n");
-		print_routine(r);
+		ERRPRINTF("Number of paramaters for routine not set correctly.\n");
+		print_routine(PMM_ERR, r);
 		ret = 0;
 	}
 
 	if(r->condition < 0 || r->condition > 4) {
-		printf("Execution Condition for routine not set correctly.\n");
-		print_routine(r);
+		ERRPRINTF("Execution Condition for routine not set correctly.\n");
+		print_routine(PMM_ERR, r);
 		ret = 0;
 	}
 
 	if(r->priority < 0) {
-		printf("Priority for routine not set correctly.\n");
-		print_routine(r);
+		ERRPRINTF("Priority for routine not set correctly.\n");
+		print_routine(PMM_ERR, r);
 		ret = 0;
 	}
 
@@ -3728,30 +3722,30 @@ int check_routine(struct pmm_routine *r) {
 /*
  * simple, prints the elements of the pmm_config structure for debugging
  */
-void print_config(struct pmm_config *cfg) {
+void print_config(const char *output, struct pmm_config *cfg) {
 
 	int i;
 
-	printf("daemon: ");
+	SWITCHPRINTF(output, "daemon: ");
 	if(cfg->daemon) {
-		printf("yes\n");
+		SWITCHPRINTF(output, "yes\n");
 	} else {
-		printf("no\n");
+		SWITCHPRINTF(output, "no\n");
 	}
 
-    printf("main sleep period: %ds %lds\n",
+    SWITCHPRINTF(output, "main sleep period: %ds %lds\n",
                              (int) cfg->ts_main_sleep_period.tv_sec,
                                    cfg->ts_main_sleep_period.tv_nsec);
-	printf("log file: %s\n", cfg->logfile);
-	printf("config file: %s\n", cfg->configfile);
-	printf("load path: %s\n", cfg->loadhistory->load_path);
-	printf("routine array size: %d\n", cfg->allocated);
-	printf("routine array used: %d\n", cfg->used);
+	SWITCHPRINTF(output, "log file: %s\n", cfg->logfile);
+	SWITCHPRINTF(output, "config file: %s\n", cfg->configfile);
+	SWITCHPRINTF(output, "load path: %s\n", cfg->loadhistory->load_path);
+	SWITCHPRINTF(output, "routine array size: %d\n", cfg->allocated);
+	SWITCHPRINTF(output, "routine array used: %d\n", cfg->used);
     
-    printf("pause: %d\n", cfg->pause);
+    SWITCHPRINTF(output, "pause: %d\n", cfg->pause);
 
 	for(i=0; i<cfg->used; i++) {
-		print_routine(cfg->routines[i]);
+		print_routine(output, cfg->routines[i]);
 	}
 
 	return;

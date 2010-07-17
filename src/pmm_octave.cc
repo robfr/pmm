@@ -117,7 +117,7 @@ fill_octave_input_matrices(struct pmm_model *m)
 	if(b != NULL) {
         ERRPRINTF("size mismatch, added %d of max %d benches (last:%p)\n",
                 c, size, b);
-        print_benchmark(b);
+        print_benchmark(PMM_ERR, b);
 		return NULL;
 	}
 
@@ -412,7 +412,7 @@ interpolate_griddatan(struct pmm_model *m, int *p)
 
 		ret_b->flops =  yi(0);
         DBGPRINTF("-------- INTERPOLATED BENCH --------\n");
-        print_benchmark(ret_b);
+        print_benchmark(PMM_DBG, ret_b);
 
 		return ret_b;
 	}

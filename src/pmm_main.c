@@ -364,7 +364,7 @@ int main(int argc, char **argv) {
     }
 
 	// print configuration
-	print_config(cfg);
+	print_config(PMM_LOG, cfg);
 
 
 	// if running as a deamon ...
@@ -487,7 +487,7 @@ int main(int argc, char **argv) {
             else {
                 DBGPRINTF("main loop: routine picked for execution: %s\n",
                         scheduled_r->name);
-                print_routine(scheduled_r);
+                print_routine(PMM_DBG, scheduled_r);
 
 
                 //launch benchmarking thread TODO seperate into function

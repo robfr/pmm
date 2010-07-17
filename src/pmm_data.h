@@ -231,7 +231,7 @@ int
 isempty_interval_list(struct pmm_interval_list *l);
 
 void
-print_interval_list(struct pmm_interval_list *l);
+print_interval_list(const char *output, struct pmm_interval_list *l);
 
 char*
 interval_type_to_string(enum pmm_interval_type type);
@@ -251,7 +251,7 @@ remove_top_interval(struct pmm_interval_list *l);
 int
 remove_interval(struct pmm_interval_list *l, struct pmm_interval *i);
 
-void print_interval(struct pmm_interval *i);
+void print_interval(const char *output, struct pmm_interval *i);
 
 /*
 int interval_contains_bench(struct pmm_routine *r, struct pmm_interval *i,
@@ -502,10 +502,10 @@ int bench_cut_greater(struct pmm_loadhistory *h, struct pmm_benchmark *b1,
 int bench_cut_less(struct pmm_loadhistory *h, struct pmm_benchmark *b1,
 		           struct pmm_benchmark *b2);
 
-void print_routine(struct pmm_routine *r);
-void print_model(struct pmm_model *m);
-void print_bench_list(struct pmm_bench_list *bl);
-void print_benchmark(struct pmm_benchmark *b);
+void print_routine(const char *output, struct pmm_routine *r);
+void print_model(const char *output, struct pmm_model *m);
+void print_bench_list(const char *output, struct pmm_bench_list *bl);
+void print_benchmark(const char *output, struct pmm_benchmark *b);
 int set_str(char **dst, char *src);
 
 time_t parseISO8601Date(char *date);
@@ -513,13 +513,13 @@ time_t parseISO8601Date(char *date);
 int check_routine(struct pmm_routine *r);
 int check_loadhistory(struct pmm_loadhistory *h);
 
-void print_params(int *p, int n);
-void print_paramdef_set(struct pmm_paramdef_set *pd_set);
-void print_paramdef_array(struct pmm_paramdef *pd_array, int n);
-void print_paramdef(struct pmm_paramdef *pd);
-void print_config(struct pmm_config *cfg);
-void print_loadhistory(struct pmm_loadhistory *h);
-void print_load(struct pmm_load *l);
+void print_params(const char *output, int *p, int n);
+void print_paramdef_set(const char *output, struct pmm_paramdef_set *pd_set);
+void print_paramdef_array(const char *output, struct pmm_paramdef *pd_array, int n);
+void print_paramdef(const char *output, struct pmm_paramdef *pd);
+void print_config(const char *output, struct pmm_config *cfg);
+void print_loadhistory(const char *output, struct pmm_loadhistory *h);
+void print_load(const char *output, struct pmm_load *l);
 
 void free_model(struct pmm_model **m);
 void free_interval_list(struct pmm_interval_list **il);

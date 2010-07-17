@@ -215,7 +215,7 @@ multi_naive_select_new_bench(struct pmm_routine *r)
     }
 
     DBGPRINTF("Choosing benchmark based on following interval:\n");
-    print_interval(top_i);
+    print_interval(PMM_DBG, top_i);
 
     switch(top_i->type) {
         case IT_POINT :
@@ -263,7 +263,7 @@ multi_naive_insert_bench(struct pmm_routine *r, struct pmm_benchmark *b)
     ret = 0;
 
     //DBGPRINTF("benchmark params:\n");
-    //print_params(b->p, b->n_p);
+    //print_params(PMM_DBG, b->p, b->n_p);
 
     if(insert_bench(r->model, b) < 0) {
         ERRPRINTF("Error inserting benchmark.\n");
@@ -361,9 +361,9 @@ naive_process_interval_list(struct pmm_routine *r, struct pmm_benchmark *b)
     //if the benchmark parameters do not match ...
     if(params_cmp(b->p, aligned_params, b->n_p) != 0) {
         LOGPRINTF("unexpected benchmark ... expected:\n");
-        print_params(interval->start, interval->n_p);
+        print_params(PMM_LOG, interval->start, interval->n_p);
         LOGPRINTF("got:\n");
-        print_params(b->p, b->n_p);
+        print_params(PMM_LOG, b->p, b->n_p);
 
         return 0; //no error
     }
@@ -439,7 +439,7 @@ naive_process_interval_list(struct pmm_routine *r, struct pmm_benchmark *b)
         }
         else {
             ERRPRINTF("Expected empty construction interval list but found:\n");
-            print_interval_list(m->interval_list);
+            print_interval_list(PMM_ERR, m->interval_list);
             return -1;
         }
     }
@@ -480,7 +480,7 @@ naive_step_interval(struct pmm_routine *r, struct pmm_interval *interval)
             // increment the parameter as tested and finish
             interval->start[i] += direction*r->pd_set->pd_array[i].stride;
 
-            print_params(interval->start, r->pd_set->n_p);
+            print_params(PMM_DBG, interval->start, r->pd_set->n_p);
 
             break; // we are done
         }
@@ -640,7 +640,7 @@ multi_gbbp_naive_select_new_bench(struct pmm_routine *r)
     }
 
     DBGPRINTF("Choosing benchmark based on following interval:\n");
-    print_interval(top_i);
+    print_interval(PMM_DBG, top_i);
 
     switch(top_i->type) {
         case IT_GBBP_EMPTY :
@@ -665,7 +665,7 @@ multi_gbbp_naive_select_new_bench(struct pmm_routine *r)
         default :
             ERRPRINTF("Invalid interval type: %s (%d)\n",
                        interval_type_to_string(top_i->type), top_i->type);
-            print_interval(top_i);
+            print_interval(PMM_ERR, top_i);
 
             free(params);
             params = NULL;
@@ -779,14 +779,14 @@ init_gbbp_naive_intervals(struct pmm_routine *r)
             if(proj_i->start[j] != proj_i->end[j] &&
                     is_interval_divisible(proj_i, r) == 1)
             {
-                LOGPRINTF("adding interval:\n");
-                print_interval(proj_i);
+                DBGPRINTF("adding interval:\n");
+                print_interval(PMM_DBG, proj_i);
                 add_bottom_interval(i_list, proj_i);
 
             }
             else {
-                LOGPRINTF("Interval not divisible, not adding.\n");
-                print_interval(proj_i);
+                DBGPRINTF("Interval not divisible, not adding.\n");
+                print_interval(PMM_DBG, proj_i);
                 free_interval(&proj_i);
             }
 
@@ -805,7 +805,7 @@ init_gbbp_naive_intervals(struct pmm_routine *r)
                 }
 
                 DBGPRINTF("Adding non zero end interval naive projection\n");
-                print_interval(point_i);
+                print_interval(PMM_DBG, point_i);
 
                 add_top_interval(i_list, point_i);
 
@@ -908,7 +908,7 @@ multi_gbbp_diagonal_select_new_bench(struct pmm_routine *r)
     }
 
     DBGPRINTF("Choosing benchmark based on following interval:\n");
-    print_interval(top_i);
+    print_interval(PMM_DBG, top_i);
 
     switch(top_i->type) {
         case IT_GBBP_EMPTY :
@@ -961,7 +961,8 @@ multi_gbbp_diagonal_select_new_bench(struct pmm_routine *r)
                 // must check to see if interval list is empty now, if
                 // completion is not tagged here then construction will restart
                 if(isempty_interval_list(m->interval_list)) {
-                    DBGPRINTF("interval list now empty.\n");
+                    LOGPRINTF("Multidensional Diagonal GBBP Construction "
+                               "complete.\n");
 
                     new_i = new_interval();
                     new_i->type = IT_COMPLETE;
@@ -986,7 +987,7 @@ multi_gbbp_diagonal_select_new_bench(struct pmm_routine *r)
         default :
             ERRPRINTF("Invalid interval type: %s (%d)\n",
                        interval_type_to_string(top_i->type), top_i->type);
-            print_interval(top_i);
+            print_interval(PMM_ERR, top_i);
 
             free(params);
             params = NULL;
@@ -1078,8 +1079,8 @@ init_gbbp_diagonal_interval(struct pmm_routine *r)
         add_top_interval(m->interval_list, diag_i);
     }
     else {
-        LOGPRINTF("Interval not divisible, not adding.\n");
-        print_interval(diag_i);
+        DBGPRINTF("Interval not divisible, not adding.\n");
+        print_interval(PMM_DBG, diag_i);
         free_interval(&diag_i);
     }
 
@@ -1165,7 +1166,7 @@ init_gbbp_diagonal_interval(struct pmm_routine *r)
     }
 
     DBGPRINTF("New Intervals initialized:\n");
-    print_interval_list(i_list);
+    print_interval_list(PMM_DBG, i_list);
 
     return 0; //success
 }
@@ -1570,12 +1571,12 @@ project_diagonal_intervals(struct pmm_model *m)
 
             if(is_interval_divisible(new_i, r) == 1) {
                 DBGPRINTF("Adding diagonal projection interval.\n");
-                print_interval(new_i);
+                print_interval(PMM_DBG, new_i);
                 add_top_interval(m->interval_list, new_i);
             }
             else {
-                LOGPRINTF("Interval not divisible, not adding.\n");
-                print_interval(new_i);
+                DBGPRINTF("Interval not divisible, not adding.\n");
+                print_interval(PMM_DBG, new_i);
                 free_interval(&new_i);
             }
 
@@ -1592,7 +1593,7 @@ project_diagonal_intervals(struct pmm_model *m)
                 DBGPRINTF("Adding nonzero end interval in diagonal "
                           "projection\n");
 
-                print_interval(new_i);
+                print_interval(PMM_DBG, new_i);
 
                 add_top_interval(m->interval_list, new_i);
 
@@ -1648,7 +1649,7 @@ project_diagonal_intervals(struct pmm_model *m)
                                     //its next/prev pointers are modified
 
         DBGPRINTF("Inserting zero benchmark from saved list:\n");
-        print_benchmark(zero_b);
+        print_benchmark(PMM_DBG, zero_b);
         if(insert_bench(m, zero_b) < 0) {
             ERRPRINTF("Error inserting a zero benchmark.\n");
 
@@ -1782,7 +1783,7 @@ multi_gbbp_select_new_bench(struct pmm_routine *r)
     }
 
     DBGPRINTF("Choosing benchmark based on following interval:\n");
-    print_interval(top_i);
+    print_interval(PMM_DBG, top_i);
 
     switch(top_i->type) {
         case IT_GBBP_EMPTY :
@@ -1828,7 +1829,7 @@ multi_gbbp_select_new_bench(struct pmm_routine *r)
                 // must check to see if interval list is empty now, if
                 // completion is not tagged here then construction will restart
                 if(isempty_interval_list(m->interval_list)) {
-                    DBGPRINTF("interval list now empty.\n");
+                    LOGPRINTF("GBBP Construction complete.\n");
 
                     new_i = new_interval();
                     new_i->type = IT_COMPLETE;
@@ -1853,7 +1854,7 @@ multi_gbbp_select_new_bench(struct pmm_routine *r)
         default :
             ERRPRINTF("Invalid interval type: %s (%d)\n",
                        interval_type_to_string(top_i->type), top_i->type);
-            print_interval(top_i);
+            print_interval(PMM_ERR, top_i);
 
             free(params);
             params = NULL;
@@ -1923,8 +1924,8 @@ init_gbbp_boundary_intervals(struct pmm_routine *r)
                 add_top_interval(m->interval_list, new_i);
             }
             else {
-                LOGPRINTF("Interval not divisible, not adding.\n");
-                print_interval(new_i);
+                DBGPRINTF("Interval not divisible, not adding.\n");
+                print_interval(PMM_DBG, new_i);
                 free_interval(&new_i);
             }
 
@@ -1974,8 +1975,8 @@ init_gbbp_boundary_intervals(struct pmm_routine *r)
                 add_top_interval(m->interval_list, new_i);
             }
             else {
-                LOGPRINTF("Interval not divisible, not adding.\n");
-                print_interval(new_i);
+                DBGPRINTF("Interval not divisible, not adding.\n");
+                print_interval(PMM_DBG, new_i);
                 free_interval(&new_i);
             }
 
@@ -2058,8 +2059,8 @@ void recurse_mesh(struct pmm_model *m, int *p, int plane, int n_p)
                 add_top_interval(m->interval_list, interval);
 
                 printf("plane: %d n_p:%d\n", plane, n_p);
-                print_params(interval->start, n_p);
-                print_params(b->p, n_p);
+                print_params(PMM_DBG, interval->start, n_p);
+                print_params(PMM_DBG, b->p, n_p);
             }
 
             b = get_previous_different_bench(b);
@@ -2100,7 +2101,7 @@ multi_gbbp_insert_bench(struct pmm_loadhistory *h, struct pmm_routine *r,
     ret = 0;
 
     DBGPRINTF("benchmark params:\n");
-    print_params(b->p, b->n_p);
+    print_params(PMM_DBG, b->p, b->n_p);
 
     if(insert_bench(r->model, b) < 0) {
         ERRPRINTF("Error inserting benchmark.\n");
@@ -2178,8 +2179,8 @@ process_interval_list(struct pmm_routine *r, struct pmm_benchmark *b,
         if(ret == 0 && params_cmp(b->p, temp_params, b->n_p) == 0) {
 
             DBGPRINTF("Interval found:\n");
-            print_interval(i);
-            print_params(temp_params, r->pd_set->n_p);
+            print_interval(PMM_DBG, i);
+            print_params(PMM_DBG, temp_params, r->pd_set->n_p);
 
             done = process_interval(r, i, b, h);
             if(done < 0) {
@@ -2348,7 +2349,7 @@ process_it_gbbp_climb(struct pmm_routine *r, struct pmm_interval *i,
 
         //check interval is divisible and remove if not
         if(is_interval_divisible(i, r) != 1) {
-            LOGPRINTF("Interval not divisible, removing.\n");
+            DBGPRINTF("Interval not divisible, removing.\n");
             remove_interval(m->interval_list, i);
         }
 
@@ -2405,11 +2406,11 @@ process_it_gbbp_climb(struct pmm_routine *r, struct pmm_interval *i,
         }
 
         DBGPRINTF("b_left_0:\n");
-        print_benchmark(b_left_0);
+        print_benchmark(PMM_DBG, b_left_0);
         DBGPRINTF("b_left_1\n");
-        print_benchmark(b_left_1);
+        print_benchmark(PMM_DBG, b_left_1);
         DBGPRINTF("b_left_2:\n");
-        print_benchmark(b_left_2);
+        print_benchmark(PMM_DBG, b_left_2);
 
 
         // if the 3 previous benchmarks along the climb interval
@@ -2434,7 +2435,7 @@ process_it_gbbp_climb(struct pmm_routine *r, struct pmm_interval *i,
                       b_left_2->flops, b_left_2->p[i->plane]);
 
             DBGPRINTF("this bench:\n");
-            print_benchmark(b_avg);
+            print_benchmark(PMM_DBG, b_avg);
 
             // setup new interval, add and remove old
             new_i = init_interval(i->plane, i->n_p, IT_GBBP_BISECT,
@@ -2448,8 +2449,8 @@ process_it_gbbp_climb(struct pmm_routine *r, struct pmm_interval *i,
                 add_top_interval(m->interval_list, new_i);
             }
             else {
-                LOGPRINTF("Interval not divisible, not adding.\n");
-                print_interval(i);
+                DBGPRINTF("Interval not divisible, not adding.\n");
+                print_interval(PMM_DBG, i);
                 free_interval(&new_i);
             }
 
@@ -2466,13 +2467,13 @@ process_it_gbbp_climb(struct pmm_routine *r, struct pmm_interval *i,
                     b_left_1->flops, b_left_1->p[i->plane],
                     b_left_2->flops, b_left_2->p[i->plane]);
             DBGPRINTF("this bench:\n");
-            print_benchmark(b_avg);
+            print_benchmark(PMM_DBG, b_avg);
 
             i->climb_step = i->climb_step+1;
 
             //check interval is divisible and remove if not
             if(is_interval_divisible(i, r) != 1) {
-                LOGPRINTF("Interval not divisible, removing.\n");
+                DBGPRINTF("Interval not divisible, removing.\n");
                 remove_interval(m->interval_list, i);
             }
         }
@@ -2673,7 +2674,7 @@ set_params_step_between_params(int *params, int *start, int *end,
     align_params(params, pd_set);
 
     DBGPRINTF("aligned params:\n");
-    print_params(params, pd_set->n_p);
+    print_params(PMM_DBG, params, pd_set->n_p);
 
     free(direction);
     direction = NULL;
@@ -2782,9 +2783,9 @@ process_gbbp_bisect(struct pmm_routine *r, struct pmm_interval *i,
         // not replace it with anything
 
         DBGPRINTF("finished building from:\n");
-        print_params(i->start, i->n_p);
+        print_params(PMM_DBG, i->start, i->n_p);
         DBGPRINTF("to:\n");
-        print_params(i->end, i->n_p);
+        print_params(PMM_DBG, i->end, i->n_p);
 
         remove_interval(m->interval_list, i);
     }
@@ -2807,15 +2808,15 @@ process_gbbp_bisect(struct pmm_routine *r, struct pmm_interval *i,
             add_top_interval(m->interval_list, new_i);
         }
         else {
-            LOGPRINTF("Interval not divisible, not adding.\n");
-            print_interval(new_i);
+            DBGPRINTF("Interval not divisible, not adding.\n");
+            print_interval(PMM_DBG, new_i);
             free_interval(&new_i);
         }
 
         DBGPRINTF("finished building from:\n");
-        print_params(i->start, i->n_p);
+        print_params(PMM_DBG, i->start, i->n_p);
         DBGPRINTF("to:\n");
-        print_params(midpoint, i->n_p);
+        print_params(PMM_DBG, midpoint, i->n_p);
 
         remove_interval(m->interval_list, i);
 
@@ -2839,15 +2840,15 @@ process_gbbp_bisect(struct pmm_routine *r, struct pmm_interval *i,
             add_top_interval(m->interval_list, new_i);
         }
         else {
-            LOGPRINTF("Interval not divisible, not adding.\n");
-            print_interval(new_i);
+            DBGPRINTF("Interval not divisible, not adding.\n");
+            print_interval(PMM_DBG, new_i);
             free_interval(&new_i);
         }
 
         DBGPRINTF("finished building from:\n");
-        print_params(midpoint, i->n_p);
+        print_params(PMM_DBG, midpoint, i->n_p);
         DBGPRINTF("to:\n");
-        print_params(i->end, i->n_p);
+        print_params(PMM_DBG, i->end, i->n_p);
 
         remove_interval(m->interval_list, i);
     }
@@ -2884,8 +2885,8 @@ process_gbbp_bisect(struct pmm_routine *r, struct pmm_interval *i,
                 add_top_interval(m->interval_list, new_i);
             }
             else {
-                LOGPRINTF("Interval not divisible, not adding.\n");
-                print_interval(new_i);
+                DBGPRINTF("Interval not divisible, not adding.\n");
+                print_interval(PMM_DBG, new_i);
                 free_interval(&new_i);
             }
 
@@ -2900,8 +2901,8 @@ process_gbbp_bisect(struct pmm_routine *r, struct pmm_interval *i,
                 add_top_interval(m->interval_list, new_i);
             }
             else {
-                LOGPRINTF("Interval not divisible, not adding.\n");
-                print_interval(new_i);
+                DBGPRINTF("Interval not divisible, not adding.\n");
+                print_interval(PMM_DBG, new_i);
                 free_interval(&new_i);
             }
 
@@ -2929,8 +2930,8 @@ process_gbbp_bisect(struct pmm_routine *r, struct pmm_interval *i,
                 add_top_interval(m->interval_list, new_i);
             }
             else {
-                LOGPRINTF("Interval not divisible, not adding.\n");
-                print_interval(new_i);
+                DBGPRINTF("Interval not divisible, not adding.\n");
+                print_interval(PMM_DBG, new_i);
                 free_interval(&new_i);
             }
 
@@ -2945,8 +2946,8 @@ process_gbbp_bisect(struct pmm_routine *r, struct pmm_interval *i,
                 add_top_interval(m->interval_list, new_i);
             }
             else {
-                LOGPRINTF("Interval not divisible, not adding.\n");
-                print_interval(new_i);
+                DBGPRINTF("Interval not divisible, not adding.\n");
+                print_interval(PMM_DBG, new_i);
                 free_interval(&new_i);
             }
 
@@ -3095,8 +3096,8 @@ process_gbbp_inflect(struct pmm_routine *r, struct pmm_interval *i,
                 add_top_interval(m->interval_list, new_i);
             }
             else {
-                LOGPRINTF("Interval not divisible, not adding.\n");
-                print_interval(new_i);
+                DBGPRINTF("Interval not divisible, not adding.\n");
+                print_interval(PMM_DBG, new_i);
                 free_interval(&new_i);
             }
 
@@ -3126,8 +3127,8 @@ process_gbbp_inflect(struct pmm_routine *r, struct pmm_interval *i,
                 add_top_interval(m->interval_list, new_i);
             }
             else {
-                LOGPRINTF("Interval not divisible, not adding.\n");
-                print_interval(new_i);
+                DBGPRINTF("Interval not divisible, not adding.\n");
+                print_interval(PMM_DBG, new_i);
                 free_interval(&new_i);
             }
 
@@ -3158,8 +3159,8 @@ process_gbbp_inflect(struct pmm_routine *r, struct pmm_interval *i,
                 add_top_interval(m->interval_list, new_i);
             }
             else {
-                LOGPRINTF("Interval not divisible, not adding.\n");
-                print_interval(new_i);
+                DBGPRINTF("Interval not divisible, not adding.\n");
+                print_interval(PMM_DBG, new_i);
                 free_interval(&new_i);
             }
 
@@ -3183,8 +3184,8 @@ process_gbbp_inflect(struct pmm_routine *r, struct pmm_interval *i,
                 add_top_interval(m->interval_list, new_i);
             }
             else {
-                LOGPRINTF("Interval not divisible, not adding.\n");
-                print_interval(new_i);
+                DBGPRINTF("Interval not divisible, not adding.\n");
+                print_interval(PMM_DBG, new_i);
                 free_interval(&new_i);
             }
 
@@ -3409,11 +3410,11 @@ multi_gbbp_bench_from_interval(struct pmm_routine *r,
             align_params(params, r->pd_set);
 
             DBGPRINTF("assigned midpoint of interval from start:\n");
-            print_params(interval->start, interval->n_p);
+            print_params(PMM_DBG, interval->start, interval->n_p);
             DBGPRINTF("to end:\n");
-            print_params(interval->end, interval->n_p);
+            print_params(PMM_DBG, interval->end, interval->n_p);
             DBGPRINTF("at:\n");
-            print_params(params, interval->n_p);
+            print_params(PMM_DBG, params, interval->n_p);
 
             return 0;
 

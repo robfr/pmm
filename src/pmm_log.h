@@ -23,6 +23,22 @@
 
 /* If debugging/output macros are not yet defined, define them now */
 
+
+// SWITCHPRINTF macro takes one of these parameters as an argument to describe
+// where to print a message (log, debug, error). 
+#ifdef HAVE_ISO_VARARGS
+#define PMM_DBG "0"
+#define PMM_LOG "1"
+#define PMM_ERR "2"
+#else
+// If we do not have VARARGS a call to SWITCHPRINTF(PMM_DBG, "asdasd\n") must
+// be macroed to printf("","asdasd") so we define the descriptors in such a way
+#define PMM_DBG ""
+#define PMM_LOG ""
+#define PMM_ERR ""
+#endif
+
+
 #ifndef DBGPRINTF
 #  ifdef ENABLE_DEBUG
 #    ifdef HAVE_ISO_VARARGS
@@ -91,5 +107,22 @@ static void DBGPRINTF(/*@unused@*/ const char *format, ...) {}
 #endif /* LOGPRINTF */
 
 
-
+#ifndef SWITCHPRINTF
+#   ifdef HAVE_ISO_VARARGS
+#       define SWITCHPRINTF(OUTPUT,...) do { \
+            if(strcmp(OUTPUT,PMM_LOG)==0) {\
+                LOGPRINTF(__VA_ARGS__);\
+            } else if(strcmp(OUTPUT, PMM_ERR)==0) {\
+                ERRPRINTF(__VA_ARGS__);\
+            } else if(strcmp(OUTPUT,PMM_DBG)==0) {\
+                DBGPRINTF(__VA_ARGS__);\
+            } else {\
+                LOGPRINTF(__VA_ARGS__);\
+            }\
+        } while (0)
+#   else
+#       define SWITCHPRINTF printf
+#   endif /* HAVE_ISO_VARARGS */
+#endif /* SWITCHPRINTF */
+    
 #endif /*PMM_LOG_H_*/

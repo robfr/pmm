@@ -253,6 +253,8 @@ struct pmm_benchmark* parse_bench_output(char *output, int n_p, int *rargs)
 	b->flops = calculate_flops(b->wall_t, (b->complexity));
 	b->seconds = timeval_to_seconds(b->wall_t);
 
+    LOGPRINTF("flops: %f\n", b->flops);
+
 	return b;
 }
 
@@ -290,7 +292,7 @@ spawn_benchmark_process(struct pmm_routine *r, int *params,
     int fd;
 
     LOGPRINTF("exe_path:%s\n", r->exe_path);
-    print_params(params, r->pd_set->n_p);
+    print_params(PMM_LOG, params, r->pd_set->n_p);
 
     // if we have some static args specified we need to count them and add
     // them to the arg array
@@ -364,13 +366,13 @@ spawn_benchmark_process(struct pmm_routine *r, int *params,
         tmp_args = NULL;
 
         //copy the routine parameters in the array after the static arguments
-        for(j=0; i<arg_n; i++, j++) {
-            arg_strings[i] = malloc((1+snprintf(NULL, 0, "%d", params[j])) *
-                                    sizeof *arg_strings[i]);
+        for(i=0; i<arg_n; i++, j++) {
+            arg_strings[j] = malloc((1+snprintf(NULL, 0, "%d", params[i])) *
+                                    sizeof *arg_strings[j]);
 
-            sprintf(arg_strings[i], "%d", params[j]);
+            sprintf(arg_strings[j], "%d", params[i]);
 
-            DBGPRINTF("arg_strings[%d]:%s\n", i, arg_strings[i]);
+            DBGPRINTF("arg_strings[%d]:%s\n", j, arg_strings[j]);
         }
 
     }

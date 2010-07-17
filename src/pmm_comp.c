@@ -137,7 +137,7 @@ correlate_models(struct pmm_model *approx_model, struct pmm_model *base_model)
 
         if(b_avg == NULL) {
             ERRPRINTF("Error getting average of benchmark:\n");
-            print_benchmark(b);
+            print_benchmark(PMM_ERR, b);
             return -1.0;
         }
 

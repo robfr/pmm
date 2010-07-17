@@ -8,6 +8,7 @@
 
 #include "pmm_data.h"
 #include "pmm_cfgparser.h"
+#include "pmm_log.h"
 
 
 int main(void) {
@@ -30,7 +31,7 @@ int main(void) {
     p[0] = 124;
     p[1] = 244;
 
-    print_config(cfg);
+    print_config(PMM_LOG, cfg);
 
     for(i=0;i<cfg->used; i++) {
         if(cfg->routines[i]->pd_set->n_p == 2) {
@@ -42,14 +43,14 @@ int main(void) {
         return -1;
     }
 
-    print_model(cfg->routines[i]->model);
+    print_model(PMM_LOG, cfg->routines[i]->model);
 
 
     b = lookup_model(cfg->routines[i]->model, p);
 
     printf("Interpolation of %d, %d:\n", p[0], p[1]);
 
-    print_benchmark(b);
+    print_benchmark(PMM_LOG, b);
 
     printf(":-)\n");
 

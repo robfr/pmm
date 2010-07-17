@@ -1643,10 +1643,10 @@ int parse_model(struct pmm_model *m)
                               "those initially used to build model.\n");
 
                     ERRPRINTF("model:\n");
-                    print_paramdef_set(pd_set);
+                    print_paramdef_set(PMM_ERR, pd_set);
 
                     ERRPRINTF("routine:\n");
-                    print_paramdef_set(m->parent_routine->pd_set);
+                    print_paramdef_set(PMM_ERR, m->parent_routine->pd_set);
 
                     free_paramdef_set(&pd_set);
 
@@ -1796,7 +1796,7 @@ int write_interval_xtwp(xmlTextWriterPtr writer, struct pmm_interval *i)
         default:
             ERRPRINTF("Invalid interval type: %s (%d)\n",
                       interval_type_to_string(i->type), i->type);
-            print_interval(i);
+            print_interval(PMM_ERR, i);
             return -1; // fail
     }
 
@@ -1898,7 +1898,7 @@ int write_interval_xtwp(xmlTextWriterPtr writer, struct pmm_interval *i)
         default :
             ERRPRINTF("Invalid interval type: %s (%d)\n",
                       interval_type_to_string(i->type), i->type);
-            print_interval(i);
+            print_interval(PMM_ERR, i);
             return -1; //failure
     }
 
@@ -2588,7 +2588,7 @@ int write_model_xtwp(xmlTextWriterPtr writer, struct pmm_model *m)
 		rc = write_interval_xtwp(writer, i);
         if (rc < 0) {
             ERRPRINTF("Error writing interval.\n");
-            print_interval(i);
+            print_interval(PMM_ERR, i);
             return rc;
         }
 

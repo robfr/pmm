@@ -510,7 +510,7 @@ plot_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
 
             if(b_plot == NULL) {
                 ERRPRINTF("Error getting average of benchmark:\n");
-                print_benchmark(b);
+                print_benchmark(PMM_ERR, b);
                 exit(EXIT_FAILURE);
             }
         }
@@ -520,7 +520,7 @@ plot_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
 
             if(b_plot == NULL) {
                 ERRPRINTF("Error getting max of benchmark:\n");
-                print_benchmark(b);
+                print_benchmark(PMM_ERR, b);
                 exit(EXIT_FAILURE);
             }
         }
@@ -664,7 +664,7 @@ plot_slice_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
 
             if(b_plot == NULL) {
                 ERRPRINTF("Error getting average of benchmark!\n");
-                print_benchmark(b);
+                print_benchmark(PMM_ERR, b);
                 exit(EXIT_FAILURE);
             }
         }
@@ -674,7 +674,7 @@ plot_slice_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
 
             if(b_plot == NULL) {
                 ERRPRINTF("Error getting max of benchmark:\n");
-                print_benchmark(b);
+                print_benchmark(PMM_ERR, b);
                 exit(EXIT_FAILURE);
             }
         }
@@ -834,7 +834,7 @@ splot_slice_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
 
             if(b_plot == NULL) {
                 ERRPRINTF("Error getting average of benchmark!\n");
-                print_benchmark(b);
+                print_benchmark(PMM_ERR, b);
                 exit(EXIT_FAILURE);
             }
         }
@@ -844,7 +844,7 @@ splot_slice_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
 
             if(b_plot == NULL) {
                 ERRPRINTF("Error getting max of benchmark:\n");
-                print_benchmark(b);
+                print_benchmark(PMM_ERR, b);
                 exit(EXIT_FAILURE);
             }
         }
@@ -962,7 +962,7 @@ splot_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
 
             if(b_plot == NULL) {
                 ERRPRINTF("Error getting average of benchmark!\n");
-                print_benchmark(b);
+                print_benchmark(PMM_ERR, b);
                 exit(EXIT_FAILURE);
             }
         }
@@ -972,7 +972,7 @@ splot_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
 
             if(b_plot == NULL) {
                 ERRPRINTF("Error getting max of benchmark:\n");
-                print_benchmark(b);
+                print_benchmark(PMM_ERR, b);
                 exit(EXIT_FAILURE);
             }
         }
@@ -1138,7 +1138,7 @@ draw_plot_intervals(gnuplot_ctrl *plot_handle, struct pmm_model *model)
     interval = model->interval_list->top;
     while(interval != NULL) {
 
-        print_interval(interval);
+        print_interval(PMM_DBG, interval);
         switch(interval->type) {
             case IT_POINT:
 
@@ -1206,7 +1206,7 @@ draw_splot_intervals(gnuplot_ctrl *plot_handle, struct pmm_model *model)
     interval = model->interval_list->top;
     while(interval != NULL) {
 
-        print_interval(interval);
+        print_interval(PMM_DBG, interval);
         switch(interval->type) {
             case IT_POINT:
 
