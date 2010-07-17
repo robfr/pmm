@@ -19,52 +19,65 @@
 */
 #include <stdlib.h>
 #include <stdio.h>
-#include "pmm_util.h"
-//#include <gsl/gsl_matrix.h>
 #include <cblas.h>
 
-#define NARGS 1
+#include "pmm_util.h"
+
+#define NARGS 2
 
 /*
- * this version of the dgemm benchmark is for the multiplciation of two square
- * matrices of the same exact size, i.e. the complexit is in terms of 1
- * parameter
+ * this version of the dgemm benchmark is for the multiplciation of two
+ * matrices simulating a striped decomposition. A is an mxn (rowsxcols) stripe
+ * of some hypothetical nxn matrix, B is a full nxn matric, and the result C is
+ * an mxn stripe of the hypothetical result.
+ *
+ * The first input parameter is the size of the full B matrix, n (of nxn). The
+ * second parameter is the size of the stripe of A/C m (of mxn)
  */
-
 int main(int argc, char **argv) {
 
 
 	/* declare variables */
 	double *a, *b, *c;
-	double arg;
-	size_t n;
-    int i;
-	long long complexity;
-
+	double arg[NARGS];
+	size_t m, n;
+    unsigned int i;
+	long long int complexity;
 
 	/* parse arguments */
 	if(argc != NARGS+1) {
 		return PMM_EXIT_ARGFAIL;
 	}
-	if(sscanf(argv[1], "%lf", &arg) == 0) {
+	if(sscanf(argv[1], "%lf", &(arg[0])) == 0 ||
+       sscanf(argv[2], "%lf", &(arg[1])) == 0) {
 		return PMM_EXIT_ARGPARSEFAIL;
 	}
 
-	n = (size_t)arg;
+	n = (size_t)arg[0];
+	m = (size_t)arg[1];
+
+    if(n<m) {
+        printf("Size of matrix N must be greater/equal to size of stripe.\n");
+        return PMM_EXIT_ARGFAIL;
+    }
 
 	/* calculate complexity */
-	complexity = 2*n*n*(long long)n;
+	complexity = 2*n*m*(long long int)n;
 
 	/* initialise data */
-    a = malloc(n*n * sizeof *a);
+    a = malloc(m*n * sizeof *a);
     b = malloc(n*n * sizeof *b);
-    c = malloc(n*n * sizeof *c);
+    c = malloc(m*n * sizeof *c);
 
-
-    for(i=0; i<n*n; i++) {
-        a[i] = n/2.0;
-        b[i] = n/1.0;
+    // fill the stripes
+    for(i=0; i<m*n; i++) {
+        a[i] = 2.0;
+        b[i] = 1.0;
         c[i] = 0.0;
+    }
+    // fill the rest of b
+    for(;i<m*m; i++) {
+        b[i] = 1.0;
     }
 
 	/* initialise timer */
@@ -74,8 +87,7 @@ int main(int argc, char **argv) {
 	pmm_timer_start();
 
 	/* execute routine */
-	cblas_dgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, n, n, n, 1.0,
-                   a, n, b, n, 0.0, c, n);
+	cblas_dgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, m, n, n, 1.0, a, n, b, n, 0.0, c, n);
 
 	/* stop timer */
 	pmm_timer_stop();
@@ -86,9 +98,12 @@ int main(int argc, char **argv) {
 	/* destroy timer */
 	pmm_timer_destroy();
 
-    free(a);
+	free(a);
+    a = NULL;
     free(b);
+    b = NULL;
     free(c);
+    c = NULL;
 
 	return PMM_EXIT_SUCCESS;
 }

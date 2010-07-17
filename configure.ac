@@ -71,34 +71,6 @@ if test "x$enable_debug" = "xyes"; then
     AC_DEFINE(ENABLE_DEBUG,1,[Enable debug flags and messages])
 fi
 
-
-AC_ARG_ENABLE(benchgotoblas2,
-    [  --enable-benchgotoblas2    build GotoBLAS2 benchmark problems],,
-    enable_benchgotoblas2=no)
-# AM_CONDITIONAL(ENABLE_BENCHGOTOBLAS2, test "x$enable_benchgotoblas2" = xyes)
-if test "x$enable_benchgotoblas2" = "xyes"; then
-
-    AC_CHECK_LIB([goto2],[main],
-    [
-        AC_CHECK_HEADER([cblas.h],
-        [
-            AC_SUBST(GOTOBLAS2_LIBS, "-lgoto2 -lgfortran")
-            GOTOBLAS2_SUBDIR=gotoblas2
-            BENCHGOTOBLAS2=yes
-        ],
-        [
-            AC_MSG_ERROR([cblas.h not found.])
-        ])
-    ],
-    [
-        AC_MSG_ERROR([GotoBLAS2 not found])
-    ],
-    $PTHREAD_CFLAGS -lgfortran)
-fi
-AC_SUBST(GOTOBLAS2_SUBDIR)
-AC_SUBST(BENCHGOTOBLAS2)
-
-
 AC_PATH_PROG(GNUPLOT, gnuplot)
 if test "x$GNUPLOT" = "x"; then
     AC_MSG_WARN([gnuplot not found, model viewing tool will not be built])
@@ -316,7 +288,119 @@ AC_SUBST(MUPARSER_CPPFLAGS)
 AC_SUBST(MUPARSER_LDFLAGS)
 AC_SUBST(HAVE_MUPARSER)
 
-# test for LAPACK ... not sure about this ... maybe test for 
+# test for GotoBLAS2
+AC_ARG_WITH(gotoblas2,
+    [ --with-gotoblas2[=path] specify use of GotoBLAS2 benchmarks],,
+    with_gotoblas2=check)
+if test "x$with_gotoblas2" != "xno"; then # if gotoblas2 is not disabled
+    if test "x$with_gotoblas2" != "xcheck"; then # if a path has been specified
+        GOTOBLAS2_CPPFLAGS="-I$with_gotoblas2/include"
+        GOTOBLAS2_LDFLAGS="-L$with_gotoblas2/lib";
+    else
+        GOTOBLAS2_CPPFLAGS=""
+        GOTOBLAS2_LDFLAGS=""
+    fi
+
+    OLD_CPPFLAGS="$CPPFLAGS"
+    OLD_LDFLAGS="$LDFLAGS"
+    CPPFLAGS="$GOTOBLAS2_CPPFLAGS $CPPFLAGS"
+    LDFLAGS="$GOTOBLAS2_LDFLAGS $LDFLAGS"
+
+    AC_CHECK_LIB([goto2],[main],
+    [
+        AC_CHECK_HEADER([cblas.h],
+        [
+            GOTOBLAS2_LIBS="-lgoto2 -lgfortran"
+            HAVE_GOTOBLAS2=yes
+        ],
+        [
+            if test "x$with_gotoblas2" != "xcheck"; then
+                AC_MSG_ERROR([GotoBLAS2 not found.])
+            fi
+        ])
+    ],
+    [
+        if test "x$with_gotoblas2" != "xcheck"; then
+            AC_MSG_ERROR([GotoBLAS2 not found.])
+        fi
+    ],
+    [$PTHREAD_CFLAGS -lgfortran])
+
+    CPPFLAGS="$OLD_CPPFLAGS"
+    LDFLAGS="$OLD_LDFLAGS"
+
+fi
+AM_CONDITIONAL([HAVE_GOTOBLAS2], [test x$HAVE_GOTOBLAS2 = xyes])
+AC_SUBST(GOTOBLAS2_LIBS)
+AC_SUBST(GOTOBLAS2_CPPFLAGS)
+AC_SUBST(GOTOBLAS2_LDFLAGS)
+AC_SUBST(HAVE_GOTOBLAS2)
+
+# test for ATLAS 
+AC_ARG_WITH(atlas,
+    [  --with-atlas[=path] specify use of (and optional path to) ATLAS],,
+    with_atlas=check)
+if test "x$with_atlas" != "xno"; then # if atlas is not disabled
+
+    if test "x$with_atlas" != "xcheck"; then # if a path has been specified
+        ATLAS_CPPFLAGS="-I$with_atlas/include"
+        ATLAS_LDFLAGS="-L$with_atlas/lib";
+    else
+        ATLAS_CPPFLAGS=""
+        ATLAS_LDFLAGS=""
+    fi
+
+    OLD_CPPFLAGS="$CPPFLAGS"
+    OLD_LDFLAGS="$LDFLAGS"
+    CPPFLAGS="$ATLAS_CPPFLAGS $CPPFLAGS"
+    LDFLAGS="$ATLAS_LDFLAGS $LDFLAGS"
+
+    ATLAS_LIBS="-lm"
+
+    # first test for atlas
+    AC_CHECK_LIB([atlas],[ATL_xerbla],
+    [
+        ATLAS_LIBS="-latlas $ATLAS_LIBS"
+    ],
+    [
+        if test "x$with_atlas" != "xcheck"; then
+            AC_MSG_ERROR([libatlas not found.])
+        fi
+    ],
+    [$ATLAS_LIBS])
+
+    # then check for ptcblas/cblas
+    AC_CHECK_LIB([ptcblas],[cblas_dgemm],
+    [
+            ATLAS_LIBS="-lptcblas $PTHREAD_CFLAGS $ATLAS_LIBS"
+            HAVE_ATLAS=yes
+    ],
+    [
+        AC_CHECK_LIB([cblas],[cblas_dgemm],
+        [
+            ATLAS_LIBS="-lcblas $ATLAS_LIBS"
+                HAVE_ATLAS=yes
+        ],
+        [
+            if test "x$with_atlas" != "xcheck"; then
+                AC_MSG_ERROR([libptcblas/libcblas not found.])
+            fi
+        ],
+        [$ATLAS_LIBS])
+    ],
+    [$ATLAS_LIBS $PTHREAD_CFLAGS])
+
+    CPPFLAGS="$OLD_CPPFLAGS"
+    LDFLAGS="$OLD_LDFLAGS"
+
+fi
+AM_CONDITIONAL([HAVE_ATLAS], [test x$HAVE_ATLAS = xyes])
+AC_SUBST(ATLAS_LIBS)
+AC_SUBST(ATLAS_CPPFLAGS)
+AC_SUBST(ATLAS_LDFLAGS)
+AC_SUBST(HAVE_ATLAS)
+
+# test for LAPACK ... not sure about this ... maybe test for atlas?
 AC_ARG_WITH(lapack,
     [  --with-lapack[=path] specify use of (and optional path to) LAPACK],,
     with_lapack=check)
@@ -342,7 +426,6 @@ if test "xwith_lapack" != "xno"; then # if lapack is not disabled
             LAPACK_LIBS="-llapack_atlas -lcblas -lm"
             LAPACK_DIR=lapack
             HAVE_LAPACK=yes
-            BENCHLAPACK=yes
         ],
         [
             if test "x$with_lapack" != "xcheck"; then
@@ -368,7 +451,6 @@ AC_SUBST(LAPACK_CPPFLAGS)
 AC_SUBST(LAPACK_LDFLAGS)
 AC_SUBST(LAPACK_SUBDIR)
 AC_SUBST(HAVE_LAPACK)
-AC_SUBST(BENCHLAPACK)
 
 
 
@@ -402,7 +484,6 @@ if test "x$with_gsl" != "xno"; then #if gsl is not disabled
                 GSL_LIBS="-lgsl -lgslcblas -lm"
                 GSL_SUBDIR=gsl
                 HAVE_GSL=yes
-                BENCHGSLBLAS=yes
             ],
             [
                 # if we have explicitly indicated --with-gsl then fail
@@ -437,7 +518,6 @@ AC_SUBST(GSL_CPPFLAGS)
 AC_SUBST(GSL_LDFLAGS)
 AC_SUBST(GSL_SUBDIR)
 AC_SUBST(HAVE_GSL)
-AC_SUBST(BENCHGSLBLAS)
 
 
 # if we have sched_setaffinity we might use it for mutli-thread/multi-core
@@ -523,7 +603,7 @@ AC_CONFIG_FILES([
 	routines/gsl/blas/Makefile
     routines/lapack/Makefile
     routines/lapack/double/Makefile
-	routines/gotoblas2/Makefile
+	routines/cblas/Makefile
     routines/sim/Makefile
     routines/sim/chps/Makefile
     routines/sim/chps/data/Makefile

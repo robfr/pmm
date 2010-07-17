@@ -6,8 +6,9 @@
 
 ENABLE_OCTAVE=@ENABLE_OCTAVE@
 HAVE_MUPARSER=@HAVE_MUPARSER@
-BENCHGSLBLAS=@BENCHGSLBLAS@
-BENCHGOTOBLAS2=@BENCHGOTOBLAS2@
+HAVE_GSL=@HAVE_GSL@
+HAVE_GOTOBLAS2=@HAVE_GOTOBLAS2@
+HAVE_ATLAS=@HAVE_ATLAS@
 
 LOCALSTATEDIR=$1
 PKGLIBDIR=$2
@@ -273,12 +274,12 @@ fi
 	</routine>"
 fi
 
-if [ "$BENCHGOTO2BLAS" = "yes" ]; then
+if [ "$HAVE_GOTOBLAS2" = "yes" ]; then
     echo "
 	<routine>
 		<name>gotoblas2_dgemm</name>
 		<exe_path>$PKGLIBDIR/gotoblas2_dgemm</exe_path>
-		<model_path>$LOCALSTATEDIR/gotoblas2_dgemm_model</model_path>
+		<model_path>$LOCALSTATEDIR/pmm/gotoblas2_dgemm_model</model_path>
 		<parameters>
 			<n_p>1</n_p>
 			<param>
@@ -286,7 +287,7 @@ if [ "$BENCHGOTO2BLAS" = "yes" ]; then
 				<name>n</name>
 				<start>1</start>
 				<end>3000</end>
-                <nonzero_end>true<nonzero_end>
+                <nonzero_end>true</nonzero_end>
 			</param>
 		</parameters>
 		
@@ -294,6 +295,79 @@ if [ "$BENCHGOTO2BLAS" = "yes" ]; then
 		<priority>30</priority>
 		<construction>
 			<method>gbbp</method>
+		</construction>
+	</routine>
+
+	<routine>
+		<name>gotoblas2_dgemm_stripe6000</name>
+		<exe_path>$PKGLIBDIR/gotoblas2_dgemm_stripe</exe_path>
+        <exe_args>6000</exe_args>
+		<model_path>$LOCALSTATEDIR/pmm/gotoblas2_dgemm_stripe6000_model</model_path>
+		<parameters>
+			<n_p>1</n_p>
+			<param>
+				<order>0</order>
+				<name>n</name>
+				<start>1</start>
+				<end>6000</end>
+                <nonzero_end>true</nonzero_end>
+			</param>
+		</parameters>
+		
+		<condition>now</condition>
+		<priority>30</priority>
+		<construction>
+			<method>naive</method>
+            <min_sample_num>5</min_sample_num>
+		</construction>
+	</routine>"
+fi
+
+if [ "$HAVE_ATLAS" = "yes" ]; then
+    echo "
+	<routine>
+		<name>atlas_dgemm</name>
+		<exe_path>$PKGLIBDIR/atlas_dgemm</exe_path>
+		<model_path>$LOCALSTATEDIR/pmm/atlas_dgemm_model</model_path>
+		<parameters>
+			<n_p>1</n_p>
+			<param>
+				<order>0</order>
+				<name>n</name>
+				<start>1</start>
+				<end>3000</end>
+                <nonzero_end>true</nonzero_end>
+			</param>
+		</parameters>
+		
+		<condition>now</condition>
+		<priority>30</priority>
+		<construction>
+			<method>gbbp</method>
+		</construction>
+	</routine>
+
+	<routine>
+		<name>atlas_dgemm_stripe6000</name>
+		<exe_path>$PKGLIBDIR/atlas_dgemm_stripe</exe_path>
+        <exe_args>6000</exe_args>
+		<model_path>$LOCALSTATEDIR/pmm/atlas_dgemm_stripe6000_model</model_path>
+		<parameters>
+			<n_p>1</n_p>
+			<param>
+				<order>0</order>
+				<name>n</name>
+				<start>1</start>
+				<end>6000</end>
+                <nonzero_end>true</nonzero_end>
+			</param>
+		</parameters>
+		
+		<condition>now</condition>
+		<priority>30</priority>
+		<construction>
+			<method>naive</method>
+            <min_sample_num>5</min_sample_num>
 		</construction>
 	</routine>"
 fi

@@ -19,6 +19,6 @@
 #   along with PMM.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-SUBDIRS = example $(GSL_SUBDIR) $(GOTOBLAS2_SUBDIR) $(LAPACK_SUBDIR) sim
+SUBDIRS = example cblas $(GSL_SUBDIR) $(LAPACK_SUBDIR) sim
 
-DIST_SUBDIRS = example gsl gotoblas2 sim lapack
+DIST_SUBDIRS = example gsl sim lapack cblas
