@@ -537,6 +537,10 @@ parse_routine_construction(struct pmm_routine *r, xmlDocPtr doc,
             {
 				r->construction_method = CM_NAIVE;
 			}
+            else if(!xmlStrcmp((const xmlChar *)"naive_bisect", (xmlChar *)key))
+            {
+                r->construction_method = CM_NAIVE_BISECT;
+            }
 			else if(!xmlStrcmp((const xmlChar *) "gbbp", (xmlChar *) key))
             {
 				r->construction_method = CM_GBBP;

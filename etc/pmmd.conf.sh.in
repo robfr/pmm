@@ -318,7 +318,7 @@ if [ "$HAVE_GOTOBLAS2" = "yes" ]; then
 		<condition>now</condition>
 		<priority>30</priority>
 		<construction>
-			<method>naive</method>
+			<method>naive_bisect</method>
             <min_sample_num>5</min_sample_num>
 		</construction>
 	</routine>"
@@ -367,7 +367,7 @@ if [ "$HAVE_ATLAS" = "yes" ]; then
 		<condition>now</condition>
 		<priority>30</priority>
 		<construction>
-			<method>naive</method>
+			<method>naive_bisect</method>
             <min_sample_num>5</min_sample_num>
 		</construction>
 	</routine>"

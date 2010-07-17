@@ -58,6 +58,7 @@ typedef struct pmm_config {
 
 typedef enum pmm_construction_method {
 	CM_NAIVE,
+    CM_NAIVE_BISECT,
     CM_RAND,
 	CM_GBBP,
 	CM_GBBP_NAIVE,

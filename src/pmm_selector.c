@@ -497,6 +497,186 @@ naive_step_interval(struct pmm_routine *r, struct pmm_interval *interval)
     return i;
 }
 
+/*!
+ * Returns a new point to benchmark using the naive bisection in 1 dimension
+ * method. Briefly, this method initialises a bisection construction interval
+ * across the problem space (1-d only). Then recursively bisects this interval
+ * and benchmarks at bisection points, until it is no longer divisible.
+ *
+ * @param   r   pointer to the routine for which we will find a new benchmark
+ *              point
+ *
+ * @return pointer to an array describing the new benchmark point or NULL on
+ * failure
+ */
+int*
+naive_1d_bisect_select_new_bench(struct pmm_routine *r)
+{
+    int *params;
+
+	struct pmm_interval_list *i_list;
+	struct pmm_interval *top_i;
+    struct pmm_model *m;
+
+    m = r->model;
+	i_list = m->interval_list;
+
+
+    if(r->pd_set->n_p != 1) {
+        ERRPRINTF("Error, Naive 1D Bisection method cannot be used to construct"
+                  " for multi-dimensional problem.\n");
+        return NULL;
+    }
+
+
+
+	//if model construction has not started, i_list will be empty
+	if(isempty_interval_list(i_list) == 1) {
+
+        DBGPRINTF("Interval list is empty, initializing new interval list.\n");
+
+        // create a new bisection interval type from start to end
+        // create point intervals a the end points of the the bisection interval
+        if(init_naive_1d_intervals(r) < 0) {
+            ERRPRINTF("Error initialising new construction intervals.\n");
+            return NULL;
+        }
+
+	}
+
+    params = malloc(r->pd_set->n_p * sizeof *params);
+    if(params == NULL) {
+        ERRPRINTF("Error allocating memory.\n");
+        return NULL;
+    }
+
+    if((top_i = read_top_interval(i_list)) == NULL) {
+        ERRPRINTF("Error reading interval from head of list\n");
+
+        free(params);
+        params = NULL;
+
+        return NULL;
+    }
+
+    DBGPRINTF("Choosing benchmark based on following interval:\n");
+    print_interval(PMM_DBG, top_i);
+
+    switch(top_i->type) {
+        case IT_GBBP_BISECT :
+
+            DBGPRINTF("Applying step of GBBP to benchmark selection.\n");
+
+            //apply GBBP to the bisection interval (we will get midpoint)
+            multi_gbbp_bench_from_interval(r, top_i, params);
+            break;
+
+
+        case IT_POINT :
+
+            DBGPRINTF("Benchmarking at point ...\n");
+            //benchmark at this point
+            multi_gbbp_bench_from_interval(r, top_i, params);
+            break;
+
+        default :
+            ERRPRINTF("Invalid interval type: %s (%d)\n",
+                       interval_type_to_string(top_i->type), top_i->type);
+            print_interval(PMM_ERR, top_i);
+
+            free(params);
+            params = NULL;
+
+            break;
+    }
+
+    return params;
+}
+
+
+/*!
+ * Function initialises a construction intervals for 1d naive bisection. A
+ * interval covering the problem space with bisection type is created. Two
+ * further 'point' type intervals are created at the end points of the
+ * bisection interval.
+ *
+ * @return 0 on success or -1 on failure
+ */
+int
+init_naive_1d_intervals(struct pmm_routine *r)
+{
+    struct pmm_model *m;
+    struct pmm_interval_list *i_list;
+    struct pmm_interval *bisect_i, *point_i;
+
+    m = r->model;
+    i_list = m->interval_list;
+
+    // first initialize a bisection interval
+    bisect_i = new_interval();
+    bisect_i->type = IT_GBBP_BISECT;
+
+    bisect_i->n_p = r->pd_set->n_p;
+
+    bisect_i->start = init_param_array_start(r->pd_set);
+    bisect_i->end = init_param_array_end(r->pd_set);
+    if(bisect_i->start == NULL || bisect_i->end == NULL) {
+        ERRPRINTF("Error initializing start/end parameter array.\n");
+
+        free_interval(&bisect_i);
+
+        return -1;
+    }
+
+    // adjust the diagonal for pc_max (but not pc_min)
+    if(r->pd_set->pc_max != -1) {
+        adjust_interval_with_param_constraint_max(bisect_i, r->pd_set);
+    }
+    if(r->pd_set->pc_min != -1) {
+        adjust_interval_with_param_constraint_min(bisect_i, r->pd_set);
+    }
+
+    if(is_interval_divisible(bisect_i, r) == 1) {
+        add_top_interval(m->interval_list, bisect_i);
+    }
+    else {
+        DBGPRINTF("Interval not divisible, not adding.\n");
+        print_interval(PMM_DBG, bisect_i);
+        free_interval(&bisect_i);
+
+        return -1;
+    }
+
+    // add benchmark at end of bisection interval
+    point_i = new_interval();
+    point_i->type = IT_POINT;
+    point_i->n_p = r->pd_set->n_p;
+
+    point_i->start = init_param_array_copy(bisect_i->end, point_i->n_p);
+    if(point_i->start == NULL) {
+        ERRPRINTF("Error initialising parameter array copy.\n");
+        free_interval(&point_i);
+        return -1;
+    }
+    add_top_interval(i_list, point_i);
+
+
+    // add benchmark at start of bisection interval
+    point_i = new_interval();
+    point_i->type = IT_POINT;
+    point_i->n_p = r->pd_set->n_p;
+
+    point_i->start = init_param_array_copy(bisect_i->start, point_i->n_p);
+    if(point_i->start == NULL) {
+        ERRPRINTF("Error initialising parameter array copy.\n");
+        free_interval(&point_i);
+        return -1;
+    }
+    add_top_interval(i_list, point_i);
+
+    return 0; //success
+}
+
 /*
  * multi_random_select - builds a multi-parameter piece-wise performance model
  * using a random selection of benchmark points
@@ -2072,6 +2252,135 @@ void recurse_mesh(struct pmm_model *m, int *p, int plane, int n_p)
 }
 
 /*
+ * @return 0 on success, -1 on failure to process intervals, -2 on failure
+ * to insert benchmark
+ */
+int
+naive_1d_bisect_insert_bench(struct pmm_routine *r, struct pmm_benchmark *b)
+{
+
+    double time_spend;
+    int num_execs;
+    int ret;
+    struct pmm_interval *interval, *new_i;;
+    int *midpoint;
+
+    ret = 0;
+
+    DBGPRINTF("benchmark params:\n");
+    print_params(PMM_DBG, b->p, b->n_p);
+
+    if(insert_bench(r->model, b) < 0) {
+        ERRPRINTF("Error inserting benchmark.\n");
+        ret = -2;
+    }
+
+    //first check time spent benchmarking at this point, if it is less than
+    //the threshold, we won't bother processing the interval list (so that
+    //the benchmark may be executed again, until it exceeds the threshold
+    calc_bench_exec_stats(r->model, b->p, &time_spend, &num_execs);
+
+    DBGPRINTF("total time spent benchmarking point: %f\n", time_spend);
+    DBGPRINTF("total number executions at benchmarking point: %d\n", num_execs);
+
+    if((r->min_sample_time != -1 && time_spend >= (double)r->min_sample_time) ||
+       (r->min_sample_num != -1 && num_execs >= r->min_sample_num) ||
+       (r->min_sample_time == -1 && r->min_sample_num  == -1))
+    {
+
+        DBGPRINTF("benchmarking threshold exceeeded (t:%d, n:%d), processing intervals.\n", r->min_sample_time, r->min_sample_num);
+
+        //find interval
+        if(find_interval_matching_bench(r, b, NULL, &interval) < 0) {
+            ERRPRINTF("Error searching intervals.\n");
+            return -1;
+        }
+
+        if(interval != NULL) {
+            if(interval->type == IT_GBBP_BISECT) {
+
+                // find midpoint
+                midpoint = malloc(interval->n_p * sizeof *midpoint);
+                if(midpoint == NULL) {
+                    ERRPRINTF("Error allocating memory.\n");
+                    return -1;
+                }
+                set_params_interval_midpoint(midpoint, interval);
+
+
+                // create new interval from start to midpoint
+                new_i = init_interval(0, interval->n_p, IT_GBBP_BISECT,
+                                      interval->start, midpoint);
+                if(new_i == NULL) {
+                    ERRPRINTF("Error initialising new interval.\n");
+                    return -1;
+                }
+
+                // don't add it unless it is divisible
+                if(is_interval_divisible(new_i, r) == 1) {
+                    add_bottom_interval(r->model->interval_list, new_i);
+                }
+                else {
+                    DBGPRINTF("Interval not divisible, not adding.\n");
+                    print_interval(PMM_DBG, new_i);
+                    free_interval(&new_i);
+                }
+
+                // create second new interval from midpoint to end
+                new_i = init_interval(0, interval->n_p, IT_GBBP_BISECT,
+                                      midpoint, interval->end);
+                if(new_i == NULL) {
+                    ERRPRINTF("Error initialising new interval.\n");
+                    return -1;
+                }
+
+                // don't add it unless it is divisible
+                if(is_interval_divisible(new_i, r) == 1) {
+                    add_bottom_interval(r->model->interval_list, new_i);
+                }
+                else {
+                    DBGPRINTF("Interval not divisible, not adding.\n");
+                    print_interval(PMM_DBG, new_i);
+                    free_interval(&new_i);
+                }
+
+                // remove the old interval
+                remove_interval(r->model->interval_list, interval);
+
+            }
+            else if(interval->type == IT_POINT) {
+
+                // remove old interval
+                remove_interval(r->model->interval_list, interval);
+
+            }
+            else {
+                ERRPRINTF("Unexpected interval type.\n");
+                return -1;
+            }
+
+            if(isempty_interval_list(r->model->interval_list)) {
+                DBGPRINTF("interval list now empty.\n");
+
+                new_i = new_interval();
+                new_i->type = IT_COMPLETE;
+                add_top_interval(r->model->interval_list, new_i);
+
+                r->model->complete = 1;
+            }
+        }
+
+    } else {
+        DBGPRINTF("benchmarking threshold not exceeded.\n");
+    }
+
+
+	// after intervals have been processed ...
+
+    return ret;
+}
+
+/*
  * multi_gbbp_insert_benchmark - the second half of the gbbp proceedure. After
  * a benchmark has been made it must be added to the model and the state of
  * the building proceedure must be adjusted according to the new shape of
@@ -2136,6 +2445,83 @@ multi_gbbp_insert_bench(struct pmm_loadhistory *h, struct pmm_routine *r,
 	// after intervals have been processed ...
 
     return ret;
+}
+
+/*!
+ * @return 0 on successful search (found or not found), -1 on failure
+ */
+int
+find_interval_matching_bench(struct pmm_routine *r, struct pmm_benchmark *b,
+                             struct pmm_loadhistory *h,
+                             struct pmm_interval **found_i)
+{
+
+    struct pmm_interval *i, *i_prev;
+    int *temp_params;
+    int done = 0, ret;
+
+
+    // set found to NULL incase we don't find anything and in case of error
+    *found_i = NULL;
+
+    i = r->model->interval_list->top;
+
+    temp_params = malloc(r->pd_set->n_p * sizeof *temp_params);
+    if(temp_params == NULL) {
+        ERRPRINTF("Error allocating memory.\n");
+        return -1;
+    }
+
+    // interate over intervals
+    while(i != NULL && !done) {
+
+        i_prev = i->previous; //store this as the interval will be deallocated
+                              //if it is processed by 'process_interval'
+
+
+        // get the appropriate gbbp point from the interval
+        ret = multi_gbbp_bench_from_interval(r, i, temp_params);
+        if(ret < -1) {
+            ERRPRINTF("Error getting benchmark from interval.\n");
+
+            free(temp_params);
+            temp_params = NULL;
+
+            return -1;
+        }
+
+        // if a gbbp benchmark point was set by multi_gbbp_bench ....  then
+        // check that the benchmark b is at the appropriate gbbp point
+        if(ret == 0 && params_cmp(b->p, temp_params, b->n_p) == 0) {
+
+            DBGPRINTF("Interval found:\n");
+            print_interval(PMM_DBG, i);
+            print_params(PMM_DBG, temp_params, r->pd_set->n_p);
+
+            free(temp_params);
+            temp_params = NULL;
+
+            *found_i = i;
+
+            return 0;
+
+        }
+        // benchmark is not at appropriate gbbp point
+        else {
+            // TODO try to reduce construction time by processing benchmarks
+            // TODO that are not lying on appropriate GBBP points somehow.
+        }
+
+        // work backwards from the top/front of the list
+        i = i_prev;
+    }
+
+    // if we got here, no interval was found
+
+    free(temp_params);
+    temp_params = NULL;
+
+    return 0;
 }
 
 /*!

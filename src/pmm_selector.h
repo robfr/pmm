@@ -38,6 +38,13 @@ int* multi_random_select_new_bench(struct pmm_routine *r);
 int rand_between(int min, int max);
 
 int*
+naive_1d_bisect_select_new_bench(struct pmm_routine *r);
+int
+init_naive_1d_intervals(struct pmm_routine *r);
+int
+naive_1d_bisect_insert_bench(struct pmm_routine *r, struct pmm_benchmark *b);
+
+int*
 multi_naive_select_new_bench(struct pmm_routine *r);
 int
 multi_naive_insert_bench(struct pmm_routine *r, struct pmm_benchmark *b);
@@ -79,6 +86,11 @@ int
 init_gbbp_boundary_intervals(struct pmm_routine *r);
 int multi_gbbp_insert_bench(struct pmm_loadhistory *h, struct pmm_routine *r,
                             struct pmm_benchmark *b);
+
+int
+find_interval_matching_bench(struct pmm_routine *r, struct pmm_benchmark *b,
+                             struct pmm_loadhistory *h,
+                             struct pmm_interval **found_i);
 int
 process_interval_list(struct pmm_routine *r, struct pmm_benchmark *b,
                       struct pmm_loadhistory *h);

@@ -638,6 +638,9 @@ void *benchmark(void *scheduled_r) {
 	if(r->construction_method == CM_NAIVE) {
 		rargs = multi_naive_select_new_bench(r);
 	}
+    else if(r->construction_method == CM_NAIVE_BISECT) {
+        rargs = naive_1d_bisect_select_new_bench(r);
+    }
 	else if(r->construction_method == CM_GBBP) {
 	//	rargs = multi_gbbp_select_new_bench(r);
 		rargs = multi_gbbp_diagonal_select_new_bench(r);
@@ -775,6 +778,9 @@ void *benchmark(void *scheduled_r) {
 
         temp_ret = multi_naive_insert_bench(r, bmark);
 
+    }
+    if(r->construction_method == CM_NAIVE_BISECT) {
+        temp_ret = naive_1d_bisect_insert_bench(r, bmark);
     }
     else if(r->construction_method == CM_GBBP ||
             r->construction_method == CM_GBBP_NAIVE) {
