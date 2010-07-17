@@ -23,7 +23,7 @@ echo "<?xml version=\"1.0\"?>
     <model_write_execs_threshold>20</model_write_execs_threshold>
 
 	<load_monitor>
-		<load_path>$LOCALSTATEDIR/loadhistory</load_path>
+		<load_path>$LOCALSTATEDIR/pmm/loadhistory</load_path>
 		<write_period>60</write_period>
 		<history_size>60</history_size>
 	</load_monitor>
@@ -33,7 +33,8 @@ echo "<?xml version=\"1.0\"?>
 	<routine>
 		<name>ben_dgemm_5000_icc_mkl</name>
 		<exe_path>$PKGLIBDIR/dgemm_ben_5000_icc_mkl.pl</exe_path>
-		<model_path>$LOCALSTATEDIR/dgemm_ben_5000_icc_mkl</model_path>
+        <exe_args>-j 100 1000</exe_args>
+		<model_path>$LOCALSTATEDIR/pmm/dgemm_ben_5000_icc_mkl</model_path>
 		<parameters>
 			<n_p>2</n_p>
 			<param>
@@ -71,7 +72,7 @@ fi
 	<routine>
 		<name>dgemm_sim_cpu</name>
 		<exe_path>$PKGLIBDIR/dgemm_sim_cpu.sh</exe_path>
-		<model_path>$LOCALSTATEDIR/dgemm_sim_cpu_model</model_path>
+		<model_path>$LOCALSTATEDIR/pmm/dgemm_sim_cpu_model</model_path>
 		<parameters>
 			<n_p>1</n_p>
 			<param>
@@ -93,7 +94,7 @@ fi
 	<routine>
 		<name>dgemm_sim_gpu</name>
 		<exe_path>$PKGLIBDIR/dgemm_sim_gpu.sh</exe_path>
-		<model_path>$LOCALSTATEDIR/dgemm_sim_gpu_model</model_path>
+		<model_path>$LOCALSTATEDIR/pmm/dgemm_sim_gpu_model</model_path>
 		<parameters>
 			<n_p>1</n_p>
 			<param>
@@ -114,12 +115,12 @@ fi
 	</routine>
     "
 
-if [ "$BENCHGSLBLAS" = "yes" ]; then
+if [ "$HAVE_GSL" = "yes" ]; then
     echo "
 	<routine>
 		<name>dgemm</name>
 		<exe_path>$PKGLIBDIR/dgemm</exe_path>
-		<model_path>$LOCALSTATEDIR/dgemm_model</model_path>
+		<model_path>$LOCALSTATEDIR/pmm/dgemm_model</model_path>
 		<parameters>
 			<n_p>1</n_p>
 			<param>
@@ -143,7 +144,7 @@ if [ "$BENCHGSLBLAS" = "yes" ]; then
 	<routine>
 		<name>dgemm2</name>
 		<exe_path>$PKGLIBDIR/dgemm2</exe_path>
-		<model_path>$LOCALSTATEDIR/dgemm2_model</model_path>
+		<model_path>$LOCALSTATEDIR/pmm/dgemm2_model</model_path>
 		<parameters>
 			<n_p>2</n_p>
 			<param>
@@ -182,7 +183,7 @@ if [ "$BENCHGSLBLAS" = "yes" ]; then
 	<routine>
 		<name>dgemm2_naive</name>
 		<exe_path>$PKGLIBDIR/dgemm2</exe_path>
-		<model_path>$LOCALSTATEDIR/dgemm2_naive_model</model_path>
+		<model_path>$LOCALSTATEDIR/pmm/dgemm2_naive_model</model_path>
 		<parameters>
 			<n_p>2</n_p>
 			<param>
@@ -213,7 +214,7 @@ if [ "$BENCHGSLBLAS" = "yes" ]; then
 	<routine>
 		<name>dgemm3</name>
 		<exe_path>$PKGLIBDIR/dgemm3</exe_path>
-		<model_path>$LOCALSTATEDIR/dgemm3_model</model_path>
+		<model_path>$LOCALSTATEDIR/pmm/dgemm3_model</model_path>
 		<parameters>
 			<n_p>3</n_p>
 			<param>
@@ -255,7 +256,7 @@ fi
 	<routine>
 		<name>dsyrk</name>
 		<exe_path>$PKGLIBDIR/dsyrk</exe_path>
-		<model_path>$LOCALSTATEDIR/dsyrk_model</model_path>
+		<model_path>$LOCALSTATEDIR/pmm/dsyrk_model</model_path>
 		<parameters>
 			<n_p>1</n_p>
 			<param>
