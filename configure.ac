@@ -242,7 +242,9 @@ AC_ARG_WITH(muparser,
     ,with_muparser=check)
 if test "x$with_muparser" != "xno"; then # if muParser is not disabled
 
-    if test "x$with_muparser" != "xcheck"; then # if path for muPaser is spec'd
+    if test "x$with_muparser" != "xcheck" &&
+       test "x$with_muparser" != "xyes";
+    then # if path for muPaser is spec'd
         MUPARSER_CPPFLAGS="-I$with_muparser/include"
         MUPARSER_LDFLAGS="-L$with_muparser/lib"
     else
@@ -293,7 +295,9 @@ AC_ARG_WITH(gotoblas2,
     [ --with-gotoblas2[=path] specify use of GotoBLAS2 benchmarks],,
     with_gotoblas2=check)
 if test "x$with_gotoblas2" != "xno"; then # if gotoblas2 is not disabled
-    if test "x$with_gotoblas2" != "xcheck"; then # if a path has been specified
+    if test "x$with_gotoblas2" != "xcheck" &&
+       test "x$with_gotoblas2" != "xyes";
+    then # if a path has been specified
         GOTOBLAS2_CPPFLAGS="-I$with_gotoblas2/include"
         GOTOBLAS2_LDFLAGS="-L$with_gotoblas2/lib";
     else
@@ -342,7 +346,9 @@ AC_ARG_WITH(atlas,
     with_atlas=check)
 if test "x$with_atlas" != "xno"; then # if atlas is not disabled
 
-    if test "x$with_atlas" != "xcheck"; then # if a path has been specified
+    if test "x$with_atlas" != "xcheck" &&
+       test "x$with_atlas" != "xyes";
+    then # if a path has been specified
         ATLAS_CPPFLAGS="-I$with_atlas/include"
         ATLAS_LDFLAGS="-L$with_atlas/lib";
     else
@@ -406,7 +412,9 @@ AC_ARG_WITH(lapack,
     with_lapack=check)
 if test "x$with_lapack" != "xno"; then # if lapack is not disabled
 
-    if test "x$with_lapack" != "xcheck"; then # if a path has been specified
+    if test "x$with_lapack" != "xcheck" &&
+       test "x$with_lapack" != "xyes";
+    then # if a path has been specified
         LAPACK_CPPFLAGS="-I$with_lapack/include"
         LAPACK_LDFLAGS="-L$with_lapack/lib";
     else
@@ -460,7 +468,9 @@ AC_ARG_WITH(gsl,
     with_gsl=check)
 if test "x$with_gsl" != "xno"; then #if gsl is not disabled 
 
-    if test "x$with_gsl" != "xcheck"; then #if a path for gsl is specified
+    if test "x$with_gsl" != "xcheck" &&
+       test "x$with_gsl" != "xyes";
+    then #if a path for gsl is specified
         GSL_CPPFLAGS="-I$with_gsl/include"
         GSL_LDFLAGS="-L$with_gsl/lib"
     else
