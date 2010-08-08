@@ -240,7 +240,7 @@ AC_SUBST(ENABLE_OCTAVE)
 AC_ARG_WITH(muparser,
     [  --with-muparser[=path]   specify use of (and optional path to) muParser],
     ,with_muparser=check)
-if test "x$with-muparser" != "xno"; then # if muParser is not disabled
+if test "x$with_muparser" != "xno"; then # if muParser is not disabled
 
     if test "x$with_muparser" != "xcheck"; then # if path for muPaser is spec'd
         MUPARSER_CPPFLAGS="-I$with_muparser/include"
@@ -271,7 +271,7 @@ if test "x$with-muparser" != "xno"; then # if muParser is not disabled
                 AC_MSG_ERROR([muParser not found.])
             fi
          ],)
-    ]
+    ],
     [
         # fail if with-muparser was explicity set
         if test "x$with_muparser" != "xcheck"; then
