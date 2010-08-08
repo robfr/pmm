@@ -1521,7 +1521,7 @@ int parse_model(struct pmm_model *m)
     if(m->bench_list != NULL) {
         ERRPRINTF("Error, attempting to parse model file into non empty model:"
                   " %s completion:%d\n", m->model_path, m->completion);
-        return -1;
+        return -2;
     }
 
     //open file descriptor on model file
