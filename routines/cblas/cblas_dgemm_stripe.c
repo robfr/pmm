@@ -76,7 +76,7 @@ int main(int argc, char **argv) {
         c[i] = 0.0;
     }
     // fill the rest of b
-    for(;i<m*m; i++) {
+    for(;i<n*n; i++) {
         b[i] = 1.0;
     }
 
