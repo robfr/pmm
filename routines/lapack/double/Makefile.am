@@ -30,6 +30,6 @@ pkglib_PROGRAMS = dpotrf
 
 dpotrf_SOURCES = dpotrf.c
 
-dpotrf_LDADD = -L$(top_builddir)/src $(LIBS) $(XML_LIBS) $(LAPACK_LIBS)
+dpotrf_LDADD = -L$(top_builddir)/src $(LIBS)
 
 dpotrf_LDFLAGS = -lpmm $(CFLAGS)

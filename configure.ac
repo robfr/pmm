@@ -427,12 +427,16 @@ if test "x$with_lapack" != "xno"; then # if lapack is not disabled
     CPPFLAGS="$LAPACK_CPPFLAGS $CPPFLAGS"
     LDFLAGS="$LAPACK_LDFLAGS $LDFLAGS"
 
+    LAPACK_LIBS="-latlas -lm"
+
     AC_CHECK_LIB([cblas],[cblas_dsyrk],
     [
+
+        LAPACK_LIBS="-lcblas $LAPACK_LIBS"
+
         AC_CHECK_LIB([lapack_atlas],[clapack_dpotrf],
         [
-            LAPACK_LIBS="-llapack_atlas -lcblas -lm"
-            LAPACK_DIR=lapack
+            LAPACK_LIBS="-llapack_atlas $LAPACK_LIBS"
             HAVE_LAPACK=yes
         ],
         [
@@ -440,14 +444,14 @@ if test "x$with_lapack" != "xno"; then # if lapack is not disabled
                 AC_MSG_ERROR([LAPACK not found.])
             fi
         ],
-        [-lblas -lm])
+        [$LAPACK_LIBS])
     ],
     [
         if test "x$with_lapack" != "xcheck"; then
-            AC_MSG_ERROR([libblas not found.])
+            AC_MSG_ERROR([libcblas not found.])
         fi
     ],
-    -lm)
+    [$LAPACK_LIBS])
 
     CPPFLAGS="$OLD_CPPFLAGS"
     LDFLAGS="$OLD_LDFLAGS"
@@ -457,7 +461,6 @@ AM_CONDITIONAL([HAVE_LAPACK], [test x$HAVE_LAPACK = xyes])
 AC_SUBST(LAPACK_LIBS)
 AC_SUBST(LAPACK_CPPFLAGS)
 AC_SUBST(LAPACK_LDFLAGS)
-AC_SUBST(LAPACK_SUBDIR)
 AC_SUBST(HAVE_LAPACK)
 
 
