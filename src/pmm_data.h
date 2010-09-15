@@ -235,6 +235,8 @@ void
 print_interval_list(const char *output, struct pmm_interval_list *l);
 
 char*
+construction_method_to_string(enum pmm_construction_method method);
+char*
 interval_type_to_string(enum pmm_interval_type type);
 
 struct pmm_interval*

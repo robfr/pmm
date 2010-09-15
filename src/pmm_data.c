@@ -3193,6 +3193,27 @@ void print_interval_list(const char *output, struct pmm_interval_list *l)
 	}
 }
 
+char*
+construction_method_to_string(enum pmm_construction_method method)
+{
+    switch (method) {
+        case CM_NAIVE:
+            return "naive";
+        case CM_NAIVE_BISECT:
+            return "naive_bisect";
+        case CM_RAND:
+            return "random";
+        case CM_GBBP:
+            return "gbbp";
+        case CM_GBBP_NAIVE:
+            return "gbbp_naive";
+        case CM_INVALID:
+            return "invalid";
+        default:
+            return "unknown";
+    }
+}
+
 char* interval_type_to_string(enum pmm_interval_type type)
 {
     switch (type) {
@@ -3546,10 +3567,15 @@ void print_routine(const char *output, struct pmm_routine *r) {
 
 	SWITCHPRINTF(output, "condition:%d\n", r->condition);
 	SWITCHPRINTF(output, "priority:%d\n", r->priority);
+    SWITCHPRINTF(output, "executable:%d\n", r->executable);
+
+    SWITCHPRINTF(output, "min_sample_num:%d\n", r->min_sample_num);
+    SWITCHPRINTF(output, "min_sample_time:%d\n", r->min_sample_time);
+    SWITCHPRINTF(output, "construction method: %s\n",
+                 construction_method_to_string(r->construction_method));
+
+	//print_model(output, r->model);
 	SWITCHPRINTF(output, "model completion:%d\n", r->model->completion);
-
-
-	//print_model(r->model);
 
 	SWITCHPRINTF(output, "-- end routine --\n");
 	return;
