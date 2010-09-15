@@ -106,6 +106,12 @@ int main(int argc, char **argv) {
 
     free(A);
 
+    // ensure any part of B that is paged out is now paged back in again
+    for(i=0; i<n*n; i++) {
+        alpha = B[i];
+    }
+
+
 	/* initialise timer */
 	pmm_timer_init(c);
 
