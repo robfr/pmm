@@ -157,6 +157,8 @@ struct pmm_model* new_model()
     m->unwritten_num_execs = 0;
     m->unwritten_time_spend = 0.0;
 
+    m->mtime = 0;
+
 	m->n_p = -1;
 	m->completion = 0;
 	m->complete = 0;
@@ -3415,18 +3417,25 @@ void print_load(const char *output, struct pmm_load *l) {
  * prints the linked list of benchmark points in a pmm_model
  */
 void print_model(const char *output, struct pmm_model *m) {
+    char mtime_str[80];
+    struct tm *ts;
 
 	SWITCHPRINTF(output, "path: %s\n", m->model_path);
 	SWITCHPRINTF(output, "unwritten execs: %d\n", m->unwritten_num_execs);
     SWITCHPRINTF(output, "unwritten time: %f\n", m->unwritten_time_spend);
 
-	SWITCHPRINTF(output, "completion:%d\n", m->completion);
+    ts = localtime(&(m->mtime));
+    strftime(mtime_str, sizeof(mtime_str), "%a %Y-%m-%d %H:%M:%S %Z", ts);
+    SWITCHPRINTF(output, "modified time: %s\n", mtime_str);
 
+    free(ts);
+    ts = NULL;
+
+	SWITCHPRINTF(output, "completion:%d\n", m->completion);
 
 	SWITCHPRINTF(output, "--- bench list ---\n");
 	print_bench_list(output, m->bench_list);
 	SWITCHPRINTF(output, "--- end bench list ---\n");
-
 
 	SWITCHPRINTF(output, "--- interval list ---\n");
 	print_interval_list(output, m->interval_list);

@@ -88,6 +88,11 @@ int draw_splot_intervals(gnuplot_ctrl *plot_handle, struct pmm_model *model);
 
 void empty_model(struct pmm_model *m);
 
+int
+test_model_files_modified(struct pmm_model **m_array, int n);
+int
+test_model_file_modified(struct pmm_model *m);
+
 // TODO remove reference to this global variable in pmm_data.c and put the
 // history maniuplation in a seperate file that can be included only where
 // needed (i.e. not here!)
@@ -393,6 +398,8 @@ int main(int argc, char **argv) {
             }
         }
         else {
+            // this will initialise all mtimes for the models
+            test_model_files_modified(models, options.n_plots);
             for(;;) {
 
                 gnuplot_resetplot(plot_handle);
@@ -409,9 +416,22 @@ int main(int argc, char **argv) {
                     }
                 }
 
-                printf("replotting in %d seconds.\n", options.wait_period);
+                printf("replotting in %d secs (minimum).\n",
+                       options.wait_period);
 
                 sleep(options.wait_period);
+
+                // if the models are not modified, don't bother
+                // reploting, just sleep for the period until they are
+                while((ret = test_model_files_modified(models, options.n_plots)
+                       != 1) ) {
+                    DBGPRINTF("models not updated. Sleeping again ...\n");
+                    sleep(options.wait_period);
+                }
+                if(ret < 0) {
+                    ERRPRINTF("Error testing modification of model files\n");
+                    exit(EXIT_FAILURE);
+                }
 
                 for(i = 0; i < options.n_plots; i++) {
                     empty_model(models[i]);
@@ -445,6 +465,69 @@ int main(int argc, char **argv) {
     exit(EXIT_SUCCESS);
 
 
+}
+
+/*!
+ * Test an array of models to see if their model files have been
+ * modified. Note that we test all models and update the stored mtime
+ * for each.
+ *
+ * @param   m       pointer to array of models
+ * @param   n       number of models in array
+ *
+ * @return 0 if none of the files have been modified, 1 if any of the
+ * model files have been modified, -1 on error.
+ */
+int
+test_model_files_modified(struct pmm_model **m_array, int n)
+{
+    int i;
+    int ret;
+    int is_modified = 0;
+
+    for(i=0; i<n; i++) {
+        ret = test_model_file_modified(m_array[i]);
+        if(ret == 1) {
+            is_modified = 1;
+        }
+        else if(ret < 0) {
+            ERRPRINTF("Error testing the mtime of %d-th model file.\n", i);
+            print_model(PMM_ERR, m_array[i]);
+
+            return -1;
+        }
+    }
+
+    return is_modified;
+}
+
+/*!
+ * Tests if a model file has been modified since the stored mtime
+ *
+ * @param   m   pointer to the model
+ *
+ * @return 0 if not modified, 1 if modified and -1 on error
+ */
+int
+test_model_file_modified(struct pmm_model *m)
+{
+
+    int ret;
+    struct stat file_stats;
+
+    ret = stat(m->model_path, &file_stats);
+    if(ret < 0) {
+        ERRPRINTF("Error stat-ing file: %s\n", m->model_path);
+        return -1;
+    }
+
+    if(m->mtime < file_stats.st_mtime) {
+        m->mtime = file_stats.st_mtime;
+        return 1;
+    }
+    else {
+        return 0;
+    }
 }
 
 void empty_model(struct pmm_model *m)

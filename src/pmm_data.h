@@ -141,6 +141,7 @@ typedef struct pmm_model {
 	char *model_path;
     int unwritten_num_execs;
     double unwritten_time_spend;
+    time_t mtime;
 
 	int n_p; /* number of parameters of the model */
 
