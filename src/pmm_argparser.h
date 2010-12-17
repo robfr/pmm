@@ -53,6 +53,7 @@ typedef struct pmm_view_options {
     int n_plots;
     char *config_file;
     char *plot_output_file;
+    int plot_output_grayscale;
 } PMM_View_Options;
 
 void usage();

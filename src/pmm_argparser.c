@@ -152,6 +152,7 @@ parse_pmm_view_args(struct pmm_view_options *options,
     options->wait_period = 0;
     options->config_file = (void*)NULL;
     options->plot_output_file = (void*)NULL;
+    options->plot_output_grayscale = 0;
     options->plot_average = 0;
     options->plot_intervals = 0;
     options->plot_params_index = -1;
@@ -179,12 +180,13 @@ parse_pmm_view_args(struct pmm_view_options *options,
             {"plot-style", required_argument, 0, 'S'},
             {"wait-period", required_argument, 0, 'w'},
             {"output-file", required_argument, 0, 'o'},
+            {"greyscale", no_argument, 0, 'g'},
 			{0, 0, 0, 0}
 		};
 
 		option_index = 0;
 
-		c = getopt_long(argc, argv, "c:f:hlr:aiImp:Ps:S:w:o:", long_options,
+		c = getopt_long(argc, argv, "c:f:hlr:aiImp:Ps:S:w:o:g", long_options,
                         &option_index);
 
 		// getopt_long returns -1 when arg list is exhausted
@@ -340,6 +342,10 @@ parse_pmm_view_args(struct pmm_view_options *options,
             break;
         case 'o':
             options->plot_output_file = optarg;
+            break;
+            
+        case 'g':
+            options->plot_output_grayscale = 1;
             break;
 
 		case 'h':
