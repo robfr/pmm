@@ -111,6 +111,7 @@ new_routine()
     r->construction_method = CM_INVALID;
     r->min_sample_num = -1;
     r->min_sample_time = -1;
+    r->max_completion = -1;
 
 	r->model = new_model();
 
@@ -162,6 +163,7 @@ struct pmm_model* new_model()
 	m->n_p = -1;
 	m->completion = 0;
 	m->complete = 0;
+    m->unique_benches = 0;
 
 	m->bench_list = (void *)NULL; // init when setting n_p
 
@@ -594,25 +596,42 @@ add_routine(struct pmm_config *c, struct pmm_routine *r) {
 }
 
 
+/*!
+ * Insert benchmark between two benchmarks in a sorted list
+ *
+ * @param   list_start  pointer to a reference for the beginning of the list
+ * @param   list_end    pointer to a reference for the end of the list
+ * @param   b           pointer to the benchmark to insert
+ *
+ * @return 0 on success if benchmark was not unique to the list, 1 on success if
+ * the benchmark was unique to the list, -1 on failure
+ */
 int
 insert_bench_into_sorted_list(struct pmm_benchmark **list_start,
                               struct pmm_benchmark **list_end,
                               struct pmm_benchmark *b)
 {
     int done;
+    int ret;
+    int unique = 0;
     struct pmm_benchmark *this;
 
     done = 0;
     this = *list_start;
 
     while(this != NULL) {
-        if(params_cmp(b->p, this->p, b->n_p) <= 0) {
+        if((ret = params_cmp(b->p, this->p, b->n_p)) <= 0) {
             if(insert_bench_into_sorted_list_before(list_start, list_end, 
                                                     this, b) < 0)
             {
                 ERRPRINTF("Error inserting bench into list.\n");
                 return -1;
             } 
+
+            // if params_cmp did not match the new benchmark, set unique flag
+            if(ret != 0)
+                unique = 1;
+
             done = 1;
             break;
         }
@@ -627,9 +646,12 @@ insert_bench_into_sorted_list(struct pmm_benchmark **list_start,
             ERRPRINTF("Error inserting bench into list.\n");
             return -1;
         }
+
+        // this is a new bench so set unqiue
+        unique = 1;
     }
 
-    return 0;
+    return unique;
 }
 
 /*!
@@ -639,8 +661,10 @@ int
 insert_bench_into_list(struct pmm_bench_list *bl,
                        struct pmm_benchmark *b)
 {
+    int ret;
 
-    if(insert_bench_into_sorted_list(&(bl->first), &(bl->last), b) < 0) {
+    if((ret = insert_bench_into_sorted_list(&(bl->first), &(bl->last), b)) < 0)
+    {
         print_bench_list(PMM_ERR, bl);
         print_benchmark(PMM_ERR, b);
         ERRPRINTF("Error inserting bench into list.\n");
@@ -650,6 +674,7 @@ insert_bench_into_list(struct pmm_bench_list *bl,
 	// in any case, if we reach this point, a benchmark has been inserted
 	bl->size++;
 	bl->parent_model->completion++;
+    bl->parent_model->unique_benches += ret;
 
     return 0;
 
@@ -2256,7 +2281,8 @@ get_first_bench_from_bench_list(struct pmm_bench_list *bl,
  * @pre arrays must be of the same length and not NULL
  *
  */
-int params_cmp(int *p1, int *p2, int n)
+int
+params_cmp(int *p1, int *p2, int n)
 {
 	int i;
 
@@ -3432,6 +3458,7 @@ void print_model(const char *output, struct pmm_model *m) {
     ts = NULL;
 
 	SWITCHPRINTF(output, "completion:%d\n", m->completion);
+    SWITCHPRINTF(output, "uniqe benches:%d\n", m->unique_benches);
 
 	SWITCHPRINTF(output, "--- bench list ---\n");
 	print_bench_list(output, m->bench_list);
@@ -3580,6 +3607,7 @@ void print_routine(const char *output, struct pmm_routine *r) {
 
     SWITCHPRINTF(output, "min_sample_num:%d\n", r->min_sample_num);
     SWITCHPRINTF(output, "min_sample_time:%d\n", r->min_sample_time);
+    SWITCHPRINTF(output, "max_completion:%d\n", r->max_completion);
     SWITCHPRINTF(output, "construction method: %s\n",
                  construction_method_to_string(r->construction_method));
 

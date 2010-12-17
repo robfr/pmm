@@ -147,6 +147,7 @@ typedef struct pmm_model {
 
 	int completion;
 	int complete;
+    int unique_benches;
 
 	struct pmm_bench_list *bench_list; 
 
@@ -216,6 +217,7 @@ typedef struct pmm_routine {
 	enum pmm_construction_method construction_method;
     int min_sample_num;
     int min_sample_time;
+    int max_completion;
 
 	struct pmm_model *model;
 

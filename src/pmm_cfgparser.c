@@ -565,6 +565,9 @@ parse_routine_construction(struct pmm_routine *r, xmlDocPtr doc,
 		if(!xmlStrcmp(cnode->name, (const xmlChar *) "min_sample_time")) {
 			r->min_sample_time = atoi(key);
 		}
+        if(!xmlStrcmp(cnode->name, (const xmlChar *) "max_completion")) {
+            r->max_completion = atoi(key);
+        }
 		else {
 			// probably a text : null tag
 			// TODO suppress these and check everywhere else

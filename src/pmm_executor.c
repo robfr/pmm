@@ -823,6 +823,14 @@ void *benchmark(void *scheduled_r) {
     }
 
 
+    // test if model has a max_completion
+    if(r->max_completion != -1) {
+        // set model complete if completion has exceeded or equaled max
+        if(r->model->unique_benches >= r->max_completion) {
+            r->model->complete = 1;
+        }
+    }
+
     //update number of unwritten benchmarks and the time spent benchmarking
     //since last write
     r->model->unwritten_time_spend += timeval_to_double(&(bmark->wall_t));
