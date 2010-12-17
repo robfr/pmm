@@ -297,6 +297,16 @@ int main(int argc, char **argv) {
                                             "postscript enhanced color font \"Helvetica\" 20");
                         }
                     }
+                    else if( strcmp(ext, ".eps") == 0) {
+                        if(options.plot_output_grayscale == 1) {
+                            gnuplot_setterm(plot_handle,
+                          "postscript eps enhanced monochrome font \"Helvetica\" 20");
+                        }
+                        else {
+                            gnuplot_setterm(plot_handle,
+                                            "postscript enhanced color font \"Helvetica\" 20");
+                        }
+                    }
                     else if(strcmp(ext, ".png") == 0) {
                         gnuplot_setterm(plot_handle, "png size 800,600");
                     }
