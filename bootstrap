@@ -1,8 +1,10 @@
 #!/bin/sh
 
 set -x
+rm -rf config configure
+mkdir config
 aclocal -I m4
-libtoolize --copy
+libtoolize --copy --force
 autoheader
 automake --foreign --add-missing --copy
 autoconf
