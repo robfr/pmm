@@ -65,10 +65,13 @@ AC_ARG_ENABLE(debug,
     enable_debug=no)
 # AM_CONDITIONAL(ENABLE_DEBUG, test "x$enable_debug" = xyes)
 if test "x$enable_debug" = "xyes"; then
-    CFLAGS="-g -O0 -Wall -Wextra"    # reset C[XX]FLAGS to -g -O0 for debugging
-    CXXFLAGS="-g -O0 -Wall -Wextra"
+    CFLAGS="-g -O0 -Wall -Wextra $CFLAGS"    # reset C[XX]FLAGS to -g -O0 for debugging
+    CXXFLAGS="-g -O0 -Wall -Wextra $CXXFLAGS"
     CPPFLAGS="$CPPFLAGS -DDEBUG"
     AC_DEFINE(ENABLE_DEBUG,1,[Enable debug flags and messages])
+else
+    CFLAGS="`tools/gcccpuopt 2>/dev/null` -O2 $CFLAGS"
+    CXXFLAGS="`tools/gcccpuopt 2>/dev/null` -O2 $CXXFLAGS"
 fi
 
 AC_PATH_PROG(GNUPLOT, gnuplot)
