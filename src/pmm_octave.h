@@ -55,10 +55,13 @@ typedef struct pmm_octave_data {
     Matrix tri;
 } PMM_Octave_Data;
 
+#define PMM_ALL 0 
+#define PMM_AVG 1
+#define PMM_MAX 2
 
 void octave_init();
 struct pmm_octave_data*
-fill_octave_input_matrices(struct pmm_model *m);
+fill_octave_input_matrices(struct pmm_model *m, int mode);
 int
 octave_triangulate(struct pmm_octave_data *oct_data);
 double

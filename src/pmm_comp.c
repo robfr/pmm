@@ -120,7 +120,7 @@ correlate_models(struct pmm_model *approx_model, struct pmm_model *base_model)
         return -1.0;
     }
 
-    oct_data = fill_octave_input_matrices(approx_model);
+    oct_data = fill_octave_input_matrices(approx_model, PMM_ALL);
     if(oct_data == NULL) {
         ERRPRINTF("Error preparing octave input data.\n");
         return -1.0;

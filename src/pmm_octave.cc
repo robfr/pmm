@@ -80,13 +80,15 @@ void add_benchmark_to_xy(int pos, int n, struct pmm_benchmark *b, Matrix &x,
 	
 }
 
+
 extern "C"
 struct pmm_octave_data*
-fill_octave_input_matrices(struct pmm_model *m)
+fill_octave_input_matrices(struct pmm_model *m, int mode)
 {
     int size;
     struct pmm_octave_data *oct_data;
     struct pmm_benchmark *b;
+    struct pmm_benchmark *b_add;
 
     oct_data = new PMM_Octave_Data;
     if(oct_data == NULL) {
@@ -94,7 +96,11 @@ fill_octave_input_matrices(struct pmm_model *m)
         return NULL;
     }
 
-    size = count_benchmarks_in_model(m);
+    if(mode == 0) {
+        size = count_benchmarks_in_model(m);
+    } else {
+        size = count_unique_benchmarks_in_sorted_list(m->bench_list->first);
+    }
 
     oct_data->x = Matrix(size, m->n_p);
     oct_data->y = ColumnVector(size);
@@ -108,11 +114,41 @@ fill_octave_input_matrices(struct pmm_model *m)
 	// add points from the bench list
 	b = m->bench_list->first;
 	while(b != NULL && c <= size) {
+        if(mode == PMM_AVG) {
+            b_add = get_avg_bench_from_sorted_bench_list(b, b->p);
+
+            if(b_add == NULL) {
+                ERRPRINTF("Error getting average of benchmark:\n");
+                print_benchmark(PMM_ERR, b);
+                return NULL;
+            }
+        }
+        else if(mode == PMM_MAX) {
+            b_add = find_max_bench_in_sorted_bench_list(b, b->p);
 		
-		add_benchmark_to_xy(c, m->n_p, b, oct_data->x, oct_data->y);
-		
+            if(b_add == NULL) {
+                ERRPRINTF("Error getting max of benchmark:\n");
+                print_benchmark(PMM_ERR, b);
+                return NULL;
+            }
+        }
+        else {
+            b_add = b;
+        }
+
+		add_benchmark_to_xy(c, m->n_p, b_add, oct_data->x, oct_data->y);
 		c++;
-		b = b->next;
+
+        if(mode == PMM_AVG) {
+            free_benchmark(&b_add);
+            b = get_next_different_bench(b);
+        }
+        else if(mode == PMM_MAX) {
+            b = get_next_different_bench(b);
+        }
+        else {
+		    b = b->next;
+        }
 	}
 	if(b != NULL) {
         ERRPRINTF("size mismatch, added %d of max %d benches (last:%p)\n",
@@ -373,7 +409,7 @@ interpolate_griddatan(struct pmm_model *m, int *p)
         octave_init();
     }
 	
-    oct_data = fill_octave_input_matrices(m);
+    oct_data = fill_octave_input_matrices(m, PMM_ALL);
 
 	
 	// create a two row matrix for the lookup point
