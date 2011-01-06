@@ -355,6 +355,13 @@ int main(int argc, char **argv) {
         exit(EXIT_FAILURE);
     }
 
+	// if running as a deamon ...
+	if(cfg->daemon) {
+		LOGPRINTF("running as daemon ...\n");
+		//redirect_output(cfg.logfile);
+		run_as_daemon();
+	}
+
 
 	// load models
 	rc = parse_models(cfg);
@@ -366,13 +373,6 @@ int main(int argc, char **argv) {
 	// print configuration
 	print_config(PMM_LOG, cfg);
 
-
-	// if running as a deamon ...
-	if(cfg->daemon) {
-		LOGPRINTF("running as daemon ...\n");
-		//redirect_output(cfg.logfile);
-		run_as_daemon();
-	}
 
 	// read previous history
 	rc = parse_history(cfg->loadhistory);
