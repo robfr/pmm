@@ -1659,10 +1659,13 @@ int parse_model(struct pmm_model *m)
 
                     return -2; // failure
                 }
+                // finished with the parsed model parameter definitions now
+                free_paramdef_set(&pd_set);
+            }
+            else {
+                m->pd_set = pd_set;
             }
 
-            // finished with the parsed model parameter definitions now
-            free_paramdef_set(&pd_set);
 
         }
 		else if(!xmlStrcmp(cnode->name, (const xmlChar *) "bench_list")) {

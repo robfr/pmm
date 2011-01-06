@@ -134,6 +134,7 @@ void usage_pmm_view()
     printf("  -P         : plot using palette\n");
     printf("  -s slice   : specify a slice of model to plot (see man page)\n");
     printf("  -S style   : specify a gnuplot plot style (see gnuplot help)\n");
+    printf("  -t [n]     : interploate model with n points (default 100)\n");
 	printf("  -w wait    : replot model every 'wait' seconds\n");
     printf("  -o file    : write plot to file (with png or ps extension)\n");
 	printf("\n");
@@ -159,6 +160,7 @@ parse_pmm_view_args(struct pmm_view_options *options,
     options->plot_max = 0;
     options->plot_style = (void*)NULL;
     options->slice_arr_size = -1;
+    options->slice_interpolate = 0;
     options->plot_palette = 0;
     options->n_plots = 0;
 
@@ -178,6 +180,7 @@ parse_pmm_view_args(struct pmm_view_options *options,
             {"palette", no_argument, 0, 'P'},
             {"slice", required_argument, 0, 's'},
             {"plot-style", required_argument, 0, 'S'},
+            {"interpolate", optional_argument, 0, 't'},
             {"wait-period", required_argument, 0, 'w'},
             {"output-file", required_argument, 0, 'o'},
             {"greyscale", no_argument, 0, 'g'},
@@ -186,7 +189,7 @@ parse_pmm_view_args(struct pmm_view_options *options,
 
 		option_index = 0;
 
-		c = getopt_long(argc, argv, "c:f:hlr:aiImp:Ps:S:w:o:g", long_options,
+		c = getopt_long(argc, argv, "c:f:hlr:aiImp:Ps:S:t:w:o:g", long_options,
                         &option_index);
 
 		// getopt_long returns -1 when arg list is exhausted
@@ -296,6 +299,15 @@ parse_pmm_view_args(struct pmm_view_options *options,
             options->plot_style = optarg;
             break;
 
+        case 't':
+            if(optarg == NULL) {
+                options->slice_interpolate = 100;
+            }
+            else {
+                options->slice_interpolate = atoi(optarg);
+            }
+            break;
+
         case 'f':
             // if no action set, set to DISPLAY_FILE
             if(options->action == PMM_VIEW_NULL) {
@@ -317,7 +329,6 @@ parse_pmm_view_args(struct pmm_view_options *options,
                           PMM_MAX_PLOTS);
                 return -1;
             }
-			break;
             break;
 
         case 'w':

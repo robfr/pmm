@@ -56,6 +56,7 @@
 #include <string.h>
 
 #include "pmm_data.h"
+#include "pmm_octave.h"
 #include "pmm_log.h"
 #include "pmm_argparser.h"
 #include "pmm_cfgparser.h"
@@ -69,6 +70,9 @@ plot_slice_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
             struct pmm_view_options *options);
 void splot_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
             struct pmm_view_options *options);
+void
+plot_slice_interp_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
+                        struct pmm_view_options *options);
 
 int
 bench_in_slice(struct pmm_view_options *options, struct pmm_benchmark *b);
@@ -382,10 +386,23 @@ int main(int argc, char **argv) {
                 }
 
                 if(options.slice_arr_size == n_p-1) {
-                    plot_slice_model(plot_handle, models[0], &options);
+                    if(options.slice_interpolate == 0) {
+                        plot_slice_model(plot_handle, models[0], &options);
+                    }
+                    else {
+                        plot_slice_interp_model(plot_handle, models[0],
+                                                &options);
+                    }
                 }
                 else {
-                    splot_slice_model(plot_handle, models[0], &options);
+                    if(options.slice_interpolate == 0) {
+                        ERRPRINTF("Interpolation plot of multidimensional "
+                                  "model is not supported");
+                        exit(EXIT_FAILURE);
+                    }
+                    else {
+                        splot_slice_model(plot_handle, models[0], &options);
+                    }
                 }
             }
             else if(n_p == 1 || (n_p <= 1 && options.plot_params_index == 0))
@@ -682,6 +699,160 @@ plot_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
 }
 
 void
+plot_slice_interp_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
+                        struct pmm_view_options *options)
+{
+    int i, j, c;
+    double *x;
+    double *y;
+    int n;
+	char *plot_title_buf;
+    int ret;
+
+    int pfound;
+    int p0; // the planes that we will plot (should those not speficied in
+            // the slice
+            //
+    int max, min;
+
+
+    struct pmm_benchmark *b, *b_plot;
+
+    struct pmm_octave_data *oct_data;
+    double *approx_speeds;
+    int **base_points;
+    int mode;
+
+
+
+    // find the free parameter of the model (which the plot will be
+    // in terms of)
+    p0=-1;
+    for(i=0; i<model->n_p; i++) {
+        pfound = 0;
+        for(j=0; j<options->slice_arr_size; j++) {
+            if(i==options->slice_i_arr[j]) {
+                pfound = 1;
+                break;
+            }
+        }
+
+        if(pfound == 0) {
+            if(p0 < 0) {
+                p0 = i;
+            }
+            else {
+                ERRPRINTF("Found too many free parameters.\n");
+                exit(EXIT_FAILURE);
+            }
+        }
+    }
+
+    if(p0 < 0) {
+        ERRPRINTF("Not found enough free parameters.\n");
+    }
+
+
+    // set max and min of parameter we will interpolate over
+    min = model->pd_set->pd_array[p0].start;
+    max = model->pd_set->pd_array[p0].end;
+
+    n = options->slice_interpolate;
+
+    mode = PMM_ALL;
+    if(options->plot_average == 1) {
+        mode = PMM_AVG;
+    }
+    else if(options->plot_max == 1) {
+        mode = PMM_MAX;
+    }
+
+    base_points = malloc(n * sizeof *base_points);
+    approx_speeds = malloc(n * sizeof *approx_speeds);
+    x = malloc(n * sizeof *x);
+
+    if(x == NULL || base_points == NULL || approx_speeds == NULL) {
+        ERRPRINTF("Error allocating memory (n:%d).\n", n);
+        exit(EXIT_FAILURE);
+    }
+
+    octave_init();
+
+    // TODO fill with max, avg or all points in model
+    oct_data = fill_octave_input_matrices(model, mode);
+    if(oct_data == NULL) {
+        ERRPRINTF("Error preparing octave input data.\n");
+        exit(EXIT_FAILURE);
+    }
+
+    if(octave_triangulate(oct_data) < 0) {
+        ERRPRINTF("Error calculating triangulation of data.\n");
+        exit(EXIT_FAILURE);
+    }
+
+    // prep the interpolation array
+    for(i=0; i<n; i++) {
+        base_points[i] = malloc(model->n_p * sizeof(int));
+        for(j=0; j<options->slice_arr_size; j++) {
+            base_points[i][options->slice_i_arr[j]] = options->slice_val_arr[j];
+        }
+
+        x[i] = (double)min + (double)i*((max-min)/(double)n);
+        base_points[i][p0] = x[i];
+    }
+
+
+    approx_speeds = octave_interp_array(oct_data, base_points, model->n_p, n);
+
+    if(approx_speeds == NULL) {
+        ERRPRINTF("Error interpolating model.\n");
+        exit(EXIT_FAILURE);
+    }
+
+    y = approx_speeds;
+
+    if(model->parent_routine != NULL) {
+        ret = asprintf(&plot_title_buf, "%s model", model->parent_routine->name);
+        if(ret < 0) {
+            ERRPRINTF("Error setting plot title.\n");
+        }
+    }
+    else {
+        ret = asprintf(&plot_title_buf, "%s", basename(model->model_path));
+        if(ret < 0) {
+            ERRPRINTF("Error setting plot title.\n");
+        }
+    }
+
+    if(options->plot_palette == 1) {
+        gnuplot_cmd(plot_handle, "set palette");
+        gnuplot_setstyle(plot_handle, "points palette");
+    }
+    else if(options->plot_style != NULL) {
+        gnuplot_setstyle(plot_handle, options->plot_style);
+    }
+
+    gnuplot_plot_xy(plot_handle, x, y, n, plot_title_buf);
+
+    free(plot_title_buf);
+    plot_title_buf = NULL;
+
+    free(x);
+    x = NULL;
+
+    free(approx_speeds);
+    y = NULL; approx_speeds = NULL;
+
+    for(i=0; i<n; i++) {
+        free(base_points[i]);
+        base_points[i] = NULL;
+    }
+    free(base_points);
+    base_points = NULL;
+
+}
+
+void
 plot_slice_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
             struct pmm_view_options *options)
 {
@@ -699,6 +870,8 @@ plot_slice_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
     struct pmm_benchmark *b, *b_plot;
 
 
+    // find the free parameter of the model (which the plot will be
+    // in terms of)
     p0=-1;
     for(i=0; i<model->n_p; i++) {
         pfound = 0;
@@ -744,6 +917,7 @@ plot_slice_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
     b = model->bench_list->first;
     while(b != NULL) {
 
+        // if bench b is not in the slice defined by options, get the next b
         while(b != NULL && bench_in_slice(options, b) == 0) {
             if(options->plot_average == 1 ||
                options->plot_max == 1)

@@ -2768,8 +2768,8 @@ interpolate_1d_model(struct pmm_bench_list *bl,
 }
 
 
-#define PMM_MAX(x,y) (x) > (y) ? (x) : (y)
-#define PMM_MIN(x,y) (x) < (y) ? (x) : (y)
+#define MAX_CMP(x,y) (x) > (y) ? (x) : (y)
+#define MIN_CMP(x,y) (x) < (y) ? (x) : (y)
 #define PMM_PERC 0.05 // percentage threshold for GBBP
 
 /*
@@ -2807,8 +2807,8 @@ int bench_cut_contains(struct pmm_loadhistory *h, struct pmm_benchmark *b1,
 
     DBGPRINTF("b1->flops:%f b2->flops:%f\n", b1->flops, b2->flops);
 
-    max = PMM_MAX(b1->flops, b2->flops);
-    min = PMM_MIN(b1->flops, b2->flops);
+    max = MAX_CMP(b1->flops, b2->flops);
+    min = MIN_CMP(b1->flops, b2->flops);
 
     DBGPRINTF("max:%f min:%f\n", max, min);
 
@@ -2870,8 +2870,8 @@ int bench_cut_intersects(struct pmm_loadhistory *h, struct pmm_benchmark *b1,
 
     DBGPRINTF("b1->flops:%f b2->flops:%f\n", b1->flops, b2->flops);
 
-    max = PMM_MAX(b1->flops, b2->flops);
-    min = PMM_MIN(b1->flops, b2->flops);
+    max = MAX_CMP(b1->flops, b2->flops);
+    min = MIN_CMP(b1->flops, b2->flops);
 
     DBGPRINTF("max:%f min:%f\n", max, min);
 
@@ -3889,6 +3889,9 @@ void free_model(struct pmm_model **m) {
 
     if((*m)->interval_list != NULL)
         free_interval_list(&((*m)->interval_list));
+
+    if((*m)->pd_set != NULL)
+        free_paramdef_set(&((*m)->pd_set));
 
 	free((*m)->model_path);
     (*m)->model_path = NULL;

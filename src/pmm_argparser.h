@@ -47,6 +47,7 @@ typedef struct pmm_view_options {
     int *slice_i_arr;
     int *slice_val_arr;
     int slice_arr_size;
+    int slice_interpolate;
 
     char *model_files[PMM_MAX_PLOTS];
     char *routine_names[PMM_MAX_PLOTS];

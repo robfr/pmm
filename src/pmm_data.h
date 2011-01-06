@@ -151,7 +151,11 @@ typedef struct pmm_model {
 
 	struct pmm_bench_list *bench_list; 
 
+    double peak_flops;
+
 	struct pmm_interval_list *interval_list;
+
+    struct pmm_paramdef_set *pd_set;
 
 	struct pmm_routine *parent_routine;
 } PMM_Model;
