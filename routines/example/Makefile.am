@@ -29,7 +29,7 @@ DEPENDS = \
   $(top_builddir)/src/libpmm.la
 
 
-pkglib_PROGRAMS	= example
+pkglibexec_PROGRAMS	= example
 
 example_SOURCES = example.c
 

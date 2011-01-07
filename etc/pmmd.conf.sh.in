@@ -71,7 +71,7 @@ fi
     echo "
 	<routine>
 		<name>dgemm_sim_cpu</name>
-		<exe_path>$PKGLIBDIR/dgemm_sim_cpu.sh</exe_path>
+		<exe_path>$PKGLIBEXECDIR/dgemm_sim_cpu.sh</exe_path>
 		<model_path>$LOCALSTATEDIR/pmm/dgemm_sim_cpu_model</model_path>
 		<parameters>
 			<n_p>1</n_p>
@@ -119,7 +119,7 @@ if [ "$HAVE_GSL" = "yes" ]; then
     echo "
 	<routine>
 		<name>dgemm</name>
-		<exe_path>$PKGLIBDIR/dgemm</exe_path>
+		<exe_path>$PKGLIBEXECDIR/dgemm</exe_path>
 		<model_path>$LOCALSTATEDIR/pmm/dgemm_model</model_path>
 		<parameters>
 			<n_p>1</n_p>
@@ -143,7 +143,7 @@ if [ "$HAVE_GSL" = "yes" ]; then
         echo "
 	<routine>
 		<name>dgemm2</name>
-		<exe_path>$PKGLIBDIR/dgemm2</exe_path>
+		<exe_path>$PKGLIBEXECDIR/dgemm2</exe_path>
 		<model_path>$LOCALSTATEDIR/pmm/dgemm2_model</model_path>
 		<parameters>
 			<n_p>2</n_p>
@@ -182,7 +182,7 @@ if [ "$HAVE_GSL" = "yes" ]; then
 	</routine>
 	<routine>
 		<name>dgemm2_naive</name>
-		<exe_path>$PKGLIBDIR/dgemm2</exe_path>
+		<exe_path>$PKGLIBEXECDIR/dgemm2</exe_path>
 		<model_path>$LOCALSTATEDIR/pmm/dgemm2_naive_model</model_path>
 		<parameters>
 			<n_p>2</n_p>
@@ -213,7 +213,7 @@ if [ "$HAVE_GSL" = "yes" ]; then
 	</routine>
 	<routine>
 		<name>dgemm3</name>
-		<exe_path>$PKGLIBDIR/dgemm3</exe_path>
+		<exe_path>$PKGLIBEXECDIR/dgemm3</exe_path>
 		<model_path>$LOCALSTATEDIR/pmm/dgemm3_model</model_path>
 		<parameters>
 			<n_p>3</n_p>
@@ -255,7 +255,7 @@ fi
     echo "
 	<routine>
 		<name>dsyrk</name>
-		<exe_path>$PKGLIBDIR/dsyrk</exe_path>
+		<exe_path>$PKGLIBEXECDIR/dsyrk</exe_path>
 		<model_path>$LOCALSTATEDIR/pmm/dsyrk_model</model_path>
 		<parameters>
 			<n_p>1</n_p>
@@ -279,7 +279,7 @@ if [ "$HAVE_GOTOBLAS2" = "yes" ]; then
     echo "
 	<routine>
 		<name>gotoblas2_dgemm</name>
-		<exe_path>$PKGLIBDIR/gotoblas2_dgemm</exe_path>
+		<exe_path>$PKGLIBEXECDIR/gotoblas2_dgemm</exe_path>
 		<model_path>$LOCALSTATEDIR/pmm/gotoblas2_dgemm_model</model_path>
 		<parameters>
 			<n_p>1</n_p>
@@ -301,7 +301,7 @@ if [ "$HAVE_GOTOBLAS2" = "yes" ]; then
 
 	<routine>
 		<name>gotoblas2_dgemm_stripe6000</name>
-		<exe_path>$PKGLIBDIR/gotoblas2_dgemm_stripe</exe_path>
+		<exe_path>$PKGLIBEXECDIR/gotoblas2_dgemm_stripe</exe_path>
         <exe_args>6000</exe_args>
 		<model_path>$LOCALSTATEDIR/pmm/gotoblas2_dgemm_stripe6000_model</model_path>
 		<parameters>
@@ -328,7 +328,7 @@ if [ "$HAVE_ATLAS" = "yes" ]; then
     echo "
 	<routine>
 		<name>atlas_dgemm</name>
-		<exe_path>$PKGLIBDIR/atlas_dgemm</exe_path>
+		<exe_path>$PKGLIBEXECDIR/atlas_dgemm</exe_path>
 		<model_path>$LOCALSTATEDIR/pmm/atlas_dgemm_model</model_path>
 		<parameters>
 			<n_p>1</n_p>
@@ -350,7 +350,7 @@ if [ "$HAVE_ATLAS" = "yes" ]; then
 
 	<routine>
 		<name>atlas_dgemm_stripe6000</name>
-		<exe_path>$PKGLIBDIR/atlas_dgemm_stripe</exe_path>
+		<exe_path>$PKGLIBEXECDIR/atlas_dgemm_stripe</exe_path>
         <exe_args>6000</exe_args>
 		<model_path>$LOCALSTATEDIR/pmm/atlas_dgemm_stripe6000_model</model_path>
 		<parameters>

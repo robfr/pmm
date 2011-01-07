@@ -26,7 +26,7 @@ LIBS += $(LAPACK_LIBS) $(XML_LIBS) -lpmm
 LDFLAGS += $(LAPACK_LDFLAGS) -L$(top_builddir)/src
 CPPFLAGS += $(LAPACK_CPPFLAGS)
 
-pkglib_PROGRAMS = dpotrf
+pkglibexec_PROGRAMS = dpotrf
 
 dpotrf_SOURCES = dpotrf.c
 

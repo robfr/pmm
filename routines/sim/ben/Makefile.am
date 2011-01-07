@@ -23,9 +23,9 @@ INCLUDES = -I$(top_builddir)/src
 SUBDIRS = data
 
 
-# workaround to install 'SCRIPT' and 'DATA' types to pkglibdir (which usually
-# only takes PROGRAMS/LIBRARIES/LTLIBRARIES and such ....
-routinedir = $(pkglibdir)
+# workaround to install 'SCRIPT' and 'DATA' types to pkglibexecdir (which usually
+# only takes PROGRAMS and such ....
+routinedir = $(pkglibexecdir)
 
 dist_routine_SCRIPTS = dgemm_ben_5000_icc_mkl.pl
 dist_routine_DATA = hoja_dgemm_5000_icc_mkl.csv

@@ -26,14 +26,14 @@ INCLUDES	= -I$(top_builddir) -I$(top_builddir)/src \
 LIBS += -lpmm
 LDFLAGS += -L$(top_builddir)/src
 
-pkglib_PROGRAMS = 
+pkglibexec_PROGRAMS = 
 
 if HAVE_GOTOBLAS2
-pkglib_PROGRAMS += gotoblas2_dgemm gotoblas2_dgemm_stripe
+pkglibexec_PROGRAMS += gotoblas2_dgemm gotoblas2_dgemm_stripe
 endif
 
 if HAVE_ATLAS
-pkglib_PROGRAMS += atlas_dgemm atlas_dgemm_stripe
+pkglibexec_PROGRAMS += atlas_dgemm atlas_dgemm_stripe
 endif
 
 gotoblas2_dgemm_SOURCES = cblas_dgemm.c
