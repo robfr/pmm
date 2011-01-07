@@ -33,7 +33,7 @@
    #define ATLAS_DIAG CBLAS_DIAG
 #endif
 
-#include <clapack.h>
+#include <atlas/clapack.h>
 
 #define NARGS 1
 
