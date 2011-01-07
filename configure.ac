@@ -221,10 +221,10 @@ if test "x$enable_octave" = "xyes"; then
     LIBS="$OCTAVE_LIBS $LIBS"
     OLD_CXXFLAGS="$CXXFLAGS"
     CXXFLAGS="$OCTAVE_CXXFLAGS $CXXFLAGS"
-    AC_LINK_IFELSE([
+    AC_LINK_IFELSE([AC_LANG_SOURCE([
             #include <octave/oct.h>
             int main(void) { string_vector foo; }
-            ],,AC_MSG_ERROR([Cannot link against liboctave]))
+            ])],,AC_MSG_ERROR([Cannot link against liboctave]))
     AC_MSG_RESULT(yes)
 
     # successfully tested for octave, ...
