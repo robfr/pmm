@@ -89,6 +89,13 @@ if test "x$PERL" = "x"; then
     AC_MSG_ERROR([perl not found])
 fi
 
+AC_CHECK_PROGS([DOXYGEN], [doxygen])
+if test -z "$DOXYGEN"; then
+    AC_MSG_WARN([Doxygen not found]);
+fi
+AM_CONDITIONAL([HAVE_DOXYGEN], [test -n "$DOXYGEN"])
+AM_COND_IF([HAVE_DOXYGEN], [AC_CONFIG_FILES([doc/Doxyfile])])
+
 
 dnl Choose working __FUNCTION__, __func__ or ""
 AC_CACHE_CHECK(if __FUNCTION__ is defined,ac_cv_have_cpp___function__macro,

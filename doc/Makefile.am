@@ -30,6 +30,19 @@ DOCS = manual
 
 manual_LATEX = manual.tex
 
+if HAVE_DOXYGEN
+directory =  $(top_srcdir)/doc
+
+doxyfile.stamp:
+	$(DOXYGEN) Doxyfile
+	echo Timestamp > doxyfile.stamp
+
+CLEANFILES += doxyfile.stamp
+
+endif
+
+all-local: doxyfile.stamp
+
 #all: pdf
 html:
 	latex2html manual.tex
