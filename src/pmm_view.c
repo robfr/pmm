@@ -852,6 +852,14 @@ plot_slice_interp_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
 
 }
 
+
+/*!
+ * plot a 2-d projection of a higher-d model
+ *
+ * @param   plot_handle     pointer to gnuplot control structure
+ * @param   model           pointer to model to plot
+ * @param   options         pointer to options structure
+ */
 void
 plot_slice_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
             struct pmm_view_options *options)
@@ -1019,6 +1027,13 @@ plot_slice_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
     y = NULL;
 }
 
+/*!
+ * plot a 3-d projection of a higher-d model
+ *
+ * @param   plot_handle     pointer to gnuplot control structure
+ * @param   model           pointer to model to plot
+ * @param   options         pointer to options structure
+ */
 void
 splot_slice_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
             struct pmm_view_options *options)
@@ -1197,6 +1212,13 @@ splot_slice_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
     return;
 }
 
+/*!
+ * plot a 3-d model
+ *
+ * @param   plot_handle     pointer to gnuplot control structure
+ * @param   model           pointer to model to plot
+ * @param   options         pointer to options structure
+ */
 void
 splot_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
             struct pmm_view_options *options)
@@ -1210,6 +1232,7 @@ splot_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
 
     struct pmm_benchmark *b, *b_plot;
 
+    // decide how many points will be in plot
     if(options->plot_average == 1 ||
        options->plot_max == 1)
     {
@@ -1219,6 +1242,7 @@ splot_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
         n = model->bench_list->size;
     }
 
+    // allocate
     x = malloc(n * sizeof *x);
     y = malloc(n * sizeof *y);
     z = malloc(n * sizeof *z);
@@ -1227,10 +1251,12 @@ splot_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
         exit(EXIT_FAILURE);
     }
 
+    // read model into x,y,z
     c=0;
     b = model->bench_list->first;
     while(b != NULL) {
 
+        // do we plot an average/max/raw benchmark
         if(options->plot_average == 1) {
             b_plot = get_avg_bench_from_sorted_bench_list(b, b->p);
 
@@ -1286,8 +1312,10 @@ splot_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
 
     //gnuplot_cmd(plot_handle, "set multiplot");
 
+    // call the gnuplot plotting function
     gnuplot_splot(plot_handle, x, y, z, n, plot_title_buf);
 
+    // intervals are not part of the plot but overlayed so must be done after
     if(options->plot_intervals == 1) {
 
         draw_splot_intervals(plot_handle, model); 
@@ -1306,6 +1334,15 @@ splot_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
     z = NULL;
 }
 
+/*!
+ * set labels, ranges and title for a 2-d plot
+ *
+ * @param   plot_handle     pointer to gnuplot structure
+ * @param   pmm_model       pointer to model that is being plot
+ * @param   plot_title_buf  pointer to character buffer that will contain title
+ *
+ * @return TODO fails with error but no return
+ */
 void
 set_plot_labels_ranges(gnuplot_ctrl *plot_handle, struct pmm_model *model,
                        char **plot_title_buf)
@@ -1340,6 +1377,15 @@ set_plot_labels_ranges(gnuplot_ctrl *plot_handle, struct pmm_model *model,
     gnuplot_set_ylabel(plot_handle, "flops");
 }
 
+/*!
+ * set labels, ranges and title for a 3-d plot
+ *
+ * @param   plot_handle     pointer to gnuplot structure
+ * @param   pmm_model       pointer to model that is being plot
+ * @param   plot_title_buf  pointer to character buffer that will contain title
+ *
+ * @return TODO fails with error but no return
+ */
 void
 set_splot_labels_ranges(gnuplot_ctrl *plot_handle, struct pmm_model *model,
                         char **plot_title_buf)
@@ -1380,6 +1426,15 @@ set_splot_labels_ranges(gnuplot_ctrl *plot_handle, struct pmm_model *model,
     gnuplot_set_zlabel(plot_handle, "flops");
 }
 
+/*!
+ * draw construction intervals on 2-d plots
+ *
+ * @param   plot_handle     pointer to gnuplot_ctrl structure
+ * @param   model           pointer to model who's construction intervals are
+ *                          to be plotted
+ *
+ * @return 0 on success (never fails TODO)
+ */
 int
 draw_plot_intervals(gnuplot_ctrl *plot_handle, struct pmm_model *model) 
 {
@@ -1448,6 +1503,16 @@ draw_plot_intervals(gnuplot_ctrl *plot_handle, struct pmm_model *model)
     return 0; //success
 }
 
+
+/*!
+ * draw construction intervals on 3-d plots
+ *
+ * @param   plot_handle     pointer to gnuplot_ctrl structure
+ * @param   model           pointer to model who's construction intervals are
+ *                          to be plotted
+ *
+ * @return 0 on success (never fails TODO)
+ */
 int
 draw_splot_intervals(gnuplot_ctrl *plot_handle, struct pmm_model *model) 
 {

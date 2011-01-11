@@ -474,13 +474,15 @@ init_loadhistory(struct pmm_loadhistory *h, int size)
 	return 0;
 }
 
-/*
- * TODO decide whether to use indexes or pointers
- *
+/*!
  * This function _copies_ the structure l into the load history structure which
  * is a circular array.
  *
- * end_i always points to a vacant element
+ * @param   h   pointer to the load history structure
+ * @param   l   pointer to the load to be copied into the next free/expired
+ *              element of the circular array
+ *
+ *
  */
 void add_load(struct pmm_loadhistory *h, struct pmm_load *l)
 {
@@ -490,11 +492,14 @@ void add_load(struct pmm_loadhistory *h, struct pmm_load *l)
 	DBGPRINTF("h->end_i: %d\n", h->end_i);
 #endif
 
+   // end_i always points to a vacant element
 	h->history[h->end_i].time = l->time;
 	h->history[h->end_i].load[0] = l->load[0];
 	h->history[h->end_i].load[1] = l->load[1];
 	h->history[h->end_i].load[2] = l->load[2];
 
+    //TODO decide whether to use indexes or pointers
+    
 	/* Increment the end index and set it to zero if it reaches h->size_mod */
 	h->end_i = (h->end_i + 1) % h->size_mod;
 
@@ -512,8 +517,12 @@ void add_load(struct pmm_loadhistory *h, struct pmm_load *l)
 
 }
 
-/*
- * TODO Write this check routine
+/*!
+ * Do some sanity checking on the load history structure
+ *
+ * @param   h   pointer to load history
+ *
+ * @returns 1 if load history passes check, 0 if it fails
  */
 int check_loadhistory(struct pmm_loadhistory *h) {
 
@@ -541,10 +550,16 @@ int check_loadhistory(struct pmm_loadhistory *h) {
 	return 1;
 }
 
+/*!
+ * initialized a new load observation structure
+ *
+ * @returns pointer to an allocated and intialized load structure
+ */
 struct pmm_load* new_load() {
 	struct pmm_load *l;
 
 	l = malloc(sizeof *l);
+    //TODO NULL check
 
 	l->time = (time_t)0;
 	l->load[0] = 0.0;
@@ -708,12 +723,17 @@ insert_bench(struct pmm_model *m, struct pmm_benchmark *b)
 }
 
 
-/*
- * returns:
- *      0 if benchmark is not at the origin of the model (all start values)
- *      1 if benchmark is at the origin of the model
- *      -1 if there is a mismatch between number of parameters
+/*!
  *
+ * test if a benchmark is at the starting point of a model (not 0,0)
+ *
+ * @param   n           number of parameters defintions
+ * @param   pd_array    pointer to parameter defintions array
+ * @param   b           pointer to benchmark
+ *
+ * @return 0 if benchmark is not at the origin of the model (all start values)
+ * @return 1 if benchmark is at the origin of the model
+ * @return -1 if there is a mismatch between number of parameters
  */
 int is_benchmark_at_origin(int n, struct pmm_paramdef *pd_array,
                            struct pmm_benchmark *b)
@@ -775,6 +795,12 @@ isempty_model(struct pmm_model *m)
 	return 1;
 }
 
+/*!
+ * count the number of benchmarks in a model
+ *
+ * @param   m   pointer to model
+ * @return number of benchmarks
+ */
 int
 count_benchmarks_in_model(struct pmm_model *m)
 {
@@ -1084,6 +1110,7 @@ init_param_array_copy(int *src, int n)
 {
     int *dst;
 
+    //TODO rename to param_array_copy_to_new or something
 
     dst = malloc(n * sizeof *dst);
     if(dst == NULL) {
@@ -1126,7 +1153,7 @@ set_param_array_copy(int *dst, int *src, int n)
  * @param   param       the value of the parameter we are aligning
  * @param   pd          the corresponding parameter definition
  *
- * @return the aligned parameter, or -1 on failure
+ * @return the aligned parameter
  *
  * @post the return value is aligned as closely as possible to the passed param.
  * In cases where the aligned parameter is greater than the end, the parameter
@@ -1221,6 +1248,13 @@ align_param(int param, struct pmm_paramdef *pd)
     return aligned;
 }
 
+/*!
+ * align an array of parameters
+ *
+ * @param   [in,out]    params  pointer to the array of parameters to align
+ * @param   [in]        pd_set  pointer to the corresponding parameter
+ *                              definition array
+ */
 void
 align_params(int *params, struct pmm_paramdef_set *pd_set)
 {
@@ -1236,6 +1270,15 @@ align_params(int *params, struct pmm_paramdef_set *pd_set)
     return;
 }
 
+/*!
+ * initialized a set of align a set of parameters based on
+ * a set of unaligned parameters and parameter definitions
+ *
+ * @param   p       pointer to unaligned parameter array
+ * @param   pd_set  pointer to corresponding parameter definitions
+ *
+ * @returns allocated array of aligned parameters or NULL on failure
+ */
 int*
 init_aligned_params(int *p, struct pmm_paramdef_set *pd_set)
 {
@@ -2619,10 +2662,15 @@ find_oldapprox(struct pmm_model *m, int *p)
     return b;
 }
 
-/*
- * lookup_model - will call octave griddatan function to interpolate scattered
- * data at the point given by the array p (parameter values)
+/*!
+ * Call the appropriate lookup function to find value of model
+ * given a set of parameters
  *
+ * @param   m       pointer to model
+ * @param   p       array of parameters
+ *
+ * @return  newly allocated benchmark describing performance at
+ * p or NULL on failure
  */
 struct pmm_benchmark* lookup_model(struct pmm_model *m, int *p)
 {
@@ -2772,9 +2820,8 @@ interpolate_1d_model(struct pmm_bench_list *bl,
 #define MIN_CMP(x,y) (x) < (y) ? (x) : (y)
 #define PMM_PERC 0.05 // percentage threshold for GBBP
 
-/*
- * bench_cut_contains:
- *
+/*!
+ * 
  * This function determines if the 'cut' of the model at a specific benchmarked
  * point, b1, contains the range of execution speeds that are defined by the cut
  * of the model at a second benchmark point, b2.
@@ -2784,6 +2831,7 @@ interpolate_1d_model(struct pmm_bench_list *bl,
  * b1_min < b2_min. As illustrated by the diagram below.
  *
  * i.e.
+ * \verbatim
  *  |           b1_max
  * s|           +               b2_max
  * p|        ...|...............+....
@@ -2795,6 +2843,14 @@ interpolate_1d_model(struct pmm_bench_list *bl,
  * -+------------------------------------------
  *  |           ^     size      ^
  *              b1              b2
+ * \endverbatim
+ *
+ * @param   h   pointer to the load history
+ * @param   b1  pointer to first benchmark point
+ * @param   b2  pointer to second benchmark point
+ *
+ * @returns 1 if the values of the model at b1 contain the values of
+ * the model at b2, 0 otherwise
  */
 int bench_cut_contains(struct pmm_loadhistory *h, struct pmm_benchmark *b1,
 		               struct pmm_benchmark *b2) {
@@ -2835,9 +2891,7 @@ int bench_cut_contains(struct pmm_loadhistory *h, struct pmm_benchmark *b1,
 	//compare upper and lower execution speeds
 }
 
-/*
- * bench_cut_intersects:
- *
+/*!
  * This function determines if the 'cut' of the model at a specific benchmarked
  * point, b1, overlaps the range of execution speeds that are defined by the cut
  * of the model at a second benchmark point, b2.
@@ -2847,6 +2901,7 @@ int bench_cut_contains(struct pmm_loadhistory *h, struct pmm_benchmark *b1,
  * b1_min < b2_max or, b1_max > b2_min and b1_min < b2_min. As illustrated by
  * the diagram below.
  *
+ * \verbatim
  * i.e.
  *  |           b1_max
  * s|           +
@@ -2860,6 +2915,14 @@ int bench_cut_contains(struct pmm_loadhistory *h, struct pmm_benchmark *b1,
  * -+------------------------------------------
  *  |           ^     size      ^
  *              b1              b2
+ * \endverbatim
+ *
+ * @param   h   pointer to the load history
+ * @param   b1  pointer to first benchmark point
+ * @param   b2  pointer to second benchmark point
+ *
+ * @return 1 if values of model at b1 intersect values of model at b2, 0
+ * otherwise
  */
 int bench_cut_intersects(struct pmm_loadhistory *h, struct pmm_benchmark *b1,
 		                 struct pmm_benchmark *b2) {
@@ -2889,9 +2952,7 @@ int bench_cut_intersects(struct pmm_loadhistory *h, struct pmm_benchmark *b1,
     //TODO implement bench_cut_intersects properly (i.e. using loadhistory)
 }
 
-/*
- * bench_cut_greater:
- *
+/*!
  * This function determines if the 'cut' of the model at a specific benchmarked
  * point, b1, has no overlap on the range of execution speeds that are defined
  * o by the cut of the model at a second benchmark point, b2. And further,
@@ -2901,6 +2962,7 @@ int bench_cut_intersects(struct pmm_loadhistory *h, struct pmm_benchmark *b1,
  * as predicted by the model. If C_b1 is greater than C_b2, then b1_min > b2_max
  * . As illustrated by the diagram below.
  *
+ * \verbatim
  * i.e.
  *  |           b1_max
  * s|           +
@@ -2917,6 +2979,13 @@ int bench_cut_intersects(struct pmm_loadhistory *h, struct pmm_benchmark *b1,
  * -+------------------------------------------
  *  |           ^     size      ^
  *              b1              b2
+ * \endverbatim
+ * @param   h   pointer to the load history
+ * @param   b1  pointer to first benchmark point
+ * @param   b2  pointer to second benchmark point
+ *
+ * @returns 1 if the values of the model at b1 are greater than the values of
+ * the model at b2, 0 otherwise
  */
 int bench_cut_greater(struct pmm_loadhistory *h, struct pmm_benchmark *b1,
 		              struct pmm_benchmark *b2) {
@@ -2930,6 +2999,16 @@ int bench_cut_greater(struct pmm_loadhistory *h, struct pmm_benchmark *b1,
     //TODO implement bench_cut_greater properly (i.e. using loadhistory)
 }
 
+/*!
+ * This function performs the inverse of of bench_cut_greater
+ *
+ * @param   h   pointer to the load history
+ * @param   b1  pointer to first benchmark point
+ * @param   b2  pointer to second benchmark point
+ *
+ * @returns 1 if the values of the model at b1 are less than the values of
+ * the model at b2, 0 otherwise
+ */
 int bench_cut_less(struct pmm_loadhistory *h, struct pmm_benchmark *b1,
 		           struct pmm_benchmark *b2) {
     if(b1->flops < b2->flops*(1.0 - PMM_PERC)) {
@@ -3038,13 +3117,15 @@ struct pmm_interval_list* new_interval_list()
 	return l;
 }
 
-/*
- * returns:
- * 		1 if list is empty
- *		0 if list is not empty
+/*!
+ * determine if interval list is empty
+ * 
+ * @param   l   pointer to interval list
+ * @returns 1 if list is empty, 0 if list is not empty
  */
 int isempty_interval_list(struct pmm_interval_list *l)
 {
+    //TODO static
 	if(l->size <= 0) {
 		return 1; // true
 	}
@@ -3148,8 +3229,13 @@ int remove_interval(struct pmm_interval_list *l, struct pmm_interval *i)
 }
 
 
-/*
- * we link the interval into list at the top/front
+/*!
+ * link the interval into interval list at the top/front
+ *
+ * @param   l   pointer to interval list
+ * @param   i   pointer to interval to add to list
+ *
+ * @return success always
  */
 int add_top_interval(struct pmm_interval_list *l, struct pmm_interval *i)
 {
@@ -3171,7 +3257,7 @@ int add_top_interval(struct pmm_interval_list *l, struct pmm_interval *i)
 
 	l->size += 1;
 
-	return 0; // success
+	return 0; // success TODO void
 }
 
 /*!
@@ -3203,6 +3289,12 @@ add_bottom_interval(struct pmm_interval_list *l, struct pmm_interval *i)
 }
 
 
+/*!
+ * print interval list
+ *
+ * @param   output      output stream to print to
+ * @param   l           interval list to print
+ */
 void print_interval_list(const char *output, struct pmm_interval_list *l)
 {
 	struct pmm_interval *i;
@@ -3242,6 +3334,13 @@ construction_method_to_string(enum pmm_construction_method method)
     }
 }
 
+/*!
+ * map interval type to string for printing
+ *
+ * @param       type    interval type
+ *
+ * @return  char string describing interval
+ */
 char* interval_type_to_string(enum pmm_interval_type type)
 {
     switch (type) {
@@ -3267,6 +3366,12 @@ char* interval_type_to_string(enum pmm_interval_type type)
 
 }
 
+/*!
+ * print interval
+ *
+ * @param   output      output stream to print to
+ * @param   i           interval to print
+ */
 void print_interval(const char *output, struct pmm_interval *i) {
 
     SWITCHPRINTF(output, "type: %s\n", interval_type_to_string(i->type));
@@ -3297,7 +3402,7 @@ void print_interval(const char *output, struct pmm_interval *i) {
     }
 }
 
-/*!
+/*
  * Test if a benchmark is contained within an interval.
  *
  * For intervals of IT_POINT type the test is if the benchmark is at the
@@ -3367,7 +3472,7 @@ int interval_contains_bench(struct pmm_routine *r, struct pmm_interval *i,
 }
 */
 
-/*!
+/*
  * Test if 3 points (parameters of a model) are collinear (in n dimensions)
  *
  * For example, in 3 dimensions, points: \f$P_1, P_2, P_3\f$, defined by
@@ -3418,6 +3523,12 @@ is_collinear_params(int *a, int *b, int *c, int n)
 }
 */
 
+/*!
+ * prints a load history sequence
+ *
+ * @param   output      output stream to print to
+ * @param   h           pointer to the load history
+ */
 void print_loadhistory(const char *output, struct pmm_loadhistory *h) {
 	int i;
 
@@ -3434,13 +3545,22 @@ void print_loadhistory(const char *output, struct pmm_loadhistory *h) {
 
 }
 
+/*!
+ * prints a single load observation
+ *
+ * @param   output      output stream to print to
+ * @param   l           pointer to load structure to print
+ */
 void print_load(const char *output, struct pmm_load *l) {
 	SWITCHPRINTF(output, "time:%d loads:%.2f %.2f %.2f\n", (int)l->time,
             l->load[0], l->load[1], l->load[2]);
 }
 
-/*
+/*!
  * prints the linked list of benchmark points in a pmm_model
+ *
+ * @param   output      output stream to print to
+ * @param   m           model to print
  */
 void print_model(const char *output, struct pmm_model *m) {
     char mtime_str[80];
@@ -3502,10 +3622,11 @@ print_bench_list(const char *output, struct pmm_bench_list *bl)
 }
 
 /*!
- * Print a parameter array to log.
+ * Print a parameter array
  *
- * @param   p   pointer to the parameter array
- * @param   n   size of the parameter array
+ * @param   output  output stream to print to
+ * @param   p       pointer to the parameter array
+ * @param   n       size of the parameter array
  *
  */
 void
@@ -3518,6 +3639,12 @@ print_params(const char *output, int *p, int n)
 	}
 }
 
+/*!
+ * print a benchmark
+ *
+ * @param   output      output stream to print to
+ * @param   b           pointer to benchmark
+ */
 void
 print_benchmark(const char *output, struct pmm_benchmark *b) {
 	int i;
@@ -3541,6 +3668,13 @@ print_benchmark(const char *output, struct pmm_benchmark *b) {
     SWITCHPRINTF(output, "--end-benchmark--\n");
 }
 
+/*!
+ * print a parameter definition array
+ *
+ * @param   output      output stream to print to
+ * @param   pd_array    pointer to parameter definition array
+ * @param   n           number of elements in array
+ */
 void
 print_paramdef_array(const char *output, struct pmm_paramdef *pd_array, int n)
 {
@@ -3553,6 +3687,12 @@ print_paramdef_array(const char *output, struct pmm_paramdef *pd_array, int n)
 	}
 }
 
+/*!
+ * print a parameter definition
+ *
+ * @param   output      output stream to print to
+ * @param   pd          pointer to parameter definition
+ */
 void print_paramdef(const char *output, struct pmm_paramdef *pd)
 {
 	SWITCHPRINTF(output, "name :%s\n", pd->name);
@@ -3569,6 +3709,12 @@ void print_paramdef(const char *output, struct pmm_paramdef *pd)
 	SWITCHPRINTF(output, "offset: %d\n", pd->offset);
 }
 
+/*!
+ * print a parameter definition set
+ *
+ * @param   output      output stream to print to
+ * @param   pd_set      pointer to parameter definition set
+ */
 void print_paramdef_set(const char *output, struct pmm_paramdef_set *pd_set)
 {
     SWITCHPRINTF(output, "n_p:%d\n", pd_set->n_p);
@@ -3585,10 +3731,11 @@ void print_paramdef_set(const char *output, struct pmm_paramdef_set *pd_set)
     SWITCHPRINTF(output, "pc_min:%d\n", pd_set->pc_min);
 }
 
-/*
- * prints the elements of a pmm_routine structure for debugging
+/*!
+ * prints the elements of a pmm_routine structure 
  *
- * TODO add printing of model?
+ * @param   output      output stream to print to
+ * @param   r           pointer to routine
  */
 void print_routine(const char *output, struct pmm_routine *r) {
 
@@ -3618,21 +3765,27 @@ void print_routine(const char *output, struct pmm_routine *r) {
 	return;
 }
 
-/*
+/*!
  * function is used  to set string variables of the pmm_routine structure
  * and other string variables. Takes a pointer to the destination char*
  * and the source char* and then allocates enough memory to copy
  * the source into the destination.
  *
- * TODO consider setting a routine string that has already some memory
- * allocated (from a previous set, i.e. resetting str ...
+ * @param   dst     pointer to location fo destination string
+ * @param   src     pointer to string to set
  *
- * or in english, FREE/malloc or realloc dst before copying src, duh!
-*
+ * @return 0 on failure, 1 on success
+ *
  */
 int set_str(char **dst, char *src) {
 	size_t len;
 
+    /*
+     * TODO consider setting a routine string that has already some memory
+     * allocated (from a previous set, i.e. resetting str ...
+     *
+     * or in english, FREE/malloc or realloc dst before copying src, duh!
+     */
 
 	if(src == NULL) {
 		ERRPRINTF("null source string\n");
@@ -3657,7 +3810,12 @@ int set_str(char **dst, char *src) {
 	return 1; //success
 }
 
-/* converts a ISO 8601 time string to a time_t value */
+/*!
+ * converts a ISO 8601 time string to a time_t value
+ *
+ * @param   date    pointer to charater string representing a date
+ * @return date converted to a time_t value
+ */
 time_t parseISO8601Date(char *date) {
 	struct tm tm_t;
     struct tm* tm_p;
@@ -3727,7 +3885,7 @@ time_t parseISO8601Date(char *date) {
 
 	if(1 == success) {
 
-		//if((time_t)(-1) != (t = mktime(&tm_t))) {
+		// if((time_t)(-1) != (t = mktime(&tm_t))) {
 
         t = mktime(&tm_t);
         if(t != (time_t)(-1)) {
@@ -3749,18 +3907,18 @@ time_t parseISO8601Date(char *date) {
 }
 
 
-/*
+/*!
  * Function checks the routine structure for misconfigurations
  *
- * TODO add checking of path names and strings
+ * @param   r   pointer to routine
  *
- * returns 1 if routine is OK
- * returns 0 if routine is BAD
+ * @returns 1 if routine is OK, 0 if routine is BAD
  *
  */
 int check_routine(struct pmm_routine *r) {
 	int ret = 1;
 
+    // TODO add checking of path names and strings
 	if(r->pd_set->n_p <= 0) {
 		ERRPRINTF("Number of paramaters for routine not set correctly.\n");
 		print_routine(PMM_ERR, r);
@@ -3782,8 +3940,11 @@ int check_routine(struct pmm_routine *r) {
 	return ret;
 }
 
-/*
- * simple, prints the elements of the pmm_config structure for debugging
+/*!
+ * prints the elements of the pmm_config structure for debugging
+ *
+ * @param   output  pointer to output stream
+ * @param   cfg     pointer to config structure
  */
 void print_config(const char *output, struct pmm_config *cfg) {
 
@@ -3814,6 +3975,11 @@ void print_config(const char *output, struct pmm_config *cfg) {
 	return;
 }
 
+/*!
+ * frees a configure structure and members it contains
+ *
+ * @param   cfg     pointer to address of config structure
+ */
 void free_config(struct pmm_config **cfg) {
 	int i;
 
@@ -3831,6 +3997,11 @@ void free_config(struct pmm_config **cfg) {
     *cfg = NULL;
 }
 
+/*!
+ * frees a routine structure and members it contains
+ *
+ * @param   routine     pointer to address of routine structure
+ */
 void free_routine(struct pmm_routine **r) {
 
     if((*r)->model != NULL)
@@ -3855,6 +4026,11 @@ void free_routine(struct pmm_routine **r) {
     *r = NULL;
 }
 
+/*!
+ * frees a parameter definition set structure and members it contains
+ *
+ * @param   pd_set pointer to address of parameter definition structure
+ */
 void free_paramdef_set(struct pmm_paramdef_set **pd_set)
 {
 
@@ -3869,6 +4045,12 @@ void free_paramdef_set(struct pmm_paramdef_set **pd_set)
 
 }
 
+/*!
+ * frees a parameter definition array
+ *
+ * @param   pd_array    pointer to address of parameter definition array
+ * @param   n_p         number of parameter definitions in array
+ */
 void free_paramdef_array(struct pmm_paramdef **pd_array, int n_p) {
 	int i;
 
@@ -3882,6 +4064,11 @@ void free_paramdef_array(struct pmm_paramdef **pd_array, int n_p) {
 
 }
 
+/*!
+ * frees a model structure and members it contains
+ *
+ * @param   m    pointer to address of the model structure
+ */
 void free_model(struct pmm_model **m) {
 
     if((*m)->bench_list != NULL)
@@ -3900,6 +4087,11 @@ void free_model(struct pmm_model **m) {
     *m = NULL;
 }
 
+/*!
+ * frees an interval list structure and members it contains
+ *
+ * @param   il   pointer to address of the interval list
+ */
 void free_interval_list(struct pmm_interval_list **il)
 {
 
@@ -3919,6 +4111,11 @@ void free_interval_list(struct pmm_interval_list **il)
     *il = NULL;
 }
 
+/*!
+ * frees an interval structure and members it contains
+ *
+ * @param   i    pointer to address of the interval
+ */
 void free_interval(struct pmm_interval **i)
 {
     if((*i)->start != NULL) {
@@ -3934,6 +4131,11 @@ void free_interval(struct pmm_interval **i)
     *i = NULL;
 }
 
+/*!
+ * frees a benchmark list structure and members it contains
+ *
+ * @param   bl    pointer to address of the benchmark list
+ */
 void free_bench_list(struct pmm_bench_list **bl)
 {
 
@@ -3943,8 +4145,15 @@ void free_bench_list(struct pmm_bench_list **bl)
     *bl = NULL;
 }
 
+/*!
+ * frees a benchmark list structure and members it contains by
+ * progressing forwards through the list
+ *
+ * @param   last_b    pointer to address of the benchmark 
+ */
 void free_benchmark_list_forwards(struct pmm_benchmark **last_b) {
     struct pmm_benchmark *this, *next;
+    //TODO check naming last_b yet we remove forwards ?
     
     this = *last_b;
 
@@ -3957,6 +4166,12 @@ void free_benchmark_list_forwards(struct pmm_benchmark **last_b) {
     return;
 }
 
+/*!
+ * frees a benchmark list structure and members it contains by
+ * progressing backwards through the list
+ *
+ * @param   first_b    pointer to address of the benchmark 
+ */
 void free_benchmark_list_backwards(struct pmm_benchmark **first_b) {
     struct pmm_benchmark *this, *prev;
     
@@ -3971,6 +4186,11 @@ void free_benchmark_list_backwards(struct pmm_benchmark **first_b) {
     return;
 }
 
+/*!
+ * frees a benchmark 
+ *
+ * @param   b    pointer to address of the benchmark 
+ */
 void free_benchmark(struct pmm_benchmark **b)
 {
 	free((*b)->p);
@@ -3980,6 +4200,11 @@ void free_benchmark(struct pmm_benchmark **b)
     *b = NULL;
 }
 
+/*!
+ * frees a load history structure and all of its members
+ *
+ * @param   h    pointer to address of the load history structure
+ */
 void free_loadhistory(struct pmm_loadhistory **h) {
 	free((*h)->load_path);
     (*h)->load_path = NULL;

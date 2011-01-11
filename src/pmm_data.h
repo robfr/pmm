@@ -17,6 +17,16 @@
     You should have received a copy of the GNU General Public License
     along with PMM.  If not, see <http://www.gnu.org/licenses/>.
 */
+
+/*! @file   pmm_data.h
+ *  @brief  general PMM data structures
+ *
+ * Data structures representing models, routines and the benchmarking
+ * server configuration are described here, along with functions that
+ * operate on them.
+ *
+ * */
+
 #ifndef PMM_DATA_H_
 #define PMM_DATA_H_
 
@@ -35,140 +45,186 @@
 #define PMM_NOUSERS 4
 
 
+/**
+ * structure to hold the configuration of the benchmarking server
+ */
 typedef struct pmm_config {
-	struct pmm_routine **routines;
-	int allocated;
-	int used;
+    struct pmm_routine **routines;  /**< pointer to array of routines to be
+                                         benchmarked */
+    int allocated;                  /**< number of allocated elements in the
+                                         routines array */
+    int used;                       /**< number of used elements in the
+                                         routines array */
 
-	struct pmm_loadhistory *loadhistory;
+	struct pmm_loadhistory *loadhistory;  /**< pointer to load history */
 
-	int daemon;
-    int build_only;
+    int daemon;                     /**< toggle whether to go to background */
+    int build_only;                 /**< toggle whether to build, then exit */
 
-    struct timespec ts_main_sleep_period;
-    int time_spend_threshold;
-    int num_execs_threshold;
+    struct timespec ts_main_sleep_period;   /**< sleep period of scheduling
+                                              loop */
+    int time_spend_threshold;               /**< threshold for time spend
+                                                 benchmarking before writing
+                                                 models to disk */
+    int num_execs_threshold;                /**< threshold for number of
+                                                 benchmark executions before
+                                                 writing models to disk */
 
-	char *logfile;
-	char *configfile;
+	char *logfile;                          /**< log file name */
+	char *configfile;                       /**< configuartion filename */
 
-    int pause;
+    int pause;                              /**< toggle pause after a
+                                                 benchmark */
 
 } PMM_Config;
 
+/*!
+ * enumeration of different model construction methods
+ */
 typedef enum pmm_construction_method {
-	CM_NAIVE,
-    CM_NAIVE_BISECT,
-    CM_RAND,
-	CM_GBBP,
-	CM_GBBP_NAIVE,
-    CM_INVALID
+    CM_NAIVE,          /*!< construct by testing every problem size from start
+                            to finish */
+    CM_NAIVE_BISECT,   /*!< construct by testing every problem size but use
+                            bisection of problem size range to get quicker
+                            coverage */
+    CM_RAND,           /*!< construct using random sampling */
+    CM_GBBP,           /*!< construct using optimised Geometric Bisection
+                             Building Procedure */
+	CM_GBBP_NAIVE,     /*!< construct using GPPB but with a naive initial
+                            period */
+    CM_INVALID         /*!< invalid construction method */
 } PMM_Construction_Method;
 
-//
-//TODO allow definition of a mathematical sequence to govern permissable
-//parameters. At present stride and offset allow a sequence equvilent to:
-//  a*x + b
-//where a = stride and b = offset
-//
+/*!
+ * Structure defining a parameter of a routine
+ * TODO allow definition of a mathematical sequence to govern permissable
+ * parameters. At present stride and offset allow a sequence equvilent to: a*x + b
+ * where a = stride and b = offset
+ */
 typedef struct pmm_paramdef {
-	char *name;
-	int type;
-	int order;
-    int nonzero_end;
-	int end;
-	int start;
-    int stride;
-    int offset;
+	char *name;         /*!< name of parameter */
+	int type;           /*!< */
+	int order;          /*!< order in the sequence of parameters passed to
+                             benchmarking routine */
+    int nonzero_end;    /*!< toggle assumtion of zero speed at parameter end value */
+	int end;            /*!< ending value of parameter range */
+	int start;          /*!< starting value of parameter range */
+    int stride;         /*!< stride to use traversing parameter range */
+    int offset;         /*!< offset from starting value to use traversing
+                             parameter range */
 } PMM_Paramdef;
 
+/*!
+ * structure describing a set of parameters and a formula in terms of
+ * those parameters which may be constrained (i.e. parameters a, b, formula:a*b,
+ * constraint on formula < 1000)
+ */
 typedef struct pmm_paramdef_set {
-    int n_p;                            // number of parameters
-    struct pmm_paramdef *pd_array;      // array of parameter definitions
-    char *pc_formula;                   // formula for parameter constraint
-    int pc_max;                         // max of parameter constraint
-    int pc_min;                         // min of parameter constraint
+    int n_p;                            /*!< number of parameters in set */
+    struct pmm_paramdef *pd_array;      /*!< array of parameter definitions */
+    char *pc_formula;                   /*!< formula for parameter constraint */
+    int pc_max;                         /*!< max of parameter constraint */
+    int pc_min;                         /*< min of parameter constraint */
 
 #ifdef HAVE_MUPARSER
-    struct pmm_param_constraint_muparser *pc_parser;
+    struct pmm_param_constraint_muparser *pc_parser; /*!< muparser structure
+                                                          used for parameter
+                                                          constraint */
 #endif
 
 } PMM_Paramdef_Set;
 
 
-/*! \struct pmm_benchmark
+/*!
+ * Benchmark structure, storing information routine tests.
  *
- * Benchmark structure, storing information on the parameters and execution
- * results of a benchmark execution. Also pointers to next/previous benchmarks
- * should the one in question is a member of a list.
- *
- * @param   n_p         number of parameters
- * @param   p           pointer to parameter array
- * @param   complexity  
+ * Details the on the parameters and execution results of a benchmark
+ * execution. Also pointers to next/previous benchmarks should the one in
+ * question is a member of a list.
  */
 typedef struct pmm_benchmark {
 	int n_p;                    //!< number of parameters
-	int *p;           //!< array of parameters 
+	int *p;                     //!< array of parameters 
 
-    //TODO calculate complexity from problem size variables
+    //TODO calculate complexity from problem size variables with muparser
 	long long int complexity;   //!< complexity of benchmark (no. of float ops.)
 	double flops;               //!< speed of benchmark execution
 	double seconds;             //!< benchmark execution time in seconds
 
-	//wall time for benchmark execution
 	struct timeval wall_t;      //!< wall clock execution time (timeval)
 
-	//user+system time for benchmark execution
 	struct timeval used_t;      //!< kernel and user mode execution time summed
 
 	struct pmm_benchmark *previous; //!< pointer to previous bench in list
-	struct pmm_benchmark *next; //!< pointer to next bench in list
+	struct pmm_benchmark *next;     //!< pointer to next bench in list
 } PMM_Benchmark;
 
 
+/*!
+ * structure describing a list of benchmarks
+ *
+ * Benchmarks are doubly linked.
+ */
 typedef struct pmm_bench_list {
-	int size;
-	int n_p; // number of parameters
+	int size;                       /*!< number of benchmarks stored in the list */
+	int n_p;                        /*!< number of parameters the benchmarks have */
 
-	struct pmm_benchmark *first;
-	struct pmm_benchmark *last;
+	struct pmm_benchmark *first;    /*!< first element of the list */
+	struct pmm_benchmark *last;     /*!< last element of the list */
 
-	struct pmm_model *parent_model;
+	struct pmm_model *parent_model; /*!< model to which the benchmarks belong */
 } PMM_Bench_List;
 
 
+/*!
+ * functional performance model of a routine
+ */
 typedef struct pmm_model {
-	char *model_path;
-    int unwritten_num_execs;
-    double unwritten_time_spend;
-    time_t mtime;
+    char *model_path;               /*!< path to model filee */
+    int unwritten_num_execs;        /*!< number of executions since last write */
+    double unwritten_time_spend;    /*!< benchmarking time spend since last
+                                         write */
+    time_t mtime;                   /*!< modified time of the model file */
 
-	int n_p; /* number of parameters of the model */
+	int n_p;                        /*!< number of parameters of the model */
 
-	int completion;
-	int complete;
-    int unique_benches;
+	int completion;                 /*!< completion state of the model */
+	int complete;                   /*!< is model complete */
+    int unique_benches;             /*!< number of unique benchmarks made to
+                                         build model */
 
-	struct pmm_bench_list *bench_list; 
+	struct pmm_bench_list *bench_list;  /*! pointer to benchmark list */
 
-    double peak_flops;
+    double peak_flops;                  /*!< peak speed observed over all
+                                             benchmarks */
 
-	struct pmm_interval_list *interval_list;
+    struct pmm_interval_list *interval_list; /*!< intervals describing
+                                                  unfinished parts of the model */
 
-    struct pmm_paramdef_set *pd_set;
+    struct pmm_paramdef_set *pd_set;    /*!< set of parameter definition for
+                                             the routine */
 
-	struct pmm_routine *parent_routine;
+    struct pmm_routine *parent_routine; /*!< routine to which the model
+                                             belongs */
 } PMM_Model;
 
+/*! enumeration of possible model construction interval types */
 typedef enum pmm_interval_type {
-    IT_NULL,
-	IT_BOUNDARY_COMPLETE,
-	IT_GBBP_EMPTY,
-	IT_GBBP_CLIMB,
-	IT_GBBP_BISECT,
-	IT_GBBP_INFLECT,
-	IT_POINT,
-    IT_COMPLETE
+    IT_NULL,                /*!< null empty interval */
+    IT_BOUNDARY_COMPLETE,   /*!< for models in terms of more than one
+                                 parameter, specifies that a boundary axis of the
+                                 model is complete */
+	IT_GBBP_EMPTY,          /*!< initial empty GPPB interval type */
+    IT_GBBP_CLIMB,          /*!< construction interval where model is still
+                                 climbing (for GBBP) */
+    IT_GBBP_BISECT,         /*!< construction interval where model has taken
+                                 descending form (for GBBP)*/
+    IT_GBBP_INFLECT,        /*!< construction interval where model is being
+                                 tested for accuracy and may almost be complete */
+    IT_POINT,               /*!< construction interval that defines a single
+                                 point where a benchmark is required */
+    IT_COMPLETE             /*!< construction interval which is complete and
+                                 does not need further testing */
 } PMM_Interval_Type;
 
 /*
@@ -183,53 +239,92 @@ static char *pmm_interval_type_str[] = { "NULL",
 */
 
 
+/*!
+ * structure describing the construction status of an interval of a model
+ */
 typedef struct pmm_interval {
-	enum pmm_interval_type type;
+	enum pmm_interval_type type;    /*!< type of interval */
 
-	int plane; // index of the plane that this interval pertains to
-    int n_p;
-	int *start;
-	int *end;
+    int plane;  /*!< index of the plane that this interval pertains to */
+    int n_p;    /*!< number of parameters the interval has */
+	int *start; /*!< end point of the interval */
+	int *end;   /*!< start point of the interval */
 
-    int climb_step; //index of the step along the interval that we are currently
-                    //constructing for, when the interval type is IT_GBBP_CLIMB
+    int climb_step; /*!< index of the step along the interval that we are
+                      currently constructing for, when the interval type is
+                      IT_GBBP_CLIMB */
 
-	struct pmm_interval *next; // pointer to the next interval in the stack
-	struct pmm_interval *previous;
+	struct pmm_interval *next; /*!< pointer to the next interval in stack */
+	struct pmm_interval *previous; /*!< pointer to previous interval in stack */
 } PMM_Interval;
 
+/*!
+ * structure holding the interval list/stack
+ */
 typedef struct pmm_interval_list {
-	struct pmm_interval *top;
-	struct pmm_interval *bottom;
-	int size;
+	struct pmm_interval *top;       /*!< pointer to top of stack */
+	struct pmm_interval *bottom;    /*!< pointer to bottom of stack */
+	int size;                       /*!< number of intervals in stack */
 
 } PMM_Interval_List;
 
+/*!
+ * structure describing a routine to be benchmarked by pmm
+ */
 typedef struct pmm_routine {
 
-	char *name;
-	char *exe_path;
-    char *exe_args;
+	char *name;         /*!< name of routine */
+	char *exe_path;     /*!< path to benchmark executable */
+    char *exe_args;     /*!< extra arguments of benchmark */
 
-    struct pmm_paramdef_set *pd_set; // set of parameter defintions
+    struct pmm_paramdef_set *pd_set; /*!< set of parameter defintions */
 
 	//struct pmm_policy *policy; TODO implement policies
-	int condition;
-	int priority;
-	int executable;
+	int condition;      /*!< benchmarking condition TODO enum */
+	int priority;       /*!< benchmarking priority */
+	int executable;     /*!< toggle for executability */
 
-	enum pmm_construction_method construction_method;
-    int min_sample_num;
-    int min_sample_time;
-    int max_completion;
+	enum pmm_construction_method construction_method; /*!< model construction method */
+    int min_sample_num;     /*!< minimum samples for each model point */
+    int min_sample_time;    /*!< minimum time to spend benchmarking each model
+                                 point */
+    int max_completion;     /*!< maximum number of model points */
 
-	struct pmm_model *model;
+	struct pmm_model *model;            /*!< pointer to model */
 
-	struct pmm_routine *next_routine;
+	struct pmm_routine *next_routine;   /*!< next routine in routine array/list */
 
-    struct pmm_config *parent_config;
+    struct pmm_config *parent_config;   /*!< configuration of host */
 
 } PMM_Routine;
+
+/*!
+ * this is a circular array of load history, size determined at run time
+ */
+typedef struct pmm_loadhistory {
+	int write_period; /*!< how often to write load history to disk */
+
+    struct pmm_load *history;   /*!< pointer to the circular array */
+    int size;                   /*!< size of circular array */
+	int size_mod;
+
+	struct pmm_load *start;   /*!< pointer to starting element of c.array */
+    struct pmm_load *end;     /*!< pointer to ending element of c.array */
+	int start_i;              /*!< ending element of the circular array */
+    int end_i;                /*!< starting element in the circular array */
+
+	char *load_path;          /*!< path to load history file */
+
+	pthread_rwlock_t history_rwlock;    /*!< mutex for accessing history */
+} PMM_Loadhistory;
+
+/*!
+ * this is a record of system load
+ */
+typedef struct pmm_load {
+	time_t time;    /*!< time at which load was recorded */
+	double load[3]; /*!< 1, 5 & 15 minute load averages TODO use float? */
+} PMM_Load;
 
 
 struct pmm_interval* new_interval();
@@ -286,29 +381,6 @@ typedef struct pmm_benchmark {
 } PMM_Benchmark;
 */
 
-
-/*
- * this is a circular array of load history, size determined at run time
- */
-typedef struct pmm_loadhistory {
-	int write_period;
-
-	struct pmm_load *history;
-	int size;
-	int size_mod;
-
-	struct pmm_load *start, *end;
-	int start_i, end_i;
-
-	char *load_path;
-
-	pthread_rwlock_t history_rwlock;
-} PMM_Loadhistory;
-
-typedef struct pmm_load {
-	time_t time; //TODO use proper datatype
-	double load[3]; /* 1, 5 & 15 minute load averages TODO use float? */
-} PMM_Load;
 
 /*
  * new_ functions typically allocate memory and set values to failsafes (-1)
