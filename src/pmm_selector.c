@@ -303,7 +303,7 @@ multi_naive_insert_bench(struct pmm_routine *r, struct pmm_benchmark *b)
     return ret;
 }
 
-/*
+/*!
  * Process the interval list of the naive construction method, after a new
  * benchmark point has been aquired.
  *
@@ -677,9 +677,9 @@ init_naive_1d_intervals(struct pmm_routine *r)
     return 0; //success
 }
 
-/*
- * multi_random_select - builds a multi-parameter piece-wise performance model
- * using a random selection of benchmark points
+/*!
+ * builds a multi-parameter piece-wise performance model using a random
+ * selection of benchmark points
  *
  * Alogirthm description:
  *
@@ -691,6 +691,10 @@ init_naive_1d_intervals(struct pmm_routine *r)
  *   for each parameter
  *     select a random parameter size based on the paramdef limits and return
  *
+ * @param   r   pointer to routine for which the model is being built
+ * 
+ * @return pointer to newly allocated array describing parameters for the
+ * benchmark
  */
 int* multi_random_select_new_bench(struct pmm_routine *r)
 {
@@ -753,6 +757,7 @@ int* multi_random_select_new_bench(struct pmm_routine *r)
 int
 rand_between(int min, int max)
 {
+    //TODO static/inline
 	if(min==max) {
 		return min;
 	}
@@ -765,7 +770,6 @@ rand_between(int min, int max)
 	}
 
 	return (int)(rand()%(max-min))+min;
-
 }
 
 
@@ -1352,7 +1356,7 @@ init_gbbp_diagonal_interval(struct pmm_routine *r)
     return 0; //success
 }
 
-/*
+/*!
  * Step along an interval until the product of the parameters at the end/start
  * point of the interval matches the minium parameter product 
  *
@@ -1481,7 +1485,7 @@ adjust_interval_with_param_constraint_min(struct pmm_interval *i,
 #endif /* HAVE_MUPARSER */
 }
 
-/*
+/*!
  * Step along an interval until the product of the parameters at the end
  * point of the interval matches the maximum parameter product (equal or less
  * than if nonzero_max is set, or equal to or 1 step great than if nonzero_max
@@ -2046,9 +2050,18 @@ multi_gbbp_select_new_bench(struct pmm_routine *r)
     return params;
 }
 
+/*!
+ * intialize the interval stack for an empty model that will be built using a GBBP
+ * algorithm
+ *
+ * @param   r   pointer to the routine which is having its intervals intiialized
+ *
+ * @return o on success, -1 on failure
+ */
 int
 init_gbbp_boundary_intervals(struct pmm_routine *r)
 {
+    //TODO rename function
     int j;
     struct pmm_model *m;
     struct pmm_interval_list *i_list;
@@ -2168,6 +2181,12 @@ init_gbbp_boundary_intervals(struct pmm_routine *r)
     return 0; //success
 }
 
+/*!
+ * given a set of complete models along the parameter boundaries, creat a
+ * mech of new benchmarking points for the interior of the model
+ *
+ * @param   m   pointer to the model
+ */
 void mesh_boundary_models(struct pmm_model *m)
 {
     int *params;
@@ -2195,8 +2214,14 @@ void mesh_boundary_models(struct pmm_model *m)
 
 //TODO prevent boundary benchmarks from being added as they are already
 //measured
-/*
+/*!
+ * recurse through each plane of a model creating a mesh of
+ * benchmark points using the completed parameter boundaries
  *
+ * @param   m       pointer the model
+ * @param   p       pointer to a parameter array
+ * @param   plane   current plane
+ * @param   n_p     number of parameters/planes
  */
 void recurse_mesh(struct pmm_model *m, int *p, int plane, int n_p)
 {
@@ -2251,7 +2276,13 @@ void recurse_mesh(struct pmm_model *m, int *p, int plane, int n_p)
 
 }
 
-/*
+/*!
+ * Insert a benchmark into a 1 parameter model being constructed with the
+ * naive bisection method.
+ *
+ * @param   r   pointer to the routine forwhich the model is being constructed
+ * @param   b   benchmark to insert
+ *
  * @return 0 on success, -1 on failure to process intervals, -2 on failure
  * to insert benchmark
  */
@@ -2380,11 +2411,13 @@ naive_1d_bisect_insert_bench(struct pmm_routine *r, struct pmm_benchmark *b)
     return ret;
 }
 
-/*
- * multi_gbbp_insert_benchmark - the second half of the gbbp proceedure. After
- * a benchmark has been made it must be added to the model and the state of
- * the building proceedure must be adjusted according to the new shape of
- * the model.
+/*!
+ * Insert a benchmark into a multi-parameter model being constructed with the
+ * GBBP method.
+ *
+ * The second half of the gbbp proceedure. After a benchmark has been made it
+ * must be added to the model and the state of the building proceedure must be
+ * adjusted according to the new shape of the model.
  *
  * The rules that govern this adjustment and the specific adjustments are as
  * follows:
@@ -2394,10 +2427,26 @@ naive_1d_bisect_insert_bench(struct pmm_routine *r, struct pmm_benchmark *b)
  *
  * if the model is climbing we test the new benchmark to see if the model is
  * still climbing, or has levelled out, or has begun to decrease. If the
- * model is not still climbing or levelled out, we change the state to
+ * model is not still climbing or levelled out, we change the state to bisection.
+ *
+ * The bisection state permits the optimal selection of new benchmarking points.
+ * In this state, any new benchmark being inserted is comparted to the existing
+ * model. If the model already accurately approximates the benchmark the state
+ * is set to inflection.
+ *
+ * The inflection state is a second level of bisection, in this state if a new
+ * benchmark is again accurately approximated by the existing model we deem the
+ * model to be complete in this region
  *
  * @return 0 on success, -1 on failure to process intervals, -2 on failure
  * to insert benchmark
+ *
+ * @param   h   pointer to the load history
+ * @param   r   pointer to the routine to which the benchmark is added
+ * @param   b   pointer to the benchmark to be added
+ *
+ * @return 0 onsucces, -1 on failure to process intervals, -2 on complete failure
+ * to add benchmark to model
  */
 int
 multi_gbbp_insert_bench(struct pmm_loadhistory *h, struct pmm_routine *r,
@@ -2448,6 +2497,17 @@ multi_gbbp_insert_bench(struct pmm_loadhistory *h, struct pmm_routine *r,
 }
 
 /*!
+ * Find the interval in an interval stack that corresponds to a given benchmark.
+ *
+ * This permits adding benchmarks to the model out of the order deemed by the
+ * construction intervals.
+ *
+ * @param   r           pointer to routine containing model and parameter definitions
+ * @param   b           pointer to benchmark whos interval we are searching for
+ * @param   h           pointer to load history
+ * @param   found_i     pointer to address that will hold the found interval or point
+ *                      to NULL
+ * 
  * @return 0 on successful search (found or not found), -1 on failure
  */
 int
@@ -2525,6 +2585,12 @@ find_interval_matching_bench(struct pmm_routine *r, struct pmm_benchmark *b,
 }
 
 /*!
+ * process the interval list, with a newly aquired benchmark
+ * 
+ * @param   r   pointer to routine
+ * @param   b   pointer to benchmark
+ * @param   h   load history
+ *
  * @return 0 on successful processing of interval, -1 on failure
  */
 int
@@ -2538,6 +2604,8 @@ process_interval_list(struct pmm_routine *r, struct pmm_benchmark *b,
 
     i = r->model->interval_list->top;
 
+    // allocate a parameter array so we can compare interval benchmark points
+    // to the benchmark that is being processed
     temp_params = malloc(r->pd_set->n_p * sizeof *temp_params);
     if(temp_params == NULL) {
         ERRPRINTF("Error allocating memory.\n");
@@ -2551,7 +2619,7 @@ process_interval_list(struct pmm_routine *r, struct pmm_benchmark *b,
                               //if it is processed by 'process_interval'
 
 
-        // get the appropriate gbbp point from the interval
+        // get the appropriate gbbp benchmarking point from the interval
         ret = multi_gbbp_bench_from_interval(r, i, temp_params);
         if(ret < -1) {
             ERRPRINTF("Error getting benchmark from interval.\n");
@@ -2582,7 +2650,8 @@ process_interval_list(struct pmm_routine *r, struct pmm_benchmark *b,
 
             }
         }
-        // benchmark is not at appropriate gbbp point
+        // benchmark is not at appropriate gbbp point, no need to modify the
+        // construction intervals
         else {
             // TODO try to reduce construction time by processing benchmarks
             // TODO that are not lying on appropriate GBBP points somehow.
@@ -3104,6 +3173,40 @@ set_params_step_along_climb_interval(int *params, int step,
 }
 
 /*!
+ * process a GBBP_BISECT interval
+ *
+ * test if the model approximates the new benchmark and in what way,
+ *
+ * If the benchmark at the same level as the its left and right neighbours: assume
+ * the model is flat in the region of the interaval and finalized this area of the
+ * model by removing it.
+ *
+ * If the benchmark is at the same level as the left neighbour only, assume that
+ * the model is flat to the left of the new benchmark, finalize this area by
+ * remoing the interval and replacing it with a new interval representing the
+ * area to the right of the benchmark.
+ *
+ * In the benchmark is at thte same level as the right neighbour only, preform
+ * the same action, but in the inverse, replace the interval with a new interval
+ * representing the area to the left of the benchmark
+ *
+ * In other cases, look up the current model at the position of the new benchmark.
+ *
+ * If the current model accurately represents the new benchmark, replace the
+ * construction interval with a new GBBP_INFLECT interval covering the same
+ * area.
+ *
+ * If the current model does not accurately represent the new benchmark,
+ * replace the interval with two new GGBP_BISECT intervals covering the left
+ * and right areas between the new benchmark and the previous interval,
+ * allowing further refinement of the model
+ *
+ *
+ * @param   r   pointer to the routine
+ * @param   i   pointer to the interval being processed
+ * @param   b   pointer to the new benchmark
+ * @param   h   pointer to the load history
+ *
  * @return 0 on success, -1 on failure
  */
 int
@@ -3373,6 +3476,35 @@ process_gbbp_bisect(struct pmm_routine *r, struct pmm_interval *i,
 }
 
 /*!
+ * process a GBBP_INFLECT interval
+ *
+ * test if the model approximates the new benchmark and in what way,
+ *
+ * Look up the current model at the position of the new benchmark, if the model
+ * accurately represents the new benchmark then the model is complete in this area,
+ * remove the construction interval.
+ *
+ * Otherwise, construction must contine in this area, but:
+ *
+ * If the benchmark is at the same level as the left neighbour only, assume that
+ * the model is flat to the left of the new benchmark, finalize this area by
+ * remoing the interval and replacing it with a new BISECT interval representing the
+ * area to the right of the benchmark.
+ *
+ * In the benchmark is at thte same level as the right neighbour only, preform
+ * the same action, but in the inverse, replace the interval with a new interval
+ * representing the area to the left of the benchmark
+ *
+ * Otherwise replace the interval with two new GGBP_BISECT intervals covering
+ * the left and right areas between the new benchmark and the previous
+ * interval, allowing further refinement of the model.
+ *
+ *
+ * @param   r   pointer to the routine
+ * @param   i   pointer to the interval being processed
+ * @param   b   pointer to the new benchmark
+ * @param   h   pointer to the load history
+ *
  * @return 0 on success, -1 on failure
  */
 int
@@ -3452,7 +3584,8 @@ process_gbbp_inflect(struct pmm_routine *r, struct pmm_interval *i,
         intersects_left = bench_cut_intersects(h, b_left, b_avg);
         intersects_right = bench_cut_intersects(h, b_right, b_avg);
 
-
+        // this should never happen, as it would mean model already
+        // accurately approximated the benchmark above
         if(intersects_left == 1 && intersects_right == 1) {
             remove_interval(m->interval_list, i);
         }
