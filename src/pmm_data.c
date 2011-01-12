@@ -104,7 +104,7 @@ new_routine()
 
     r->pd_set = new_paramdef_set();
 
-    r->condition = PMM_INVALID;
+    r->condition = CC_INVALID;
     r->priority = -1;
     r->executable = -1;
 
@@ -3335,6 +3335,34 @@ construction_method_to_string(enum pmm_construction_method method)
 }
 
 /*!
+ * convert a construction condition enum to a char array description
+ *
+ * @param   conditon    the construction method
+ * 
+ * @returns pointer to a character array describing the condition
+ */
+char*
+construction_condition_to_string(enum pmm_construction_condition condition)
+{
+    switch (condition) {
+        case CC_INVALID:
+            return "invalid";
+        case CC_NOW:
+            return "now";
+        case CC_UNTIL:
+            return "until";
+        case CC_PERIODIC:
+            return "periodic";
+        case CC_IDLE:
+            return "idle";
+        case CC_NOUSERS:
+            return "no users";
+        default:
+            return "unknown";
+    }
+}
+
+/*!
  * map interval type to string for printing
  *
  * @param       type    interval type
@@ -3748,7 +3776,7 @@ void print_routine(const char *output, struct pmm_routine *r) {
 
     print_paramdef_set(output, r->pd_set);
 
-	SWITCHPRINTF(output, "condition:%d\n", r->condition);
+	SWITCHPRINTF(output, "condition:%d\n", construction_condition_to_string(r->condition));
 	SWITCHPRINTF(output, "priority:%d\n", r->priority);
     SWITCHPRINTF(output, "executable:%d\n", r->executable);
 

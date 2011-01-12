@@ -136,10 +136,6 @@ int cond_idle() {
  * check if conditions for execution of a routine are satisfied and
  * set executable parameter of routine accordingly
  *
- * TODO add PMM_UNTIL and PMM_PERIODIC to this function ...
- * TODO permit multiple conditions in one routine
- * TODO permit system wide conditions applicable to all routines
- *
  * @param   r   pointer to the routine
  *
  * @return 0 if routine is not execuable based on conditions, 1 if
@@ -148,17 +144,21 @@ int cond_idle() {
 int
 check_conds(struct pmm_routine *r)
 {
+    // TODO add CC_UNTIL and CC_PERIODIC to this function ...
+    // TODO permit multiple conditions in one routine
+    // TODO permit system wide conditions applicable to all routines
+    //
     r->executable = 0;
-    if(r->condition == PMM_NOW) {
+    if(r->condition == CC_NOW) {
         r->executable = 1;
 
     }
-    else if(r->condition == PMM_IDLE) {
+    else if(r->condition == CC_IDLE) {
         if(cond_idle()) {
             r->executable = 1;
         }
     }
-    else if(r->condition == PMM_NOUSERS) {
+    else if(r->condition == CC_NOUSERS) {
         if(!cond_users()) {
             r->executable = 1;
         }

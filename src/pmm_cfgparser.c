@@ -166,21 +166,21 @@ parse_routine(xmlDocPtr doc, xmlNodePtr node)
 		}
 		else if(!xmlStrcmp(cnode->name, (const xmlChar *) "condition")) {
 			if(strcmp("now", key) == 0) {
-				r->condition = PMM_NOW;
+				r->condition = CC_NOW;
 			}
-			/* TODO change PMM_BEFORE to PMM_UNTIL and add code to support
+			/* TODO  and add code to support CC_BEFORE
 			else if(strcmp("before", key) == 0) {
-				r->condition = PMM_BEFORE;
+				r->condition = CC_UNTIL;
 			} */
 			else if(strcmp("idle", key) == 0) {
-				r->condition = PMM_IDLE;
+				r->condition = CC_IDLE;
 			}
 			else if(strcmp("nousers", key) == 0) {
-				r->condition = PMM_NOUSERS;
+				r->condition = CC_NOUSERS;
 			}
-			/* TODO  change PMM_BETWEEN to PMM_PERIODIC and add code to support
+			/* TODO  add code to support CC_PERIODIC
 			else if(strcmp("periodic", key) == 0) {
-				r->condition = PMM_PERIODIC;
+				r->condition = CC_PERIODIC;
 
 				parse_routine_periodic(cnode->xmlChildren, doc, &r);
 

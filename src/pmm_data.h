@@ -37,12 +37,14 @@
 #include <sys/time.h>
 #include <pthread.h>
 
-#define PMM_INVALID -1
-#define PMM_NOW 0
-#define PMM_BEFORE 1
-#define PMM_PERIODIC 2
-#define PMM_IDLE 3
-#define PMM_NOUSERS 4
+typedef enum pmm_construction_condition {
+    CC_INVALID,     /*< invalid status */
+    CC_NOW,         /*< build model immidiately */
+    CC_UNTIL,       /*< build model as much as up to a certain time */
+    CC_PERIODIC,    /*< build model during a specific period of time only */
+    CC_IDLE,        /*< build model only when machine is considered idle */
+    CC_NOUSERS      /*< build model only when no users are logged in */
+} PMM_Construction_Condition;
 
 
 /**
@@ -280,7 +282,7 @@ typedef struct pmm_routine {
     struct pmm_paramdef_set *pd_set; /*!< set of parameter defintions */
 
 	//struct pmm_policy *policy; TODO implement policies
-	int condition;      /*!< benchmarking condition TODO enum */
+	enum pmm_construction_condition condition;  /*!< benchmarking condition */
 	int priority;       /*!< benchmarking priority */
 	int executable;     /*!< toggle for executability */
 
@@ -338,6 +340,8 @@ print_interval_list(const char *output, struct pmm_interval_list *l);
 
 char*
 construction_method_to_string(enum pmm_construction_method method);
+char*
+construction_condition_to_string(enum pmm_construction_condition condition);
 char*
 interval_type_to_string(enum pmm_interval_type type);
 
