@@ -3978,11 +3978,13 @@ int check_routine(struct pmm_routine *r) {
 		ret = 0;
 	}
 
+    /* TODO after changing to enum do we need to check this any more?
 	if(r->condition < 0 || r->condition > 4) {
 		ERRPRINTF("Execution Condition for routine not set correctly.\n");
 		print_routine(PMM_ERR, r);
 		ret = 0;
 	}
+    */
 
 	if(r->priority < 0) {
 		ERRPRINTF("Priority for routine not set correctly.\n");
