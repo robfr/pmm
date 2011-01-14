@@ -17,6 +17,15 @@
     You should have received a copy of the GNU General Public License
     along with PMM.  If not, see <http://www.gnu.org/licenses/>.
 */
+/*!
+ *
+ * @file pmm_argparser.c
+ *
+ * @brief Parsing command line arguments
+ *
+ * This file contains the command line argument parsing code for the pmm
+ * daemon and the pmm_view utility
+ */
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -33,14 +42,16 @@
 #include "pmm_argparser.h"
 #include "pmm_log.h"
 
-/*******************************************************************************
- *
- */
+//TODO put pmm_view and pmm argument parsing in seperate files
+
 int
 parse_slice_str(char *slice_str, struct pmm_view_options *options);
 int
 count_tokens_in_str(char *str, char *delimiters);
 
+/*!
+ * print command line usage for pmm building daemon
+ */
 void usage() {
 	printf("Usage: pmmd [-dh] [-c file] [-l file]\n");
 	printf("Options:\n");
@@ -53,11 +64,17 @@ void usage() {
 	printf("\n");
 }
 
-/*
- * function takes pointer to config structure and parses argument array using
- * getopt_long
+/*!
+ * Parse arguments for pmm building daemon.
+ *
+ * @param   cfg     pointer to config structure
+ * @param   argc    number of command line arguments
+ * @param   argv    pointer to command line arguments (array of character
+ *                  arrays)
+ *
  */
 void parse_args(struct pmm_config *cfg, int argc, char **argv) {
+    //TODO return on failure
 	int c;
 	int option_index;
 
@@ -116,6 +133,9 @@ void parse_args(struct pmm_config *cfg, int argc, char **argv) {
     }
 }
 
+/*!
+ * print command line usage for pmm_view tool
+ */
 void usage_pmm_view()
 {
 	printf("Usage: pmm_view -h | -c file [ -l | -r routine  [-p param -p ...] "
@@ -140,6 +160,17 @@ void usage_pmm_view()
 	printf("\n");
 }
 
+
+/*!
+ * Parse arguments for pmm_view tool
+ *
+ * @param   options pointer to pmm_view options structure
+ * @param   argc    number of command line arguments
+ * @param   argv    pointer to command line arguments (array of character
+ *                  arrays)
+ *
+ * @return 0 on successful parsing, -1 on error
+ */
 int
 parse_pmm_view_args(struct pmm_view_options *options,
 		                 int argc, char **argv)

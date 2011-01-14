@@ -24,12 +24,12 @@
 #include "config.h"
 #endif
 
-#define PMM_VIEW_NULL 0
-#define PMM_VIEW_PRINT_LIST 1
-#define PMM_VIEW_DISPLAY_ROUTINE 2
-#define PMM_VIEW_DISPLAY_FILE 3
+#define PMM_VIEW_NULL 0             /*!< pmm_view unset operation mode */
+#define PMM_VIEW_PRINT_LIST 1       /*!< pmm_view list routines mode */
+#define PMM_VIEW_DISPLAY_ROUTINE 2  /*!< pmm_view plot routine mode */
+#define PMM_VIEW_DISPLAY_FILE 3     /*!< pmm_view print routine data mode */
 
-#define PMM_MAX_PLOTS 32
+#define PMM_MAX_PLOTS 32            /*!< pmm_view max plots allowed */
 
 typedef struct pmm_view_options {
     int action;

@@ -1,4 +1,30 @@
 /*
+    Copyright (C) 2008-2010 Robert Higgins
+        Author: Robert Higgins <robert.higgins@ucd.ie>
+
+    This file is part of PMM.
+
+    PMM is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    PMM is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with PMM.  If not, see <http://www.gnu.org/licenses/>.
+*/
+/*!
+ *
+ * @file pmm_comp.c
+ *
+ * @brief Program to compare two models
+ *
+ * This file contains the pmm_comp program, which is a simple utility to
+ * compare two models
  */
 #if HAVE_CONFIG_H
 #include "config.h"
@@ -16,13 +42,21 @@
 #include "pmm_cfgparser.h"
 #include "pmm_log.h"
 
+/*!
+ * structure storing options for pmm_comp tool
+ */
 typedef struct pmm_comp_options {
     char *approx_model_file;
     char *base_model_file;
 } PMM_Comp_Options;
 
 
-void usage() {
+/*!
+ * print command line usage for pmm_comp tool
+ */
+void
+usage()
+{
     printf("Usage: pmm_comp -a model_a -b model_b\n");
     printf("Options:\n");
     printf("  -a model_a     : approximation that will be compared\n");
@@ -30,7 +64,16 @@ void usage() {
     printf("\n");
 }
 
-void parse_args(struct pmm_comp_options *opts, int argc, char **argv) {
+/*!
+ * parse arguments for pmm_comp tool
+ *
+ * @param   opts    pointer to options structure
+ * @param   argc    number of command line arguments
+ * @param   argv    command line arguments character array pointer
+ */
+void
+parse_args(struct pmm_comp_options *opts, int argc, char **argv)
+{
     int c;
     int option_index;
 
@@ -92,6 +135,14 @@ void parse_args(struct pmm_comp_options *opts, int argc, char **argv) {
     return;
 }
 
+/*!
+ * find the correlation between two models
+ *
+ * @param   approx_model    pointer to so called approximation model
+ * @param   base_model      pointer to base model
+ *
+ * @return the correlation factor
+ */
 double
 correlate_models(struct pmm_model *approx_model, struct pmm_model *base_model)
 {
@@ -190,6 +241,12 @@ correlate_models(struct pmm_model *approx_model, struct pmm_model *base_model)
     return correlation;
 }
 
+/*!
+ * pmm_comp compares pairs of model files
+ *
+ * shows statistics such as correlation, number of points, time spent
+ * benchmarking, etc.
+ */
 int
 main(int argc, char **argv)
 {
@@ -255,5 +312,3 @@ main(int argc, char **argv)
 
     return 0;
 }
-
-

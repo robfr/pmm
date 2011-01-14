@@ -17,6 +17,11 @@
     You should have received a copy of the GNU General Public License
     along with PMM.  If not, see <http://www.gnu.org/licenses/>.
 */
+/*!
+ * @file    pmm_muparse.h
+ * @brief   muparser structures
+ *
+ */
 #ifndef PMM_MUPARSE_H_
 #define PMM_MUPARSE_H_
 
@@ -36,10 +41,13 @@ typedef struct Parser {} Parser;
 using namespace mu;
 #endif
 
+/*!
+ * Structure to hold muparser object and variable array
+ */
 typedef struct pmm_param_constraint_muparser {
-    Parser p;
-    double *vars;
-    int n_p;
+    Parser p;       /*!< muparser parser object */
+    double *vars;   /*!< variable array that will be linked to parser object */
+    int n_p;        /*!< length of variable array */
 } PMM_Param_Constraint_Muparser;
 
 int

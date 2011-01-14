@@ -18,6 +18,12 @@
     You should have received a copy of the GNU General Public License
     along with PMM.  If not, see <http://www.gnu.org/licenses/>.
 */
+/*!
+ * @file    pmm_muparse.cc
+ * @brief   interface between pmm and muparser
+ *
+ * Contains code to interface between pmm structures and muparser API
+ */
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -34,6 +40,17 @@ extern "C" {
 }
 #include "pmm_muparse.h"
 
+/*!
+ * create a new parameter constraint formula structure for muparser
+ *
+ * Initializes muparser object and var array, then links var array to muparser
+ * object
+ *
+ * @param   pd_set  pointer to the set of parameter definitions that
+ *                  will contain the constraint formula
+ *
+ * @return 0 on success, -1 on failure
+ */
 extern "C"
 int
 create_param_constraint_muparser(struct pmm_paramdef_set *pd_set)
@@ -70,6 +87,18 @@ create_param_constraint_muparser(struct pmm_paramdef_set *pd_set)
     return 0;
 }
 
+/*!
+ * given a set of parameters, evaluate the constraint formula
+ *
+ * Store the values of the parameter in the constraint formula structure
+ * and then call the evaluation.
+ *
+ * @param   pc_parser   pointer to the parameter constraint formula structure
+ * @param   params      pointer to array of parameters
+ * @param   value       pointer to a double where the evaluation will be stored
+ *
+ * @returns 0 on success, -1 on failure
+ */
 extern "C"
 int
 evaluate_constraint_with_params(struct pmm_param_constraint_muparser* pc_parser,
@@ -85,6 +114,14 @@ evaluate_constraint_with_params(struct pmm_param_constraint_muparser* pc_parser,
 
 }
 
+/*!
+ * evaluate a constraint formula using its stored values
+ *
+ * @param   pc_parser   pointer to the parameter constraint formula structure
+ * @param   value       pointer to a double where the evaluation will be stored
+ *
+ * @return 0 on success, -1 on failure
+ */
 extern "C"
 int
 evaluate_constraint(struct pmm_param_constraint_muparser* pc_parser,

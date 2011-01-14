@@ -17,6 +17,10 @@
     You should have received a copy of the GNU General Public License
     along with PMM.  If not, see <http://www.gnu.org/licenses/>.
 */
+/*!
+ * @file    pmm_octave.h
+ * @brief   data structure for interaction with octave
+ */
 #ifndef PMM_OCTAVE_H_
 #define PMM_OCTAVE_H_
 
@@ -49,15 +53,20 @@ typedef struct ColumnVector {} ColumnVector;
 #undef PACKAGE_VERSION
 #endif
 
+/*!
+ * Structure containing octave objects which are used in interpolation of
+ * models
+ */
 typedef struct pmm_octave_data {
-    Matrix x;
-    ColumnVector y;
-    Matrix tri;
+    Matrix x;           /*!< matrix containing the parameter values */
+    ColumnVector y;     /*!< vector containing the value of model at @a x */
+    Matrix tri;         /*!< matix containing the triangulation of the point
+                             cloud described by @a x and @a y */
 } PMM_Octave_Data;
 
-#define PMM_ALL 0 
-#define PMM_AVG 1
-#define PMM_MAX 2
+#define PMM_ALL 0 /*!< use all points */
+#define PMM_AVG 1 /*!< use average of points with identical parameters */
+#define PMM_MAX 2 /*!< use maximum of points with identical parameters */
 
 void octave_init();
 struct pmm_octave_data*

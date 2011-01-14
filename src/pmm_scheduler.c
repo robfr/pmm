@@ -18,6 +18,12 @@
     You should have received a copy of the GNU General Public License
     along with PMM.  If not, see <http://www.gnu.org/licenses/>.
 */
+/*!
+ * @file    pmm_scheduler.c
+ * @brief   Choose next routine to benchmark
+ *
+ * Code to select next routine that should be benchmarked.
+ */
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif

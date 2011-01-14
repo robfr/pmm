@@ -17,6 +17,15 @@
     You should have received a copy of the GNU General Public License
     along with PMM.  If not, see <http://www.gnu.org/licenses/>.
 */
+/*!
+ * @file pmm_executor.c
+ *
+ * @brief Functions for executing a benchmark
+ *
+ * This file contains code for calling a benchmark executable from the 
+ * pmm daemon, dealing with the system level requirements of spawning
+ * the benchmark process and parsing the output of said benchmark.
+ */
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -45,16 +54,20 @@
 #include "pmm_log.h"
 #include "pmm_util.h"
 
-/*******************************************************************************
- * global variables
- */
-extern int executing_benchmark;
-extern pthread_mutex_t executing_benchmark_mutex;
-extern volatile sig_atomic_t sig_cleanup_received;
+//! daemon executing variable or not
+extern int executing_benchmark;                     
+//! mutex for accessing executing_benchmark variable
+extern pthread_mutex_t executing_benchmark_mutex;   
+
+/* TODO 
+extern volatile sig_atomic_t sig_cleanup_received; 
 extern volatile sig_atomic_t sig_pause_received;
 extern volatile sig_atomic_t sig_unpause_received;
+*/
 
+//! signal to indicate benchmark should be terminated
 extern int signal_quit;
+//! mutex for accessing singal_quit
 extern pthread_mutex_t signal_quit_mutex;
 
 
@@ -73,9 +86,12 @@ void set_executing_benchmark(int i);
 char*
 pmm_bench_exit_status_to_string(int bench_status);
 
-/*
- * this is a roughly portable way of setting a file descriptor for non-blocking
- * I/O.
+/*!
+ * a roughly portable way of setting a file descriptor for non-blocking I/O.
+ *
+ * @param   fd      file descriptor to modify
+ *
+ * @return -1 on error, 0 on success
  */
 int set_non_blocking(int fd) {
 	int flags;
@@ -186,9 +202,12 @@ my_popen(char *cmd, char **args, int n, pid_t *pid)
 	}
 }
 
-/*
+/*!
+ *  SIGCHLD signal handler
+ *  
+ *  @param   sign    the signal
  *
- *  Do not use *PRINTF logging facility in this thread, it is not
+ *  @warning Do not use *PRINTF logging facility in this thread, it is not
  * 'async-signal-safe' (though it is threadsafe).
  */
 void sig_childexit(int sig)
@@ -198,10 +217,22 @@ void sig_childexit(int sig)
 	//wait(0);
 }
 
-//TODO seperate into seperate call
-//TODO permit detection of routine that benchmark pertains to
-struct pmm_benchmark* parse_bench_output(char *output, int n_p, int *rargs)
+/*!
+ * Given the output of a benchmark execution parse and create a new
+ * benchmark structure storing all the information gained
+ *
+ * @param   output  pointer to benchmark output string
+ * @param   n_p     number of parameters of benchmark
+ * @param   rargs   arguments passed to the benchmarked routine
+ *
+ * @return pointer to newly allocated benchmark reflecting the parsed output
+ */
+struct pmm_benchmark*
+parse_bench_output(char *output, int n_p, int *rargs)
 {
+    //TODO seperate into seperate call
+    //TODO permit detection of routine that benchmark pertains to
+    //TODO change rargs to p or something reflecting the reset of the code
 	struct timeval wall_t, used_t;
 	long long complexity;
 	int rc;
@@ -258,14 +289,28 @@ struct pmm_benchmark* parse_bench_output(char *output, int n_p, int *rargs)
 	return b;
 }
 
+
+/*!
+ * calculate (FL)OPS (floating point operations per second or any other
+ * type of operations per second)
+ *
+ * @param   tv          timeval structure representing duration of computation
+ * @param   complexity  complexity of computation (volume of operations)
+ *
+ * @returns flops as a double
+ */
 double calculate_flops(struct timeval tv, long long int complexity)
 {
-
 	return complexity/timeval_to_seconds(tv);
-
-
 }
 
+/*!
+ * convert a timeval to second in double
+ *
+ * @param   tv  timeval structure
+ *
+ * @return timeval as seconds
+ */
 double timeval_to_seconds(struct timeval tv)
 {
 	return (double)tv.tv_sec + (double)tv.tv_usec/1000000.0;
@@ -404,6 +449,15 @@ spawn_benchmark_process(struct pmm_routine *r, int *params,
     return fd;
 }
 
+/*!
+ * clean up a benchmark process
+ *
+ * closes file handles and kills the process
+ *
+ * @param   fp              file pointer to the benchmarks standard output
+ * @param   bench_pid       benchmark process id
+ *
+ */
 void
 cleanup_benchmark_process(FILE *fp, pid_t bench_pid)
 {
@@ -418,6 +472,13 @@ cleanup_benchmark_process(FILE *fp, pid_t bench_pid)
 }
 
 /*!
+ *
+ * Read the output of a benchmark process
+ *
+ * @param   fd          benchmark process output file descriptor
+ * @param   output_p    pointer to a character array where output will be
+ *                      stored
+ * @param   bench_pid   process id of the benchmark process
  *
  * @return 0 on success, -1 if there was an error reading (output_p
  * also set to NULL) 1 if a quit signal was received while waiting for output
@@ -608,14 +669,19 @@ read_benchmark_output(int fd, char **output_p, pid_t bench_pid)
 }
 
 /*!
- * Given a routine to benchmark, select a point, execute the benchmark
- * and insert the new point into the model. Set the global 'executing_benchark'
- * to false/0 when the operation is complete (failed).
+ * Given a routine to benchmark, select a point, execute the benchmark and
+ * insert the new point into the model. Set the global 'executing_benchark' to
+ * false/0 when the operation is complete (or has failed).
  *
- * @return 0 on success, 1 on quit from signal, -1 on failure
- * TODO decompose some of the fuctionality of this to make it more legible
+ * @param   scheduled_r     void pointer to a routine structure that has been
+ *                          scheduled for a benchmark execution
+ *
+ * @return void pointer to an integer with value of: 0 on success, 1 on quit from signal, -1 on failure
  */
-void *benchmark(void *scheduled_r) {
+void*
+benchmark(void *scheduled_r)
+{
+    // TODO decompose some of the fuctionality of this to make it more legible
 	int *ret;
     int temp_ret;
 	struct pmm_routine *r;
@@ -876,6 +942,11 @@ void *benchmark(void *scheduled_r) {
 	return (void *)ret;
 }
 
+/*!
+ * set the executing_benchmark variable via mutex
+ *
+ * @param   i   value to set variable with
+ */
 void
 set_executing_benchmark(int i)
 {
@@ -887,6 +958,13 @@ set_executing_benchmark(int i)
 	pthread_mutex_unlock (&executing_benchmark_mutex);
 }
 
+/*!
+ * convert benchmark exit status to a string
+ *
+ * @param   bench_status    benchmark status represented by an int
+ *
+ * @return pointer to a character string
+ */
 char*
 pmm_bench_exit_status_to_string(int bench_status)
 {

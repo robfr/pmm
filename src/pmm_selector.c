@@ -17,6 +17,13 @@
     You should have received a copy of the GNU General Public License
     along with PMM.  If not, see <http://www.gnu.org/licenses/>.
 */
+/*!
+ * @file    pmm_selector.c
+ * @brief   Code for chosing benchmark points
+ *
+ * This is the core of the application, implementing many methods to choose
+ * benchmarking points to minimise the construction time of a model
+ */
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif

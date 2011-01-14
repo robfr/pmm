@@ -17,6 +17,13 @@
     You should have received a copy of the GNU General Public License
     along with PMM.  If not, see <http://www.gnu.org/licenses/>.
 */
+/*!
+ * @file    pmm_octave.cc
+ * @brief   interface between octave and pmm
+ *
+ * Contains code to permit pmm to call interpolation functions written in
+ * octave
+ */
 #if HAVE_CONFIG_H
 #include "config.h"
 
@@ -47,9 +54,15 @@ extern "C" {
 	#include "pmm_log.h"
 }
 
-static int is_octave_initialised = 0;
+static int is_octave_initialised = 0; /*!< global initialization switch */
 
 
+/*!
+ * Intialize octave
+ *
+ * Initialize octave and load the custom griddatan octave function file
+ *
+ */
 extern "C"
 void octave_init()
 {
@@ -68,6 +81,16 @@ void octave_init()
     is_octave_initialised = 1;
 }
 
+/*!
+ * Add a benchmark to octave matrix and vector objects
+ *
+ * @param   pos     row in @a x and @a y to add benchmark to
+ * @param   n       number of elements in parameter array of benchmark and
+ *                  columns in @a x
+ * @param   x       reference to matrix containing parameter values
+ * @param   y       reference to column vector containing performance for
+ *                  parameter values in @a x
+ */
 void add_benchmark_to_xy(int pos, int n, struct pmm_benchmark *b, Matrix &x,
                          ColumnVector &y)
 {
@@ -81,6 +104,17 @@ void add_benchmark_to_xy(int pos, int n, struct pmm_benchmark *b, Matrix &x,
 }
 
 
+/*!
+ * 
+ * Populate the members of an octave data structure with a model
+ *
+ * @param   m       pointer to model which will populate octave data objects
+ * @param   mode    defines mode of operation, either adding all raw data
+ *                  points in model (@a mode=0) or adding only averaged
+ *                  data points in model (@a mode!=0)
+ *
+ * @returns a populated octave data structure
+ */
 extern "C"
 struct pmm_octave_data*
 fill_octave_input_matrices(struct pmm_model *m, int mode)
@@ -163,7 +197,7 @@ fill_octave_input_matrices(struct pmm_model *m, int mode)
 
 /*!
  * Calcuate and store the triangulation of a matrix of points stored in the
- * pmm_octave_data structure
+ * pmm_octave_data structure using delaunayn octave function
  *
  * @param   oct_data    pointer to octave data structure containing matrix
  *                      of points, values at points and the triangulation
@@ -202,7 +236,7 @@ octave_triangulate(struct pmm_octave_data *oct_data)
 
 /*!
  * Interpolate a previously calculated triangulation at a set of points defined
- * by the array p
+ * by the array p using triinterpn octave function
  *
  * @param   oct_data    octave data structure containing data points and the
  *                      calculated triangulation of those points
@@ -273,6 +307,17 @@ octave_interp_array(struct pmm_octave_data *oct_data, int **p, int n, int l)
     return flops;
 }
 
+/*!
+ * Interpolate a previously calculated triangulation at a single point
+ * using triinterpn octave function
+ *
+ * @param   oct_data    octave data structure containing data points and the
+ *                      calculated triangulation of those points
+ * @param   p           pointer to an interpolation point array
+ * @param   n           number of dimensions of the interpolation point
+ *
+ * @return value of interpolation at point @a p
+ */
 extern "C"
 double
 octave_interp(struct pmm_octave_data *oct_data, int *p, int n)
@@ -330,6 +375,15 @@ octave_interp(struct pmm_octave_data *oct_data, int *p, int n)
     return flops;
 }
 
+/*!
+ * interpolate the data stored in octave data structure at a
+ * particular point using griddatan octave function
+ *
+ * @param   oct_data    pointer to data structure containing a point cloud
+ * @param   p           pointer to an array describing point at which to
+ *                      interpolate point cloud
+ * @param   n           number of parameters of point
+ */
 extern "C"
 double
 octave_interpolate(struct pmm_octave_data *oct_data, int *p, int n)
@@ -394,6 +448,16 @@ octave_interpolate(struct pmm_octave_data *oct_data, int *p, int n)
     return flops;
 }
 
+/*!
+ * Create octave data structures from a model, interpolate that model and
+ * look up the interpolation at a point using griddatan octave function
+ *
+ * @param   m       pointer to the model
+ * @param   p       pointer to the parameter array describing the look up point
+ *
+ * @return pointer to a newly allocated benchmark representing the value of
+ * the model at the lookup point or NULL on failure
+ */
 extern "C"
 struct pmm_benchmark*
 interpolate_griddatan(struct pmm_model *m, int *p)

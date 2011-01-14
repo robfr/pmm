@@ -17,6 +17,14 @@
     You should have received a copy of the GNU General Public License
     along with PMM.  If not, see <http://www.gnu.org/licenses/>.
 */
+/*!
+ * @file pmm_cond.c
+ *
+ * @brief Functions to test system conditions
+ *
+ * this file contains the code for testing system conditions which may limit
+ * or permit the construction of models by the pmm daemon
+ */
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -36,15 +44,24 @@
 int ttystat(char *line, int sz);
 int num_users();
 
-/*
+/*!
  * checks that the tty a user is logged into (as per utmp) exists in /dev
- * returns 1 (true) if tty exists, 0 if tty does not exist
+ *
+ * This indicates whether a user has an interactive session or not
+ *  
  *
  * code comes from FreeBSD /usr/src/usr.bin/w/w.c
  *
- * TODO Portable?
+ * @param   line    pointer to line of the utmp file
+ * @param   sz      size of the line
+ *
+ * @return 1 if user has a tty, 0 if user does not.
+ *
  */
-int ttystat(char *line, int sz) {
+int
+ttystat(char *line, int sz)
+{
+    // TODO portable ?
 	static struct stat sb;
 	char ttybuf[MAXPATHLEN];
 
@@ -61,15 +78,18 @@ int ttystat(char *line, int sz) {
 }
 
 
-/*
+/*!
  * counts the number of users logged into a system by reading utmp returns
  * the number of users logged in.
  *
  * code comes from FreeBSD /usr/src/usr.bin/w/w.c
  *
- * TODO Portable?
+ * @return number of users logged in
  */
-int num_users() {
+int
+num_users()
+{
+    //TODO portable on windows/NON-posix ?
 	FILE *ut;
 	struct utmp utmp;
 	int nusers;
@@ -101,8 +121,9 @@ int num_users() {
 }
 
 /*
- * cond_users, returns true (1) if users are logged into the system, or 0 if
- * no users are logged in.
+ * Test system for users
+ *
+ * @return 1 if users are logged into system, 0 if not
  */
 int cond_users() {
 	if(num_users() > 0) {
@@ -112,8 +133,12 @@ int cond_users() {
 	}
 }
 
-/*
- * cond_idle, return true if 5 minute load is below 0.1
+/*!
+ * test system for idleness
+ *
+ * true if 5 minute load is below 0.1
+ *
+ * return 0 if not idle, 1 if idle
  */
 int cond_idle() {
 	double loadavg[3];

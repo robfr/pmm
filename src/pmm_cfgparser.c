@@ -17,6 +17,16 @@
     You should have received a copy of the GNU General Public License
     along with PMM.  If not, see <http://www.gnu.org/licenses/>.
 */
+/*!
+ *
+ * @file pmm_cfgparser.c
+ *
+ * @brief Functions for handling xml data files
+ *
+ * This file contains code for parsing and writing xml files which store
+ * the various data structures of the program, those being models, load history
+ * and the pmm daemon configuration file
+ */
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -41,9 +51,6 @@
 #include "pmm_cfgparser.h"
 #include "pmm_muparse.h"
 
-/******************************************************************************
- *
- */
 
 struct pmm_loadhistory* parse_loadconfig(xmlDocPtr, xmlNodePtr node);
 
@@ -1752,9 +1759,13 @@ int parse_models(struct pmm_config *c)
 	return 0; //success
 }
 
-/*
- * writes history structure to disk in xml returning +ve on sucess and -ve on
- * failure
+/*!
+ * write an interval structure to disk in xml
+ *
+ * @param   writer      xmlTextWriterPtr to use to write with
+ * @param   i           pointer to interval structure to write to disk
+ *
+ * @return 0 on success, -1 on failure
  */
 int write_interval_xtwp(xmlTextWriterPtr writer, struct pmm_interval *i)
 {
@@ -1925,6 +1936,16 @@ int write_interval_xtwp(xmlTextWriterPtr writer, struct pmm_interval *i)
 	return 0; //success
 }
 
+/*!
+ * write the load history to file
+ *
+ * opens an xmlTextWriter and writes the history to the file specified
+ * in the history structure
+ *
+ * @param   h   pointer to the load history
+ *
+ * @return 0 on success, -1 on failure
+ */
 int
 write_loadhistory(struct pmm_loadhistory *h)
 {
@@ -2105,11 +2126,15 @@ write_loadhistory(struct pmm_loadhistory *h)
 }
 
 
-#define TIME_STR_SIZE 256
-/*
- * this is the 'internal' function that writes the various elements and
- * returns error codes to the main write_loadhistory function so it may close
- * the xmlTextWriterPtr gracefully
+#define TIME_STR_SIZE 256   /*!< size of ISO 8601 time string */
+/*!
+ *
+ * Write load history to the xmlTextWriterPtr
+ *
+ * @param   writer  an xmlTextWriter pointer
+ * @param   h       pointer to load load history structure
+ *
+ * @return 0 on success, -1 on failure
  */
 int write_loadhistory_xtwp(xmlTextWriterPtr writer, struct pmm_loadhistory *h)
 {
@@ -2246,6 +2271,13 @@ int check_lock(int fd, int type)
     }
 }
 
+/*!
+ * write all models in the configuration
+ *
+ * @param   cfg     pointer to the configuration
+ *
+ * @return 0 on success, -1 on failure
+ */
 int
 write_models(struct pmm_config *cfg)
 {
@@ -2266,6 +2298,13 @@ write_models(struct pmm_config *cfg)
     return ret;
 }
 
+/*!
+ * write an individual model to disk
+ *
+ * @param   m   pointer to the model
+ *
+ * @return 0 on success, -1 on failure
+ */
 int
 write_model(struct pmm_model *m)
 {
@@ -2447,6 +2486,9 @@ write_model(struct pmm_model *m)
 /*!
  * attempt to sync and close an open file descriptor.
  *
+ * @param   fd  file discriptor
+ *
+ * @return 0 on success, -1 on failure
  */
 int
 sync_close_file(int fd)
@@ -2472,6 +2514,13 @@ sync_close_file(int fd)
     return ret;
 }
 
+/*!
+ * attempt to sync the directory contained by a file in a particular path 
+ *
+ * @param   file_path  pointer to character array giving path of file
+ *
+ * @return 0 on success, -1 on failure
+ */
 int
 sync_parent_dir(char *file_path)
 {
@@ -2525,8 +2574,13 @@ sync_parent_dir(char *file_path)
     return ret;
 }
 
-/*
- * writes model to xmlTextWriterPtr
+/*!
+ * Write a model list to an xmlTextWriterPtr object
+ *
+ * @param   writer      xmlTextWriter pointer
+ * @param   m           pointer to the model
+ *
+ * @returns 0 on success, -1 on failure
  */
 int write_model_xtwp(xmlTextWriterPtr writer, struct pmm_model *m)
 {
@@ -2622,7 +2676,14 @@ int write_model_xtwp(xmlTextWriterPtr writer, struct pmm_model *m)
 	return 0; //success
 }
 
-
+/*!
+ * Write a benchmark list to an xmlTextWriterPtr object
+ *
+ * @param   writer      xmlTextWriter pointer
+ * @param   bench_list  pointer to the benchmark list
+ *
+ * @returns 0 on success, -1 on failure
+ */
 int write_bench_list_xtwp(xmlTextWriterPtr writer,
 		                  struct pmm_bench_list *bench_list)
 {
@@ -2906,8 +2967,16 @@ write_parameter_array_xtwp(xmlTextWriterPtr writer, int *p, int n)
     return 0;
 }
 
-
-int write_benchmark_xtwp(xmlTextWriterPtr writer, struct pmm_benchmark *b)
+/*!
+ * Write a benchmark to an xmlTextWriterPtr object
+ *
+ * @param   writer  xmlTextWriter pointer
+ * @param   b       pointer to the benchmark
+ *
+ * @return 0 on success -1 on error
+ */
+int
+write_benchmark_xtwp(xmlTextWriterPtr writer, struct pmm_benchmark *b)
 {
 	int rc;
 
@@ -2990,8 +3059,16 @@ int write_benchmark_xtwp(xmlTextWriterPtr writer, struct pmm_benchmark *b)
 	return 0; //success
 }
 
-
-int write_timeval_xtwp(xmlTextWriterPtr writer, struct timeval *t)
+/*!
+ * Write a timeval to an xmlTextWriterPtr object
+ *
+ * @param   writer  xmlTextWriter pointer
+ * @param   t       pointer to the timeval
+ *
+ * @return 0 on success -1 on error
+ */
+int
+write_timeval_xtwp(xmlTextWriterPtr writer, struct timeval *t)
 {
 	int rc;
 
@@ -3015,12 +3092,20 @@ int write_timeval_xtwp(xmlTextWriterPtr writer, struct timeval *t)
 
 }
 
-void xmlparser_init()
+/*!
+ * initialized libxml2 parser
+ */
+void
+xmlparser_init()
 {
     xmlInitParser();
 }
 
-void xmlparser_cleanup()
+/*!
+ * clean up libxml parser
+ */
+void
+xmlparser_cleanup()
 {
 	xmlCleanupParser();
 }

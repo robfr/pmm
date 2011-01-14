@@ -17,6 +17,14 @@
     You should have received a copy of the GNU General Public License
     along with PMM.  If not, see <http://www.gnu.org/licenses/>.
 */
+/*!
+ * @file pmm_data.c
+ *
+ * @brief functions for operating on PMM data structures
+ *
+ * this file contains the code for operating on the data structures of the
+ * pmm applications
+ */
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -3313,6 +3321,13 @@ void print_interval_list(const char *output, struct pmm_interval_list *l)
 	}
 }
 
+/*!
+ * convert a construction method enum to a char array description
+ *
+ * @param   method  the construction method
+ * 
+ * @returns pointer to a character array describing the method
+ */
 char*
 construction_method_to_string(enum pmm_construction_method method)
 {

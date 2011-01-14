@@ -17,6 +17,12 @@
     You should have received a copy of the GNU General Public License
     along with PMM.  If not, see <http://www.gnu.org/licenses/>.
 */
+/*!
+ * @file    pmm_util.c
+ * @brief   Utility functions for benchmark executables
+ *
+ * Code that implements utility functions for benchmark authors
+ */
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif

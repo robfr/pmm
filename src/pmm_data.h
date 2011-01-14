@@ -37,6 +37,10 @@
 #include <sys/time.h>
 #include <pthread.h>
 
+/*!
+ * enumeration fo different model construction conditions that must be
+ * satisified to conduct benchmarking
+ */
 typedef enum pmm_construction_condition {
     CC_INVALID,     /*< invalid status */
     CC_NOW,         /*< build model immidiately */
@@ -47,7 +51,8 @@ typedef enum pmm_construction_condition {
 } PMM_Construction_Condition;
 
 
-/**
+
+/*!
  * structure to hold the configuration of the benchmarking server
  */
 typedef struct pmm_config {
@@ -99,16 +104,19 @@ typedef enum pmm_construction_method {
 
 /*!
  * Structure defining a parameter of a routine
- * TODO allow definition of a mathematical sequence to govern permissable
- * parameters. At present stride and offset allow a sequence equvilent to: a*x + b
- * where a = stride and b = offset
  */
 typedef struct pmm_paramdef {
+    /*
+     * TODO allow definition of a mathematical sequence to govern permissable
+     * parameters. At present stride and offset allow a sequence equvilent
+     * to: a*x + b where a = stride and b = offset
+     */
 	char *name;         /*!< name of parameter */
 	int type;           /*!< */
 	int order;          /*!< order in the sequence of parameters passed to
                              benchmarking routine */
-    int nonzero_end;    /*!< toggle assumtion of zero speed at parameter end value */
+    int nonzero_end;    /*!< toggle assumtion of zero speed at parameter end
+                             value */
 	int end;            /*!< ending value of parameter range */
 	int start;          /*!< starting value of parameter range */
     int stride;         /*!< stride to use traversing parameter range */
