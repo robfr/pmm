@@ -481,7 +481,12 @@ parse_slice_str(char *slice_str, struct pmm_view_options *options)
 
     int i;
     int n; //number of tokens
-    int p_index;
+    int p_index = 0; /* TODO no need for switch statement below which emits
+                        a warning if p_index is not initialized because parsing
+                        into p_index is a conditional operation. Same can be
+                        achieved by replacing the switch and states with a
+                        two step parsing of the string */
+                        
     int p_value;
 
 
