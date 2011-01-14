@@ -703,7 +703,7 @@ void
 plot_slice_interp_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
                         struct pmm_view_options *options)
 {
-    int i, j, c;
+    int i, j;
     double *x;
     double *y;
     int n;
@@ -716,8 +716,6 @@ plot_slice_interp_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
             //
     int max, min;
 
-
-    struct pmm_benchmark *b, *b_plot;
 
     struct pmm_octave_data *oct_data;
     double *approx_speeds;
