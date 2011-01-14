@@ -50,6 +50,7 @@
 #include <time.h>
 #include <paths.h>
 #include <sys/types.h>
+#include <sys/stat.h> // for stat
 #include <fcntl.h>
 #include <pthread.h>
 #include <libgen.h>
