@@ -123,9 +123,6 @@ multi_naive_select_new_bench(struct pmm_routine *r)
     struct pmm_interval_list *i_list;
     struct pmm_interval *new_i, *top_i;
     struct pmm_model *m;
-    int i;
-    double pc;
-
 
     m = r->model;
     i_list = m->interval_list;
@@ -352,8 +349,6 @@ naive_process_interval_list(struct pmm_routine *r, struct pmm_benchmark *b)
     struct pmm_interval *new_i;
     int *aligned_params;
     int i;
-    double pc;
-
 
     m = r->model;
     interval = m->interval_list->top;
@@ -1487,6 +1482,8 @@ adjust_interval_with_param_constraint_min(struct pmm_interval *i,
 
     return 0;
 #else
+    (void)i;        //TODO unused
+    (void)pd_set;
     ERRPRINTF("muParser not enabled at configure.\n");
     return -1;
 #endif /* HAVE_MUPARSER */
@@ -1633,6 +1630,9 @@ adjust_interval_with_param_constraint_max(struct pmm_interval *i,
 
     return 0;
 #else
+    (void)i;        //TODO unused
+    (void)pd_set;
+
     ERRPRINTF("muParser not enabled at configure.\n");
     return -1;
 #endif /* HAVE_MUPARSER */
@@ -2527,6 +2527,7 @@ find_interval_matching_bench(struct pmm_routine *r, struct pmm_benchmark *b,
     int *temp_params;
     int done = 0, ret;
 
+    (void)h; //TODO unused
 
     // set found to NULL incase we don't find anything and in case of error
     *found_i = NULL;

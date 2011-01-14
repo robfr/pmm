@@ -246,7 +246,6 @@ parse_paramdef_set(struct pmm_paramdef_set *pd_set, xmlDocPtr doc,
 	char *key;
 	xmlNodePtr cnode;
 	int i;
-    double d;
 
 	cnode = node->xmlChildrenNode;
 

@@ -107,6 +107,8 @@ void* signal_handler(void* arg)
 	sigset_t signal_set;
 	int signal;
 
+    (void)arg; //TODO unused
+
 	for(;;) {
 
 		//create a full signal set

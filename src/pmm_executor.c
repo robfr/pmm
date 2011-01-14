@@ -212,6 +212,9 @@ my_popen(char *cmd, char **args, int n, pid_t *pid)
  */
 void sig_childexit(int sig)
 {
+
+    (void)sig; //TODO unused
+
     printf("received SIGCHLD\n");
     // if we wait here we miss the status in the "benchmark" function
 	//wait(0);

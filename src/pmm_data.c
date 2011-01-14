@@ -1553,7 +1553,7 @@ remove_bench_from_bench_list(struct pmm_bench_list *bl,
 
 
 
-/*!
+/*
  * Takes a benchmark structure with flops and size members set and uses them to
  * calculate and set the execution time timeval used_t member of the benchmark
  *
@@ -1561,8 +1561,9 @@ remove_bench_from_bench_list(struct pmm_bench_list *bl,
  *
  * @return 0 if benchmark does not have valid data or 1 on success
  */
-int flops_to_time_t(struct pmm_benchmark *b) {
 /*
+int
+flops_to_time_t(struct pmm_benchmark *b) {
 		double d_secs;
 		if(b->flops <= 0 || b->size < 0) {
 			return 0;
@@ -1573,9 +1574,9 @@ int flops_to_time_t(struct pmm_benchmark *b) {
 		b->used_t.tv_sec = floor(d_secs);
 
 		b->used_t.tv_usec = floor(1000*(d_secs - b->used_t.tv_sec));
-*/
     return 0;
 }
+*/
 
 
 //TODO make some consistency where functions that allocate and return memory do
@@ -2869,6 +2870,8 @@ int bench_cut_contains(struct pmm_loadhistory *h, struct pmm_benchmark *b1,
 
     double max, min;
 
+    (void)h; //TODO unused
+
     DBGPRINTF("b1->flops:%f b2->flops:%f\n", b1->flops, b2->flops);
 
     max = MAX_CMP(b1->flops, b2->flops);
@@ -2939,6 +2942,8 @@ int bench_cut_intersects(struct pmm_loadhistory *h, struct pmm_benchmark *b1,
 
     double max, min;
 
+    (void)h; //TODO unused
+
     DBGPRINTF("b1->flops:%f b2->flops:%f\n", b1->flops, b2->flops);
 
     max = MAX_CMP(b1->flops, b2->flops);
@@ -2998,6 +3003,8 @@ int bench_cut_intersects(struct pmm_loadhistory *h, struct pmm_benchmark *b1,
 int bench_cut_greater(struct pmm_loadhistory *h, struct pmm_benchmark *b1,
 		              struct pmm_benchmark *b2) {
 
+    (void)h; //TODO unused
+
     if(b1->flops > b2->flops*(1.0 + PMM_PERC)) {
         return 1; //b1 greater than b2 (by a percentage)
     }
@@ -3019,6 +3026,9 @@ int bench_cut_greater(struct pmm_loadhistory *h, struct pmm_benchmark *b1,
  */
 int bench_cut_less(struct pmm_loadhistory *h, struct pmm_benchmark *b1,
 		           struct pmm_benchmark *b2) {
+
+    (void)h; //TODO unused
+
     if(b1->flops < b2->flops*(1.0 - PMM_PERC)) {
         return 1; //b1 less than b2 (by a percentage)
     }
