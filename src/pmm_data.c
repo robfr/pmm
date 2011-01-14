@@ -2594,7 +2594,7 @@ remove_benchmarks_at_param(struct pmm_model *m, int *p,
         return 0; //nothing found
     }
 
-    DBGPRINTF("allocating remove_array of %d elemenets of size %u.\n",
+    DBGPRINTF("allocating remove_array of %d elemenets of size %lu.\n",
               n, sizeof(*removed_array));
 
     (*removed_array) = malloc(n * sizeof *(*removed_array));
@@ -3791,7 +3791,7 @@ void print_routine(const char *output, struct pmm_routine *r) {
 
     print_paramdef_set(output, r->pd_set);
 
-	SWITCHPRINTF(output, "condition:%d\n", construction_condition_to_string(r->condition));
+	SWITCHPRINTF(output, "condition: %s\n", construction_condition_to_string(r->condition));
 	SWITCHPRINTF(output, "priority:%d\n", r->priority);
     SWITCHPRINTF(output, "executable:%d\n", r->executable);
 

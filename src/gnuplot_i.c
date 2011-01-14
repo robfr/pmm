@@ -613,7 +613,7 @@ void gnuplot_plot_x(
     for (i=0 ; i<n ; i++) {
 		sprintf(line, "%g\n", d[i]);
 		ret = write(tmpfd, line, strlen(line));
-        if(ret != strlen(line)) {
+        if(ret != (int)strlen(line)) {
             if(ret < 0) {
                 fprintf(stderr,"error writing to temp file\n");
             }
@@ -720,7 +720,7 @@ void gnuplot_plot_xy(
     for (i=0 ; i<n; i++) {
         sprintf(line, "%g %g\n", x[i], y[i]) ;
 		ret = write(tmpfd, line, strlen(line));
-        if(ret != strlen(line)) {
+        if(ret != (int)strlen(line)) {
             if(ret < 0) {
                 fprintf(stderr,"error writing to temp file:\n");
             }
@@ -822,7 +822,7 @@ int gnuplot_splot(gnuplot_ctrl *handle, double *x, double *y, double *z, int n, 
     for (i=0 ; i<n; i++) {
         sprintf(line, "%g %g %g\n", x[i], y[i], z[i]) ;
 		ret = write(tmpfd, line, strlen(line));
-        if(ret != strlen(line)) {
+        if(ret != (int)strlen(line)) {
             if(ret < 0) {
                 fprintf(stderr,"error writing to temp file\n");
             }
@@ -903,7 +903,7 @@ int gnuplot_splot_grid(gnuplot_ctrl *handle, double *points, int rows, int cols,
         for (j=0;j<cols;j++) {
             sprintf(line, "%d %d %g\n", i,j,points[i*cols+j]) ;
             ret = write(tmpfd, line, strlen(line));
-            if(ret != strlen(line)) {
+            if(ret != (int)strlen(line)) {
                 if(ret < 0) {
                     fprintf(stderr,"error writing to file temp file\n");
                 }
@@ -916,7 +916,7 @@ int gnuplot_splot_grid(gnuplot_ctrl *handle, double *points, int rows, int cols,
         }
         strcpy(line,"\n");
 		ret = write(tmpfd, line, strlen(line));
-        if(ret != strlen(line)) {
+        if(ret != (int)strlen(line)) {
             if(ret < 0) {
                 fprintf(stderr,"error writing to temp file\n");
             }
@@ -1021,7 +1021,7 @@ int gnuplot_contour_plot(gnuplot_ctrl *handle, double *x, double *y, double *z, 
         for (j=0 ; j<ny; j++) {
             sprintf(line, "%g %g %g\n", x[nx*i+j], y[nx*i+j], z[nx*i+j]) ;
             ret = write(tmpfd, line, strlen(line));
-            if(ret != strlen(line)) {
+            if(ret != (int)strlen(line)) {
                 if(ret < 0) {
                     fprintf(stderr,"error writing to temp file\n");
                 }
@@ -1034,7 +1034,7 @@ int gnuplot_contour_plot(gnuplot_ctrl *handle, double *x, double *y, double *z, 
         }
         sprintf(line, "\n") ;
 		ret = write(tmpfd, line, strlen(line));
-        if(ret != strlen(line)) {
+        if(ret != (int)strlen(line)) {
             if(ret < 0) {
                 fprintf(stderr,"error writing to temp file\n");
             }
@@ -1127,7 +1127,7 @@ int gnuplot_splot_obj(gnuplot_ctrl *handle,
         getPoint(obj,&point,i,n);
         sprintf(line, "%g %g %g\n", point.x, point.y, point.z) ;
 		ret = write(tmpfd, line, strlen(line));
-        if(ret != strlen(line)) {
+        if(ret != (int)strlen(line)) {
             if(ret < 0) {
                 fprintf(stderr,"error writing to temp file\n");
             }
@@ -1239,7 +1239,7 @@ int gnuplot_plot_obj_xy(
         getPoint(obj,&point,i,n);
         sprintf(line, "%g %g\n", point.x, point.y) ;
 		ret = write(tmpfd, line, strlen(line));
-        if(ret != strlen(line)) {
+        if(ret != (int)strlen(line)) {
             if(ret < 0) {
                 fprintf(stderr,"error writing to temp file\n");
             }
