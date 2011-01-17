@@ -36,7 +36,7 @@
 #include "pmm_data.h"
 #include "pmm_selector.h"
 #include "pmm_interval.h"
-#include "pmm_params.h"
+#include "pmm_param.h"
 #include "pmm_log.h"
 
 #ifdef HAVE_MUPARSER
