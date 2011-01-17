@@ -55,8 +55,8 @@ MAINTAINERCLEANFILES	= Makefile.in aclocal.m4 configure config-h.in \
 			stamp-h.in $(AUX_DIST)
 
 #create the 'var' localstate directory for models and loadhistory
-localstatepmmdir = $(localstatedir)/pmm
-localstatepmm_DATA =
+install-data-local:
+	$(MKDIR_P)  $(localstatedir)/pmm
 
 #dist-hook:
 #	(cd $(distdir) && mkdir $(auxdir))
