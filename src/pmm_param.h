@@ -29,6 +29,10 @@
 #include "config.h"
 #endif
 
+#ifdef HAVE_MUPARSER
+#include "pmm_muparse.h"
+#endif
+
 /*!
  * Structure defining a parameter of a routine
  */
