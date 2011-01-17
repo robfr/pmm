@@ -79,7 +79,7 @@ libpmm_la_CXXFLAGS = $(OCTAVE_CXXFLAGS) $(MUPARSER_CPPFLAGS)
 pkgdata_DATA = pmm_griddatan.m
 
 EXTRA_DIST	= pmm_argparser.h pmm_cfgparser.h pmm_cond.h pmm_data.h \
-		pmm_param.h \
+		pmm_interval.h pmm_param.h \
 		pmm_executor.h pmm_scheduler.h pmm_util.h pmm_selector.h gnuplot_i.h \
 		pmm_octave.h pmm_log.h pmm_muparse.h pmm_griddatan.m
 
