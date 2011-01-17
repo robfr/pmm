@@ -406,6 +406,7 @@ spawn_benchmark_process(struct pmm_routine *r, int *params,
 
         //check we got expected number of tokens
         if(j!=count) {
+            free(arg_strings);
             ERRPRINTF("Error copying tokens into array.\n");
             return -1;
         }

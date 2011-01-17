@@ -301,6 +301,7 @@ octave_interp_array(struct pmm_octave_data *oct_data, int **p, int n, int l)
 	}
 	else {
 		ERRPRINTF("Error calling pmm_triinterpn in octave.\n");
+        delete [] flops;
 		return NULL;
 	}
 

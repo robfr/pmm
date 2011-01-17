@@ -2219,6 +2219,9 @@ void mesh_boundary_models(struct pmm_model *m)
 
     recurse_mesh(m, params, plane, n_p);
 
+    free(params);
+
+    return;
 }
 
 //TODO prevent boundary benchmarks from being added as they are already
