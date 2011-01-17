@@ -459,8 +459,8 @@ int main(int argc, char **argv) {
 
                 // if the models are not modified, don't bother
                 // reploting, just sleep for the period until they are
-                while((ret = test_model_files_modified(models, options.n_plots)
-                       != 1) ) {
+                while((ret = test_model_files_modified(models, options.n_plots))
+                       != 1)  {
                     DBGPRINTF("models not updated. Sleeping again ...\n");
                     sleep(options.wait_period);
                 }
