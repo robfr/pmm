@@ -38,6 +38,7 @@
 #include <pthread.h>
 
 #include "pmm_interval.h"
+#include "pmm_param.h"
 
 /*!
  * enumeration fo different model construction conditions that must be
@@ -103,48 +104,6 @@ typedef enum pmm_construction_method {
                             period */
     CM_INVALID         /*!< invalid construction method */
 } PMM_Construction_Method;
-
-/*!
- * Structure defining a parameter of a routine
- */
-typedef struct pmm_paramdef {
-    /*
-     * TODO allow definition of a mathematical sequence to govern permissable
-     * parameters. At present stride and offset allow a sequence equvilent
-     * to: a*x + b where a = stride and b = offset
-     */
-	char *name;         /*!< name of parameter */
-	int type;           /*!< */
-	int order;          /*!< order in the sequence of parameters passed to
-                             benchmarking routine */
-    int nonzero_end;    /*!< toggle assumtion of zero speed at parameter end
-                             value */
-	int end;            /*!< ending value of parameter range */
-	int start;          /*!< starting value of parameter range */
-    int stride;         /*!< stride to use traversing parameter range */
-    int offset;         /*!< offset from starting value to use traversing
-                             parameter range */
-} PMM_Paramdef;
-
-/*!
- * structure describing a set of parameters and a formula in terms of
- * those parameters which may be constrained (i.e. parameters a, b, formula:a*b,
- * constraint on formula < 1000)
- */
-typedef struct pmm_paramdef_set {
-    int n_p;                            /*!< number of parameters in set */
-    struct pmm_paramdef *pd_array;      /*!< array of parameter definitions */
-    char *pc_formula;                   /*!< formula for parameter constraint */
-    int pc_max;                         /*!< max of parameter constraint */
-    int pc_min;                         /*< min of parameter constraint */
-
-#ifdef HAVE_MUPARSER
-    struct pmm_param_constraint_muparser *pc_parser; /*!< muparser structure
-                                                          used for parameter
-                                                          constraint */
-#endif
-
-} PMM_Paramdef_Set;
 
 
 /*!
@@ -312,7 +271,6 @@ typedef struct pmm_benchmark {
  */
 struct pmm_config* new_config();
 struct pmm_routine* new_routine();
-struct pmm_paramdef_set* new_paramdef_set();
 struct pmm_model* new_model();
 struct pmm_benchmark* new_benchmark();
 struct pmm_load* new_load();
@@ -331,15 +289,6 @@ int
 init_bench_list(struct pmm_model *m, struct pmm_paramdef_set *pd_set);
 struct pmm_benchmark*
 init_zero_benchmark(int *params, int n_p);
-
-int*
-init_param_array_start(struct pmm_paramdef_set *pds);
-int*
-init_param_array_end(struct pmm_paramdef_set *pds);
-void
-set_param_array_start(int *p, struct pmm_paramdef_set *pds);
-void
-set_param_array_end(int *p, struct pmm_paramdef_set *pds);
 
 int isempty_model(struct pmm_model *m);
 
@@ -369,24 +318,6 @@ void double_to_timespec(double d, struct timespec *ts);
 void timeval_add(struct timeval *tv_a, struct timeval *tv_b,
                  struct timeval *tv_res);
 void timeval_div(struct timeval *tv, double d);
-
-int
-copy_paramdef(struct pmm_paramdef *dst, struct pmm_paramdef *src);
-
-int*
-init_param_array_copy(int *src, int n);
-void
-set_param_array_copy(int *dst, int *src, int n);
-
-int params_cmp(int *p1, int *p2, int n);
-
-void
-align_params(int *params, struct pmm_paramdef_set *pd_set);
-int
-align_param(int param, struct pmm_paramdef *pd);
-int*
-init_aligned_params(int *p, struct pmm_paramdef_set *pd_set);
-
 
 int
 count_benchmarks_in_model(struct pmm_model *m);
@@ -422,16 +353,6 @@ int
 remove_bench_from_bench_list(struct pmm_bench_list *bl,
                              struct pmm_benchmark *b);
 
-int
-param_on_axis(int *p,
-              int n,
-              struct pmm_paramdef *pd_array);
-
-int
-params_within_paramdefs(int *p, int n, struct pmm_paramdef *pd_array);
-int
-param_within_paramdef(int p, struct pmm_paramdef *pd_array);
-
 int benchmark_on_axis(struct pmm_model *m, struct pmm_benchmark *b);
 
 int is_benchmark_at_origin(int n, struct pmm_paramdef *paramdef_array,
@@ -439,15 +360,6 @@ int is_benchmark_at_origin(int n, struct pmm_paramdef *paramdef_array,
 
 
 int isequal_benchmarks(struct pmm_benchmark *b1, struct pmm_benchmark *b2);
-
-int
-isequal_paramdef_set(struct pmm_paramdef_set *pds_a,
-                     struct pmm_paramdef_set *pds_b);
-int
-isequal_paramdef_array(struct pmm_paramdef *pd_array_a,
-                       struct pmm_paramdef *pd_array_b, int n_p);
-int
-isequal_paramdef(struct pmm_paramdef *a, struct pmm_paramdef *b);
 
 struct pmm_benchmark*
 get_avg_aligned_bench(struct pmm_model *m, int *param);
@@ -515,10 +427,6 @@ time_t parseISO8601Date(char *date);
 int check_routine(struct pmm_routine *r);
 int check_loadhistory(struct pmm_loadhistory *h);
 
-void print_params(const char *output, int *p, int n);
-void print_paramdef_set(const char *output, struct pmm_paramdef_set *pd_set);
-void print_paramdef_array(const char *output, struct pmm_paramdef *pd_array, int n);
-void print_paramdef(const char *output, struct pmm_paramdef *pd);
 void print_config(const char *output, struct pmm_config *cfg);
 void print_loadhistory(const char *output, struct pmm_loadhistory *h);
 void print_load(const char *output, struct pmm_load *l);
@@ -528,8 +436,6 @@ void free_bench_list(struct pmm_bench_list **bl);
 void free_benchmark_list_backwards(struct pmm_benchmark **first_b);
 void free_benchmark_list_forwards(struct pmm_benchmark **last_b);
 void free_benchmark(struct pmm_benchmark **b);
-void free_paramdef_set(struct pmm_paramdef_set **pd_set);
-void free_paramdef_array(struct pmm_paramdef **pd_array, int n_p);
 void free_routine(struct pmm_routine **r);
 void free_config(struct pmm_config **cfg);
 void free_loadhistory(struct pmm_loadhistory **h);

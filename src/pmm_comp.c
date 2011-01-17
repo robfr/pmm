@@ -41,6 +41,7 @@
 #include "pmm_octave.h"
 #include "pmm_cfgparser.h"
 #include "pmm_log.h"
+#include "pmm_param.h"
 
 /*!
  * structure storing options for pmm_comp tool
