@@ -50,6 +50,7 @@
 
 #include "pmm_cfgparser.h"
 #include "pmm_muparse.h"
+#include "pmm_interval.h"
 
 
 struct pmm_loadhistory* parse_loadconfig(xmlDocPtr, xmlNodePtr node);

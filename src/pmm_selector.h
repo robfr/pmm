@@ -24,6 +24,8 @@
 #include "config.h"
 #endif
 
+#include "pmm_interval.h"
+
 
 /*
 int gbbp_select_new_bench(struct pmm_routine *r);

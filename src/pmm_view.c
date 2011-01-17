@@ -58,6 +58,7 @@
 
 #include "pmm_data.h"
 #include "pmm_octave.h"
+#include "pmm_interval.h"
 #include "pmm_log.h"
 #include "pmm_argparser.h"
 #include "pmm_cfgparser.h"
