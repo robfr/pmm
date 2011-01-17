@@ -849,6 +849,7 @@ benchmark(void *scheduled_r)
         temp_ret = multi_naive_insert_bench(r, bmark);
 
     }
+
     if(r->construction_method == CM_NAIVE_BISECT) {
         temp_ret = naive_1d_bisect_insert_bench(r, bmark);
     }
@@ -863,10 +864,7 @@ benchmark(void *scheduled_r)
         temp_ret = multi_gbbp_insert_bench(NULL, r, bmark);
 
     }
-    else if(r->construction_method == CM_RAND) {
-        insert_bench(r->model, bmark);
-    }
-    else { // default
+    else { // default, including CM_RAND
         insert_bench(r->model, bmark);
     }
 
