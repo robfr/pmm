@@ -26,7 +26,7 @@
 sysconf_DATA = pmmd.conf
 
 pmmd.conf:
-	/bin/sh pmmd.conf.sh $(localstatedir) $(pkglibdir) > $@
+	/bin/sh pmmd.conf.sh $(localstatedir) $(pkglibexecdir) > $@
 
 #EXTRA_DIST = $(sysconf_DATA)
 

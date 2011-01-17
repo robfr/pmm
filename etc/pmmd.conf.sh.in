@@ -11,7 +11,7 @@ HAVE_GOTOBLAS2=@HAVE_GOTOBLAS2@
 HAVE_ATLAS=@HAVE_ATLAS@
 
 LOCALSTATEDIR=$1
-PKGLIBDIR=$2
+PKGLIBEXECDIR=$2
 
 echo "<?xml version=\"1.0\"?>
 
@@ -32,7 +32,7 @@ echo "<?xml version=\"1.0\"?>
         echo "
 	<routine>
 		<name>ben_dgemm_5000_icc_mkl</name>
-		<exe_path>$PKGLIBDIR/dgemm_ben_5000_icc_mkl.pl</exe_path>
+		<exe_path>$PKGLIBEXECDIR/dgemm_ben_5000_icc_mkl.pl</exe_path>
         <exe_args>-j 100 1000</exe_args>
 		<model_path>$LOCALSTATEDIR/pmm/dgemm_ben_5000_icc_mkl</model_path>
 		<parameters>
@@ -93,7 +93,7 @@ fi
 	</routine>
 	<routine>
 		<name>dgemm_sim_gpu</name>
-		<exe_path>$PKGLIBDIR/dgemm_sim_gpu.sh</exe_path>
+		<exe_path>$PKGLIBEXECDIR/dgemm_sim_gpu.sh</exe_path>
 		<model_path>$LOCALSTATEDIR/pmm/dgemm_sim_gpu_model</model_path>
 		<parameters>
 			<n_p>1</n_p>
