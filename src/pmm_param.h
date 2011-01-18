@@ -124,6 +124,10 @@ isequal_paramdef_array(struct pmm_paramdef *pd_array_a,
 int
 isequal_paramdef(struct pmm_paramdef *a, struct pmm_paramdef *b);
 
+int
+set_params_step_between_params(int *params, int *start, int *end,
+                               int step, struct pmm_paramdef_set *pd_set);
+
 void print_params(const char *output, int *p, int n);
 void print_paramdef_set(const char *output, struct pmm_paramdef_set *pd_set);
 void print_paramdef_array(const char *output, struct pmm_paramdef *pd_array, int n);
