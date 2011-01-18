@@ -198,6 +198,11 @@ multi_naive_select_new_bench(struct pmm_routine *r)
     struct pmm_interval_list *i_list;
     struct pmm_interval *new_i, *top_i;
     struct pmm_model *m;
+#ifdef HAVE_MUPARSER
+    int i;
+    double pc;
+#endif
+
 
     m = r->model;
     i_list = m->interval_list;
@@ -446,6 +451,9 @@ naive_process_interval_list(struct pmm_routine *r, struct pmm_benchmark *b)
     struct pmm_interval *new_i;
     int *aligned_params;
     int i;
+#ifdef HAVE_MUPARSER
+    double pc;
+#endif
 
     m = r->model;
     interval = m->interval_list->top;

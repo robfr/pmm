@@ -32,13 +32,14 @@
 
 #include <iostream>
 #include <string>
-#include <muParser/muParser.h>
+#include <muParser.h>
+
+#include "pmm_muparse.h"
 
 extern "C" {
 #include "pmm_data.h"
 #include "pmm_log.h"
 }
-#include "pmm_muparse.h"
 
 /*!
  * create a new parameter constraint formula structure for muparser

@@ -269,7 +269,7 @@ if test "x$with_muparser" != "xno"; then # if muParser is not disabled
     CPPFLAGS="$MUPARSER_CPPFLAGS $CPPFLAGS"
     LDFLAGS="$MUPARSER_LDFLAGS $LDFLAGS"
 
-    AC_CHECK_HEADERS([muParser/muParserDLL.h],
+    AC_CHECK_HEADERS([muParserDLL.h],
     [
 
         AC_CHECK_LIB([muparser], [_init],

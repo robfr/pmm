@@ -37,9 +37,13 @@ extern "C" {
 #ifndef __cplusplus
 typedef struct Parser {} Parser;
 #else
-#include <muParser/muParser.h>
+#include <muParser.h>
 using namespace mu;
 #endif
+
+//#include "pmm_param.h"
+
+struct pmm_paramdef_set; //< forward declaration
 
 /*!
  * Structure to hold muparser object and variable array

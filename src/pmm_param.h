@@ -30,9 +30,12 @@
 #endif
 
 #ifdef HAVE_MUPARSER
-#include "pmm_muparse.h"
+//#include "pmm_muparse.h"
 #endif
 
+#ifdef HAVE_MUPARSER
+struct pmm_param_constraint_muparser;   //< forward declaration
+#endif
 /*!
  * Structure defining a parameter of a routine
  */
