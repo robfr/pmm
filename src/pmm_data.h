@@ -34,8 +34,7 @@
 #include "config.h"
 #endif
 
-#include <sys/time.h>
-#include <pthread.h>
+#include <sys/time.h>           // for timeval
 
 #include "pmm_interval.h"
 #include "pmm_param.h"

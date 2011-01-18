@@ -29,14 +29,14 @@
 #include "config.h"
 #endif
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <time.h>
-#include <utmp.h>
-#include <paths.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <sys/param.h>
+#include <stdlib.h>         // for getloadavg
+#include <stdio.h>          // for snprintf
+#include <utmp.h>           // for utmp
+#include <paths.h>          // for _UTMP_PATH
+#include <sys/types.h>      // for stat
+#include <sys/stat.h>       // for stat
+#include <unistd.h>         // for stat
+#include <sys/param.h>      // for MAXPATHLEN
 
 #include "pmm_data.h"
 #include "pmm_cond.h"

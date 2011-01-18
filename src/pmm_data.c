@@ -30,19 +30,10 @@
 #include "config.h"
 #endif
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
-#include <limits.h>
-//#include <sys/time.h>
-#include <ctype.h> //for isdigit
-#include <string.h>
-#include <pthread.h>
-#include <math.h>
-#include <sys/types.h> //getpid
-#include <unistd.h> //getpid
-#include <libxml/encoding.h>
-#include <libxml/xmlwriter.h>
+#include <stdlib.h>         // for malloc
+#include <time.h>           // for mktime/etc.
+#include <ctype.h>          // for isdigit
+#include <string.h>         // for strcpy/memset
 
 #include "pmm_data.h"
 #include "pmm_octave.h"

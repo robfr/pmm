@@ -30,16 +30,13 @@
 #include "config.h"
 #endif
 
-#include <unistd.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <getopt.h>
-#include <string.h>
-#include <errno.h>
-#include <limits.h>
+#include <stdio.h>          // for printf
+#include <stdlib.h>         // for malloc
+#include <getopt.h>         // for getopts
+#include <string.h>         // for strcmp/strdup/strtok
 
-#include "pmm_data.h"       // for pmm_config
 #include "pmm_argparser.h"
+#include "pmm_data.h"       // for pmm_config
 #include "pmm_log.h"        // for printing
 
 //TODO put pmm_view and pmm argument parsing in seperate files

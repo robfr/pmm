@@ -30,23 +30,22 @@
 #include "config.h"
 #endif
 
-#include <string.h>
+//#include <string.h>
 //#include <stdio.h>
-#include <stdlib.h>
-#include <signal.h>
-#include <sys/signal.h>
-#include <pthread.h>
+#include <stdlib.h>         // for free
+#include <signal.h>         // for sigset
+#include <sys/signal.h>     // for sigset
+#include <pthread.h>        // for pthreads/etc.
 // TODO platform specific code follows, need to fix this
-#include <unistd.h>
-#include <sys/time.h>
-#include <time.h>
+#include <sys/time.h>       // for select
+#include <sys/types.h>      // for select, waitpid
+#include <time.h>           // for timeval
 #include <paths.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <fcntl.h>
-#include <errno.h>
-
-#include <libgen.h> // for basename
+#include <sys/wait.h>       // for waitpid
+#include <fcntl.h>          // for fcntl
+#include <unistd.h>         // for fcntl, select
+#include <errno.h>          // for perror, errno, etc
+#include <libgen.h>         // for basename
 
 #include "pmm_data.h"
 #include "pmm_selector.h"

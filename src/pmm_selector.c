@@ -28,9 +28,7 @@
 #include "config.h"
 #endif
 
-#include <stdlib.h>
-#include <stdio.h>
-
+#include <stdlib.h>     // for malloc, free, rand, exit
 
 #include "pmm_data.h"
 #include "pmm_selector.h"

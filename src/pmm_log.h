@@ -32,12 +32,11 @@
 #include "config.h"
 #endif
 
-#include <stdio.h>
-
-#include <time.h>
-
-#include <sys/types.h> //for getpid
-#include <unistd.h>
+#include <stdio.h>      // for fprintf
+#include <time.h>       // for time
+#include <sys/types.h>  // for getpid
+#include <unistd.h>     // for getpid
+#include <string.h>     // for strcmp
 
 /* If debugging/output macros are not yet defined, define them now */
 

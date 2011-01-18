@@ -27,27 +27,28 @@
 #include "config.h"
 #endif
 
-#include <stdlib.h>
-#include <sys/signal.h>
-#include <pthread.h>
-#include <signal.h>
+#include <stdio.h>      // for fileno,freopen
+#include <stdlib.h>     // for free, exit
+#include <signal.h>     // for signal,sigwait,sigfillset,pthread_sigmask,kill
+#include <sys/signal.h> // for signal
+#include <pthread.h>    // for pthreads
 // TODO platform specific code follows, need to fix this
-#include <unistd.h>
+#include <unistd.h>     // for fork,setsid,getpid
 #include <sys/time.h>
-#include <time.h>
+#include <time.h>       // for nanosleep
 #include <paths.h>
-#include <sys/types.h>
-#include <sys/stat.h>
+#include <sys/types.h>  // for kill,umask,getpid
+#include <sys/stat.h>   // for umask
 //#include <fcntl.h>
 
 #include "pmm_data.h"
-#include "pmm_log.h"
 #include "pmm_load.h"
 #include "pmm_loadmonitor.h"
 #include "pmm_argparser.h"
 #include "pmm_cfgparser.h"
 #include "pmm_scheduler.h"
 #include "pmm_executor.h"
+#include "pmm_log.h"
 
 //global variables
 int executing_benchmark;

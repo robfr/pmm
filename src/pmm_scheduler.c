@@ -28,8 +28,6 @@
 #include "config.h"
 #endif
 
-#include <stdlib.h>
-
 #include "pmm_data.h"
 #include "pmm_cond.h"
 
