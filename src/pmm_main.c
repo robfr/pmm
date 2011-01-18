@@ -36,6 +36,8 @@
 
 #include "pmm_data.h"
 #include "pmm_log.h"
+#include "pmm_load.h"
+#include "pmm_loadmonitor.h"
 #include "pmm_argparser.h"
 #include "pmm_cfgparser.h"
 #include "pmm_scheduler.h"
@@ -55,7 +57,6 @@ volatile sig_atomic_t sig_unpause_received = 0;
 void run_as_daemon();
 void sig_cleanup(int sig);
 void sig_do_nothing();
-void *loadmonitor(void *loadhistory);
 
 
 /*******************************************************************************
@@ -198,99 +199,6 @@ void redirect_output(char* logfile) {
 	if(f == NULL) {
 		ERRPRINTF("Error redirecting output to file: %s\n", logfile);
 		exit(EXIT_FAILURE);
-	}
-}
-
-void* loadmonitor(void *loadhistory) {
-	struct pmm_loadhistory *h;
-	struct pmm_load l;
-	int ret;
-    int rc;
-
-    int sleep_for = 60; //number of seconds we wish to sleep for
-    int sleep_for_counter = 0; //counter for how long we have slept
-    int sleep_for_fraction = 5; //sleep in 5 second fractions
-
-	int write_period = 10*60; //write the history to disk every 10 minutes
-	int write_period_counter=0; //counter for writing history to disk
-
-	h = (struct pmm_loadhistory*)loadhistory;
-
-	LOGPRINTF("[loadmonitor]: h:%p\n", h);
-
-	// read load history file
-	//if loadfile exists ...
-    //
-
-	for(;;) {
-
-		if((l.time = time(NULL)) == (time_t)-1) {
-			ERRPRINTF("Error retreiving unix time.\n");
-			exit(EXIT_FAILURE);
-		}
-
-		if((ret = getloadavg(l.load, 3)) != 3) {
-			ERRPRINTF("Error retreiving load averages from getloadavg.\n");
-			exit(EXIT_FAILURE);
-		}
-
-
-	    // lock the rwlock for writing
-	    if((rc = pthread_rwlock_wrlock(&(h->history_rwlock))) != 0) {
-	    	ERRPRINTF("Error aquiring write lock:%d\n", rc);
-	    	exit(EXIT_FAILURE);
-	    }
-
-		//add load to load history data structure
-		add_load(h, &l);
-
-	    // unlock the rwlock
-	    rc = pthread_rwlock_unlock(&(h->history_rwlock));
-
-        //sleep for a total of "sleep_for" seconds, in sleep_for_fraction
-        //segments ...
-        sleep_for_counter = 0;
-        while(sleep_for_counter<=sleep_for) {
-
-            //check we have not received the quit signal
-            pthread_mutex_lock(&signal_quit_mutex);
-            if(signal_quit) {
-                pthread_mutex_unlock(&signal_quit_mutex);
-
-                // write load history to file using xml ...
-                LOGPRINTF("signal_quit set, writing history file ...\n");
-                if(write_loadhistory(h) < 0) {
-                    perror("[loadmonitor]"); //TODO
-                    ERRPRINTF("Error writing history.\n");
-                    exit(EXIT_FAILURE);
-                }
-
-                return (void*)0;
-            }
-            pthread_mutex_unlock(&signal_quit_mutex);
-
-            //sleep for fraction and add to
-            sleep(sleep_for_fraction);
-
-            sleep_for_counter += sleep_for_fraction;
-        }
-
-        write_period_counter += sleep_for;
-
-        //write history when write_period seconds have elapsed since last write
-		if(write_period_counter == write_period) {
-
-			// write load history to file using xml ...
-			LOGPRINTF("writing history to file ...\n");
-			if(write_loadhistory(h) < 0) {
-				perror("[loadmonitor]");
-				ERRPRINTF("Error writing history.\n");
-				exit(EXIT_FAILURE);
-			}
-
-		    write_period_counter = 0;
-		}
-
 	}
 }
 

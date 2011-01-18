@@ -39,6 +39,7 @@
 
 #include "pmm_interval.h"
 #include "pmm_param.h"
+#include "pmm_load.h"
 
 /*!
  * enumeration fo different model construction conditions that must be
@@ -209,34 +210,6 @@ typedef struct pmm_routine {
 
 } PMM_Routine;
 
-/*!
- * this is a circular array of load history, size determined at run time
- */
-typedef struct pmm_loadhistory {
-	int write_period; /*!< how often to write load history to disk */
-
-    struct pmm_load *history;   /*!< pointer to the circular array */
-    int size;                   /*!< size of circular array */
-	int size_mod;
-
-	struct pmm_load *start;   /*!< pointer to starting element of c.array */
-    struct pmm_load *end;     /*!< pointer to ending element of c.array */
-	int start_i;              /*!< ending element of the circular array */
-    int end_i;                /*!< starting element in the circular array */
-
-	char *load_path;          /*!< path to load history file */
-
-	pthread_rwlock_t history_rwlock;    /*!< mutex for accessing history */
-} PMM_Loadhistory;
-
-/*!
- * this is a record of system load
- */
-typedef struct pmm_load {
-	time_t time;    /*!< time at which load was recorded */
-	double load[3]; /*!< 1, 5 & 15 minute load averages TODO use float? */
-} PMM_Load;
-
 
 
 char*
@@ -273,8 +246,6 @@ struct pmm_config* new_config();
 struct pmm_routine* new_routine();
 struct pmm_model* new_model();
 struct pmm_benchmark* new_benchmark();
-struct pmm_load* new_load();
-struct pmm_loadhistory* new_loadhistory();
 
 struct pmm_bench_list*
 new_bench_list(struct pmm_model *m,
@@ -283,7 +254,6 @@ new_bench_list(struct pmm_model *m,
 /*
  * init_ functions initialize structures with initial condition data values
  */
-int init_loadhistory(struct pmm_loadhistory *h, int size);
 
 int
 init_bench_list(struct pmm_model *m, struct pmm_paramdef_set *pd_set);
@@ -292,7 +262,6 @@ init_zero_benchmark(int *params, int n_p);
 
 int isempty_model(struct pmm_model *m);
 
-void add_load(struct pmm_loadhistory *h, struct pmm_load *l);
 int add_routine(struct pmm_config *c, struct pmm_routine *r);
 int insert_bench(struct pmm_model *m, struct pmm_benchmark *b);
 int
@@ -425,12 +394,8 @@ int set_str(char **dst, char *src);
 time_t parseISO8601Date(char *date);
 
 int check_routine(struct pmm_routine *r);
-int check_loadhistory(struct pmm_loadhistory *h);
 
 void print_config(const char *output, struct pmm_config *cfg);
-void print_loadhistory(const char *output, struct pmm_loadhistory *h);
-void print_load(const char *output, struct pmm_load *l);
-
 void free_model(struct pmm_model **m);
 void free_bench_list(struct pmm_bench_list **bl);
 void free_benchmark_list_backwards(struct pmm_benchmark **first_b);

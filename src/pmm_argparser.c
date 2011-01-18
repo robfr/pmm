@@ -38,9 +38,9 @@
 #include <errno.h>
 #include <limits.h>
 
-#include "pmm_data.h"
+#include "pmm_data.h"       // for pmm_config
 #include "pmm_argparser.h"
-#include "pmm_log.h"
+#include "pmm_log.h"        // for printing
 
 //TODO put pmm_view and pmm argument parsing in seperate files
 
