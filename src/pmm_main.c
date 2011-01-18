@@ -17,6 +17,12 @@
     You should have received a copy of the GNU General Public License
     along with PMM.  If not, see <http://www.gnu.org/licenses/>.
 */
+/*!
+ * @file    pmm_main.c
+ * @brief   The pmm application
+ *
+ * Main function for the pmm application
+ */
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -96,11 +102,11 @@ void run_as_daemon() {
 	return;
 }
 
-/*
+/*!
  * single handler thread that should catch signals and set appropriate
  * gobal variables
  *
- * Do not use *PRINTF logging facility in this thread, it is not
+ * @warning Do not use *PRINTF logging facility in this thread, it is not
  * 'async-signal-safe' (though it is threadsafe).
  */
 void* signal_handler(void* arg)
@@ -202,6 +208,22 @@ void redirect_output(char* logfile) {
 	}
 }
 
+/*!
+ * the main function
+ *
+ * Structure of the main function is as follows:
+ *
+ * - set up signal handlers
+ * - parse command line arguments
+ * - read configuration file, models and load history
+ * - launch load monitoring thread
+ * - enter main loop
+ *   - if not executing benchmark
+ *      - clean up previous benchmark execution
+ *      - pick a new benchmark launch benchmarking thread
+ *
+ * All the while checking for termination signals, handling shutdown and so on.
+ */
 int main(int argc, char **argv) {
 
 	struct pmm_config *cfg;

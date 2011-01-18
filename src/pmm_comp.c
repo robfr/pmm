@@ -147,6 +147,7 @@ parse_args(struct pmm_comp_options *opts, int argc, char **argv)
 double
 correlate_models(struct pmm_model *approx_model, struct pmm_model *base_model)
 {
+    //TODO free allocated memory on return by error to prevent leaks
     int n; /* number of unique points in base model b */
     int c; /* counter */
     int i, j;

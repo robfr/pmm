@@ -20,10 +20,11 @@
 /*!
  * @file pmm_data.c
  *
- * @brief functions for operating on PMM data structures
+ * @brief functions for operating on PMM model, benchmark and other data
+ * structures
  *
- * this file contains the code for operating on the data structures of the
- * pmm applications
+ * this file contains the code for operating on model and associated data
+ * structures of the pmm applications
  */
 #if HAVE_CONFIG_H
 #include "config.h"

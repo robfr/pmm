@@ -104,7 +104,19 @@ test_model_file_modified(struct pmm_model *m);
 // needed (i.e. not here!)
 pthread_rwlock_t history_rwlock;
 
-int main(int argc, char **argv) {
+
+/*!
+ * Program first parses command line args and to determine the action to take
+ * which is either:
+ *
+ * print list of models available for plotting (according to config file)
+ * plot a model
+ * print out the raw data of a model
+ *
+ */
+
+int
+main(int argc, char **argv) {
 
     struct pmm_view_options options;    // structure containing all options
 	struct pmm_config *cfg;             // pointer to pmm configuration
@@ -270,7 +282,7 @@ int main(int argc, char **argv) {
 
         }
 
-        
+
 
 
         // init gnuplot handle and plot models
@@ -284,14 +296,14 @@ int main(int argc, char **argv) {
                 // test extension
                 {
                     char *ext;
-                    
+
                     ext = strrchr(options.plot_output_file, '.');
                     if(ext == NULL) {
                         printf("specify an extension (.ps or .png) to your "
                                "output file.\n");
                         exit(EXIT_FAILURE);
                     }
-                    
+
                     if(strcmp(ext, ".ps") == 0) {
 
                         if(options.plot_output_grayscale == 1) {
@@ -383,7 +395,7 @@ int main(int argc, char **argv) {
                             }
                         }
 
-                                
+
                     }
                 }
 
@@ -566,7 +578,13 @@ test_model_file_modified(struct pmm_model *m)
     }
 }
 
-void empty_model(struct pmm_model *m)
+/*!
+ * free memeber structures and zero a model
+ *
+ * @param   m   pointer to model
+ */
+void
+empty_model(struct pmm_model *m)
 {
 
     if(m->bench_list != NULL) {
@@ -582,10 +600,16 @@ void empty_model(struct pmm_model *m)
     m->n_p = -1;
     m->completion = 0;
     m->complete = 0;
-
-
 }
 
+/*!
+ * plot a model which is in terms of 1 parameter
+ *
+ * @param   plot_handle     pointer to gnuplot handle
+ * @param   model           pointer to model to plot
+ * @param   options         pointer to options for plot
+ *
+ */
 void
 plot_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
            struct pmm_view_options *options)
@@ -618,7 +642,7 @@ plot_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
         exit(EXIT_FAILURE);
     }
 
-    b = model->bench_list->first; 
+    b = model->bench_list->first;
 
 
     c = 0;
@@ -683,7 +707,7 @@ plot_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
     else if(options->plot_style != NULL) {
         gnuplot_setstyle(plot_handle, options->plot_style);
     }
-                       
+
     gnuplot_plot_xy(plot_handle, x, y, n, plot_title_buf);
 
     if(options->plot_intervals == 1) {
@@ -700,6 +724,14 @@ plot_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
     y = NULL;
 }
 
+/*!
+ * plot an interpolated one dimensional slice of a 2 parameter model
+ *
+ * @param   plot_handle     pointer to gnuplot handle
+ * @param   model           pointer to model
+ * @param   options         pointer to options
+ *
+ */
 void
 plot_slice_interp_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
                         struct pmm_view_options *options)
@@ -939,7 +971,7 @@ plot_slice_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
         if(b == NULL) {
             break;
         }
-        
+
 
         if(options->plot_average == 1) {
             b_plot = get_avg_bench_from_sorted_bench_list(b, b->p);
@@ -1085,7 +1117,7 @@ splot_slice_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
        options->plot_max == 1)
     {
         n = count_unique_benchmarks_in_sorted_list(model->bench_list->first);
-                
+
     }
     else {
         n = model->bench_list->size;
@@ -1116,7 +1148,7 @@ splot_slice_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
         if(b == NULL) {
             break;
         }
-        
+
 
         if(options->plot_average == 1) {
             b_plot = get_avg_bench_from_sorted_bench_list(b, b->p);
@@ -1318,7 +1350,7 @@ splot_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
     // intervals are not part of the plot but overlayed so must be done after
     if(options->plot_intervals == 1) {
 
-        draw_splot_intervals(plot_handle, model); 
+        draw_splot_intervals(plot_handle, model);
     }
 
     free(plot_title_buf);
@@ -1436,9 +1468,9 @@ set_splot_labels_ranges(gnuplot_ctrl *plot_handle, struct pmm_model *model,
  * @return 0 on success (never fails TODO)
  */
 int
-draw_plot_intervals(gnuplot_ctrl *plot_handle, struct pmm_model *model) 
+draw_plot_intervals(gnuplot_ctrl *plot_handle, struct pmm_model *model)
 {
-            
+
 
     struct pmm_interval *interval;
 
@@ -1514,9 +1546,9 @@ draw_plot_intervals(gnuplot_ctrl *plot_handle, struct pmm_model *model)
  * @return 0 on success (never fails TODO)
  */
 int
-draw_splot_intervals(gnuplot_ctrl *plot_handle, struct pmm_model *model) 
+draw_splot_intervals(gnuplot_ctrl *plot_handle, struct pmm_model *model)
 {
-            
+
 
     struct pmm_interval *interval;
 

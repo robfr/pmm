@@ -3098,9 +3098,9 @@ set_params_step_along_climb_interval(int *params, int step,
  *
  * test if the model approximates the new benchmark and in what way,
  *
- * If the benchmark at the same level as the its left and right neighbours: assume
- * the model is flat in the region of the interaval and finalized this area of the
- * model by removing it.
+ * If the benchmark at the same level as the its left and right neighbours:
+ * assume the model is flat in the region of the interaval and finalized this
+ * area of the model by removing it.
  *
  * If the benchmark is at the same level as the left neighbour only, assume that
  * the model is flat to the left of the new benchmark, finalize this area by
@@ -3111,7 +3111,8 @@ set_params_step_along_climb_interval(int *params, int step,
  * the same action, but in the inverse, replace the interval with a new interval
  * representing the area to the left of the benchmark
  *
- * In other cases, look up the current model at the position of the new benchmark.
+ * In other cases, look up the current model at the position of the new
+ * benchmark.
  *
  * If the current model accurately represents the new benchmark, replace the
  * construction interval with a new GBBP_INFLECT interval covering the same
