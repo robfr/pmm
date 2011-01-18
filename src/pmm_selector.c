@@ -89,6 +89,77 @@ int gbbp_select_new_bench(struct pmm_routine *r) {
 }
 */
 
+int
+rand_between(int min, int max);
+
+int
+init_naive_1d_intervals(struct pmm_routine *r);
+int
+init_gbbp_naive_intervals(struct pmm_routine *r);
+int
+init_gbbp_diagonal_interval(struct pmm_routine *r);
+int
+init_gbbp_boundary_intervals(struct pmm_routine *r);
+
+int
+naive_process_interval_list(struct pmm_routine *r, struct pmm_benchmark *b);
+int
+process_interval_list(struct pmm_routine *r, struct pmm_benchmark *b,
+                      struct pmm_loadhistory *h);
+int
+process_interval(struct pmm_routine *r, struct pmm_interval *i,
+                 struct pmm_benchmark *b, struct pmm_loadhistory *h);
+int
+process_it_gbbp_empty(struct pmm_routine *r, struct pmm_interval *i);
+int
+process_it_gbbp_climb(struct pmm_routine *r, struct pmm_interval *i,
+                      struct pmm_benchmark *b, struct pmm_loadhistory *h);
+int
+process_it_gbbp_bisect(struct pmm_routine *r, struct pmm_interval *i,
+                    struct pmm_benchmark *b, struct pmm_loadhistory *h);
+int
+process_it_gbbp_inflect(struct pmm_routine *r, struct pmm_interval *i,
+                     struct pmm_benchmark *b, struct pmm_loadhistory *h);
+int
+process_it_point(struct pmm_routine *r, struct pmm_interval *i);
+
+int
+naive_step_interval(struct pmm_routine *r, struct pmm_interval *interval);
+int
+adjust_interval_with_param_constraint_max(struct pmm_interval *i,
+                                          struct pmm_paramdef_set *pd_set);
+int
+adjust_interval_with_param_constraint_min(struct pmm_interval *i,
+                                          struct pmm_paramdef_set *pd_set);
+int
+set_params_step_along_climb_interval(int *params, int step,
+                             struct pmm_interval *i,
+                             struct pmm_paramdef_set *pd_set);
+void
+set_params_interval_midpoint(int *p, struct pmm_interval *i);
+int
+isnonzero_at_interval_end(struct pmm_interval *i,
+                          struct pmm_paramdef_set *pd_set);
+int
+is_interval_divisible(struct pmm_interval *i, struct pmm_routine *r);
+int
+project_diagonal_intervals(struct pmm_model *m);
+
+struct pmm_interval*
+new_projection_interval(int *p, struct pmm_paramdef *pd, int d,
+                         int n);
+int
+find_interval_matching_bench(struct pmm_routine *r, struct pmm_benchmark *b,
+                             struct pmm_loadhistory *h,
+                             struct pmm_interval **found_i);
+
+int
+multi_gbbp_bench_from_interval(struct pmm_routine *r,
+		                       struct pmm_interval *interval,
+                               int *params);
+
+void mesh_boundary_models(struct pmm_model *m);
+void recurse_mesh(struct pmm_model *m, int *p, int plane, int n_p);
 /*
  * functions to write:
  *
@@ -2716,13 +2787,13 @@ process_interval(struct pmm_routine *r, struct pmm_interval *i,
 
         case IT_GBBP_BISECT :
 
-            done = process_gbbp_bisect(r, i, b, h) < 0 ? -1 : 1;
+            done = process_it_gbbp_bisect(r, i, b, h) < 0 ? -1 : 1;
 
             break;
 
         case IT_GBBP_INFLECT :
 
-            done = process_gbbp_inflect(r, i, b, h) < 0 ? -1 : 1;
+            done = process_it_gbbp_inflect(r, i, b, h) < 0 ? -1 : 1;
 
             break;
 
@@ -3040,8 +3111,8 @@ set_params_step_along_climb_interval(int *params, int step,
  * @return 0 on success, -1 on failure
  */
 int
-process_gbbp_bisect(struct pmm_routine *r, struct pmm_interval *i,
-                    struct pmm_benchmark *b, struct pmm_loadhistory *h)
+process_it_gbbp_bisect(struct pmm_routine *r, struct pmm_interval *i,
+                       struct pmm_benchmark *b, struct pmm_loadhistory *h)
 {
 
     struct pmm_interval *new_i;
@@ -3338,8 +3409,8 @@ process_gbbp_bisect(struct pmm_routine *r, struct pmm_interval *i,
  * @return 0 on success, -1 on failure
  */
 int
-process_gbbp_inflect(struct pmm_routine *r, struct pmm_interval *i,
-                     struct pmm_benchmark *b, struct pmm_loadhistory *h)
+process_it_gbbp_inflect(struct pmm_routine *r, struct pmm_interval *i,
+                        struct pmm_benchmark *b, struct pmm_loadhistory *h)
 {
 
     struct pmm_interval *new_i;
