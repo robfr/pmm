@@ -29,6 +29,9 @@
 
 /* undefine variables that are also defined in oct.h */
 /* TODO rearrange octave headers so we don't need this so many places */
+#undef PACKAGE
+#undef PACKAGE_URL
+#undef VERSION
 #undef PACKAGE_BUGREPORT
 #undef PACKAGE_NAME
 #undef PACKAGE_STRING
@@ -41,6 +44,9 @@
 #include <octave/oct.h>
 #include <octave/octave.h>
 #include <octave/parse.h>
+#undef PACKAGE
+#undef PACKAGE_URL
+#undef VERSION
 #undef PACKAGE_BUGREPORT
 #undef PACKAGE_NAME
 #undef PACKAGE_STRING

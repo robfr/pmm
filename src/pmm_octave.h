@@ -28,6 +28,9 @@
 #include "config.h"
 
 /* undefine variables that are also defined in oct.h */
+#undef PACKAGE
+#undef PACKAGE_URL
+#undef VERSION
 #undef PACKAGE_BUGREPORT
 #undef PACKAGE_NAME
 #undef PACKAGE_STRING
@@ -46,6 +49,9 @@ typedef struct ColumnVector {} ColumnVector;
 #else
 #include <octave/oct.h>
 /* undefine variables that are also defined in oct.h */
+#undef PACKAGE
+#undef PACKAGE_URL
+#undef VERSION
 #undef PACKAGE_BUGREPORT
 #undef PACKAGE_NAME
 #undef PACKAGE_STRING
