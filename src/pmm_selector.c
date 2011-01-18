@@ -90,6 +90,8 @@ int gbbp_select_new_bench(struct pmm_routine *r) {
 */
 
 int
+check_benchmarking_minimums(struct pmm_routine *r, double t, int n);
+int
 rand_between(int min, int max);
 
 int
@@ -355,9 +357,7 @@ multi_naive_insert_bench(struct pmm_routine *r, struct pmm_benchmark *b)
     DBGPRINTF("total time spent benchmarking point: %f\n", time_spend);
     DBGPRINTF("total number executions at benchmarking point: %d\n", num_execs);
 
-    if((r->min_sample_time != -1 && time_spend >= (double)r->min_sample_time) ||
-       (r->min_sample_num != -1 && num_execs >= r->min_sample_num) ||
-       (r->min_sample_time == -1 && r->min_sample_num  == -1))
+    if(check_benchmarking_minimums(r, time_spend, num_execs))
     {
         DBGPRINTF("benchmarking threshold exceeeded (t:%d, n:%d), processing intervals.\n", r->min_sample_time, r->min_sample_num);
 
@@ -378,6 +378,30 @@ multi_naive_insert_bench(struct pmm_routine *r, struct pmm_benchmark *b)
 	// after intervals have been processed ...
 
     return ret;
+}
+
+/*!
+ * check benchmark execution statistics against minimum requirements
+ * in routine configuration
+ *
+ * @param   r   pointer to the routine
+ * @param   t   time spent benchmarking as a double
+ * @param   n   number of benchmarks taken
+ *
+ * @return 0 if minimums are not satisfied, 1 if they are
+ */
+int
+check_benchmarking_minimums(struct pmm_routine *r, double t, int n)
+{
+    if((r->min_sample_time != -1 && t >= (double)r->min_sample_time) ||
+       (r->min_sample_num != -1 && n >= r->min_sample_num) ||
+       (r->min_sample_time == -1 && r->min_sample_num  == -1))
+    {
+        return 1;
+    }
+    else {
+        return 0;
+    }
 }
 
 /*!
@@ -2397,9 +2421,7 @@ naive_1d_bisect_insert_bench(struct pmm_routine *r, struct pmm_benchmark *b)
     DBGPRINTF("total time spent benchmarking point: %f\n", time_spend);
     DBGPRINTF("total number executions at benchmarking point: %d\n", num_execs);
 
-    if((r->min_sample_time != -1 && time_spend >= (double)r->min_sample_time) ||
-       (r->min_sample_num != -1 && num_execs >= r->min_sample_num) ||
-       (r->min_sample_time == -1 && r->min_sample_num  == -1))
+    if(check_benchmarking_minimums(r, time_spend, num_execs))
     {
 
         DBGPRINTF("benchmarking threshold exceeeded (t:%d, n:%d), processing intervals.\n", r->min_sample_time, r->min_sample_num);
@@ -2558,9 +2580,7 @@ multi_gbbp_insert_bench(struct pmm_loadhistory *h, struct pmm_routine *r,
     DBGPRINTF("total time spent benchmarking point: %f\n", time_spend);
     DBGPRINTF("total number executions at benchmarking point: %d\n", num_execs);
 
-    if((r->min_sample_time != -1 && time_spend >= (double)r->min_sample_time) ||
-       (r->min_sample_num != -1 && num_execs >= r->min_sample_num) ||
-       (r->min_sample_time == -1 && r->min_sample_num  == -1))
+    if(check_benchmarking_minimums(r, time_spend, num_execs))
     {
         DBGPRINTF("benchmarking threshold exceeeded (t:%d, n:%d), processing intervals.\n", r->min_sample_time, r->min_sample_num);
 
