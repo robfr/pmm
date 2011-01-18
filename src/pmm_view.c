@@ -119,18 +119,18 @@ int
 main(int argc, char **argv) {
 
     struct pmm_view_options options;    // structure containing all options
-	struct pmm_config *cfg;             // pointer to pmm configuration
+    struct pmm_config *cfg;             // pointer to pmm configuration
 
-	struct pmm_model **models;          // array of models to plot
+    struct pmm_model **models;          // array of models to plot
     int n_p;                            // number of parameters to models
 
-	gnuplot_ctrl *plot_handle;          // handle to the gnuplot process
+    gnuplot_ctrl *plot_handle;          // handle to the gnuplot process
 
     int ret;
-	int i, j;
+    int i, j;
 
-	// parse arguments
-	ret = parse_pmm_view_args(&options, argc, argv);
+    // parse arguments
+    ret = parse_pmm_view_args(&options, argc, argv);
     if(ret < 0) {
         printf("Error parsing arguments.\n");
         usage_pmm_view();
@@ -520,8 +520,8 @@ main(int argc, char **argv) {
  * modified. Note that we test all models and update the stored mtime
  * for each.
  *
- * @param   m       pointer to array of models
- * @param   n       number of models in array
+ * @param   m_array     pointer to array of models
+ * @param   n           number of models in array
  *
  * @return 0 if none of the files have been modified, 1 if any of the
  * model files have been modified, -1 on error.
@@ -617,7 +617,7 @@ plot_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
     double *x;
     double *y;
     int n, c;
-	char *plot_title_buf;
+    char *plot_title_buf;
 
     struct pmm_benchmark *b, *b_plot;
 
@@ -740,7 +740,7 @@ plot_slice_interp_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
     double *x;
     double *y;
     int n;
-	char *plot_title_buf;
+    char *plot_title_buf;
     int ret;
 
     int pfound;
@@ -900,7 +900,7 @@ plot_slice_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
     double *x;
     double *y;
     int n;
-	char *plot_title_buf;
+    char *plot_title_buf;
     int ret;
 
     int pfound;
@@ -1075,7 +1075,7 @@ splot_slice_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
     double *y;
     double *z;
     int n;
-	char *plot_title_buf;
+    char *plot_title_buf;
     int ret;
 
     int pfound;
@@ -1260,7 +1260,7 @@ splot_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
     double *y;
     double *z;
     int n;
-	char *plot_title_buf;
+    char *plot_title_buf;
 
     struct pmm_benchmark *b, *b_plot;
 
@@ -1370,7 +1370,7 @@ splot_model(gnuplot_ctrl *plot_handle, struct pmm_model *model,
  * set labels, ranges and title for a 2-d plot
  *
  * @param   plot_handle     pointer to gnuplot structure
- * @param   pmm_model       pointer to model that is being plot
+ * @param   model           pointer to model that is being plot
  * @param   plot_title_buf  pointer to character buffer that will contain title
  *
  * @return TODO fails with error but no return
@@ -1413,7 +1413,7 @@ set_plot_labels_ranges(gnuplot_ctrl *plot_handle, struct pmm_model *model,
  * set labels, ranges and title for a 3-d plot
  *
  * @param   plot_handle     pointer to gnuplot structure
- * @param   pmm_model       pointer to model that is being plot
+ * @param   model           pointer to model that is being plot
  * @param   plot_title_buf  pointer to character buffer that will contain title
  *
  * @return TODO fails with error but no return

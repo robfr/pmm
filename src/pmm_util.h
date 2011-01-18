@@ -53,14 +53,14 @@ extern struct timeval tret;*/
 */
 //
 //#define pmm_rusagesub(a, b, result)
-//	do {
-//		pmm_timersub((a)->ru_utime, (b)->ru_utime, (result)->ru_utime);
-//		pmm_timersub((a)->ru_stime, (b)->ru_stime, (result)->ru_stime);
-//		(result)->ru_maxrss = (a)->ru_maxrss;
-//		(result)->ru_ixrss = (a)->ru_ixrss;
-//		(result)->ru_isrss = (a)->ru_isrss;
-//		()
-//	}
+//  do {
+//      pmm_timersub((a)->ru_utime, (b)->ru_utime, (result)->ru_utime);
+//      pmm_timersub((a)->ru_stime, (b)->ru_stime, (result)->ru_stime);
+//      (result)->ru_maxrss = (a)->ru_maxrss;
+//      (result)->ru_ixrss = (a)->ru_ixrss;
+//      (result)->ru_isrss = (a)->ru_isrss;
+//      ()
+//  }
 
 void pmm_timer_init(long long complexity);
 void pmm_timer_destroy();

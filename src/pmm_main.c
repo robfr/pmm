@@ -71,36 +71,36 @@ void sig_do_nothing();
  *
  */
 void run_as_daemon() {
-	signal(SIGTERM, SIG_IGN);
-	signal(SIGQUIT, SIG_IGN);
-	signal(SIGHUP, SIG_IGN);
-	signal(SIGINT, SIG_IGN);
+    signal(SIGTERM, SIG_IGN);
+    signal(SIGQUIT, SIG_IGN);
+    signal(SIGHUP, SIG_IGN);
+    signal(SIGINT, SIG_IGN);
 
-	switch(fork()) {
-		case -1:
-			ERRPRINTF("Error: could not fork to background.\n");
-			exit(EXIT_FAILURE);
-		case 0:
-			break;
-		default:
-			exit(EXIT_SUCCESS);
-	}
+    switch(fork()) {
+        case -1:
+            ERRPRINTF("Error: could not fork to background.\n");
+            exit(EXIT_FAILURE);
+        case 0:
+            break;
+        default:
+            exit(EXIT_SUCCESS);
+    }
 
-	if(setsid() == (pid_t) -1) {
-		ERRPRINTF("Error: process could not create new session.\n");
-		exit(EXIT_FAILURE);
-	}
+    if(setsid() == (pid_t) -1) {
+        ERRPRINTF("Error: process could not create new session.\n");
+        exit(EXIT_FAILURE);
+    }
 
-	(void) umask(0);
+    (void) umask(0);
 
 
 
     //TODO
-	//close(fileno(stdin));
-	//close(fileno(stdout));
-	//close(fileno(stderr));
+    //close(fileno(stdin));
+    //close(fileno(stdout));
+    //close(fileno(stderr));
 
-	return;
+    return;
 }
 
 /*!
@@ -112,54 +112,54 @@ void run_as_daemon() {
  */
 void* signal_handler(void* arg)
 {
-	sigset_t signal_set;
-	int signal;
+    sigset_t signal_set;
+    int signal;
 
     (void)arg; //TODO unused
 
-	for(;;) {
+    for(;;) {
 
-		//create a full signal set
-		if(sigfillset(&signal_set) != 0) {
+        //create a full signal set
+        if(sigfillset(&signal_set) != 0) {
             ERRPRINTF("Error filling signal_set.\n");
             exit(EXIT_FAILURE);
         }
 
         //wait for all signals in signal_set
-		sigwait(&signal_set, &signal);
+        sigwait(&signal_set, &signal);
 
 
         LOGPRINTF("signal received: %d\n", signal);
 
-		// when we get this far, we've caught a signal
-		switch(signal)
-		{
-			// whatever you need to do on SIGQUIT
-			case SIGQUIT:
-				if(pthread_mutex_lock(&signal_quit_mutex) != 0) {
+        // when we get this far, we've caught a signal
+        switch(signal)
+        {
+            // whatever you need to do on SIGQUIT
+            case SIGQUIT:
+                if(pthread_mutex_lock(&signal_quit_mutex) != 0) {
                     ERRPRINTF("Error locking signal_quit_mutex\n");
                     exit(EXIT_FAILURE);
                 }
 
-				signal_quit = 1;
+                signal_quit = 1;
 
-				if(pthread_mutex_unlock(&signal_quit_mutex) != 0) {
+                if(pthread_mutex_unlock(&signal_quit_mutex) != 0) {
                     ERRPRINTF("Error unlocking signal_quit_mutex\n");
                     exit(EXIT_FAILURE);
                 }
 
                 return NULL; //we are done processing signals
 
-				break;
+                break;
             case SIGINT: //do the same with SIGINT
-				if(pthread_mutex_lock(&signal_quit_mutex) != 0) {
+                if(pthread_mutex_lock(&signal_quit_mutex) != 0) {
                     ERRPRINTF("Error locking signal_quit_mutex\n");
                     exit(EXIT_FAILURE);
                 }
 
-				signal_quit = 1;
+                signal_quit = 1;
 
-				if(pthread_mutex_unlock(&signal_quit_mutex) != 0) {
+                if(pthread_mutex_unlock(&signal_quit_mutex) != 0) {
                     ERRPRINTF("Error unlocking signal_quit_mutex\n");
                     exit(EXIT_FAILURE);
                 }
@@ -168,45 +168,45 @@ void* signal_handler(void* arg)
 
                 break;
 
-			// whatever you need to do on SIGINT
-			//case SIGINT:
-			//	pthread_mutex_lock(&signal_mutex);
-			//	handled_signal = SIGINT;
-			//	pthread_mutex_unlock(&signal_mutex);
-			//	break;
+            // whatever you need to do on SIGINT
+            //case SIGINT:
+            //  pthread_mutex_lock(&signal_mutex);
+            //  handled_signal = SIGINT;
+            //  pthread_mutex_unlock(&signal_mutex);
+            //  break;
 
-			// whatever you need to do for other signals
-			default:
-				break; //nohing
-		}
-	}
+            // whatever you need to do for other signals
+            default:
+                break; //nohing
+        }
+    }
 
 
-	return NULL;
+    return NULL;
 }
 
 void sig_cleanup(int sig) {
-	LOGPRINTF("received: %d, cleaning up.\n", sig); //TODO enable this!!!
-	sig_cleanup_received = 1;
+    LOGPRINTF("received: %d, cleaning up.\n", sig); //TODO enable this!!!
+    sig_cleanup_received = 1;
 
-	// after we receive the sigint we are going to catch but do nothing with
-	// further sigints, namely the one that will be sent to the load monitoring
-	// thread
-	signal(SIGINT, sig_do_nothing);
+    // after we receive the sigint we are going to catch but do nothing with
+    // further sigints, namely the one that will be sent to the load monitoring
+    // thread
+    signal(SIGINT, sig_do_nothing);
 }
 
 void sig_do_nothing() {
-	return;
+    return;
 }
 
 void redirect_output(char* logfile) {
-	FILE *f;
+    FILE *f;
 
-	f = freopen(logfile, "a", stdout);
-	if(f == NULL) {
-		ERRPRINTF("Error redirecting output to file: %s\n", logfile);
-		exit(EXIT_FAILURE);
-	}
+    f = freopen(logfile, "a", stdout);
+    if(f == NULL) {
+        ERRPRINTF("Error redirecting output to file: %s\n", logfile);
+        exit(EXIT_FAILURE);
+    }
 }
 
 /*!
@@ -227,88 +227,88 @@ void redirect_output(char* logfile) {
  */
 int main(int argc, char **argv) {
 
-	struct pmm_config *cfg;
-	struct pmm_routine *scheduled_r = NULL;
+    struct pmm_config *cfg;
+    struct pmm_routine *scheduled_r = NULL;
     int scheduled_status = 0;
 
     int rc;
 
-	// benchmark thread variables
-	int b_thread_rc;
-	pthread_t b_thread_id = 0;
-	pthread_attr_t b_thread_attr;
-	void *b_thread_return;
+    // benchmark thread variables
+    int b_thread_rc;
+    pthread_t b_thread_id = 0;
+    pthread_attr_t b_thread_attr;
+    void *b_thread_return;
 
-	// load monitor thread variables
-	int l_thread_rc;
-	pthread_t l_thread_id = 0;
-	pthread_attr_t l_thread_attr;
+    // load monitor thread variables
+    int l_thread_rc;
+    pthread_t l_thread_id = 0;
+    pthread_attr_t l_thread_attr;
 
-	// signal handler thread
+    // signal handler thread
     sigset_t signal_set;
-	int s_thread_rc;
-	pthread_t s_thread_id = 0;
-	pthread_attr_t s_thread_attr;
+    int s_thread_rc;
+    pthread_t s_thread_id = 0;
+    pthread_attr_t s_thread_attr;
 
-	//register Ctrl+C signal handler (undone if we switch to daemon later)
-	//if(signal(SIGINT, sig_cleanup) == SIG_IGN) {
-	//	signal(SIGINT, SIG_IGN);
-	//}
-	//
+    //register Ctrl+C signal handler (undone if we switch to daemon later)
+    //if(signal(SIGINT, sig_cleanup) == SIG_IGN) {
+    //  signal(SIGINT, SIG_IGN);
+    //}
+    //
     //
 
-	// block all signals
-	sigfillset(&signal_set);
-	pthread_sigmask(SIG_BLOCK, &signal_set, NULL);
+    // block all signals
+    sigfillset(&signal_set);
+    pthread_sigmask(SIG_BLOCK, &signal_set, NULL);
 
-	// create signal handling thread
-	//
-	pthread_attr_init(&s_thread_attr);
-	pthread_attr_setdetachstate(&s_thread_attr, PTHREAD_CREATE_JOINABLE);
-	s_thread_rc = pthread_create(&s_thread_id, &s_thread_attr,
+    // create signal handling thread
+    //
+    pthread_attr_init(&s_thread_attr);
+    pthread_attr_setdetachstate(&s_thread_attr, PTHREAD_CREATE_JOINABLE);
+    s_thread_rc = pthread_create(&s_thread_id, &s_thread_attr,
                                  signal_handler, NULL);
-	if(s_thread_rc != 0) {
-		ERRPRINTF("Error creating signal handler thread, return code: %d.\n",
-		          s_thread_rc);
-		exit(EXIT_FAILURE);
-	}
+    if(s_thread_rc != 0) {
+        ERRPRINTF("Error creating signal handler thread, return code: %d.\n",
+                  s_thread_rc);
+        exit(EXIT_FAILURE);
+    }
 
 
-	cfg = new_config();
+    cfg = new_config();
 
-	// parse arguments
-	parse_args(cfg, argc, argv);
+    // parse arguments
+    parse_args(cfg, argc, argv);
 
     xmlparser_init();
 
-	// read configuation files
-	rc = parse_config(cfg);
+    // read configuation files
+    rc = parse_config(cfg);
     if(rc < 0) {
         ERRPRINTF("Error parsing config.\n");
         exit(EXIT_FAILURE);
     }
 
-	// if running as a deamon ...
-	if(cfg->daemon) {
-		LOGPRINTF("running as daemon ...\n");
-		//redirect_output(cfg.logfile);
-		run_as_daemon();
-	}
+    // if running as a deamon ...
+    if(cfg->daemon) {
+        LOGPRINTF("running as daemon ...\n");
+        //redirect_output(cfg.logfile);
+        run_as_daemon();
+    }
 
 
-	// load models
-	rc = parse_models(cfg);
+    // load models
+    rc = parse_models(cfg);
     if(rc < 0) {
         ERRPRINTF("Error loading models.\n");
         exit(EXIT_FAILURE);
     }
 
-	// print configuration
-	print_config(PMM_LOG, cfg);
+    // print configuration
+    print_config(PMM_LOG, cfg);
 
 
-	// read previous history
-	rc = parse_history(cfg->loadhistory);
+    // read previous history
+    rc = parse_history(cfg->loadhistory);
     if(rc < 0) {
         if(rc == -1) {
             //history file empty, start with empty history
@@ -319,56 +319,56 @@ int main(int argc, char **argv) {
         }
     }
 
-	// launch thread to record load history
-	pthread_rwlock_init(&(cfg->loadhistory->history_rwlock), NULL);
+    // launch thread to record load history
+    pthread_rwlock_init(&(cfg->loadhistory->history_rwlock), NULL);
 
-	pthread_attr_init(&l_thread_attr);
-	pthread_attr_setdetachstate(&l_thread_attr, PTHREAD_CREATE_JOINABLE);
+    pthread_attr_init(&l_thread_attr);
+    pthread_attr_setdetachstate(&l_thread_attr, PTHREAD_CREATE_JOINABLE);
 
-	LOGPRINTF("Starting load monitor thread.\n");
-	l_thread_rc = pthread_create(&l_thread_id, &l_thread_attr,
-								 loadmonitor, (void *)cfg->loadhistory);
+    LOGPRINTF("Starting load monitor thread.\n");
+    l_thread_rc = pthread_create(&l_thread_id, &l_thread_attr,
+                                 loadmonitor, (void *)cfg->loadhistory);
 
-	if(l_thread_rc != 0) {
-		ERRPRINTF("Error creating thread, return code: %d", l_thread_rc);
-		exit(EXIT_FAILURE);
-	}
+    if(l_thread_rc != 0) {
+        ERRPRINTF("Error creating thread, return code: %d", l_thread_rc);
+        exit(EXIT_FAILURE);
+    }
 
 
-	// possibly launch server thread (listens for requests from an cli utility
-	// and from api calls, all over sockets)
+    // possibly launch server thread (listens for requests from an cli utility
+    // and from api calls, all over sockets)
 
-	// initialize some benchmarking variables
-	executing_benchmark = 0;
+    // initialize some benchmarking variables
+    executing_benchmark = 0;
 
-	pthread_attr_init(&b_thread_attr);
+    pthread_attr_init(&b_thread_attr);
 
-	pthread_attr_setdetachstate(&b_thread_attr, PTHREAD_CREATE_JOINABLE);
-	pthread_mutex_init(&executing_benchmark_mutex, NULL);
+    pthread_attr_setdetachstate(&b_thread_attr, PTHREAD_CREATE_JOINABLE);
+    pthread_mutex_init(&executing_benchmark_mutex, NULL);
 
-	// main loop
-	for(;;) {
-		//DBGPRINTF("main loop: ...\n");
+    // main loop
+    for(;;) {
+        //DBGPRINTF("main loop: ...\n");
 
-		//DBGPRINTF("main loop: locking executing_benchmark.\n");
-		pthread_mutex_lock(&executing_benchmark_mutex);
+        //DBGPRINTF("main loop: locking executing_benchmark.\n");
+        pthread_mutex_lock(&executing_benchmark_mutex);
 
-		// if no benchmark is executing
-		if(!executing_benchmark) {
+        // if no benchmark is executing
+        if(!executing_benchmark) {
 
-			//DBGPRINTF("main loop: no benchmark executing.\n");
+            //DBGPRINTF("main loop: no benchmark executing.\n");
 
-			// join any previous benchmark thread (should be finished by now)
-			if(b_thread_id != 0) {
+            // join any previous benchmark thread (should be finished by now)
+            if(b_thread_id != 0) {
 
-				DBGPRINTF("main loop: Joining previous benchmark thread.\n");
+                DBGPRINTF("main loop: Joining previous benchmark thread.\n");
 
-				b_thread_rc = pthread_join(b_thread_id, &b_thread_return);
+                b_thread_rc = pthread_join(b_thread_id, &b_thread_return);
 
-				if(b_thread_rc != 0) {
-					perror("[main]"); //TODO
-					ERRPRINTF("Error joining previous thread.\n");
-				}
+                if(b_thread_rc != 0) {
+                    perror("[main]"); //TODO
+                    ERRPRINTF("Error joining previous thread.\n");
+                }
 
                 if(*(int*)b_thread_return == 1) { //quit signal
                     LOGPRINTF("Benchmark quit successful.\n");
@@ -395,26 +395,26 @@ int main(int argc, char **argv) {
                     getchar();
                 }
 
-			}
+            }
 
-			scheduled_status = schedule_routine(&scheduled_r, cfg->routines,
+            scheduled_status = schedule_routine(&scheduled_r, cfg->routines,
                                                 cfg->used);
 
-			DBGPRINTF("schedule status: %i\n", scheduled_status);
+            DBGPRINTF("schedule status: %i\n", scheduled_status);
 
-			if(scheduled_status == 0){
+            if(scheduled_status == 0){
 
                 //if we are only building and not monitor load, terminate
                 //program when all models are built
                 if(cfg->build_only == 1) {
-				    LOGPRINTF("All routines completed.\n");
-				    kill(getpid(), SIGINT);
+                    LOGPRINTF("All routines completed.\n");
+                    kill(getpid(), SIGINT);
                 }
 
                 //TODO if all models are built we no longer need to attempt
                 //to schedule one this scheduling loop should be terminated
-			}
-			else if(scheduled_status > 1) {
+            }
+            else if(scheduled_status > 1) {
                 DBGPRINTF("Currently no schedule-able routine.\n");
             }
             else {
@@ -434,61 +434,61 @@ int main(int argc, char **argv) {
                 }
 
             }
-			//DBGPRINTF("[main]: unlocking executing_benchmark.\n");
-			pthread_mutex_unlock(&executing_benchmark_mutex);
+            //DBGPRINTF("[main]: unlocking executing_benchmark.\n");
+            pthread_mutex_unlock(&executing_benchmark_mutex);
 
-		}
-		else {
-			//DBGPRINTF("[main]: unlocking executing_benchmark.\n");
-			pthread_mutex_unlock(&executing_benchmark_mutex);
+        }
+        else {
+            //DBGPRINTF("[main]: unlocking executing_benchmark.\n");
+            pthread_mutex_unlock(&executing_benchmark_mutex);
 
-			//DBGPRINTF("main loop: benchmarking executing, do nothing ...\n");
+            //DBGPRINTF("main loop: benchmarking executing, do nothing ...\n");
 
-			/* here we are going to recheck that the currently executing bench
-			 * mark still satisfies the executing conditions and pause/unpause
-			 * or cancel as required */
-		}
+            /* here we are going to recheck that the currently executing bench
+             * mark still satisfies the executing conditions and pause/unpause
+             * or cancel as required */
+        }
 
-		// sleep for a period
+        // sleep for a period
         nanosleep(&(cfg->ts_main_sleep_period), NULL);
 
 
 
-		//check signals
+        //check signals
 
-		// grab the mutex before looking at signal_quit
-		pthread_mutex_lock(&signal_quit_mutex);
+        // grab the mutex before looking at signal_quit
+        pthread_mutex_lock(&signal_quit_mutex);
         if(signal_quit) {
-		    pthread_mutex_unlock(&signal_quit_mutex);
+            pthread_mutex_unlock(&signal_quit_mutex);
             LOGPRINTF("signal_quit set, breaking from main loop ...\n");
             break;
         }
-		// remember to release mutex
-		pthread_mutex_unlock(&signal_quit_mutex);
+        // remember to release mutex
+        pthread_mutex_unlock(&signal_quit_mutex);
 
-	}
+    }
 
-	//join benchmark thread, they will see global variable and exit promptly
-	if(b_thread_id != 0)pthread_join(b_thread_id, NULL);
-	pthread_join(l_thread_id, NULL);
-	pthread_join(s_thread_id, NULL);
+    //join benchmark thread, they will see global variable and exit promptly
+    if(b_thread_id != 0)pthread_join(b_thread_id, NULL);
+    pthread_join(l_thread_id, NULL);
+    pthread_join(s_thread_id, NULL);
 
     //write models
     write_models(cfg);
 
-	pthread_mutex_destroy(&signal_quit_mutex);
-	pthread_mutex_destroy(&executing_benchmark_mutex);
-	pthread_rwlock_destroy(&(cfg->loadhistory->history_rwlock));
-	//pthread_exit(NULL); this allows a thread to continue executing after the
-	//main has finished, don't think we want this here ...
+    pthread_mutex_destroy(&signal_quit_mutex);
+    pthread_mutex_destroy(&executing_benchmark_mutex);
+    pthread_rwlock_destroy(&(cfg->loadhistory->history_rwlock));
+    //pthread_exit(NULL); this allows a thread to continue executing after the
+    //main has finished, don't think we want this here ...
 
-	//close files
+    //close files
 
-	//cleanup libxml
-	xmlparser_cleanup();
+    //cleanup libxml
+    xmlparser_cleanup();
 
-	//free memory
-	free_config(&cfg);
+    //free memory
+    free_config(&cfg);
 
 
 }

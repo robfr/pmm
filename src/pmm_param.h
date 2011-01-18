@@ -45,14 +45,14 @@ typedef struct pmm_paramdef {
      * parameters. At present stride and offset allow a sequence equvilent
      * to: a*x + b where a = stride and b = offset
      */
-	char *name;         /*!< name of parameter */
-	int type;           /*!< */
-	int order;          /*!< order in the sequence of parameters passed to
+    char *name;         /*!< name of parameter */
+    int type;           /*!< */
+    int order;          /*!< order in the sequence of parameters passed to
                              benchmarking routine */
     int nonzero_end;    /*!< toggle assumtion of zero speed at parameter end
                              value */
-	int end;            /*!< ending value of parameter range */
-	int start;          /*!< starting value of parameter range */
+    int end;            /*!< ending value of parameter range */
+    int start;          /*!< starting value of parameter range */
     int stride;         /*!< stride to use traversing parameter range */
     int offset;         /*!< offset from starting value to use traversing
                              parameter range */

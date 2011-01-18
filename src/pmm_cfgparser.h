@@ -40,7 +40,7 @@ int write_models(struct pmm_config *cfg);
 int write_model(struct pmm_model *m);
 int write_model_xtwp(xmlTextWriterPtr writer, struct pmm_model *m);
 int write_bench_list_xtwp(xmlTextWriterPtr writer,
-		                  struct pmm_bench_list *bench_list);
+                          struct pmm_bench_list *bench_list);
 int write_benchmark_xtwp(xmlTextWriterPtr writer, struct pmm_benchmark *b);
 int
 write_paramdef_set_xtwp(xmlTextWriterPtr writer,

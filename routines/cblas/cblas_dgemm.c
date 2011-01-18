@@ -34,28 +34,28 @@
 int main(int argc, char **argv) {
 
 
-	/* declare variables */
-	double *a, *b, *c;
-	double arg;
-	size_t n;
+    /* declare variables */
+    double *a, *b, *c;
+    double arg;
+    size_t n;
     unsigned int i;
-	long long complexity;
+    long long complexity;
 
 
-	/* parse arguments */
-	if(argc != NARGS+1) {
-		return PMM_EXIT_ARGFAIL;
-	}
-	if(sscanf(argv[1], "%lf", &arg) == 0) {
-		return PMM_EXIT_ARGPARSEFAIL;
-	}
+    /* parse arguments */
+    if(argc != NARGS+1) {
+        return PMM_EXIT_ARGFAIL;
+    }
+    if(sscanf(argv[1], "%lf", &arg) == 0) {
+        return PMM_EXIT_ARGPARSEFAIL;
+    }
 
-	n = (size_t)arg;
+    n = (size_t)arg;
 
-	/* calculate complexity */
-	complexity = 2*n*n*(long long)n;
+    /* calculate complexity */
+    complexity = 2*n*n*(long long)n;
 
-	/* initialise data */
+    /* initialise data */
     a = malloc(n*n * sizeof *a);
     b = malloc(n*n * sizeof *b);
     c = malloc(n*n * sizeof *c);
@@ -67,28 +67,28 @@ int main(int argc, char **argv) {
         c[i] = 0.0;
     }
 
-	/* initialise timer */
-	pmm_timer_init(complexity);
+    /* initialise timer */
+    pmm_timer_init(complexity);
 
-	/* start timer */
-	pmm_timer_start();
+    /* start timer */
+    pmm_timer_start();
 
-	/* execute routine */
-	cblas_dgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, n, n, n, 1.0,
+    /* execute routine */
+    cblas_dgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, n, n, n, 1.0,
                    a, n, b, n, 0.0, c, n);
 
-	/* stop timer */
-	pmm_timer_stop();
+    /* stop timer */
+    pmm_timer_stop();
 
-	/* get timing result */
-	pmm_timer_result();
+    /* get timing result */
+    pmm_timer_result();
 
-	/* destroy timer */
-	pmm_timer_destroy();
+    /* destroy timer */
+    pmm_timer_destroy();
 
     free(a);
     free(b);
     free(c);
 
-	return PMM_EXIT_SUCCESS;
+    return PMM_EXIT_SUCCESS;
 }

@@ -152,7 +152,7 @@ if test "x$with_papi" != "xno"; then #if papi is enabled
         PAPI_LDFLAGS="-lpapi"
     fi
 
-    
+
     OLD_LIBS=$LIBS
     OLD_CPPFLAGS=$CPPFLAGS
 
@@ -351,7 +351,7 @@ AC_SUBST(GOTOBLAS2_CPPFLAGS)
 AC_SUBST(GOTOBLAS2_LDFLAGS)
 AC_SUBST(HAVE_GOTOBLAS2)
 
-# test for ATLAS 
+# test for ATLAS
 AC_ARG_WITH(atlas,
     [  --with-atlas[=path] specify use of (and optional path to) ATLAS],,
     with_atlas=check)
@@ -480,7 +480,7 @@ AC_SUBST(HAVE_LAPACK)
 AC_ARG_WITH(gsl,
     [  --with-gsl[=path]   specify use of (and optional path to) GSL],,
     with_gsl=check)
-if test "x$with_gsl" != "xno"; then #if gsl is not disabled 
+if test "x$with_gsl" != "xno"; then #if gsl is not disabled
 
     if test "x$with_gsl" != "xcheck" &&
        test "x$with_gsl" != "xyes";

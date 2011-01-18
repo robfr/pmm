@@ -38,28 +38,28 @@
  * this is a circular array of load history, size determined at run time
  */
 typedef struct pmm_loadhistory {
-	int write_period; /*!< how often to write load history to disk */
+    int write_period; /*!< how often to write load history to disk */
 
     struct pmm_load *history;   /*!< pointer to the circular array */
     int size;                   /*!< size of circular array */
-	int size_mod;
+    int size_mod;
 
-	struct pmm_load *start;   /*!< pointer to starting element of c.array */
+    struct pmm_load *start;   /*!< pointer to starting element of c.array */
     struct pmm_load *end;     /*!< pointer to ending element of c.array */
-	int start_i;              /*!< ending element of the circular array */
+    int start_i;              /*!< ending element of the circular array */
     int end_i;                /*!< starting element in the circular array */
 
-	char *load_path;          /*!< path to load history file */
+    char *load_path;          /*!< path to load history file */
 
-	pthread_rwlock_t history_rwlock;    /*!< mutex for accessing history */
+    pthread_rwlock_t history_rwlock;    /*!< mutex for accessing history */
 } PMM_Loadhistory;
 
 /*!
  * this is a record of system load
  */
 typedef struct pmm_load {
-	time_t time;    /*!< time at which load was recorded */
-	double load[3]; /*!< 1, 5 & 15 minute load averages TODO use float? */
+    time_t time;    /*!< time at which load was recorded */
+    double load[3]; /*!< 1, 5 & 15 minute load averages TODO use float? */
 } PMM_Load;
 
 

@@ -43,15 +43,15 @@
 struct pmm_interval_list*
 new_interval_list()
 {
-	struct pmm_interval_list *l;
+    struct pmm_interval_list *l;
 
-	l = malloc(sizeof *l);
+    l = malloc(sizeof *l);
 
-	l->size = 0;
-	l->top = NULL;
-	l->bottom = NULL;
+    l->size = 0;
+    l->top = NULL;
+    l->bottom = NULL;
 
-	return l;
+    return l;
 }
 
 /*!
@@ -63,25 +63,25 @@ void
 free_interval_list(struct pmm_interval_list **il)
 {
 
-	struct pmm_interval *this, *next;
+    struct pmm_interval *this, *next;
 
-	this = (*il)->top;
+    this = (*il)->top;
 
-	while(this != NULL) {
-		next = this->next;
+    while(this != NULL) {
+        next = this->next;
 
-		free_interval(&this);
+        free_interval(&this);
 
-		this = next;
-	}
+        this = next;
+    }
 
-	free(*il);
+    free(*il);
     *il = NULL;
 }
 
 /*!
  * determine if interval list is empty
- * 
+ *
  * @param   l   pointer to interval list
  * @returns 1 if list is empty, 0 if list is not empty
  */
@@ -89,12 +89,12 @@ int
 isempty_interval_list(struct pmm_interval_list *l)
 {
     //TODO static
-	if(l->size <= 0) {
-		return 1; // true
-	}
-	else {
-		return 0; // false
-	}
+    if(l->size <= 0) {
+        return 1; // true
+    }
+    else {
+        return 0; // false
+    }
 }
 
 /*!
@@ -104,27 +104,27 @@ isempty_interval_list(struct pmm_interval_list *l)
  */
 struct pmm_interval* new_interval()
 {
-	struct pmm_interval *i;
+    struct pmm_interval *i;
 
-	i = malloc(sizeof *i);
-	if(i == NULL) {
-		ERRPRINTF("Error allocating memory for interval struct\n");
+    i = malloc(sizeof *i);
+    if(i == NULL) {
+        ERRPRINTF("Error allocating memory for interval struct\n");
         return i;
-	}
+    }
 
     i->plane = -1;
     i->climb_step = 0;
 
     i->n_p = -1;
-	i->start = NULL;
-	i->end = NULL;
+    i->start = NULL;
+    i->end = NULL;
 
-	i->type = IT_NULL;
+    i->type = IT_NULL;
 
-	i->next = NULL;
-	i->previous = NULL;
+    i->next = NULL;
+    i->previous = NULL;
 
-	return i;
+    return i;
 }
 
 /*!
@@ -188,7 +188,7 @@ struct pmm_interval* init_interval(int plane,
 void free_interval(struct pmm_interval **i)
 {
     if((*i)->start != NULL) {
-        free((*i)->start); 
+        free((*i)->start);
         (*i)->start = NULL;
     }
     if((*i)->end != NULL) {
@@ -204,12 +204,12 @@ void free_interval(struct pmm_interval **i)
 struct pmm_interval*
 read_top_interval(struct pmm_interval_list *l)
 {
-	if(!isempty_interval_list(l)) {
-		return l->top; // success
-	}
-	else {
-		return NULL; // failure
-	}
+    if(!isempty_interval_list(l)) {
+        return l->top; // success
+    }
+    else {
+        return NULL; // failure
+    }
 }
 
 /*!
@@ -224,38 +224,38 @@ read_top_interval(struct pmm_interval_list *l)
 int
 remove_top_interval(struct pmm_interval_list *l)
 {
-	// remove top destructively removes the top element of the list, remember
-	// to read it first or it will be gone forever
+    // remove top destructively removes the top element of the list, remember
+    // to read it first or it will be gone forever
 
-	struct pmm_interval *zombie;
+    struct pmm_interval *zombie;
 
-	if(isempty_interval_list(l)) {
-		return 0; // failure
-	}
-	else {
+    if(isempty_interval_list(l)) {
+        return 0; // failure
+    }
+    else {
 
-		if(l->top == l->bottom) { /* only one element in list */
-			zombie = l->top;
-			l->top = NULL;
-			l->bottom = NULL;
+        if(l->top == l->bottom) { /* only one element in list */
+            zombie = l->top;
+            l->top = NULL;
+            l->bottom = NULL;
 
-		}
-		else {
-			/* swap old top with new top */
-			zombie = l->top;
-			l->top = zombie->previous;
+        }
+        else {
+            /* swap old top with new top */
+            zombie = l->top;
+            l->top = zombie->previous;
 
-			l->top->next=NULL;
+            l->top->next=NULL;
 
 
-		}
+        }
 
         free_interval(&zombie);
 
-		l->size -= 1;
+        l->size -= 1;
 
-		return 1; // success
-	}
+        return 1; // success
+    }
 }
 
 /*!
@@ -274,29 +274,29 @@ remove_interval(struct pmm_interval_list *l, struct pmm_interval *i)
     LOGPRINTF("removing interval with type: %d\n", i->type);
 
     //if interval is at top or bottom, rewire top/bottom pointers
-	if(l->top == i) {
-		l->top = i->previous;
-	}
-	if(l->bottom == i) {
-		l->bottom = i->next;
-	}
+    if(l->top == i) {
+        l->top = i->previous;
+    }
+    if(l->bottom == i) {
+        l->bottom = i->next;
+    }
 
     //rewire intervals that were previous/next intervals of the remove-ee
-	if(i->next != NULL) {
-		i->next->previous = i->previous;
-	}
-	if(i->previous != NULL) {
-		i->previous->next = i->next;
-	}
+    if(i->next != NULL) {
+        i->next->previous = i->previous;
+    }
+    if(i->previous != NULL) {
+        i->previous->next = i->next;
+    }
 
 
     //free interval
-	free_interval(&i);
-	l->size -= 1;
+    free_interval(&i);
+    l->size -= 1;
 
     LOGPRINTF("size: %d\n", l->size);
 
-	return 1;
+    return 1;
 }
 
 
@@ -311,24 +311,24 @@ remove_interval(struct pmm_interval_list *l, struct pmm_interval *i)
 int add_top_interval(struct pmm_interval_list *l, struct pmm_interval *i)
 {
 
-	 /* if the list was empty, new i will be only member, top & bottom */
-	if(isempty_interval_list(l)) {
-		i->previous = NULL;
-		i->next = NULL;
+     /* if the list was empty, new i will be only member, top & bottom */
+    if(isempty_interval_list(l)) {
+        i->previous = NULL;
+        i->next = NULL;
 
-		l->bottom = i;
-		l->top = i;
-	} else {
-		i->previous = l->top;
+        l->bottom = i;
+        l->top = i;
+    } else {
+        i->previous = l->top;
         l->top->next = i;
 
-		l->top = i;
-		i->next = NULL;
-	}
+        l->top = i;
+        i->next = NULL;
+    }
 
-	l->size += 1;
+    l->size += 1;
 
-	return 0; // success TODO void
+    return 0; // success TODO void
 }
 
 /*!
@@ -343,24 +343,24 @@ int
 add_bottom_interval(struct pmm_interval_list *l, struct pmm_interval *i)
 {
 
-	// if the list was empty, new i will be only member, top & bottom
-	if(isempty_interval_list(l)) {
-		i->previous = NULL;
-		i->next = NULL;
+    // if the list was empty, new i will be only member, top & bottom
+    if(isempty_interval_list(l)) {
+        i->previous = NULL;
+        i->next = NULL;
 
-		l->bottom = i;
-		l->top = i;
-	} else {
+        l->bottom = i;
+        l->top = i;
+    } else {
         i->next = l->bottom;
         l->bottom->previous = i;
 
         l->bottom = i;
         i->previous = NULL;
-	}
+    }
 
-	l->size += 1;
+    l->size += 1;
 
-	return 0; // success
+    return 0; // success
 }
 
 
@@ -373,20 +373,20 @@ add_bottom_interval(struct pmm_interval_list *l, struct pmm_interval *i)
 void
 print_interval_list(const char *output, struct pmm_interval_list *l)
 {
-	struct pmm_interval *i;
+    struct pmm_interval *i;
     int c;
 
-	i = l->top;
+    i = l->top;
 
     c=0;
-	while(i != NULL) {
+    while(i != NULL) {
         SWITCHPRINTF(output, "%d of %d intervals ...\n", c, l->size);
 
-		print_interval(output, i);
+        print_interval(output, i);
 
-		i = i->previous;
+        i = i->previous;
         c++;
-	}
+    }
 }
 
 /*!
@@ -474,29 +474,29 @@ void print_interval(const char *output, struct pmm_interval *i) {
  */
 /* TODO implement interval_contains_bench with non-boundary intervals
 int interval_contains_bench(struct pmm_routine *r, struct pmm_interval *i,
-		                    struct pmm_benchmark *b)
+                            struct pmm_benchmark *b)
 {
     int b_plane;
 
     switch(i->type) {
         case IT_BOUNDARY_COMPLETE :
         case IT_COMPLETE :
-		    return 0; //false
+            return 0; //false
             break;
 
         case IT_POINT :
-		    if(params_cmp(b->p, i->point->p, b->n_p) == 0) {
-		    	return 1; //true
-		    }
-		    else {
-		    	return 0; //false
-		    }
+            if(params_cmp(b->p, i->point->p, b->n_p) == 0) {
+                return 1; //true
+            }
+            else {
+                return 0; //false
+            }
             break;
-	    case IT_GBBP_EMPTY :
+        case IT_GBBP_EMPTY :
         case IT_GBBP_CLIMB :
         case IT_GBBP_BISECT :
         case IT_GBBP_INFLECT :
-            // 
+            //
             // to test if a point c is between two other points a & b,
             // first, test they are collinear
             //
@@ -521,7 +521,7 @@ int interval_contains_bench(struct pmm_routine *r, struct pmm_interval *i,
         default:
             ERRPRINTF("Invalid interval type: %d\n", i->type);
             break;
-	}
+    }
 
     return 0;
 }

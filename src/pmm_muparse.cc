@@ -128,7 +128,7 @@ int
 evaluate_constraint(struct pmm_param_constraint_muparser* pc_parser,
                     double *value)
 {
-    
+
     try {
         *value = pc_parser->p.Eval();
         DBGPRINTF("evaluated constraint formula to:%f\n", *value);

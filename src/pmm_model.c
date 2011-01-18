@@ -48,7 +48,7 @@
  */
 
 /******************************80 columns**************************************/
- 
+
  /*!
  * Allocates memory for the pmm_config structure. Sets some default values
  * in the config.
@@ -56,28 +56,28 @@
  * @return pointer to newly allocated pmm_config structure or NULL on failure
  */
 struct pmm_config* new_config() {
-	struct pmm_config *c;
+    struct pmm_config *c;
 
-	c = malloc(sizeof *c);
+    c = malloc(sizeof *c);
 
-	c->routines = malloc(5 * sizeof *(c->routines));
-	if(c->routines == NULL) {
-		ERRPRINTF("allocation of memory to routine array failed.\n");
+    c->routines = malloc(5 * sizeof *(c->routines));
+    if(c->routines == NULL) {
+        ERRPRINTF("allocation of memory to routine array failed.\n");
 
         free(c);
         c = NULL;
 
         return NULL;
-	}
-	c->allocated = 5;
-	c->used = 0;
+    }
+    c->allocated = 5;
+    c->used = 0;
 
     c->loadhistory = (void *)NULL;
 
-	c->daemon = 0;
+    c->daemon = 0;
     c->build_only = 0;
     c->configfile = SYSCONFDIR"/pmmd.conf";
-	c->logfile = "./pmmd.log"; //TODO  set default log file directory
+    c->logfile = "./pmmd.log"; //TODO  set default log file directory
 
     c->ts_main_sleep_period.tv_sec = 1;
     c->ts_main_sleep_period.tv_nsec = 0;
@@ -86,7 +86,7 @@ struct pmm_config* new_config() {
 
     c->pause = 0;
 
-	return c;
+    return c;
 }
 
 /*!
@@ -97,9 +97,9 @@ struct pmm_config* new_config() {
 struct pmm_routine*
 new_routine()
 {
-	struct pmm_routine *r;
+    struct pmm_routine *r;
 
-	r = malloc(sizeof *r);
+    r = malloc(sizeof *r);
 
     r->name = NULL;
     r->exe_path = NULL;
@@ -116,11 +116,11 @@ new_routine()
     r->min_sample_time = -1;
     r->max_completion = -1;
 
-	r->model = new_model();
+    r->model = new_model();
 
-	r->model->parent_routine = r;
+    r->model->parent_routine = r;
 
-	return r;
+    return r;
 }
 
 /*!
@@ -131,28 +131,28 @@ new_routine()
  */
 struct pmm_model* new_model()
 {
-	struct pmm_model *m;
+    struct pmm_model *m;
 
-	m = malloc(sizeof *m);
+    m = malloc(sizeof *m);
 
-	m->model_path = (void *)NULL;
+    m->model_path = (void *)NULL;
     m->unwritten_num_execs = 0;
     m->unwritten_time_spend = 0.0;
 
     m->mtime = 0;
 
-	m->n_p = -1;
-	m->completion = 0;
-	m->complete = 0;
+    m->n_p = -1;
+    m->completion = 0;
+    m->complete = 0;
     m->unique_benches = 0;
 
-	m->bench_list = (void *)NULL; // init when setting n_p
+    m->bench_list = (void *)NULL; // init when setting n_p
 
-	m->interval_list = new_interval_list();
+    m->interval_list = new_interval_list();
 
     m->parent_routine = (void *)NULL;
 
-	return m;
+    return m;
 }
 
 /*!
@@ -167,22 +167,22 @@ struct pmm_bench_list*
 new_bench_list(struct pmm_model *m,
                int n_p)
 {
-	struct pmm_bench_list *bl;
+    struct pmm_bench_list *bl;
 
-	bl = malloc(sizeof *bl);
+    bl = malloc(sizeof *bl);
 
-	if(bl == NULL) {
-		ERRPRINTF("Error allocating memory.\n");
-		return NULL;
-	}
+    if(bl == NULL) {
+        ERRPRINTF("Error allocating memory.\n");
+        return NULL;
+    }
 
-	bl->size = 0;
-	bl->n_p = n_p;
-	bl->first = NULL;
-	bl->last = NULL;
-	bl->parent_model = m;
+    bl->size = 0;
+    bl->n_p = n_p;
+    bl->first = NULL;
+    bl->last = NULL;
+    bl->parent_model = m;
 
-	return bl;
+    return bl;
 }
 
 /*!
@@ -198,33 +198,32 @@ new_bench_list(struct pmm_model *m,
  * ever benchmark at end_0,end_1,...,end_n and set a zero speed benchmark at
  * this point also.
  *
- * @param   m           pointer to the model that the bench list belongs to 
- * @param   pd_array    pointer to the parameter definition array of the model
- * @param   n_p         number of parameters in the model/pd array
+ * @param   m           pointer to the model that the bench list belongs to
+ * @param   pd_set      pointer to the parameter definition set of the model
  *
  * @return 0 on success, -1 on failure
  */
 int
 init_bench_list(struct pmm_model *m, struct pmm_paramdef_set *pd_set)
 {
-	int i;
+    int i;
     int ret;
     int all_nonzero_end;
-	struct pmm_benchmark *b;
+    struct pmm_benchmark *b;
 
-	m->bench_list = malloc(sizeof *(m->bench_list));
-	if(m->bench_list == NULL) {
-		ERRPRINTF("Error allocating memory.\n");
-		return -1; //failure;
-	}
+    m->bench_list = malloc(sizeof *(m->bench_list));
+    if(m->bench_list == NULL) {
+        ERRPRINTF("Error allocating memory.\n");
+        return -1; //failure;
+    }
 
-	m->bench_list->size = 0;
-	m->bench_list->n_p = pd_set->n_p;
+    m->bench_list->size = 0;
+    m->bench_list->n_p = pd_set->n_p;
 
-	m->bench_list->first = NULL;
-	m->bench_list->last = NULL;
+    m->bench_list->first = NULL;
+    m->bench_list->last = NULL;
 
-	m->bench_list->parent_model = m;
+    m->bench_list->parent_model = m;
 
     // check if any parameters are set to nonzero end (bench at this point
     // instead of assuming it to have zero speed)
@@ -241,7 +240,7 @@ init_bench_list(struct pmm_model *m, struct pmm_paramdef_set *pd_set)
                 free_benchmark(&b);
                 return -1; //failure
             }
-        
+
             b->p[i] = pd_set->pd_array[i].end;
 
             b->flops = 0.;
@@ -281,7 +280,7 @@ init_bench_list(struct pmm_model *m, struct pmm_paramdef_set *pd_set)
         }
     }
 
-	return 0; // success
+    return 0; // success
 }
 
 
@@ -320,27 +319,27 @@ zero_benchmark(struct pmm_benchmark *b)
 struct pmm_benchmark*
 new_benchmark()
 {
-	struct pmm_benchmark *b;
+    struct pmm_benchmark *b;
 
-	b = malloc(sizeof *b);
+    b = malloc(sizeof *b);
 
-	b->n_p = -1;
-	b->p = (void *)NULL; //init when assigning parameters
+    b->n_p = -1;
+    b->p = (void *)NULL; //init when assigning parameters
 
-	b->complexity = -1;
-	b->flops = -1;
-	b->seconds = -1;
+    b->complexity = -1;
+    b->flops = -1;
+    b->seconds = -1;
 
-	b->wall_t.tv_sec = -1;
-	b->wall_t.tv_usec = -1;
+    b->wall_t.tv_sec = -1;
+    b->wall_t.tv_usec = -1;
 
-	b->used_t.tv_sec = -1;
-	b->used_t.tv_usec = -1;
+    b->used_t.tv_sec = -1;
+    b->used_t.tv_usec = -1;
 
-	b->next = (void *)NULL; //set when inserting into model
-	b->previous = (void *)NULL;
+    b->next = (void *)NULL; //set when inserting into model
+    b->previous = (void *)NULL;
 
-	return b;
+    return b;
 }
 
 /*!
@@ -392,32 +391,32 @@ init_zero_benchmark(int *params, int n_p)
  */
 int
 add_routine(struct pmm_config *c, struct pmm_routine *r) {
-	// if we still have space in the routines array
-	if(c->used < c->allocated) {
+    // if we still have space in the routines array
+    if(c->used < c->allocated) {
 
-		// add routine
-		c->routines[c->used] = r;
-		c->used++;
-	}
-	// otherwise ...
-	else {
-		// reallocate the routines array
-		c->allocated+=5;
-		c->routines = realloc(c->routines,
-		                      sizeof(struct pmm_routine*)*c->allocated);
-		if(c->routines == NULL) {
-			ERRPRINTF("Reallocation of memory to routine array failed.\n");
+        // add routine
+        c->routines[c->used] = r;
+        c->used++;
+    }
+    // otherwise ...
+    else {
+        // reallocate the routines array
+        c->allocated+=5;
+        c->routines = realloc(c->routines,
+                              sizeof(struct pmm_routine*)*c->allocated);
+        if(c->routines == NULL) {
+            ERRPRINTF("Reallocation of memory to routine array failed.\n");
             return -1;
-		}
+        }
 
-		// and add the routine
-		c->routines[c->used] = r;
-		c->used++;
-	}
+        // and add the routine
+        c->routines[c->used] = r;
+        c->used++;
+    }
 
     r->parent_config = c;
 
-	return 0;
+    return 0;
 }
 
 
@@ -446,12 +445,12 @@ insert_bench_into_sorted_list(struct pmm_benchmark **list_start,
 
     while(this != NULL) {
         if((ret = params_cmp(b->p, this->p, b->n_p)) <= 0) {
-            if(insert_bench_into_sorted_list_before(list_start, list_end, 
+            if(insert_bench_into_sorted_list_before(list_start, list_end,
                                                     this, b) < 0)
             {
                 ERRPRINTF("Error inserting bench into list.\n");
                 return -1;
-            } 
+            }
 
             // if params_cmp did not match the new benchmark, set unique flag
             if(ret != 0)
@@ -496,9 +495,9 @@ insert_bench_into_list(struct pmm_bench_list *bl,
         return -1;
     }
 
-	// in any case, if we reach this point, a benchmark has been inserted
-	bl->size++;
-	bl->parent_model->completion++;
+    // in any case, if we reach this point, a benchmark has been inserted
+    bl->size++;
+    bl->parent_model->completion++;
     bl->parent_model->unique_benches += ret;
 
     return 0;
@@ -521,7 +520,7 @@ insert_bench_into_list(struct pmm_bench_list *bl,
 int
 insert_bench(struct pmm_model *m, struct pmm_benchmark *b)
 {
-	int ret;
+    int ret;
 
     ret = insert_bench_into_list(m->bench_list, b);
     if(ret < 0) {
@@ -529,7 +528,7 @@ insert_bench(struct pmm_model *m, struct pmm_benchmark *b)
         return ret;
     }
 
-	return ret;
+    return ret;
 }
 
 
@@ -548,22 +547,22 @@ insert_bench(struct pmm_model *m, struct pmm_benchmark *b)
 int is_benchmark_at_origin(int n, struct pmm_paramdef *pd_array,
                            struct pmm_benchmark *b)
 {
-	int i;
+    int i;
 
-	if(n!=b->n_p) {
-		ERRPRINTF("paramdef array and benchmark param array size mismatch\n");
-		return -1;
-	}
+    if(n!=b->n_p) {
+        ERRPRINTF("paramdef array and benchmark param array size mismatch\n");
+        return -1;
+    }
 
-	for(i=0; i<n; i++) {
+    for(i=0; i<n; i++) {
         LOGPRINTF("b->p[%d]:%d paramdef[%d].start:%d\n", i, b->p[i], i,
                   pd_array[i].start);
-		if(b->p[i] != pd_array[i].start) {
-			return 0;
-		}
-	}
+        if(b->p[i] != pd_array[i].start) {
+            return 0;
+        }
+    }
 
-	return 1; // all bench parameters are start, bench is at origin
+    return 1; // all bench parameters are start, bench is at origin
 }
 
 /*!
@@ -586,23 +585,23 @@ int is_benchmark_at_origin(int n, struct pmm_paramdef *pd_array,
 int
 isempty_model(struct pmm_model *m)
 {
-	struct pmm_benchmark *b;
+    struct pmm_benchmark *b;
 
 
-	b = m->bench_list->first;
-	if(b == NULL) {
-		ERRPRINTF("Mesh model not initialized.\n");
-	}
+    b = m->bench_list->first;
+    if(b == NULL) {
+        ERRPRINTF("Mesh model not initialized.\n");
+    }
 
     while(b != NULL) {
         if(b->flops != 0.0) {
             return 0;
         }
-        b=b->next; 
+        b=b->next;
     }
 
-	//list is empty of experimental points
-	return 1;
+    //list is empty of experimental points
+    return 1;
 }
 
 /*!
@@ -614,11 +613,11 @@ isempty_model(struct pmm_model *m)
 int
 count_benchmarks_in_model(struct pmm_model *m)
 {
-	int c = 0; //counter
+    int c = 0; //counter
 
-	c = count_benchmarks_in_bench_list(m->bench_list);
+    c = count_benchmarks_in_bench_list(m->bench_list);
 
-	return c;
+    return c;
 }
 
 
@@ -633,17 +632,17 @@ count_benchmarks_in_model(struct pmm_model *m)
 int
 count_benchmarks_in_bench_list(struct pmm_bench_list *bl)
 {
-	int c = 0; //counter
-	struct pmm_benchmark *b;
+    int c = 0; //counter
+    struct pmm_benchmark *b;
 
-	b = bl->first;
-	while(b != NULL) {
-		c++;
-		b = b->next;
-	}
+    b = bl->first;
+    while(b != NULL) {
+        c++;
+        b = b->next;
+    }
 
     LOGPRINTF("c:%d\n", c);
-	return c;
+    return c;
 }
 
 /*!
@@ -684,7 +683,7 @@ int
 benchmark_on_axis(struct pmm_model *m,
                   struct pmm_benchmark *b)
 {
-	return param_on_axis(b->p, b->n_p, m->parent_routine->pd_set->pd_array);
+    return param_on_axis(b->p, b->n_p, m->parent_routine->pd_set->pd_array);
 }
 
 /*!
@@ -703,7 +702,7 @@ benchmark_on_axis(struct pmm_model *m,
 int copy_benchmark(struct pmm_benchmark *dst, struct pmm_benchmark *src)
 {
 
-	dst->n_p = src->n_p;
+    dst->n_p = src->n_p;
 
     dst->p = init_param_array_copy(src->p, src->n_p);
     if(dst->p == NULL) {
@@ -711,18 +710,18 @@ int copy_benchmark(struct pmm_benchmark *dst, struct pmm_benchmark *src)
         return -1;
     }
 
-	dst->complexity = src->complexity;
-	dst->flops = src->flops;
-	dst->seconds = src->seconds;
+    dst->complexity = src->complexity;
+    dst->flops = src->flops;
+    dst->seconds = src->seconds;
 
     //copy from -> to
-	copy_timeval(&dst->wall_t, &src->wall_t);
-	copy_timeval(&dst->used_t, &src->used_t);
+    copy_timeval(&dst->wall_t, &src->wall_t);
+    copy_timeval(&dst->used_t, &src->used_t);
 
-	dst->next = (void *)NULL;
-	dst->previous = (void *)NULL;
+    dst->next = (void *)NULL;
+    dst->previous = (void *)NULL;
 
-	return 0;
+    return 0;
 }
 
 
@@ -743,41 +742,41 @@ int copy_benchmark(struct pmm_benchmark *dst, struct pmm_benchmark *src)
 int
 insert_bench_into_sorted_list_before(struct pmm_benchmark **list_first,
                                      struct pmm_benchmark **list_last,
-		                             struct pmm_benchmark *before,
+                                     struct pmm_benchmark *before,
                                      struct pmm_benchmark *b)
 {
-	//if before is NULL then we may have an empty list
-	if(before == NULL) {
+    //if before is NULL then we may have an empty list
+    if(before == NULL) {
 
-		if(*list_first == NULL && *list_last == NULL) { //if empty list
-			b->previous = (void *)NULL;
-			b->next = (void *)NULL;
+        if(*list_first == NULL && *list_last == NULL) { //if empty list
+            b->previous = (void *)NULL;
+            b->next = (void *)NULL;
 
-			*list_first = b;
-			*list_last = b;
+            *list_first = b;
+            *list_last = b;
 
-		}
-		else { //else error, shouldn't have been passed a NULL benchmark
-			ERRPRINTF("Insertion before NULL benchmark in non-empty list.\n");
+        }
+        else { //else error, shouldn't have been passed a NULL benchmark
+            ERRPRINTF("Insertion before NULL benchmark in non-empty list.\n");
             return -1;
-		}
-	}
-	else if(before == *list_first) { //if inserting before first element in list
-		b->previous = (void *)NULL;
-		b->next = before;
-		before->previous = b;
-		*list_first = b;
+        }
+    }
+    else if(before == *list_first) { //if inserting before first element in list
+        b->previous = (void *)NULL;
+        b->next = before;
+        before->previous = b;
+        *list_first = b;
 
-	}
-	else { //inserted midway through the list
-		b->previous = before->previous;
-		b->next = before;
-		before->previous->next = b;
-		before->previous = b;
+    }
+    else { //inserted midway through the list
+        b->previous = before->previous;
+        b->next = before;
+        before->previous->next = b;
+        before->previous = b;
 
-	}
+    }
 
-	return 0;
+    return 0;
 }
 
 /*!
@@ -797,40 +796,40 @@ insert_bench_into_sorted_list_before(struct pmm_benchmark **list_first,
 int
 insert_bench_into_sorted_list_after(struct pmm_benchmark **list_first,
                                     struct pmm_benchmark **list_last,
-		                            struct pmm_benchmark *after,
+                                    struct pmm_benchmark *after,
                                     struct pmm_benchmark *b)
 {
-	//if after is NULL then we may have an empty list
-	if(after == NULL) {
+    //if after is NULL then we may have an empty list
+    if(after == NULL) {
 
-		if(*list_first == NULL && *list_last == NULL) { //if empty list
-			b->previous = (void *)NULL;
-			b->next = (void *)NULL;
+        if(*list_first == NULL && *list_last == NULL) { //if empty list
+            b->previous = (void *)NULL;
+            b->next = (void *)NULL;
 
-			*list_first = b;
-			*list_last = b;
+            *list_first = b;
+            *list_last = b;
 
-		}
-		else { //else error, shouldn't have been passed a NULL benchmark
-			ERRPRINTF("Insertion after NULL benchmark in non-empty list.\n");
+        }
+        else { //else error, shouldn't have been passed a NULL benchmark
+            ERRPRINTF("Insertion after NULL benchmark in non-empty list.\n");
             return -1;
-		}
-	}
-	else if(after == *list_last) { //if inserting after last element in list
-		b->previous = after;
-		b->next = (void *)NULL;
-	    after->next = b;
-		*list_last = b;
+        }
+    }
+    else if(after == *list_last) { //if inserting after last element in list
+        b->previous = after;
+        b->next = (void *)NULL;
+        after->next = b;
+        *list_last = b;
 
-	}
-	else { //inserted midway through the list
-		b->previous = after;
-		b->next = after->next;
+    }
+    else { //inserted midway through the list
+        b->previous = after;
+        b->next = after->next;
         after->next->previous = b;
         after->next = b;
-	}
+    }
 
-	return 0;
+    return 0;
 }
 
 /*!
@@ -948,16 +947,16 @@ remove_bench_from_bench_list(struct pmm_bench_list *bl,
 /*
 int
 flops_to_time_t(struct pmm_benchmark *b) {
-		double d_secs;
-		if(b->flops <= 0 || b->size < 0) {
-			return 0;
-		}
+        double d_secs;
+        if(b->flops <= 0 || b->size < 0) {
+            return 0;
+        }
 
-		d_secs = b->size/b->flops;
+        d_secs = b->size/b->flops;
 
-		b->used_t.tv_sec = floor(d_secs);
+        b->used_t.tv_sec = floor(d_secs);
 
-		b->used_t.tv_usec = floor(1000*(d_secs - b->used_t.tv_sec));
+        b->used_t.tv_usec = floor(1000*(d_secs - b->used_t.tv_sec));
     return 0;
 }
 */
@@ -975,7 +974,7 @@ flops_to_time_t(struct pmm_benchmark *b) {
 #define SEARCH_BACKWARDS 1
 
 /*!
- * Searches a sorted bench list for the fastest instance of a benchmark with 
+ * Searches a sorted bench list for the fastest instance of a benchmark with
  * matching parameters and returns a pointer to that benchmark
  *
  * @param   start   pointer to start bench to commence search
@@ -1027,8 +1026,8 @@ find_max_bench_in_sorted_bench_list(struct pmm_benchmark *start,
 }
 
 /*!
- * Searches a sorted bench list for multiple instances of a benchmark with 
- * matching parameters and returns a newly allocated benchmark that represents 
+ * Searches a sorted bench list for multiple instances of a benchmark with
+ * matching parameters and returns a newly allocated benchmark that represents
  * an average of the search hits.
  *
  * @param   start   pointer to start bench to commence search
@@ -1132,7 +1131,7 @@ get_sublist_from_bench_list(struct pmm_bench_list *bl,
  * They do not depend on the search direction, i.e. first and last are not
  * reordered if the search direction is reversed, they will always be presented
  * in the order that occurs in the model.
- * 
+ *
  */
 int
 search_sorted_bench_list(int direction,
@@ -1181,7 +1180,7 @@ search_sorted_bench_list(int direction,
 
                 b=b->next;
             }
-            
+
             break;
 
         case SEARCH_BACKWARDS:
@@ -1218,7 +1217,7 @@ search_sorted_bench_list(int direction,
 
                 b=b->previous;
             }
-            
+
             break;
 
         default:
@@ -1237,7 +1236,7 @@ search_sorted_bench_list(int direction,
  * benchmark at the exact same point. Hence the need for this function
  *
  * @param   b       pointer to a benchmark that is in a sorted list
- * 
+ *
  * @return pointer to the next benchmark in the list (that b belongs to), which
  * has a different set of parameters associated with it. This may be null if
  * the benchmark b is the last benchmark in the list
@@ -1252,8 +1251,8 @@ get_next_different_bench(struct pmm_benchmark *b)
     //the search at b, using the result we know where the next not matching
     //bench will be
     search_sorted_bench_list(SEARCH_FORWARDS, b, b->p, b->n_p, &first, &last);
-    
-    if(last == NULL) { //there is only 1 matching benchmark in the list 
+
+    if(last == NULL) { //there is only 1 matching benchmark in the list
 
         if(first != NULL) {
             next = first->next;
@@ -1280,7 +1279,7 @@ get_next_different_bench(struct pmm_benchmark *b)
  * benchmark at the exact same point. Hence the need for this function
  *
  * @param   b       pointer to a benchmark that is in a sorted list
- * 
+ *
  * @return pointer to the previous benchmark in the list (that b belongs to),
  * which has a different set of parameters associated with it. This may be NULL
  * if the benchmark b is the first benchmark in the list.
@@ -1294,7 +1293,7 @@ get_previous_different_bench(struct pmm_benchmark *b)
     //search the bench list for all benchmarks with params of b, starting
     //the search at b for expediency and looking backwards
     search_sorted_bench_list(SEARCH_BACKWARDS, b, b->p, b->n_p, &first, &last);
-    
+
     //previous different benchmark to b will be before the first in the list of
     //benchmarks matching b
     if(first != NULL) {
@@ -1459,8 +1458,8 @@ div_bench(struct pmm_benchmark *b, double d, struct pmm_benchmark *res)
 void
 copy_timeval(struct timeval *dst, struct timeval *src)
 {
-	dst->tv_sec = src->tv_sec;
-	dst->tv_usec = src->tv_usec;
+    dst->tv_sec = src->tv_sec;
+    dst->tv_usec = src->tv_usec;
 }
 
 /*!
@@ -1595,20 +1594,20 @@ timeval_cmp(struct timeval *a, struct timeval *b)
  */
 struct pmm_benchmark*
 get_first_bench_from_bench_list(struct pmm_bench_list *bl,
-		                        int *p)
+                                int *p)
 {
-	struct pmm_benchmark *b;
+    struct pmm_benchmark *b;
 
-	b = bl->first;
+    b = bl->first;
 
-	while(b != NULL) {
-		if(params_cmp(b->p, p, bl->n_p == 0)) {
-			return b;
-		}
-		b = b->next;
-	}
+    while(b != NULL) {
+        if(params_cmp(b->p, p, bl->n_p == 0)) {
+            return b;
+        }
+        b = b->next;
+    }
 
-	return b; //b should be NULL at this point
+    return b; //b should be NULL at this point
 
 }
 
@@ -1666,13 +1665,13 @@ struct pmm_benchmark*
 get_first_bench(struct pmm_model *m, int *p)
 {
 
-	struct pmm_benchmark *b;
+    struct pmm_benchmark *b;
 
-	b = (void *)NULL;
+    b = (void *)NULL;
 
     b = get_first_bench_from_bench_list(m->bench_list, p);
 
-	return b;
+    return b;
 }
 
 
@@ -1733,13 +1732,13 @@ get_avg_aligned_bench(struct pmm_model *m, int *param)
 struct pmm_benchmark*
 get_avg_bench(struct pmm_model *m, int *p)
 {
-	struct pmm_benchmark *b;
+    struct pmm_benchmark *b;
 
-	b = (void *)NULL;
+    b = (void *)NULL;
 
     b = get_avg_bench_from_sorted_bench_list(m->bench_list->first, p);
 
-	return b;
+    return b;
 
 }
 
@@ -1761,7 +1760,7 @@ void
 calc_bench_exec_stats(struct pmm_model *m, int *param,
                       double *time_spent, int *num_execs)
 {
-	struct pmm_benchmark *b;
+    struct pmm_benchmark *b;
     struct pmm_benchmark *first, *last;
 
     *num_execs = 0;
@@ -1940,9 +1939,9 @@ find_oldapprox(struct pmm_model *m, int *p)
  */
 struct pmm_benchmark* lookup_model(struct pmm_model *m, int *p)
 {
-	struct pmm_benchmark *b;
+    struct pmm_benchmark *b;
 
-	b = NULL;
+    b = NULL;
 
     if(m->n_p == 1) {
         b = interpolate_1d_model(m->bench_list, p);
@@ -1950,15 +1949,15 @@ struct pmm_benchmark* lookup_model(struct pmm_model *m, int *p)
     else {
 #ifdef ENABLE_OCTAVE
         // n-dimensional interpolation within boundaries via octave
-		b = interpolate_griddatan(m, p);
+        b = interpolate_griddatan(m, p);
 #else
         ERRPRINTF("Cannot interpolate 2D+ models without octave support "
                   "compiled.\n");
         return NULL;
 #endif /* ENABLE_OCTAVE */
     }
-		
-	return b;
+
+    return b;
 }
 
 /*!
@@ -1970,7 +1969,7 @@ struct pmm_benchmark* lookup_model(struct pmm_model *m, int *p)
  *
  * @return pointer to a newly allocated benchmark structure which describes
  * the flops performance at the point p.
- * 
+ *
  *
  * TODO this does not use the average of benchmarks with the same parameters
  */
@@ -2016,13 +2015,13 @@ interpolate_1d_model(struct pmm_bench_list *bl,
 
             if(cur->previous != NULL) {
                 //let's interpolate!
-				//
-				// the formula to calcuate the flops is as follows:
-				//
-				// x1,y1 are p[0] and flops of previous
-				// x2,y2 are p[0] and flops of cur
-				// xb,yb are p[0] and flops of b;
-				//
+                //
+                // the formula to calcuate the flops is as follows:
+                //
+                // x1,y1 are p[0] and flops of previous
+                // x2,y2 are p[0] and flops of cur
+                // xb,yb are p[0] and flops of b;
+                //
                 //
                 // m = (y2 - y1)/(x2 - x1) (formula for slope)
                 //
@@ -2030,37 +2029,37 @@ interpolate_1d_model(struct pmm_bench_list *bl,
                 //
                 // yb = m(xb - x1) + y1
                 //
-				{
-					int x1, x2, xb;
-					double y1, y2, yb;
+                {
+                    int x1, x2, xb;
+                    double y1, y2, yb;
 
-					double m;
+                    double m;
 
-					x1=cur->p[0];
-					x2=cur->previous->p[0];
-					xb=b->p[0];
+                    x1=cur->p[0];
+                    x2=cur->previous->p[0];
+                    xb=b->p[0];
 
-					y1=cur->flops;
-					y2=cur->previous->flops;
+                    y1=cur->flops;
+                    y2=cur->previous->flops;
 
-					m = ((double)(y2-y1))/((double)(x2-x1));
+                    m = ((double)(y2-y1))/((double)(x2-x1));
 
-					yb = m*((double)(xb-x1)) + (double)y1;
+                    yb = m*((double)(xb-x1)) + (double)y1;
 
-					b->flops = yb;
+                    b->flops = yb;
 
                     DBGPRINTF("interploated between %d and %d to %f\n",
                              x1, x2, b->flops);
                     return b;
 
 
-				}
-			}
+                }
+            }
             else {
                 //cur has no preivous, i.e. it is the first benchmark in the
                 //list model. We will assume speed for a smaller size is
                 //equal to the first benchmark.
-				b->flops = cur->flops;
+                b->flops = cur->flops;
                 DBGPRINTF("< than first bench, interpolated to:%f\n", b->flops);
                 return b;
             }
@@ -2087,7 +2086,7 @@ interpolate_1d_model(struct pmm_bench_list *bl,
 #define PMM_PERC 0.05 // percentage threshold for GBBP
 
 /*!
- * 
+ *
  * This function determines if the 'cut' of the model at a specific benchmarked
  * point, b1, contains the range of execution speeds that are defined by the cut
  * of the model at a second benchmark point, b2.
@@ -2119,7 +2118,7 @@ interpolate_1d_model(struct pmm_bench_list *bl,
  * the model at b2, 0 otherwise
  */
 int bench_cut_contains(struct pmm_loadhistory *h, struct pmm_benchmark *b1,
-		               struct pmm_benchmark *b2) {
+                       struct pmm_benchmark *b2) {
 
     //for now we just test if b1->flops and b2->flops are within a percent
     //of eachother
@@ -2151,12 +2150,12 @@ int bench_cut_contains(struct pmm_loadhistory *h, struct pmm_benchmark *b1,
     //TODO implement bench_cut_contains properly (i.e. using loadhistory)
     //take t0, the optimal execution time of the benchmark
 
-	//using the load history band caculate the upper and lower execution times
-	//of the benchmark
+    //using the load history band caculate the upper and lower execution times
+    //of the benchmark
 
-	//convert execution times into speed of computation (divide by size)
+    //convert execution times into speed of computation (divide by size)
 
-	//compare upper and lower execution speeds
+    //compare upper and lower execution speeds
 }
 
 /*!
@@ -2193,7 +2192,7 @@ int bench_cut_contains(struct pmm_loadhistory *h, struct pmm_benchmark *b1,
  * otherwise
  */
 int bench_cut_intersects(struct pmm_loadhistory *h, struct pmm_benchmark *b1,
-		                 struct pmm_benchmark *b2) {
+                         struct pmm_benchmark *b2) {
     //for now we just test if b1->flops and b2->flops are within a percent
     //of eachother ... same as 'bench_cut_contains'
 
@@ -2258,7 +2257,7 @@ int bench_cut_intersects(struct pmm_loadhistory *h, struct pmm_benchmark *b1,
  * the model at b2, 0 otherwise
  */
 int bench_cut_greater(struct pmm_loadhistory *h, struct pmm_benchmark *b1,
-		              struct pmm_benchmark *b2) {
+                      struct pmm_benchmark *b2) {
 
     (void)h; //TODO unused
 
@@ -2282,7 +2281,7 @@ int bench_cut_greater(struct pmm_loadhistory *h, struct pmm_benchmark *b1,
  * the model at b2, 0 otherwise
  */
 int bench_cut_less(struct pmm_loadhistory *h, struct pmm_benchmark *b1,
-		           struct pmm_benchmark *b2) {
+                   struct pmm_benchmark *b2) {
 
     (void)h; //TODO unused
 
@@ -2299,7 +2298,7 @@ int bench_cut_less(struct pmm_loadhistory *h, struct pmm_benchmark *b1,
  * convert a construction method enum to a char array description
  *
  * @param   method  the construction method
- * 
+ *
  * @returns pointer to a character array describing the method
  */
 char*
@@ -2326,8 +2325,8 @@ construction_method_to_string(enum pmm_construction_method method)
 /*!
  * convert a construction condition enum to a char array description
  *
- * @param   conditon    the construction method
- * 
+ * @param   condition    the construction method
+ *
  * @returns pointer to a character array describing the condition
  */
 char*
@@ -2355,9 +2354,9 @@ construction_condition_to_string(enum pmm_construction_condition condition)
  * Test if 3 points (parameters of a model) are collinear (in n dimensions)
  *
  * For example, in 3 dimensions, points: \f$P_1, P_2, P_3\f$, defined by
- * \f$(x_1,y_2), (x_2,y_2), (x_3,y_3)\f$ respectively, are collinear if 
+ * \f$(x_1,y_2), (x_2,y_2), (x_3,y_3)\f$ respectively, are collinear if
  * and only if:
- * 
+ *
  * \f$(x_2-x_1)/(x_3-x_1)=(y_2-y_1)/(y_3-y_1)=(z_2-z_1)/(z_3-z_1)\f$
  *
  * That is, the ratio of the distance from \f$P_1\f$ to \f$P_2\f$  and from
@@ -2412,8 +2411,8 @@ void print_model(const char *output, struct pmm_model *m) {
     char mtime_str[80];
     struct tm *ts;
 
-	SWITCHPRINTF(output, "path: %s\n", m->model_path);
-	SWITCHPRINTF(output, "unwritten execs: %d\n", m->unwritten_num_execs);
+    SWITCHPRINTF(output, "path: %s\n", m->model_path);
+    SWITCHPRINTF(output, "unwritten execs: %d\n", m->unwritten_num_execs);
     SWITCHPRINTF(output, "unwritten time: %f\n", m->unwritten_time_spend);
 
     ts = localtime(&(m->mtime));
@@ -2423,16 +2422,16 @@ void print_model(const char *output, struct pmm_model *m) {
     free(ts);
     ts = NULL;
 
-	SWITCHPRINTF(output, "completion:%d\n", m->completion);
+    SWITCHPRINTF(output, "completion:%d\n", m->completion);
     SWITCHPRINTF(output, "uniqe benches:%d\n", m->unique_benches);
 
-	SWITCHPRINTF(output, "--- bench list ---\n");
-	print_bench_list(output, m->bench_list);
-	SWITCHPRINTF(output, "--- end bench list ---\n");
+    SWITCHPRINTF(output, "--- bench list ---\n");
+    print_bench_list(output, m->bench_list);
+    SWITCHPRINTF(output, "--- end bench list ---\n");
 
-	SWITCHPRINTF(output, "--- interval list ---\n");
-	print_interval_list(output, m->interval_list);
-	SWITCHPRINTF(output, "--- end interval list ---\n");
+    SWITCHPRINTF(output, "--- interval list ---\n");
+    print_interval_list(output, m->interval_list);
+    SWITCHPRINTF(output, "--- end interval list ---\n");
 
 
 }
@@ -2440,31 +2439,33 @@ void print_model(const char *output, struct pmm_model *m) {
 /*!
  * Print a pmm_bench_list structure to the log
  *
+ * @param   output  output stream to print two
  * @param   bl  pointer to the pmm_bench_list structure
  */
+//TODO it is not an output stream but one of PMM_DBG/PMM_ERR/PMM_LOG
 void
 print_bench_list(const char *output, struct pmm_bench_list *bl)
 {
-	struct pmm_benchmark *b;
+    struct pmm_benchmark *b;
 
-	SWITCHPRINTF(output, "size: %d\n", bl->size);
-	SWITCHPRINTF(output, "n_p: %d\n", bl->n_p);
+    SWITCHPRINTF(output, "size: %d\n", bl->size);
+    SWITCHPRINTF(output, "n_p: %d\n", bl->n_p);
 
-	SWITCHPRINTF(output, "first: %p\n", bl->first);
-	SWITCHPRINTF(output, "last: %p\n", bl->last);
+    SWITCHPRINTF(output, "first: %p\n", bl->first);
+    SWITCHPRINTF(output, "last: %p\n", bl->last);
 
-	SWITCHPRINTF(output, "--- begin benchmarks ---\n");
+    SWITCHPRINTF(output, "--- begin benchmarks ---\n");
 
-	b = bl->first;
+    b = bl->first;
 
-	while(b != NULL) {
-		print_benchmark(output, b);
-		b = b->next;
-	}
+    while(b != NULL) {
+        print_benchmark(output, b);
+        b = b->next;
+    }
 
-	SWITCHPRINTF(output, "--- end benchmarks ---\n");
+    SWITCHPRINTF(output, "--- end benchmarks ---\n");
 
-	return;
+    return;
 }
 
 /*!
@@ -2475,46 +2476,46 @@ print_bench_list(const char *output, struct pmm_bench_list *bl)
  */
 void
 print_benchmark(const char *output, struct pmm_benchmark *b) {
-	int i;
+    int i;
 
     SWITCHPRINTF(output, "----benchmark----\n");
-	for(i=0; i<b->n_p; i++) {
-		SWITCHPRINTF(output, "p[%d]: %d\n", i, b->p[i]);
-	}
-	SWITCHPRINTF(output, "flops: %f\n", b->flops);
-	SWITCHPRINTF(output, "seconds: %f\n", b->seconds);
-	SWITCHPRINTF(output, "wall sec:%ld wall usec:%ld\n", b->wall_t.tv_sec,
-			     b->wall_t.tv_usec);
-	SWITCHPRINTF(output, "used sec:%ld used usec:%ld\n", b->used_t.tv_sec,
-			     b->used_t.tv_usec);
+    for(i=0; i<b->n_p; i++) {
+        SWITCHPRINTF(output, "p[%d]: %d\n", i, b->p[i]);
+    }
+    SWITCHPRINTF(output, "flops: %f\n", b->flops);
+    SWITCHPRINTF(output, "seconds: %f\n", b->seconds);
+    SWITCHPRINTF(output, "wall sec:%ld wall usec:%ld\n", b->wall_t.tv_sec,
+                 b->wall_t.tv_usec);
+    SWITCHPRINTF(output, "used sec:%ld used usec:%ld\n", b->used_t.tv_sec,
+                 b->used_t.tv_usec);
 
-	SWITCHPRINTF(output, "previous:%p\n", b->previous);
+    SWITCHPRINTF(output, "previous:%p\n", b->previous);
 
-	SWITCHPRINTF(output, "current:%p\n", b);
+    SWITCHPRINTF(output, "current:%p\n", b);
 
-	SWITCHPRINTF(output, "next:%p\n", b->next);
+    SWITCHPRINTF(output, "next:%p\n", b->next);
     SWITCHPRINTF(output, "--end-benchmark--\n");
 }
 
 /*!
- * prints the elements of a pmm_routine structure 
+ * prints the elements of a pmm_routine structure
  *
  * @param   output      output stream to print to
  * @param   r           pointer to routine
  */
 void print_routine(const char *output, struct pmm_routine *r) {
 
-	SWITCHPRINTF(output, "-- rountine --\n");
-	SWITCHPRINTF(output, "name: %s\n", r->name);
-	SWITCHPRINTF(output, "exe_path: %s\n", r->exe_path);
+    SWITCHPRINTF(output, "-- rountine --\n");
+    SWITCHPRINTF(output, "name: %s\n", r->name);
+    SWITCHPRINTF(output, "exe_path: %s\n", r->exe_path);
 
     if(r->exe_args != NULL)
         SWITCHPRINTF(output, "exe_args: %s\n", r->exe_args);
 
     print_paramdef_set(output, r->pd_set);
 
-	SWITCHPRINTF(output, "condition: %s\n", construction_condition_to_string(r->condition));
-	SWITCHPRINTF(output, "priority:%d\n", r->priority);
+    SWITCHPRINTF(output, "condition: %s\n", construction_condition_to_string(r->condition));
+    SWITCHPRINTF(output, "priority:%d\n", r->priority);
     SWITCHPRINTF(output, "executable:%d\n", r->executable);
 
     SWITCHPRINTF(output, "min_sample_num:%d\n", r->min_sample_num);
@@ -2523,11 +2524,11 @@ void print_routine(const char *output, struct pmm_routine *r) {
     SWITCHPRINTF(output, "construction method: %s\n",
                  construction_method_to_string(r->construction_method));
 
-	//print_model(output, r->model);
-	SWITCHPRINTF(output, "model completion:%d\n", r->model->completion);
+    //print_model(output, r->model);
+    SWITCHPRINTF(output, "model completion:%d\n", r->model->completion);
 
-	SWITCHPRINTF(output, "-- end routine --\n");
-	return;
+    SWITCHPRINTF(output, "-- end routine --\n");
+    return;
 }
 
 /*!
@@ -2543,7 +2544,7 @@ void print_routine(const char *output, struct pmm_routine *r) {
  *
  */
 int set_str(char **dst, char *src) {
-	size_t len;
+    size_t len;
 
     /*
      * TODO consider setting a routine string that has already some memory
@@ -2552,27 +2553,27 @@ int set_str(char **dst, char *src) {
      * or in english, FREE/malloc or realloc dst before copying src, duh!
      */
 
-	if(src == NULL) {
-		ERRPRINTF("null source string\n");
-		return 0; //failure
-	}
+    if(src == NULL) {
+        ERRPRINTF("null source string\n");
+        return 0; //failure
+    }
 
-	len = strlen(src) + 1;
+    len = strlen(src) + 1;
 
-	// LOGPRINTF("len:%d\n", len);
+    // LOGPRINTF("len:%d\n", len);
 
-	*dst = malloc(sizeof(char)*len); //this is a bit ptr crazy,
+    *dst = malloc(sizeof(char)*len); //this is a bit ptr crazy,
 
-	if(*dst == NULL) {
-		ERRPRINTF("Allocation of memory to string failed.\n");
-		return 0; //failure
-	}
+    if(*dst == NULL) {
+        ERRPRINTF("Allocation of memory to string failed.\n");
+        return 0; //failure
+    }
 
-	strcpy(*dst, src);
+    strcpy(*dst, src);
 
-	// LOGPRINTF("src:%s dst:%s\n", src, *dst);
+    // LOGPRINTF("src:%s dst:%s\n", src, *dst);
 
-	return 1; //success
+    return 1; //success
 }
 
 /*!
@@ -2582,93 +2583,93 @@ int set_str(char **dst, char *src) {
  * @return date converted to a time_t value
  */
 time_t parseISO8601Date(char *date) {
-	struct tm tm_t;
+    struct tm tm_t;
     struct tm* tm_p;
-	time_t t, t2, offset = 0;
-	int success = 0;
-	char *pos;
+    time_t t, t2, offset = 0;
+    int success = 0;
+    char *pos;
 
-	if(date == NULL) {
-		ERRPRINTF("Error date string is null.\n");
-		return (time_t)-1;
-	}
+    if(date == NULL) {
+        ERRPRINTF("Error date string is null.\n");
+        return (time_t)-1;
+    }
 
     tm_p = &tm_t;
 
-	memset(tm_p, 0, sizeof(struct tm));
+    memset(tm_p, 0, sizeof(struct tm));
 
-	// we expect at least something like "2003-08-07T15:28:19" and
-	// don't require the second fractions and the timezone info
-	// the most specific format:   YYYY-MM-DDThh:mm:ss.sTZD
+    // we expect at least something like "2003-08-07T15:28:19" and
+    // don't require the second fractions and the timezone info
+    // the most specific format:   YYYY-MM-DDThh:mm:ss.sTZD
 
-	// full specified variant
-	pos = (char *) strptime((const char *)date,
+    // full specified variant
+    pos = (char *) strptime((const char *)date,
                             (const char *)"%t%Y-%m-%dT%H:%M%t",
                             tm_p);
 
     if(pos != NULL)
     {
-		// Parse seconds
-		if (*pos == ':') {
-			pos++;
-		}
-		if (isdigit(pos[0]) && !isdigit(pos[1])) {
-			tm_t.tm_sec = pos[0] - '0';
-			pos++;
-		}
-		else if (isdigit(pos[0]) && isdigit(pos[1])) {
-			tm_t.tm_sec = 10*(pos[0]-'0') + pos[1] - '0';
-			pos +=2;
-		}
-		// Parse timezone
-		if (*pos == 'Z') {
-			offset = 0;
-		}
-		else if ((*pos == '+' || *pos == '-') &&
-		         isdigit(pos[1]) && isdigit(pos[2]) &&
-		         strlen(pos) >= 3) {
+        // Parse seconds
+        if (*pos == ':') {
+            pos++;
+        }
+        if (isdigit(pos[0]) && !isdigit(pos[1])) {
+            tm_t.tm_sec = pos[0] - '0';
+            pos++;
+        }
+        else if (isdigit(pos[0]) && isdigit(pos[1])) {
+            tm_t.tm_sec = 10*(pos[0]-'0') + pos[1] - '0';
+            pos +=2;
+        }
+        // Parse timezone
+        if (*pos == 'Z') {
+            offset = 0;
+        }
+        else if ((*pos == '+' || *pos == '-') &&
+                 isdigit(pos[1]) && isdigit(pos[2]) &&
+                 strlen(pos) >= 3) {
 
-			offset = (10*(pos[1] - '0') + (pos[2] - '0')) * 60 * 60;
+            offset = (10*(pos[1] - '0') + (pos[2] - '0')) * 60 * 60;
 
-			if (pos[3] == ':' && isdigit(pos[4]) && isdigit(pos[5])) {
-				offset +=  (10*(pos[4] - '0') + (pos[5] - '0')) * 60;
-			}
-			else if (isdigit(pos[3]) && isdigit(pos[4])) {
-				offset +=  (10*(pos[3] - '0') + (pos[4] - '0')) * 60;
-			}
+            if (pos[3] == ':' && isdigit(pos[4]) && isdigit(pos[5])) {
+                offset +=  (10*(pos[4] - '0') + (pos[5] - '0')) * 60;
+            }
+            else if (isdigit(pos[3]) && isdigit(pos[4])) {
+                offset +=  (10*(pos[3] - '0') + (pos[4] - '0')) * 60;
+            }
 
-			offset *= (pos[0] == '+') ? 1 : -1;
+            offset *= (pos[0] == '+') ? 1 : -1;
 
-		}
-		success = 1;
+        }
+        success = 1;
 
-	} // only date ... not enough for us, set success to 0
-	//else if(NULL != strptime((const char *)date, "%t%Y-%m-%d", &tm_t)) {
-	//	success = 0;
-	//}
-	// there were others combinations too...
+    } // only date ... not enough for us, set success to 0
+    //else if(NULL != strptime((const char *)date, "%t%Y-%m-%d", &tm_t)) {
+    //  success = 0;
+    //}
+    // there were others combinations too...
 
-	if(1 == success) {
+    if(1 == success) {
 
-		// if((time_t)(-1) != (t = mktime(&tm_t))) {
+        // if((time_t)(-1) != (t = mktime(&tm_t))) {
 
         t = mktime(&tm_t);
         if(t != (time_t)(-1)) {
-			// Correct for the local timezone
-			t = t - offset;
-			t2 = mktime(gmtime(&t));
-			t = t - (t2 - t);
+            // Correct for the local timezone
+            t = t - offset;
+            t2 = mktime(gmtime(&t));
+            t = t - (t2 - t);
 
-			return t;
-		}
-		else {
-			ERRPRINTF("Time conversion error: mktime failed.\n");
-		}
-	} else {
-		ERRPRINTF("Invalid ISO8601 date format.\n");
-	}
+            return t;
+        }
+        else {
+            ERRPRINTF("Time conversion error: mktime failed.\n");
+        }
+    } else {
+        ERRPRINTF("Invalid ISO8601 date format.\n");
+    }
 
-	return (time_t)-1;
+    return (time_t)-1;
 }
 
 
@@ -2681,30 +2682,30 @@ time_t parseISO8601Date(char *date) {
  *
  */
 int check_routine(struct pmm_routine *r) {
-	int ret = 1;
+    int ret = 1;
 
     // TODO add checking of path names and strings
-	if(r->pd_set->n_p <= 0) {
-		ERRPRINTF("Number of paramaters for routine not set correctly.\n");
-		print_routine(PMM_ERR, r);
-		ret = 0;
-	}
+    if(r->pd_set->n_p <= 0) {
+        ERRPRINTF("Number of paramaters for routine not set correctly.\n");
+        print_routine(PMM_ERR, r);
+        ret = 0;
+    }
 
     /* TODO after changing to enum do we need to check this any more?
-	if(r->condition < 0 || r->condition > 4) {
-		ERRPRINTF("Execution Condition for routine not set correctly.\n");
-		print_routine(PMM_ERR, r);
-		ret = 0;
-	}
+    if(r->condition < 0 || r->condition > 4) {
+        ERRPRINTF("Execution Condition for routine not set correctly.\n");
+        print_routine(PMM_ERR, r);
+        ret = 0;
+    }
     */
 
-	if(r->priority < 0) {
-		ERRPRINTF("Priority for routine not set correctly.\n");
-		print_routine(PMM_ERR, r);
-		ret = 0;
-	}
+    if(r->priority < 0) {
+        ERRPRINTF("Priority for routine not set correctly.\n");
+        print_routine(PMM_ERR, r);
+        ret = 0;
+    }
 
-	return ret;
+    return ret;
 }
 
 /*!
@@ -2715,31 +2716,31 @@ int check_routine(struct pmm_routine *r) {
  */
 void print_config(const char *output, struct pmm_config *cfg) {
 
-	int i;
+    int i;
 
-	SWITCHPRINTF(output, "daemon: ");
-	if(cfg->daemon) {
-		SWITCHPRINTF(output, "yes\n");
-	} else {
-		SWITCHPRINTF(output, "no\n");
-	}
+    SWITCHPRINTF(output, "daemon: ");
+    if(cfg->daemon) {
+        SWITCHPRINTF(output, "yes\n");
+    } else {
+        SWITCHPRINTF(output, "no\n");
+    }
 
     SWITCHPRINTF(output, "main sleep period: %ds %lds\n",
                              (int) cfg->ts_main_sleep_period.tv_sec,
                                    cfg->ts_main_sleep_period.tv_nsec);
-	SWITCHPRINTF(output, "log file: %s\n", cfg->logfile);
-	SWITCHPRINTF(output, "config file: %s\n", cfg->configfile);
-	SWITCHPRINTF(output, "load path: %s\n", cfg->loadhistory->load_path);
-	SWITCHPRINTF(output, "routine array size: %d\n", cfg->allocated);
-	SWITCHPRINTF(output, "routine array used: %d\n", cfg->used);
-    
+    SWITCHPRINTF(output, "log file: %s\n", cfg->logfile);
+    SWITCHPRINTF(output, "config file: %s\n", cfg->configfile);
+    SWITCHPRINTF(output, "load path: %s\n", cfg->loadhistory->load_path);
+    SWITCHPRINTF(output, "routine array size: %d\n", cfg->allocated);
+    SWITCHPRINTF(output, "routine array used: %d\n", cfg->used);
+
     SWITCHPRINTF(output, "pause: %d\n", cfg->pause);
 
-	for(i=0; i<cfg->used; i++) {
-		print_routine(output, cfg->routines[i]);
-	}
+    for(i=0; i<cfg->used; i++) {
+        print_routine(output, cfg->routines[i]);
+    }
 
-	return;
+    return;
 }
 
 /*!
@@ -2748,34 +2749,34 @@ void print_config(const char *output, struct pmm_config *cfg) {
  * @param   cfg     pointer to address of config structure
  */
 void free_config(struct pmm_config **cfg) {
-	int i;
+    int i;
 
     if((*cfg)->loadhistory != NULL)
-	    free_loadhistory(&((*cfg)->loadhistory));
+        free_loadhistory(&((*cfg)->loadhistory));
 
-	for(i=0; i<(*cfg)->used; i++) {
-		free_routine(&((*cfg)->routines[i]));
-	}
+    for(i=0; i<(*cfg)->used; i++) {
+        free_routine(&((*cfg)->routines[i]));
+    }
 
-	free((*cfg)->routines);
+    free((*cfg)->routines);
     (*cfg)->routines = NULL;
 
-	free(*cfg);
+    free(*cfg);
     *cfg = NULL;
 }
 
 /*!
  * frees a routine structure and members it contains
  *
- * @param   routine     pointer to address of routine structure
+ * @param   r   pointer to address of routine structure
  */
 void free_routine(struct pmm_routine **r) {
 
     if((*r)->model != NULL)
-	    free_model(&((*r)->model));
+        free_model(&((*r)->model));
 
-	//free some malloced 'strings'
-	free((*r)->name);
+    //free some malloced 'strings'
+    free((*r)->name);
     (*r)->name = NULL;
 
     if((*r)->exe_args != NULL) {
@@ -2783,14 +2784,14 @@ void free_routine(struct pmm_routine **r) {
         (*r)->exe_args = NULL;
     }
 
-	free((*r)->exe_path);
+    free((*r)->exe_path);
     (*r)->exe_path = NULL;
 
-	//free paramdef set
+    //free paramdef set
     if((*r)->pd_set != NULL)
         free_paramdef_set(&(*r)->pd_set);
 
-	free(*r);
+    free(*r);
     *r = NULL;
 }
 
@@ -2802,7 +2803,7 @@ void free_routine(struct pmm_routine **r) {
 void free_model(struct pmm_model **m) {
 
     if((*m)->bench_list != NULL)
-	    free_bench_list(&((*m)->bench_list));
+        free_bench_list(&((*m)->bench_list));
 
     if((*m)->interval_list != NULL)
         free_interval_list(&((*m)->interval_list));
@@ -2810,10 +2811,10 @@ void free_model(struct pmm_model **m) {
     if((*m)->pd_set != NULL)
         free_paramdef_set(&((*m)->pd_set));
 
-	free((*m)->model_path);
+    free((*m)->model_path);
     (*m)->model_path = NULL;
 
-	free(*m);
+    free(*m);
     *m = NULL;
 }
 
@@ -2827,7 +2828,7 @@ void free_bench_list(struct pmm_bench_list **bl)
 
     free_benchmark_list_backwards(&((*bl)->first));
 
-	free(*bl);
+    free(*bl);
     *bl = NULL;
 }
 
@@ -2835,12 +2836,12 @@ void free_bench_list(struct pmm_bench_list **bl)
  * frees a benchmark list structure and members it contains by
  * progressing forwards through the list
  *
- * @param   last_b    pointer to address of the benchmark 
+ * @param   last_b    pointer to address of the benchmark
  */
 void free_benchmark_list_forwards(struct pmm_benchmark **last_b) {
     struct pmm_benchmark *this, *next;
     //TODO check naming last_b yet we remove forwards ?
-    
+
     this = *last_b;
 
     while(this != NULL) {
@@ -2856,11 +2857,11 @@ void free_benchmark_list_forwards(struct pmm_benchmark **last_b) {
  * frees a benchmark list structure and members it contains by
  * progressing backwards through the list
  *
- * @param   first_b    pointer to address of the benchmark 
+ * @param   first_b    pointer to address of the benchmark
  */
 void free_benchmark_list_backwards(struct pmm_benchmark **first_b) {
     struct pmm_benchmark *this, *prev;
-    
+
     this = *first_b;
 
     while(this != NULL) {
@@ -2873,16 +2874,16 @@ void free_benchmark_list_backwards(struct pmm_benchmark **first_b) {
 }
 
 /*!
- * frees a benchmark 
+ * frees a benchmark
  *
- * @param   b    pointer to address of the benchmark 
+ * @param   b    pointer to address of the benchmark
  */
 void free_benchmark(struct pmm_benchmark **b)
 {
-	free((*b)->p);
+    free((*b)->p);
     (*b)->p = NULL;
 
-	free(*b);
+    free(*b);
     *b = NULL;
 }
 

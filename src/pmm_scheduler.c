@@ -32,7 +32,7 @@
 #include "pmm_cond.h"
 
 /*!
- * Function handles the chosing of the next routine to benchmark. 
+ * Function handles the chosing of the next routine to benchmark.
  *
  * @param   scheduled       pointer to pointer describing routine picked for
  *                          scheduling
@@ -47,41 +47,41 @@
 int
 schedule_routine(struct pmm_routine** scheduled, struct pmm_routine** r, int n) {
 
-	int i, status = 0;
-	*scheduled = NULL;
+    int i, status = 0;
+    *scheduled = NULL;
 
 
-	//iterate over r
-	for(i=0; i<n; i++) {
+    //iterate over r
+    for(i=0; i<n; i++) {
 
-	    check_conds(r[i]);
+        check_conds(r[i]);
 
-		//check routine is executable and model is not complete
-		if(r[i]->executable &&
-		   !r[i]->model->complete) { //TODO possibly rearrange these checks
-			//if no routine is scheduled
-			if(*scheduled == NULL) {
-				*scheduled = r[i];
-				status = 1;
-			}
+        //check routine is executable and model is not complete
+        if(r[i]->executable &&
+           !r[i]->model->complete) { //TODO possibly rearrange these checks
+            //if no routine is scheduled
+            if(*scheduled == NULL) {
+                *scheduled = r[i];
+                status = 1;
+            }
 
-			//if priority is greater change scheduled
-			else if(r[i]->priority > (*scheduled)->priority) {
-				*scheduled = r[i];
-			}
+            //if priority is greater change scheduled
+            else if(r[i]->priority > (*scheduled)->priority) {
+                *scheduled = r[i];
+            }
 
-			//if priorities are equal then keep the least complete (or
-			//do nothing if completion is equal.
-			else if(r[i]->priority == (*scheduled)->priority) {
-				if(r[i]->model->completion < (*scheduled)->model->completion) {
-					*scheduled = r[i];
-				}
-			}
-		}
-		//check if there is routines incomplete and not executable
-		if(!r[i]->model->complete && status == 0)
-			status = 2;
-	}
+            //if priorities are equal then keep the least complete (or
+            //do nothing if completion is equal.
+            else if(r[i]->priority == (*scheduled)->priority) {
+                if(r[i]->model->completion < (*scheduled)->model->completion) {
+                    *scheduled = r[i];
+                }
+            }
+        }
+        //check if there is routines incomplete and not executable
+        if(!r[i]->model->complete && status == 0)
+            status = 2;
+    }
 
-	return status;
+    return status;
 }

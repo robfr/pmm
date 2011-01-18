@@ -32,9 +32,9 @@
 /*
 int gbbp_select_new_bench(struct pmm_routine *r);
 int gbbp_bench_from_interval(struct pmm_routine *r,
-		                               struct pmm_interval *i);
+                             struct pmm_interval *i);
 void gbbp_insert_bench(struct pmm_loadhistory *h, struct pmm_routine *r,
-		                   struct pmm_benchmark *b);
+                       struct pmm_benchmark *b);
 int naive_select_new_bench(struct pmm_routine *r);
 */
 

@@ -65,7 +65,7 @@ void parse_args(struct pmm_config *cfg, int argc, char **argv);
 void usage_pmm_view();
 int
 parse_pmm_view_args(struct pmm_view_options *options,
-		                 int argc, char **argv);
+                    int argc, char **argv);
 
 #endif /*PMM_ARGPARSER_H_*/
 

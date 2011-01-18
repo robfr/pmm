@@ -214,19 +214,19 @@ set_param_array_copy(int *dst, int *src, int n)
 int
 copy_paramdef(struct pmm_paramdef *dst, struct pmm_paramdef *src)
 {
-	dst->end = src->end;
-	dst->start = src->start;
-	dst->order = src->order;
+    dst->end = src->end;
+    dst->start = src->start;
+    dst->order = src->order;
     dst->nonzero_end = src->nonzero_end;
     dst->stride = src->stride;
     dst->offset = src->offset;
 
-	if(!set_str(&(dst->name), src->name)) {
-		ERRPRINTF("set_str failed setting name\n");
+    if(!set_str(&(dst->name), src->name)) {
+        ERRPRINTF("set_str failed setting name\n");
         return -1;
-	}
+    }
 
-	return 0;
+    return 0;
 }
 
 /*!
@@ -247,31 +247,31 @@ param_on_axis(int *p,
               int n,
               struct pmm_paramdef *pd_array)
 {
-	int i;
-	int plane = -1;
+    int i;
+    int plane = -1;
 
-	for(i=0; i<n; i++) {
-		// if a parameter is not a start
-		if(p[i] != pd_array[i].start) {
+    for(i=0; i<n; i++) {
+        // if a parameter is not a start
+        if(p[i] != pd_array[i].start) {
 
-			//
-			// and if it is the first non-start parameter encountered then set
-			// the possible axis index to the parameter's index
-			//
-			if(plane == -1) {
-				plane = i; // set axis index
-			}
-			//
-			// else if it is the second non-start encounted we can conclude
-			// that the benchmark is not on parameter axis and return negative
-			//
-			else {
-				return -2;
-			}
-		}
-	}
+            //
+            // and if it is the first non-start parameter encountered then set
+            // the possible axis index to the parameter's index
+            //
+            if(plane == -1) {
+                plane = i; // set axis index
+            }
+            //
+            // else if it is the second non-start encounted we can conclude
+            // that the benchmark is not on parameter axis and return negative
+            //
+            else {
+                return -2;
+            }
+        }
+    }
 
-	return plane;
+    return plane;
 
 }
 
@@ -345,7 +345,7 @@ param_within_paramdef(int p, struct pmm_paramdef *pd) {
  * the parameter sequence. If the aligned parameter is less than the start
  * it is set to the start value, regardless of whether this is within the stride
  * & offset describing the parameter sequence.
- * 
+ *
  */
 int
 align_param(int param, struct pmm_paramdef *pd)
@@ -413,7 +413,7 @@ align_param(int param, struct pmm_paramdef *pd)
         }
         else {
             aligned = pd->endx;
-            while(aligned >= pd->end) { //decrement until it is less than end 
+            while(aligned >= pd->end) { //decrement until it is less than end
                 aligned -= pd->stride;
             }
         }*/
@@ -421,7 +421,7 @@ align_param(int param, struct pmm_paramdef *pd)
 
     if(aligned < pd->start) { // if aligned parameter is less than start
         //DBGPRINTF("less than start: %d\n", aligned);
-        aligned = pd->start; //set to start 
+        aligned = pd->start; //set to start
     }
 
 
@@ -544,7 +544,7 @@ isequal_paramdef_array(struct pmm_paramdef *pd_array_a,
  *
  * @param   a   pointer to first parameter definition
  * @param   b   pointer to second parameter definition
- * 
+ *
  * @return 0 if not identical, 1 if identical
  */
 int
@@ -584,23 +584,23 @@ isequal_paramdef(struct pmm_paramdef *a, struct pmm_paramdef *b)
 int
 params_cmp(int *p1, int *p2, int n)
 {
-	int i;
+    int i;
 
     if(p1 == NULL || p2 == NULL) {
         ERRPRINTF("Parameter arrays should not be null.\n");
         exit(EXIT_FAILURE);
     }
 
-	for(i=0; i<n; i++) {
-		if(p1[i] < p2[i]) {
-			return -1;
-		}
+    for(i=0; i<n; i++) {
+        if(p1[i] < p2[i]) {
+            return -1;
+        }
         else if(p1[i] > p2[i]) {
             return 1;
         }
-	}
+    }
 
-	return 0; // at this point, all parameters are identical
+    return 0; // at this point, all parameters are identical
 }
 
 /*!
@@ -691,7 +691,7 @@ set_params_step_between_params(int *params, int *start, int *end,
     // increment along we must calculate the position of the incremented
     // point with the particular stride we apply.
     //
-    // The parametric representation of a line L between two points, S 
+    // The parametric representation of a line L between two points, S
     // = (s_1, s_2, ..., s_n) and E = (e_1, e_2, ..., e_n) is:
     //
     //   L = L(a) = S^T + a*B, where B = E^T - S^T
@@ -721,7 +721,7 @@ set_params_step_between_params(int *params, int *start, int *end,
     // So finally:
     //   I_x = s_x + inc*((e_x-s_x)/divisor)
     //
-    
+
     // to get the 1st/2nd/nth next/previous climb point
     min_stride = min_stride*step;
     min_stride_i_dist = end[min_stride_i] - start[min_stride_i];
@@ -740,7 +740,7 @@ set_params_step_between_params(int *params, int *start, int *end,
                                         )
                                     );
 
-        //             1 + (5/(300-1))*(1-1) = 
+        //             1 + (5/(300-1))*(1-1) =
         //             1 + (5/(300-1))*(300-1) = 1+5 ...
 
         DBGPRINTF("start[%d]:%d end{%d]:%d direction[%d]:%d\n", j, start[j], j,
@@ -795,11 +795,11 @@ set_params_step_between_params(int *params, int *start, int *end,
 void
 print_params(const char *output, int *p, int n)
 {
-	int i;
+    int i;
 
-	for(i=0; i<n; i++) {
-		SWITCHPRINTF(output, "p[%d]: %d\n", i, p[i]);
-	}
+    for(i=0; i<n; i++) {
+        SWITCHPRINTF(output, "p[%d]: %d\n", i, p[i]);
+    }
 }
 
 /*!
@@ -812,13 +812,13 @@ print_params(const char *output, int *p, int n)
 void
 print_paramdef_array(const char *output, struct pmm_paramdef *pd_array, int n)
 {
-	int i;
+    int i;
 
     SWITCHPRINTF(output, "---paramdef-array---\n");
     SWITCHPRINTF(output, "n: %d\n", n);
-	for(i=0; i<n; i++) {
-		print_paramdef(output, &(pd_array[i]));
-	}
+    for(i=0; i<n; i++) {
+        print_paramdef(output, &(pd_array[i]));
+    }
 }
 
 /*!
@@ -829,18 +829,18 @@ print_paramdef_array(const char *output, struct pmm_paramdef *pd_array, int n)
  */
 void print_paramdef(const char *output, struct pmm_paramdef *pd)
 {
-	SWITCHPRINTF(output, "name :%s\n", pd->name);
-	SWITCHPRINTF(output, "type :");
+    SWITCHPRINTF(output, "name :%s\n", pd->name);
+    SWITCHPRINTF(output, "type :");
 
-	if(pd->type == -1) {
+    if(pd->type == -1) {
         //TODO implement parameter types
-	}
-	SWITCHPRINTF(output,"order: %d\n", pd->order);
+    }
+    SWITCHPRINTF(output,"order: %d\n", pd->order);
     SWITCHPRINTF(output, "nonzero_end: %d\n", pd->nonzero_end);
-	SWITCHPRINTF(output, "end: %d\n", pd->end);
-	SWITCHPRINTF(output, "start: %d\n", pd->start);
-	SWITCHPRINTF(output, "stride: %d\n", pd->stride);
-	SWITCHPRINTF(output, "offset: %d\n", pd->offset);
+    SWITCHPRINTF(output, "end: %d\n", pd->end);
+    SWITCHPRINTF(output, "start: %d\n", pd->start);
+    SWITCHPRINTF(output, "stride: %d\n", pd->stride);
+    SWITCHPRINTF(output, "offset: %d\n", pd->offset);
 }
 
 /*!
@@ -852,8 +852,8 @@ void print_paramdef(const char *output, struct pmm_paramdef *pd)
 void print_paramdef_set(const char *output, struct pmm_paramdef_set *pd_set)
 {
     SWITCHPRINTF(output, "n_p:%d\n", pd_set->n_p);
-    
-	print_paramdef_array(output, pd_set->pd_array, pd_set->n_p);
+
+    print_paramdef_array(output, pd_set->pd_array, pd_set->n_p);
 
     if(pd_set->pc_formula != NULL) {
         SWITCHPRINTF(output, "pc_formula:%s\n", pd_set->pc_formula);
@@ -891,14 +891,14 @@ void free_paramdef_set(struct pmm_paramdef_set **pd_set)
  * @param   n_p         number of parameter definitions in array
  */
 void free_paramdef_array(struct pmm_paramdef **pd_array, int n_p) {
-	int i;
+    int i;
 
-	for(i=0; i<n_p; i++) {
-		free((*pd_array)[i].name);
+    for(i=0; i<n_p; i++) {
+        free((*pd_array)[i].name);
         (*pd_array)[i].name = NULL;
-	}
+    }
 
-	free(*pd_array);
+    free(*pd_array);
     *pd_array = NULL;
 
 }

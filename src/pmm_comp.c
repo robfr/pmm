@@ -105,7 +105,7 @@ parse_args(struct pmm_comp_options *opts, int argc, char **argv)
             case 'a':
                 opts->approx_model_file = optarg;
                 break;
-                
+
             case 'b':
                 opts->base_model_file = optarg;
                 break;
@@ -198,7 +198,7 @@ correlate_models(struct pmm_model *approx_model, struct pmm_model *base_model)
 
         base_points[c] = init_param_array_copy(b_avg->p, b_avg->n_p);
 
-        free_benchmark(&b_avg); 
+        free_benchmark(&b_avg);
 
         b = get_next_different_bench(b);
         c++;
@@ -219,7 +219,7 @@ correlate_models(struct pmm_model *approx_model, struct pmm_model *base_model)
 
     correlation = gsl_stats_correlation(base_speed, 1, approx_speed, 1, n);
 
-    for(j=0; j<base_model->n_p; j++) 
+    for(j=0; j<base_model->n_p; j++)
         printf("p%d ", j);
 
     printf("base_speed approx_speed diff %%diff\n");

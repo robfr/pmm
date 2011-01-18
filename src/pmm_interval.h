@@ -37,7 +37,7 @@ typedef enum pmm_interval_type {
     IT_BOUNDARY_COMPLETE,   /*!< for models in terms of more than one
                                  parameter, specifies that a boundary axis of the
                                  model is complete */
-	IT_GBBP_EMPTY,          /*!< initial empty GPPB interval type */
+    IT_GBBP_EMPTY,          /*!< initial empty GPPB interval type */
     IT_GBBP_CLIMB,          /*!< construction interval where model is still
                                  climbing (for GBBP) */
     IT_GBBP_BISECT,         /*!< construction interval where model has taken
@@ -66,28 +66,28 @@ static char *pmm_interval_type_str[] = { "NULL",
  * structure describing the construction status of an interval of a model
  */
 typedef struct pmm_interval {
-	enum pmm_interval_type type;    /*!< type of interval */
+    enum pmm_interval_type type;    /*!< type of interval */
 
     int plane;  /*!< index of the plane that this interval pertains to */
     int n_p;    /*!< number of parameters the interval has */
-	int *start; /*!< end point of the interval */
-	int *end;   /*!< start point of the interval */
+    int *start; /*!< end point of the interval */
+    int *end;   /*!< start point of the interval */
 
     int climb_step; /*!< index of the step along the interval that we are
                       currently constructing for, when the interval type is
                       IT_GBBP_CLIMB */
 
-	struct pmm_interval *next; /*!< pointer to the next interval in stack */
-	struct pmm_interval *previous; /*!< pointer to previous interval in stack */
+    struct pmm_interval *next; /*!< pointer to the next interval in stack */
+    struct pmm_interval *previous; /*!< pointer to previous interval in stack */
 } PMM_Interval;
 
 /*!
  * structure holding the interval list/stack
  */
 typedef struct pmm_interval_list {
-	struct pmm_interval *top;       /*!< pointer to top of stack */
-	struct pmm_interval *bottom;    /*!< pointer to bottom of stack */
-	int size;                       /*!< number of intervals in stack */
+    struct pmm_interval *top;       /*!< pointer to top of stack */
+    struct pmm_interval *bottom;    /*!< pointer to bottom of stack */
+    int size;                       /*!< number of intervals in stack */
 
 } PMM_Interval_List;
 
@@ -120,7 +120,7 @@ print_interval(const char *output, struct pmm_interval *i);
 
 /*
 int interval_contains_bench(struct pmm_routine *r, struct pmm_interval *i,
-		                    struct pmm_benchmark *b);
+                            struct pmm_benchmark *b);
 */
 
 struct pmm_interval*

@@ -82,13 +82,13 @@ long long pmm_complexity;
 
 void pmm_timer_init(long long complexity)
 {
-	pmm_complexity = complexity;
-	return;
+    pmm_complexity = complexity;
+    return;
 }
 
 void pmm_timer_destroy() {
 
-	return;
+    return;
 }
 
 void pmm_timer_start() {
@@ -96,7 +96,7 @@ void pmm_timer_start() {
     int ret;
 #endif
 
-	getrusage(RUSAGE_SELF, &usage_start);
+    getrusage(RUSAGE_SELF, &usage_start);
 
 #ifdef HAVE_PAPI
     ret = PAPI_flops(&papi_realtime, &papi_usedtime, &papi_complexity,
@@ -108,10 +108,10 @@ void pmm_timer_start() {
         exit(PMM_EXIT_GENFAIL);
     }
 #else
-	gettimeofday(&realtime_start, NULL);
+    gettimeofday(&realtime_start, NULL);
 #endif
 
-	return;
+    return;
 }
 
 void pmm_timer_stop() {
@@ -128,12 +128,12 @@ void pmm_timer_stop() {
         exit(PMM_EXIT_GENFAIL);
     }
 #else
-	gettimeofday(&realtime_end, NULL);
+    gettimeofday(&realtime_end, NULL);
 #endif
 
-	getrusage(RUSAGE_SELF, &usage_end);
+    getrusage(RUSAGE_SELF, &usage_end);
 
-	return;
+    return;
 }
 
 void pmm_timer_result() {
@@ -146,25 +146,25 @@ void pmm_timer_result() {
                                                          (int)papi_usedtime)));
     printf("%lld\n", papi_complexity);
 #else
-	timersub(&realtime_end, &realtime_start, &realtime_total);
+    timersub(&realtime_end, &realtime_start, &realtime_total);
 
-	// use usage_temp to store the total system and user timevals
-	timersub(&usage_end.ru_utime, &usage_start.ru_utime, &usage_temp.ru_utime);
-	timersub(&usage_end.ru_stime, &usage_start.ru_stime, &usage_temp.ru_stime);
+    // use usage_temp to store the total system and user timevals
+    timersub(&usage_end.ru_utime, &usage_start.ru_utime, &usage_temp.ru_utime);
+    timersub(&usage_end.ru_stime, &usage_start.ru_stime, &usage_temp.ru_stime);
 
-	//add the total system and user timevals to usedtime
+    //add the total system and user timevals to usedtime
     //TODO rusage time not useful if routine is multithread and host is SMP
-	timeradd(&usage_temp.ru_utime, &usage_temp.ru_stime, &usedtime_total);
+    timeradd(&usage_temp.ru_utime, &usage_temp.ru_stime, &usedtime_total);
 
 
 
-	//TODO implment return of data via xml
-	//print_xml_results(&realtime_total, &usedtime_total);
-	print_plain_results(&realtime_total, &usedtime_total);
+    //TODO implment return of data via xml
+    //print_xml_results(&realtime_total, &usedtime_total);
+    print_plain_results(&realtime_total, &usedtime_total);
 #endif
 
 
-	return;
+    return;
 }
 
 /*
@@ -172,112 +172,112 @@ void pmm_timer_result() {
  */
 void print_xml_results(struct timeval *walltime, struct timeval *usedtime) {
 
-	int rc;
-	xmlTextWriterPtr writer;
-	xmlBufferPtr buf;
+    int rc;
+    xmlTextWriterPtr writer;
+    xmlBufferPtr buf;
 
-	buf = xmlBufferCreate();
-	if(buf == NULL) {
-		printf("pmm_timer_result: Error creating xml buffer\n");
-		exit(-1);
-	}
+    buf = xmlBufferCreate();
+    if(buf == NULL) {
+        printf("pmm_timer_result: Error creating xml buffer\n");
+        exit(-1);
+    }
 
-	writer = xmlNewTextWriterMemory(buf, 0);
-	if(writer == NULL) {
-		printf("pmm_timer_result: Error creating xml writer\n");
-		exit(-1);
-	}
+    writer = xmlNewTextWriterMemory(buf, 0);
+    if(writer == NULL) {
+        printf("pmm_timer_result: Error creating xml writer\n");
+        exit(-1);
+    }
 
-	rc = xmlTextWriterSetIndent(writer, 1);
-	if(rc < 0) {
-		printf("pmm_timer_result: Error setting indent\n");
-		exit(-1);
-	}
+    rc = xmlTextWriterSetIndent(writer, 1);
+    if(rc < 0) {
+        printf("pmm_timer_result: Error setting indent\n");
+        exit(-1);
+    }
 
-	rc = xmlTextWriterStartDocument(writer, NULL, XMLENCODING, NULL);
-	if(rc < 0) {
-		printf("pmm_timer_result: Error at xmlTextWriterStartDocument\n");
-		exit(-1);
-	}
+    rc = xmlTextWriterStartDocument(writer, NULL, XMLENCODING, NULL);
+    if(rc < 0) {
+        printf("pmm_timer_result: Error at xmlTextWriterStartDocument\n");
+        exit(-1);
+    }
 
-	rc = xmlTextWriterStartElement(writer, BAD_CAST "result");
-	if(rc < 0) {
-		printf("pmm_timer_result: Error creating \'result\' element\n");
-		exit(-1);
-	}
+    rc = xmlTextWriterStartElement(writer, BAD_CAST "result");
+    if(rc < 0) {
+        printf("pmm_timer_result: Error creating \'result\' element\n");
+        exit(-1);
+    }
 
-	rc = print_xml_time_element(writer, "walltime", walltime);
-	if(rc < 0) {
-		printf("print_xml_results: Error printing walltime result\n");
-		exit(rc);
-	}
+    rc = print_xml_time_element(writer, "walltime", walltime);
+    if(rc < 0) {
+        printf("print_xml_results: Error printing walltime result\n");
+        exit(rc);
+    }
 
-	rc = print_xml_time_element(writer, "usedtime", usedtime);
-	if(rc < 0) {
-		printf("print_xml_results: Error printing usedtime result\n");
-		exit(rc);
-	}
+    rc = print_xml_time_element(writer, "usedtime", usedtime);
+    if(rc < 0) {
+        printf("print_xml_results: Error printing usedtime result\n");
+        exit(rc);
+    }
 
 
-	rc = xmlTextWriterEndDocument(writer);
-	if(rc < 0) {
-		printf("print_xml_results: Error closing xml document\n");
-		exit(rc);
-	}
+    rc = xmlTextWriterEndDocument(writer);
+    if(rc < 0) {
+        printf("print_xml_results: Error closing xml document\n");
+        exit(rc);
+    }
 
-	xmlFreeTextWriter(writer);
+    xmlFreeTextWriter(writer);
 
-	printf("%s", (const char*)buf->content);
+    printf("%s", (const char*)buf->content);
 
-	xmlBufferFree(buf);
+    xmlBufferFree(buf);
 
 }
 
 int print_xml_time_element(xmlTextWriterPtr writer, const char *name,
                             struct timeval *time) {
-	int rc;
+    int rc;
 
-	rc = xmlTextWriterStartElement(writer, BAD_CAST name);
-	if(rc < 0) {
-		printf("print_xml_time_element: Error opening time element\n");
-		return rc;
-	}
+    rc = xmlTextWriterStartElement(writer, BAD_CAST name);
+    if(rc < 0) {
+        printf("print_xml_time_element: Error opening time element\n");
+        return rc;
+    }
 
-	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "seconds", "%ld",
+    rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "seconds", "%ld",
                                          (long)time->tv_sec);
-	if(rc < 0) {
-		printf("print_xml_time_element: Error writing seconds element\n");
-		return rc;
-	}
+    if(rc < 0) {
+        printf("print_xml_time_element: Error writing seconds element\n");
+        return rc;
+    }
 
-	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "useconds", "%ld",
+    rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "useconds", "%ld",
                                          (long)time->tv_usec);
-	if(rc < 0) {
-		printf("print_xml_time_element: Error writing useconds\n");
-		return rc;
-	}
+    if(rc < 0) {
+        printf("print_xml_time_element: Error writing useconds\n");
+        return rc;
+    }
 
-	rc = xmlTextWriterEndElement(writer);
-	if(rc < 0) {
-		printf("print_xml_time_element: Error closing time element\n");
-		return rc;
-	}
+    rc = xmlTextWriterEndElement(writer);
+    if(rc < 0) {
+        printf("print_xml_time_element: Error closing time element\n");
+        return rc;
+    }
 
-	return rc;
+    return rc;
 
 }
 
 void print_plain_results(struct timeval *walltime, struct timeval *usedtime) {
-	FILE *fp;
+    FILE *fp;
 
-	printf("%ld %ld\n", walltime->tv_sec, walltime->tv_usec);
-	printf("%ld %ld\n", usedtime->tv_sec, usedtime->tv_usec);
-	printf("%lld\n", pmm_complexity);
+    printf("%ld %ld\n", walltime->tv_sec, walltime->tv_usec);
+    printf("%ld %ld\n", usedtime->tv_sec, usedtime->tv_usec);
+    printf("%lld\n", pmm_complexity);
 
-	fp = fopen("/tmp/pmm_results", "w");
-	fprintf(fp, "%ld %ld\n", walltime->tv_sec, walltime->tv_usec);
-	fprintf(fp, "%ld %ld\n", usedtime->tv_sec, usedtime->tv_usec);
-	fclose(fp);
+    fp = fopen("/tmp/pmm_results", "w");
+    fprintf(fp, "%ld %ld\n", walltime->tv_sec, walltime->tv_usec);
+    fprintf(fp, "%ld %ld\n", usedtime->tv_sec, usedtime->tv_usec);
+    fclose(fp);
 }
 
 

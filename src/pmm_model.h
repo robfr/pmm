@@ -66,7 +66,7 @@ typedef struct pmm_config {
     int used;                       /**< number of used elements in the
                                          routines array */
 
-	struct pmm_loadhistory *loadhistory;  /**< pointer to load history */
+    struct pmm_loadhistory *loadhistory;  /**< pointer to load history */
 
     int daemon;                     /**< toggle whether to go to background */
     int build_only;                 /**< toggle whether to build, then exit */
@@ -80,8 +80,8 @@ typedef struct pmm_config {
                                                  benchmark executions before
                                                  writing models to disk */
 
-	char *logfile;                          /**< log file name */
-	char *configfile;                       /**< configuartion filename */
+    char *logfile;                          /**< log file name */
+    char *configfile;                       /**< configuartion filename */
 
     int pause;                              /**< toggle pause after a
                                                  benchmark */
@@ -100,7 +100,7 @@ typedef enum pmm_construction_method {
     CM_RAND,           /*!< construct using random sampling */
     CM_GBBP,           /*!< construct using optimised Geometric Bisection
                              Building Procedure */
-	CM_GBBP_NAIVE,     /*!< construct using GPPB but with a naive initial
+    CM_GBBP_NAIVE,     /*!< construct using GPPB but with a naive initial
                             period */
     CM_INVALID         /*!< invalid construction method */
 } PMM_Construction_Method;
@@ -114,20 +114,20 @@ typedef enum pmm_construction_method {
  * question is a member of a list.
  */
 typedef struct pmm_benchmark {
-	int n_p;                    //!< number of parameters
-	int *p;                     //!< array of parameters 
+    int n_p;                    //!< number of parameters
+    int *p;                     //!< array of parameters
 
     //TODO calculate complexity from problem size variables with muparser
-	long long int complexity;   //!< complexity of benchmark (no. of float ops.)
-	double flops;               //!< speed of benchmark execution
-	double seconds;             //!< benchmark execution time in seconds
+    long long int complexity;   //!< complexity of benchmark (no. of float ops.)
+    double flops;               //!< speed of benchmark execution
+    double seconds;             //!< benchmark execution time in seconds
 
-	struct timeval wall_t;      //!< wall clock execution time (timeval)
+    struct timeval wall_t;      //!< wall clock execution time (timeval)
 
-	struct timeval used_t;      //!< kernel and user mode execution time summed
+    struct timeval used_t;      //!< kernel and user mode execution time summed
 
-	struct pmm_benchmark *previous; //!< pointer to previous bench in list
-	struct pmm_benchmark *next;     //!< pointer to next bench in list
+    struct pmm_benchmark *previous; //!< pointer to previous bench in list
+    struct pmm_benchmark *next;     //!< pointer to next bench in list
 } PMM_Benchmark;
 
 
@@ -137,13 +137,13 @@ typedef struct pmm_benchmark {
  * Benchmarks are doubly linked.
  */
 typedef struct pmm_bench_list {
-	int size;                       /*!< number of benchmarks stored in the list */
-	int n_p;                        /*!< number of parameters the benchmarks have */
+    int size;                       /*!< number of benchmarks stored in the list */
+    int n_p;                        /*!< number of parameters the benchmarks have */
 
-	struct pmm_benchmark *first;    /*!< first element of the list */
-	struct pmm_benchmark *last;     /*!< last element of the list */
+    struct pmm_benchmark *first;    /*!< first element of the list */
+    struct pmm_benchmark *last;     /*!< last element of the list */
 
-	struct pmm_model *parent_model; /*!< model to which the benchmarks belong */
+    struct pmm_model *parent_model; /*!< model to which the benchmarks belong */
 } PMM_Bench_List;
 
 
@@ -157,14 +157,14 @@ typedef struct pmm_model {
                                          write */
     time_t mtime;                   /*!< modified time of the model file */
 
-	int n_p;                        /*!< number of parameters of the model */
+    int n_p;                        /*!< number of parameters of the model */
 
-	int completion;                 /*!< completion state of the model */
-	int complete;                   /*!< is model complete */
+    int completion;                 /*!< completion state of the model */
+    int complete;                   /*!< is model complete */
     int unique_benches;             /*!< number of unique benchmarks made to
                                          build model */
 
-	struct pmm_bench_list *bench_list;  /*! pointer to benchmark list */
+    struct pmm_bench_list *bench_list;  /*! pointer to benchmark list */
 
     double peak_flops;                  /*!< peak speed observed over all
                                              benchmarks */
@@ -184,26 +184,26 @@ typedef struct pmm_model {
  */
 typedef struct pmm_routine {
 
-	char *name;         /*!< name of routine */
-	char *exe_path;     /*!< path to benchmark executable */
+    char *name;         /*!< name of routine */
+    char *exe_path;     /*!< path to benchmark executable */
     char *exe_args;     /*!< extra arguments of benchmark */
 
     struct pmm_paramdef_set *pd_set; /*!< set of parameter defintions */
 
-	//struct pmm_policy *policy; TODO implement policies
-	enum pmm_construction_condition condition;  /*!< benchmarking condition */
-	int priority;       /*!< benchmarking priority */
-	int executable;     /*!< toggle for executability */
+    //struct pmm_policy *policy; TODO implement policies
+    enum pmm_construction_condition condition;  /*!< benchmarking condition */
+    int priority;       /*!< benchmarking priority */
+    int executable;     /*!< toggle for executability */
 
-	enum pmm_construction_method construction_method; /*!< model construction method */
+    enum pmm_construction_method construction_method; /*!< model construction method */
     int min_sample_num;     /*!< minimum samples for each model point */
     int min_sample_time;    /*!< minimum time to spend benchmarking each model
                                  point */
     int max_completion;     /*!< maximum number of model points */
 
-	struct pmm_model *model;            /*!< pointer to model */
+    struct pmm_model *model;            /*!< pointer to model */
 
-	struct pmm_routine *next_routine;   /*!< next routine in routine array/list */
+    struct pmm_routine *next_routine;   /*!< next routine in routine array/list */
 
     struct pmm_config *parent_config;   /*!< configuration of host */
 
@@ -221,19 +221,19 @@ interval_type_to_string(enum pmm_interval_type type);
 
 /*
 typedef struct pmm_benchmark {
-	long long int size; //TODO support multiple problem size variables
-	long long int complexity; //TODO calculate complexity from problem size variables
-	double flops;
-	double seconds;
+    long long int size; //TODO support multiple problem size variables
+    long long int complexity; //TODO calculate complexity from problem size variables
+    double flops;
+    double seconds;
 
-	//wall time for benchmark execution
-	struct timeval wall_t;
+    //wall time for benchmark execution
+    struct timeval wall_t;
 
-	//user+system time for benchmark execution
-	struct timeval used_t;
+    //user+system time for benchmark execution
+    struct timeval used_t;
 
-	struct pmm_benchmark *previous;
-	struct pmm_benchmark *next;
+    struct pmm_benchmark *previous;
+    struct pmm_benchmark *next;
 } PMM_Benchmark;
 */
 
@@ -302,12 +302,12 @@ insert_bench_into_sorted_list(struct pmm_benchmark **list_start,
 int
 insert_bench_into_sorted_list_before(struct pmm_benchmark **list_first,
                                      struct pmm_benchmark **list_last,
-		                             struct pmm_benchmark *before,
+                                     struct pmm_benchmark *before,
                                      struct pmm_benchmark *b);
 int
 insert_bench_into_sorted_list_after(struct pmm_benchmark **list_first,
                                     struct pmm_benchmark **list_last,
-		                            struct pmm_benchmark *after,
+                                    struct pmm_benchmark *after,
                                     struct pmm_benchmark *b);
 int
 insert_bench_into_list(struct pmm_bench_list *bl,
@@ -360,7 +360,7 @@ get_first_bench(struct pmm_model *m, int *param);
 
 struct pmm_benchmark*
 get_first_bench_from_bench_list(struct pmm_bench_list *bl,
-		                        int *p);
+                                int *p);
 
 void
 calc_bench_exec_stats(struct pmm_model *m, int *param,
@@ -372,17 +372,17 @@ struct pmm_benchmark *
 find_oldapprox(struct pmm_model *m, int *p);
 struct pmm_benchmark* lookup_model(struct pmm_model *m, int *p);
 struct pmm_benchmark* interpolate_1d_model(struct pmm_bench_list *bl,
-                                                 int *p);
+                                           int *p);
 
 
 int bench_cut_contains(struct pmm_loadhistory *h, struct pmm_benchmark *b1,
-		               struct pmm_benchmark *b2);
+                       struct pmm_benchmark *b2);
 int bench_cut_intersects(struct pmm_loadhistory *h, struct pmm_benchmark *b1,
-		                 struct pmm_benchmark *b2);
+                         struct pmm_benchmark *b2);
 int bench_cut_greater(struct pmm_loadhistory *h, struct pmm_benchmark *b1,
-		              struct pmm_benchmark *b2);
+                      struct pmm_benchmark *b2);
 int bench_cut_less(struct pmm_loadhistory *h, struct pmm_benchmark *b1,
-		           struct pmm_benchmark *b2);
+                   struct pmm_benchmark *b2);
 
 void print_routine(const char *output, struct pmm_routine *r);
 void print_model(const char *output, struct pmm_model *m);

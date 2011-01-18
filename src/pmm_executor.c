@@ -22,7 +22,7 @@
  *
  * @brief Functions for executing a benchmark
  *
- * This file contains code for calling a benchmark executable from the 
+ * This file contains code for calling a benchmark executable from the
  * pmm daemon, dealing with the system level requirements of spawning
  * the benchmark process and parsing the output of said benchmark.
  */
@@ -54,12 +54,12 @@
 #include "pmm_util.h"
 
 //! daemon executing variable or not
-extern int executing_benchmark;                     
+extern int executing_benchmark;
 //! mutex for accessing executing_benchmark variable
-extern pthread_mutex_t executing_benchmark_mutex;   
+extern pthread_mutex_t executing_benchmark_mutex;
 
-/* TODO 
-extern volatile sig_atomic_t sig_cleanup_received; 
+/* TODO
+extern volatile sig_atomic_t sig_cleanup_received;
 extern volatile sig_atomic_t sig_pause_received;
 extern volatile sig_atomic_t sig_unpause_received;
 */
@@ -74,7 +74,6 @@ extern pthread_mutex_t signal_quit_mutex;
 int my_popen(char *cmd, char **args, int n, pid_t *pid);
 int set_non_blocking(int fd);
 struct pmm_benchmark* parse_bench_output(char *output, int n_p, int *rargs);
-                                         
 
 int read_benchmark_output(int fd, char **output_p, pid_t bench_pid);
 
@@ -93,24 +92,24 @@ pmm_bench_exit_status_to_string(int bench_status);
  * @return -1 on error, 0 on success
  */
 int set_non_blocking(int fd) {
-	int flags;
+    int flags;
 
-	/* If they have O_NONBLOCK, use the Posix way to do it
-	 * Fixme: O_NONBLOCK is defined but broken on SunOS 4.1.x
-	 * and AIX 3.2.5.
-	 */
+    /* If they have O_NONBLOCK, use the Posix way to do it
+     * Fixme: O_NONBLOCK is defined but broken on SunOS 4.1.x
+     * and AIX 3.2.5.
+     */
 #if defined(O_NONBLOCK)
 
-	if (-1 == (flags = fcntl(fd, F_GETFL, 0)))
-		flags = 0;
+    if (-1 == (flags = fcntl(fd, F_GETFL, 0)))
+        flags = 0;
 
-	return fcntl(fd, F_SETFL, flags | O_NONBLOCK);
+    return fcntl(fd, F_SETFL, flags | O_NONBLOCK);
 
 #else
 
-	/* Otherwise, use the old way of doing it */
-	flags = 1;
-	return ioctl(fd, FIOBIO, &flags);
+    /* Otherwise, use the old way of doing it */
+    flags = 1;
+    return ioctl(fd, FIOBIO, &flags);
 
 #endif
 
@@ -134,17 +133,17 @@ int set_non_blocking(int fd) {
 int
 my_popen(char *cmd, char **args, int n, pid_t *pid)
 {
-	int p[2]; // this is our pipe of file descriptors
-	char **argv;
+    int p[2]; // this is our pipe of file descriptors
+    char **argv;
     int i;
 
-	if(pipe(p) < 0) {
-		ERRPRINTF("Error creating pipe.\n");
-		return -1;
-	}
+    if(pipe(p) < 0) {
+        ERRPRINTF("Error creating pipe.\n");
+        return -1;
+    }
 
 
-	/* build up argv for calling command */
+    /* build up argv for calling command */
     argv = malloc((n+2) * sizeof *argv);
 
     argv[0] = basename(cmd); //TODO threadsafe????
@@ -160,51 +159,52 @@ my_popen(char *cmd, char **args, int n, pid_t *pid)
 
 
 
-	sigset(SIGCHLD, &sig_childexit);
+    // TODO change to sigaction
+    sigset(SIGCHLD, &sig_childexit);
 
-	if((*pid = fork()) > 0) { // parent
+    if((*pid = fork()) > 0) { // parent
 
-		close(p[1]); // close write pipe
+        close(p[1]); // close write pipe
 
         free(argv); //this has been copied into the child so we can free
         argv = NULL;
 
-		return p[0]; // return read pipe
-	}
-	else if(*pid  == 0) { // child
+        return p[0]; // return read pipe
+    }
+    else if(*pid  == 0) { // child
 
 
-		close(p[0]); // close read pipe
+        close(p[0]); // close read pipe
 
-		// duplicate STDOUT to write pipe (for parent to read)
-		dup2(p[1], STDOUT_FILENO);
+        // duplicate STDOUT to write pipe (for parent to read)
+        dup2(p[1], STDOUT_FILENO);
 
-		// duplicate STDERR to write pipe (for parent to read)
-		dup2(p[1], STDERR_FILENO);
+        // duplicate STDERR to write pipe (for parent to read)
+        dup2(p[1], STDERR_FILENO);
 
-		close(p[1]);
+        close(p[1]);
 
 
-		// call the command 'cmd' using argv[]
-		execv(cmd, argv);
+        // call the command 'cmd' using argv[]
+        execv(cmd, argv);
 
-		// if we reach this exec has filed
-		ERRPRINTF("child: exec failure, exiting.\n");
-		exit(EXIT_FAILURE);
+        // if we reach this exec has filed
+        ERRPRINTF("child: exec failure, exiting.\n");
+        exit(EXIT_FAILURE);
 
-	}
-	else { // error
-		close(p[0]);
-		close(p[1]);
-		ERRPRINTF("Error forking.\n");
-		return -1;
-	}
+    }
+    else { // error
+        close(p[0]);
+        close(p[1]);
+        ERRPRINTF("Error forking.\n");
+        return -1;
+    }
 }
 
 /*!
  *  SIGCHLD signal handler
- *  
- *  @param   sign    the signal
+ *
+ *  @param   sig    the signal
  *
  *  @warning Do not use *PRINTF logging facility in this thread, it is not
  * 'async-signal-safe' (though it is threadsafe).
@@ -216,7 +216,7 @@ void sig_childexit(int sig)
 
     printf("received SIGCHLD\n");
     // if we wait here we miss the status in the "benchmark" function
-	//wait(0);
+    //wait(0);
 }
 
 /*!
@@ -235,22 +235,22 @@ parse_bench_output(char *output, int n_p, int *rargs)
     //TODO seperate into seperate call
     //TODO permit detection of routine that benchmark pertains to
     //TODO change rargs to p or something reflecting the reset of the code
-	struct timeval wall_t, used_t;
-	long long complexity;
-	int rc;
-	struct pmm_benchmark *b;
+    struct timeval wall_t, used_t;
+    long long complexity;
+    int rc;
+    struct pmm_benchmark *b;
 
-	rc = sscanf(output, "%ld %ld\n%ld %ld\n%lld", &(wall_t.tv_sec),
+    rc = sscanf(output, "%ld %ld\n%ld %ld\n%lld", &(wall_t.tv_sec),
                 &(wall_t.tv_usec), &(used_t.tv_sec), &(used_t.tv_usec),
                 &complexity);
-	           
-	if(rc != 5) {
-		ERRPRINTF("Error parsing output\n");
-		return NULL;
-	}
 
-	LOGPRINTF("wall secs: %ld usecs: %ld\n", wall_t.tv_sec, wall_t.tv_usec);
-	LOGPRINTF("used secs: %ld usecs: %ld\n", used_t.tv_sec, used_t.tv_usec);
+    if(rc != 5) {
+        ERRPRINTF("Error parsing output\n");
+        return NULL;
+    }
+
+    LOGPRINTF("wall secs: %ld usecs: %ld\n", wall_t.tv_sec, wall_t.tv_usec);
+    LOGPRINTF("used secs: %ld usecs: %ld\n", used_t.tv_sec, used_t.tv_usec);
 
     if(wall_t.tv_sec == 0 && wall_t.tv_usec == 0) {
         ERRPRINTF("Zero execution wall-time parsed from bench output.\n");
@@ -262,33 +262,33 @@ parse_bench_output(char *output, int n_p, int *rargs)
         return NULL;
     }
 
-	b = new_benchmark();
+    b = new_benchmark();
 
-	if(b == NULL) {
-		ERRPRINTF("Errory allocating benchmark structure.\n");
-		return NULL;
-	}
+    if(b == NULL) {
+        ERRPRINTF("Errory allocating benchmark structure.\n");
+        return NULL;
+    }
 
-	b->n_p = n_p;
+    b->n_p = n_p;
 
     b->p = init_param_array_copy(rargs, b->n_p);
-	if(b->p == NULL) {
-		ERRPRINTF("Error copying benchmark parameters.\n");
-		return NULL;
-	}
+    if(b->p == NULL) {
+        ERRPRINTF("Error copying benchmark parameters.\n");
+        return NULL;
+    }
 
-	copy_timeval(&b->wall_t, &wall_t);
-	copy_timeval(&b->used_t, &used_t);
+    copy_timeval(&b->wall_t, &wall_t);
+    copy_timeval(&b->used_t, &used_t);
 
-	b->next = (void *)NULL; //this will be delt with elswhere
-	b->previous = (void *)NULL;
-	b->complexity = complexity;
-	b->flops = calculate_flops(b->wall_t, (b->complexity));
-	b->seconds = timeval_to_seconds(b->wall_t);
+    b->next = (void *)NULL; //this will be delt with elswhere
+    b->previous = (void *)NULL;
+    b->complexity = complexity;
+    b->flops = calculate_flops(b->wall_t, (b->complexity));
+    b->seconds = timeval_to_seconds(b->wall_t);
 
     LOGPRINTF("flops: %f\n", b->flops);
 
-	return b;
+    return b;
 }
 
 
@@ -303,7 +303,7 @@ parse_bench_output(char *output, int n_p, int *rargs)
  */
 double calculate_flops(struct timeval tv, long long int complexity)
 {
-	return complexity/timeval_to_seconds(tv);
+    return complexity/timeval_to_seconds(tv);
 }
 
 /*!
@@ -315,7 +315,7 @@ double calculate_flops(struct timeval tv, long long int complexity)
  */
 double timeval_to_seconds(struct timeval tv)
 {
-	return (double)tv.tv_sec + (double)tv.tv_usec/1000000.0;
+    return (double)tv.tv_sec + (double)tv.tv_usec/1000000.0;
 }
 
 /*!
@@ -685,11 +685,11 @@ void*
 benchmark(void *scheduled_r)
 {
     // TODO decompose some of the fuctionality of this to make it more legible
-	int *ret;
+    int *ret;
     int temp_ret;
-	struct pmm_routine *r;
-	struct pmm_benchmark *bmark;
-	int *rargs = NULL; //new benchmark point
+    struct pmm_routine *r;
+    struct pmm_benchmark *bmark;
+    int *rargs = NULL; //new benchmark point
 
     pid_t bench_pid;
     int bench_status;
@@ -697,45 +697,45 @@ benchmark(void *scheduled_r)
     int fd;
     char *output;
 
-	r = (struct pmm_routine*)scheduled_r;
+    r = (struct pmm_routine*)scheduled_r;
 
     ret = (int*)malloc(sizeof *ret);
 
-	//evaluate current performance model approximation and pick new
-	//point on the approximation to measure with benchmark, TODO if model
-	//proves to be complete set complete status and return immidiately
-	if(r->construction_method == CM_NAIVE) {
-		rargs = multi_naive_select_new_bench(r);
-	}
+    //evaluate current performance model approximation and pick new
+    //point on the approximation to measure with benchmark, TODO if model
+    //proves to be complete set complete status and return immidiately
+    if(r->construction_method == CM_NAIVE) {
+        rargs = multi_naive_select_new_bench(r);
+    }
     else if(r->construction_method == CM_NAIVE_BISECT) {
         rargs = naive_1d_bisect_select_new_bench(r);
     }
-	else if(r->construction_method == CM_GBBP) {
-	//	rargs = multi_gbbp_select_new_bench(r);
-		rargs = multi_gbbp_diagonal_select_new_bench(r);
-	}
-    else if(r->construction_method == CM_GBBP_NAIVE) {
-		rargs = multi_gbbp_naive_select_new_bench(r);
+    else if(r->construction_method == CM_GBBP) {
+    //  rargs = multi_gbbp_select_new_bench(r);
+        rargs = multi_gbbp_diagonal_select_new_bench(r);
     }
-	else if(r->construction_method == CM_RAND) {
-		rargs = multi_random_select_new_bench(r);
-	}
-	else { // default
-		//rargs = naive_select_new_bench(r);
-	}
+    else if(r->construction_method == CM_GBBP_NAIVE) {
+        rargs = multi_gbbp_naive_select_new_bench(r);
+    }
+    else if(r->construction_method == CM_RAND) {
+        rargs = multi_random_select_new_bench(r);
+    }
+    else { // default
+        //rargs = naive_select_new_bench(r);
+    }
 
-	if(rargs == NULL) {
-		ERRPRINTF("Error selecting new benchmark point.\n");
+    if(rargs == NULL) {
+        ERRPRINTF("Error selecting new benchmark point.\n");
         set_executing_benchmark(0);
         *ret = -1;
 
-		return (void *)ret;
-	}
+        return (void *)ret;
+    }
 
-	// take routine and execute it passing in the parameters
-	// of the performance model coordinate experiment at
+    // take routine and execute it passing in the parameters
+    // of the performance model coordinate experiment at
     //
-	//LOGPRINTF("benchmark thread: started\n");
+    //LOGPRINTF("benchmark thread: started\n");
 
 
     //LOGPRINTF("exe_path:%s\n", r->exe_path);
@@ -938,9 +938,9 @@ benchmark(void *scheduled_r)
     LOGPRINTF("benchmark thread: finished.\n");
 
     set_executing_benchmark(0);
-	*ret = 1;
+    *ret = 1;
 
-	return (void *)ret;
+    return (void *)ret;
 }
 
 /*!
@@ -951,12 +951,12 @@ benchmark(void *scheduled_r)
 void
 set_executing_benchmark(int i)
 {
-	//TODO check return codes
-	LOGPRINTF("locking executing_benchmark.\n");
-	pthread_mutex_lock (&executing_benchmark_mutex);
-	executing_benchmark = i;
-	LOGPRINTF("unlocking executing_benchmark.\n");
-	pthread_mutex_unlock (&executing_benchmark_mutex);
+    //TODO check return codes
+    LOGPRINTF("locking executing_benchmark.\n");
+    pthread_mutex_lock (&executing_benchmark_mutex);
+    executing_benchmark = i;
+    LOGPRINTF("unlocking executing_benchmark.\n");
+    pthread_mutex_unlock (&executing_benchmark_mutex);
 }
 
 /*!

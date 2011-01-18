@@ -44,10 +44,10 @@
 int main(int argc, char **argv) {
 
 
-	/* declare variables */
-	double *A;              /* random matrix A */
-	double *B;              /* postive definite matrix B (derived from A) */
-	long long int c;        /* complexity */
+    /* declare variables */
+    double *A;              /* random matrix A */
+    double *B;              /* postive definite matrix B (derived from A) */
+    long long int c;        /* complexity */
     int n;                  /* matrix size of side */
     int i, j;               /* indexes */
     int ret;                /* dpotrf return status */
@@ -56,16 +56,16 @@ int main(int argc, char **argv) {
     double alpha, beta;
 
 
-	/* parse arguments */
-	if(argc != NARGS+1) {
-		return PMM_EXIT_ARGFAIL;
-	}
-	if(sscanf(argv[1], "%d", &n) == 0) {
-		return PMM_EXIT_ARGPARSEFAIL;
-	}
+    /* parse arguments */
+    if(argc != NARGS+1) {
+        return PMM_EXIT_ARGFAIL;
+    }
+    if(sscanf(argv[1], "%d", &n) == 0) {
+        return PMM_EXIT_ARGPARSEFAIL;
+    }
 
-	/* calculate complexity */
-	c = (n*n*(long long int)n)/3;
+    /* calculate complexity */
+    c = (n*n*(long long int)n)/3;
 
 
     /* allocate array */
@@ -76,13 +76,13 @@ int main(int argc, char **argv) {
         return PMM_EXIT_ALLOCFAIL;
     }
 
-	/* initialise data */
+    /* initialise data */
     //srand(time(NULL));
     for(i=0; i<n; i++) {
 
-        for(j=0;j<n; j++) { 
+        for(j=0;j<n; j++) {
             /* column major order */
-            A[n*j+i] = 10.0*(rand()/((double)RAND_MAX+1)); 
+            A[n*j+i] = 10.0*(rand()/((double)RAND_MAX+1));
         }
     }
     uplo = 'l';
@@ -90,7 +90,7 @@ int main(int argc, char **argv) {
     alpha=1.0;
     beta=0.0;
 
-    /* making positive definite matrix ... */ 
+    /* making positive definite matrix ... */
     /* dsyrk_(&uplo, &trans, &n, &n, &alpha, A, &n, &beta, B, &n); */
     cblas_dsyrk(CblasColMajor, CblasUpper, CblasTrans, n, n, alpha, A, n, beta, B, n);
 
@@ -112,18 +112,18 @@ int main(int argc, char **argv) {
     }
 
 
-	/* initialise timer */
-	pmm_timer_init(c);
+    /* initialise timer */
+    pmm_timer_init(c);
 
-	/* start timer */
-	pmm_timer_start();
+    /* start timer */
+    pmm_timer_start();
 
-	/* execute routine */
+    /* execute routine */
     /* dpotrf_(&uplo, &n, B, &n, &ret); */
     ret = clapack_dpotrf(CblasColMajor, CblasUpper, n, B, n);
 
-	/* stop timer */
-	pmm_timer_stop();
+    /* stop timer */
+    pmm_timer_stop();
 
     /* check dpotrf return */
 /*
@@ -142,13 +142,13 @@ int main(int argc, char **argv) {
         return PMM_EXIT_EXEFAIL;
     }
 
-	/* get timing result */
-	pmm_timer_result();
+    /* get timing result */
+    pmm_timer_result();
 
-	/* destroy timer */
-	pmm_timer_destroy();
+    /* destroy timer */
+    pmm_timer_destroy();
 
-	free(B);
+    free(B);
 
-	return PMM_EXIT_SUCCESS;
+    return PMM_EXIT_SUCCESS;
 }

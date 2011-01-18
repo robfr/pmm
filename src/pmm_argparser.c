@@ -50,15 +50,15 @@ count_tokens_in_str(char *str, char *delimiters);
  * print command line usage for pmm building daemon
  */
 void usage() {
-	printf("Usage: pmmd [-dh] [-c file] [-l file]\n");
-	printf("Options:\n");
-	printf("  -c file    : specify config file\n");
-	printf("  -l file    : specify log file\n");
-	printf("  -d         : run in daemon (background) mode\n");
-	printf("  -h         : print this help\n");
+    printf("Usage: pmmd [-dh] [-c file] [-l file]\n");
+    printf("Options:\n");
+    printf("  -c file    : specify config file\n");
+    printf("  -l file    : specify log file\n");
+    printf("  -d         : run in daemon (background) mode\n");
+    printf("  -h         : print this help\n");
     printf("  -b         : exit after all models are built\n");
     printf("  -p         : pause after each benchmark execution\n");
-	printf("\n");
+    printf("\n");
 }
 
 /*!
@@ -72,42 +72,42 @@ void usage() {
  */
 void parse_args(struct pmm_config *cfg, int argc, char **argv) {
     //TODO return on failure
-	int c;
-	int option_index;
+    int c;
+    int option_index;
 
-	while(1) {
-		static struct option long_options[] =
-		{
-			{"daemon", no_argument, 0, 'd'},
-			{"config-file", required_argument, 0, 'c'},
-			{"log-file", required_argument, 0, 'l'},
-			{"help", no_argument, 0, 'h'},
+    while(1) {
+        static struct option long_options[] =
+        {
+            {"daemon", no_argument, 0, 'd'},
+            {"config-file", required_argument, 0, 'c'},
+            {"log-file", required_argument, 0, 'l'},
+            {"help", no_argument, 0, 'h'},
             {"build-only", no_argument, 0, 'b'},
             {"pause", no_argument, 0, 'p'},
-			{0, 0, 0, 0}
-		};
+            {0, 0, 0, 0}
+        };
 
-		option_index = 0;
+        option_index = 0;
 
-		c = getopt_long(argc, argv, "dc:l:hbp", long_options, &option_index);
+        c = getopt_long(argc, argv, "dc:l:hbp", long_options, &option_index);
 
-		// getopt_long returns -1 when arg list is exhausted
-		if(c == -1) {
-			break;
-		}
+        // getopt_long returns -1 when arg list is exhausted
+        if(c == -1) {
+            break;
+        }
 
-		switch(c) {
-		case 'd':
-			cfg->daemon = 1;
-			break;
+        switch(c) {
+        case 'd':
+            cfg->daemon = 1;
+            break;
 
-		case 'c':
-			cfg->configfile = optarg;
-			break;
+        case 'c':
+            cfg->configfile = optarg;
+            break;
 
-		case 'l':
-			cfg->logfile = optarg;
-			break;
+        case 'l':
+            cfg->logfile = optarg;
+            break;
 
         case 'b':
             cfg->build_only = 1;
@@ -117,12 +117,12 @@ void parse_args(struct pmm_config *cfg, int argc, char **argv) {
             cfg->pause = 1;
             break;
 
-		case 'h':
-		default:
-			usage();
-			exit(EXIT_SUCCESS);
-		}
-	}
+        case 'h':
+        default:
+            usage();
+            exit(EXIT_SUCCESS);
+        }
+    }
 
     if(optind < argc) {
         usage_pmm_view();
@@ -135,14 +135,14 @@ void parse_args(struct pmm_config *cfg, int argc, char **argv) {
  */
 void usage_pmm_view()
 {
-	printf("Usage: pmm_view -h | -c file [ -l | -r routine  [-p param -p ...] "
+    printf("Usage: pmm_view -h | -c file [ -l | -r routine  [-p param -p ...] "
            "[-ai] [-I|-w wait]]\n");
-	printf("Options:\n");
-	printf("  -c file    : specify config file\n");
+    printf("Options:\n");
+    printf("  -c file    : specify config file\n");
     printf("  -f model   : specify model file to plot\n");
-	printf("  -h         : print this help\n");
+    printf("  -h         : print this help\n");
     printf("  -l         : list routines\n");
-	printf("  -r routine : specify routine to plot\n");
+    printf("  -r routine : specify routine to plot\n");
     printf("  -a         : plot averaged datapoints\n");
     printf("  -i         : plot intervals (not supported in slice plot)\n");
     printf("  -I         : enter interactive mode after plotting\n");
@@ -152,9 +152,9 @@ void usage_pmm_view()
     printf("  -s slice   : specify a slice of model to plot (see man page)\n");
     printf("  -S style   : specify a gnuplot plot style (see gnuplot help)\n");
     printf("  -t [n]     : interploate model with n points (default 100)\n");
-	printf("  -w wait    : replot model every 'wait' seconds\n");
+    printf("  -w wait    : replot model every 'wait' seconds\n");
     printf("  -o file    : write plot to file (with png or ps extension)\n");
-	printf("\n");
+    printf("\n");
 }
 
 
@@ -170,10 +170,10 @@ void usage_pmm_view()
  */
 int
 parse_pmm_view_args(struct pmm_view_options *options,
-		                 int argc, char **argv)
+                         int argc, char **argv)
 {
-	int c;
-	int option_index;
+    int c;
+    int option_index;
 
 
     options->action = PMM_VIEW_NULL;
@@ -192,14 +192,14 @@ parse_pmm_view_args(struct pmm_view_options *options,
     options->plot_palette = 0;
     options->n_plots = 0;
 
-	while(1) {
-		static struct option long_options[] =
-		{
-			{"config-file", required_argument, 0, 'c'},
+    while(1) {
+        static struct option long_options[] =
+        {
+            {"config-file", required_argument, 0, 'c'},
             {"model-file", required_argument, 0, 'f'},
-			{"help", no_argument, 0, 'h'},
+            {"help", no_argument, 0, 'h'},
             {"list-routines", no_argument, 0, 'l'},
-			{"routine", required_argument, 0, 'r'},
+            {"routine", required_argument, 0, 'r'},
             {"plot-average", no_argument, 0, 'a'},
             {"plot-intervals", no_argument, 0, 'i'},
             {"interactive-mode", no_argument, 0, 'I'},
@@ -212,23 +212,23 @@ parse_pmm_view_args(struct pmm_view_options *options,
             {"wait-period", required_argument, 0, 'w'},
             {"output-file", required_argument, 0, 'o'},
             {"greyscale", no_argument, 0, 'g'},
-			{0, 0, 0, 0}
-		};
+            {0, 0, 0, 0}
+        };
 
-		option_index = 0;
+        option_index = 0;
 
-		c = getopt_long(argc, argv, "c:f:hlr:aiImp:Ps:S:t:w:o:g", long_options,
+        c = getopt_long(argc, argv, "c:f:hlr:aiImp:Ps:S:t:w:o:g", long_options,
                         &option_index);
 
-		// getopt_long returns -1 when arg list is exhausted
-		if(c == -1) {
-			break; //exit while loop
-		}
+        // getopt_long returns -1 when arg list is exhausted
+        if(c == -1) {
+            break; //exit while loop
+        }
 
-		switch(c) {
-		case 'c':
+        switch(c) {
+        case 'c':
             options->config_file = optarg;
-			break;
+            break;
 
         case 'a':
             if(options->plot_max != 0) {
@@ -252,7 +252,7 @@ parse_pmm_view_args(struct pmm_view_options *options,
             options->enter_interactive = 1;
             break;
 
-		case 'r':
+        case 'r':
             // if no action set, set to DISPLAY_ROUTINE
             if(options->action == PMM_VIEW_NULL) {
                 options->action = PMM_VIEW_DISPLAY_ROUTINE;
@@ -264,7 +264,7 @@ parse_pmm_view_args(struct pmm_view_options *options,
                 return -1;
             }
 
-			options->routine_names[options->n_plots] = optarg;
+            options->routine_names[options->n_plots] = optarg;
 
             options->n_plots = options->n_plots + 1;
 
@@ -273,7 +273,7 @@ parse_pmm_view_args(struct pmm_view_options *options,
                           PMM_MAX_PLOTS);
                 return -1;
             }
-			break;
+            break;
 
         case 'm':
             if(options->plot_average != 0) {
@@ -348,7 +348,7 @@ parse_pmm_view_args(struct pmm_view_options *options,
                 return -1;
             }
 
-			options->model_files[options->n_plots] = optarg;
+            options->model_files[options->n_plots] = optarg;
 
             options->n_plots = options->n_plots + 1;
 
@@ -369,7 +369,7 @@ parse_pmm_view_args(struct pmm_view_options *options,
 
         case 'l':
             // if option is NULL set to PRINT_LIST
-            if(options->action == PMM_VIEW_NULL) { 
+            if(options->action == PMM_VIEW_NULL) {
                 options->action = PMM_VIEW_PRINT_LIST;
             }
             // otherwise, action has already been set, this is error
@@ -382,17 +382,17 @@ parse_pmm_view_args(struct pmm_view_options *options,
         case 'o':
             options->plot_output_file = optarg;
             break;
-            
+
         case 'g':
             options->plot_output_grayscale = 1;
             break;
 
-		case 'h':
-		default:
+        case 'h':
+        default:
             return -1;
-		}
+        }
 
-	}
+    }
 
     if(optind < argc) {
         return -1;
@@ -441,7 +441,7 @@ count_tokens_in_str(char *str, char *delimiters)
 
     free(str_copy);
     str_copy = NULL;
-    
+
     return count;
 }
 
@@ -483,7 +483,7 @@ parse_slice_str(char *slice_str, struct pmm_view_options *options)
                         into p_index is a conditional operation. Same can be
                         achieved by replacing the switch and states with a
                         two step parsing of the string */
-                        
+
     int p_value;
 
 
@@ -535,7 +535,7 @@ parse_slice_str(char *slice_str, struct pmm_view_options *options)
                     return -1;
                 }
                 break;
-                
+
             case SLICE_PVALUE :
                 if(strcmp(token, "max") == 0) {
                     options->slice_i_arr[i] = p_index;

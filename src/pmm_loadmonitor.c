@@ -53,49 +53,49 @@ extern pthread_mutex_t signal_quit_mutex;
 void*
 loadmonitor(void *loadhistory)
 {
-	struct pmm_loadhistory *h;
-	struct pmm_load l;
+    struct pmm_loadhistory *h;
+    struct pmm_load l;
     int rc;
 
     int sleep_for = 60; //number of seconds we wish to sleep for
     int sleep_for_counter = 0; //counter for how long we have slept
     int sleep_for_fraction = 5; //sleep in 5 second fractions
 
-	int write_period = 10*60; //write the history to disk every 10 minutes
-	int write_period_counter=0; //counter for writing history to disk
+    int write_period = 10*60; //write the history to disk every 10 minutes
+    int write_period_counter=0; //counter for writing history to disk
 
-	h = (struct pmm_loadhistory*)loadhistory;
+    h = (struct pmm_loadhistory*)loadhistory;
 
-	LOGPRINTF("[loadmonitor]: h:%p\n", h);
+    LOGPRINTF("[loadmonitor]: h:%p\n", h);
 
-	// read load history file
-	//if loadfile exists ...
+    // read load history file
+    //if loadfile exists ...
     //
 
-	for(;;) {
+    for(;;) {
 
-		if((l.time = time(NULL)) == (time_t)-1) {
-			ERRPRINTF("Error retreiving unix time.\n");
-			exit(EXIT_FAILURE);
-		}
+        if((l.time = time(NULL)) == (time_t)-1) {
+            ERRPRINTF("Error retreiving unix time.\n");
+            exit(EXIT_FAILURE);
+        }
 
-		if(getloadavg(l.load, 3) != 3) {
-			ERRPRINTF("Error retreiving load averages from getloadavg.\n");
-			exit(EXIT_FAILURE);
-		}
+        if(getloadavg(l.load, 3) != 3) {
+            ERRPRINTF("Error retreiving load averages from getloadavg.\n");
+            exit(EXIT_FAILURE);
+        }
 
 
-	    // lock the rwlock for writing
-	    if((rc = pthread_rwlock_wrlock(&(h->history_rwlock))) != 0) {
-	    	ERRPRINTF("Error aquiring write lock:%d\n", rc);
-	    	exit(EXIT_FAILURE);
-	    }
+        // lock the rwlock for writing
+        if((rc = pthread_rwlock_wrlock(&(h->history_rwlock))) != 0) {
+            ERRPRINTF("Error aquiring write lock:%d\n", rc);
+            exit(EXIT_FAILURE);
+        }
 
-		//add load to load history data structure
-		add_load(h, &l);
+        //add load to load history data structure
+        add_load(h, &l);
 
-	    // unlock the rwlock
-	    rc = pthread_rwlock_unlock(&(h->history_rwlock));
+        // unlock the rwlock
+        rc = pthread_rwlock_unlock(&(h->history_rwlock));
 
         //sleep for a total of "sleep_for" seconds, in sleep_for_fraction
         //segments ...
@@ -128,19 +128,19 @@ loadmonitor(void *loadhistory)
         write_period_counter += sleep_for;
 
         //write history when write_period seconds have elapsed since last write
-		if(write_period_counter == write_period) {
+        if(write_period_counter == write_period) {
 
-			// write load history to file using xml ...
-			LOGPRINTF("writing history to file ...\n");
-			if(write_loadhistory(h) < 0) {
-				perror("[loadmonitor]");
-				ERRPRINTF("Error writing history.\n");
-				exit(EXIT_FAILURE);
-			}
+            // write load history to file using xml ...
+            LOGPRINTF("writing history to file ...\n");
+            if(write_loadhistory(h) < 0) {
+                perror("[loadmonitor]");
+                ERRPRINTF("Error writing history.\n");
+                exit(EXIT_FAILURE);
+            }
 
-		    write_period_counter = 0;
-		}
+            write_period_counter = 0;
+        }
 
-	}
+    }
 }
 

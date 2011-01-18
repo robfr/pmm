@@ -42,7 +42,7 @@
 
 
 // SWITCHPRINTF macro takes one of these parameters as an argument to describe
-// where to print a message (log, debug, error). 
+// where to print a message (log, debug, error).
 #ifdef HAVE_ISO_VARARGS
 #define PMM_DBG "0" //!< defines debug print stream for SWITCHPRINTF(OUTPUT,...)
 #define PMM_LOG "1" //!< defines log print stream for SWITCHPRINTF(OUTPUT,...)
@@ -98,13 +98,13 @@ static void DBGPRINTF(/*@unused@*/ const char *format, ...) {}
 #ifndef ERRPRINTF
 #  ifdef HAVE_ISO_VARARGS
 #    define ERRPRINTF(...) do { time_t clock; struct tm now;\
-	clock = time(0); localtime_r(&clock, &now); \
-	fprintf(stderr,"[%02d/%02d/%04d %02d:%02d:%02d] [%s:%d] [%s] %d ERR: ",\
-			now.tm_mon+1,now.tm_mday,now.tm_year+1900,\
-			now.tm_hour,now.tm_min,now.tm_sec,\
-			__FILE__,__LINE__,__FUNCNAME__, (int)getpid()); \
-			fprintf(stderr, __VA_ARGS__); \
-			fflush(stderr); } while (0)
+    clock = time(0); localtime_r(&clock, &now); \
+    fprintf(stderr,"[%02d/%02d/%04d %02d:%02d:%02d] [%s:%d] [%s] %d ERR: ",\
+            now.tm_mon+1,now.tm_mday,now.tm_year+1900,\
+            now.tm_hour,now.tm_min,now.tm_sec,\
+            __FILE__,__LINE__,__FUNCNAME__, (int)getpid()); \
+            fprintf(stderr, __VA_ARGS__); \
+            fflush(stderr); } while (0)
 #  else
 #       define ERRPRINTF printf
 #  endif /* ifdef HAVE_ISO_VARARGS */
@@ -123,23 +123,23 @@ static void DBGPRINTF(/*@unused@*/ const char *format, ...) {}
 #  ifdef HAVE_ISO_VARARGS
 #    ifdef PMM_DEBUG
 #      define LOGPRINTF(...) do { time_t clock; struct tm now;\
-	clock = time(0); localtime_r(&clock, &now); \
-	fprintf(stderr,"[%02d/%02d/%04d %02d:%02d:%02d] [%s:%d] [%s] %d LOG: ",\
-			now.tm_mon+1,now.tm_mday,now.tm_year+1900,\
-			now.tm_hour,now.tm_min,now.tm_sec,\
-			__FILE__,__LINE__,__FUNCNAME__,\
-			(int)getpid());\
-			fprintf(stderr, __VA_ARGS__); \
-			fflush(stderr); } while (0)
+    clock = time(0); localtime_r(&clock, &now); \
+    fprintf(stderr,"[%02d/%02d/%04d %02d:%02d:%02d] [%s:%d] [%s] %d LOG: ",\
+            now.tm_mon+1,now.tm_mday,now.tm_year+1900,\
+            now.tm_hour,now.tm_min,now.tm_sec,\
+            __FILE__,__LINE__,__FUNCNAME__,\
+            (int)getpid());\
+            fprintf(stderr, __VA_ARGS__); \
+            fflush(stderr); } while (0)
 #    else
 #      define LOGPRINTF(...) do { time_t clock; struct tm now;\
-	clock = time(0); localtime_r(&clock, &now); \
-	fprintf(stderr,"[%02d/%02d/%04d %02d:%02d:%02d] [%s] %d LOG: ",\
-			now.tm_mon+1,now.tm_mday,now.tm_year+1900,\
-			now.tm_hour,now.tm_min,now.tm_sec,__FUNCNAME__,\
-			(int)getpid());\
-			fprintf(stderr, __VA_ARGS__); \
-			fflush(stderr); } while (0)
+    clock = time(0); localtime_r(&clock, &now); \
+    fprintf(stderr,"[%02d/%02d/%04d %02d:%02d:%02d] [%s] %d LOG: ",\
+            now.tm_mon+1,now.tm_mday,now.tm_year+1900,\
+            now.tm_hour,now.tm_min,now.tm_sec,__FUNCNAME__,\
+            (int)getpid());\
+            fprintf(stderr, __VA_ARGS__); \
+            fflush(stderr); } while (0)
 #    endif
 #  else
 #       define LOGPRINTF printf
@@ -169,5 +169,5 @@ static void DBGPRINTF(/*@unused@*/ const char *format, ...) {}
 #       define SWITCHPRINTF printf
 #   endif /* HAVE_ISO_VARARGS */
 #endif /* SWITCHPRINTF */
-    
+
 #endif /*PMM_LOG_H_*/

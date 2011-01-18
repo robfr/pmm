@@ -48,7 +48,7 @@ int num_users();
  * checks that the tty a user is logged into (as per utmp) exists in /dev
  *
  * This indicates whether a user has an interactive session or not
- *  
+ *
  *
  * code comes from FreeBSD /usr/src/usr.bin/w/w.c
  *
@@ -62,19 +62,19 @@ int
 ttystat(char *line, int sz)
 {
     // TODO portable ?
-	static struct stat sb;
-	char ttybuf[MAXPATHLEN];
+    static struct stat sb;
+    char ttybuf[MAXPATHLEN];
 
-	//create the string /dev/<terminal user is logged into>
-	(void)snprintf(ttybuf, sizeof(ttybuf), "%s%.*s", _PATH_DEV, sz, line);
+    //create the string /dev/<terminal user is logged into>
+    (void)snprintf(ttybuf, sizeof(ttybuf), "%s%.*s", _PATH_DEV, sz, line);
 
-	//check that the terminal/file exists by stat'ing it
-	if(stat(ttybuf, &sb) == 0) {
-		return 1; // terminal exists, great
-	}
-	else {
-		return 0; // terminal does not exist, corrupt utmp line
-	}
+    //check that the terminal/file exists by stat'ing it
+    if(stat(ttybuf, &sb) == 0) {
+        return 1; // terminal exists, great
+    }
+    else {
+        return 0; // terminal does not exist, corrupt utmp line
+    }
 }
 
 
@@ -90,34 +90,34 @@ int
 num_users()
 {
     //TODO portable on windows/NON-posix ?
-	FILE *ut;
-	struct utmp utmp;
-	int nusers;
+    FILE *ut;
+    struct utmp utmp;
+    int nusers;
 
-	//open utmp file stream
-	if((ut = fopen(_PATH_UTMP, "r")) == NULL) {
-		printf("Error calculating users logged in, could not read file %s\n",
-				_PATH_UTMP);
-		exit(EXIT_FAILURE);
-	}
+    //open utmp file stream
+    if((ut = fopen(_PATH_UTMP, "r")) == NULL) {
+        printf("Error calculating users logged in, could not read file %s\n",
+                _PATH_UTMP);
+        exit(EXIT_FAILURE);
+    }
 
-	nusers=0;
-	for(;fread(&utmp, sizeof(utmp), 1, ut);) {
+    nusers=0;
+    for(;fread(&utmp, sizeof(utmp), 1, ut);) {
 
-		if(utmp.ut_name[0] == '\0') {
-			continue;
-		}
+        if(utmp.ut_name[0] == '\0') {
+            continue;
+        }
 
-		//check that the tty if the user exists in /dev
-		if(!ttystat(utmp.ut_line, UT_LINESIZE)) {
-			continue; //corrupted record
-		}
+        //check that the tty if the user exists in /dev
+        if(!ttystat(utmp.ut_line, UT_LINESIZE)) {
+            continue; //corrupted record
+        }
 
-		nusers++;
-	}
-	fclose(ut);
+        nusers++;
+    }
+    fclose(ut);
 
-	return nusers;
+    return nusers;
 }
 
 /*
@@ -126,11 +126,11 @@ num_users()
  * @return 1 if users are logged into system, 0 if not
  */
 int cond_users() {
-	if(num_users() > 0) {
-		return 1;
-	} else {
-		return 0;
-	}
+    if(num_users() > 0) {
+        return 1;
+    } else {
+        return 0;
+    }
 }
 
 /*!
@@ -141,20 +141,20 @@ int cond_users() {
  * return 0 if not idle, 1 if idle
  */
 int cond_idle() {
-	double loadavg[3];
+    double loadavg[3];
 
-	if(!getloadavg(loadavg, 3)) {
-		printf("Error, could not retreive system load averages.\n");
-		exit(EXIT_FAILURE);
-	}
+    if(!getloadavg(loadavg, 3)) {
+        printf("Error, could not retreive system load averages.\n");
+        exit(EXIT_FAILURE);
+    }
 
-	// if load is below 0.10, i.e. 10% untilisation
-	if(loadavg[1] < 0.10) {
-		return 1;
-	}
-	else {
-		return 0;
-	}
+    // if load is below 0.10, i.e. 10% untilisation
+    if(loadavg[1] < 0.10) {
+        return 1;
+    }
+    else {
+        return 0;
+    }
 }
 
 /*!
@@ -189,6 +189,6 @@ check_conds(struct pmm_routine *r)
         }
     }
 
-	return r->executable;
+    return r->executable;
 }
 

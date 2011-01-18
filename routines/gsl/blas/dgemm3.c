@@ -33,62 +33,62 @@
 int main(int argc, char **argv) {
 
 
-	/* declare variables */
-	gsl_matrix *A, *B, *C;
-	double arg[NARGS];
-	size_t m, n, k;
-	long long c;
-	int i;
+    /* declare variables */
+    gsl_matrix *A, *B, *C;
+    double arg[NARGS];
+    size_t m, n, k;
+    long long c;
+    int i;
 
 
-	/* parse arguments */
-	if(argc != NARGS+1) {
-		return PMM_EXIT_ARGFAIL;
-	}
-	for(i=0; i<NARGS; i++) {
-		if(sscanf(argv[i+1], "%lf", &arg[i]) == 0) {
-			return PMM_EXIT_ARGPARSEFAIL;
-		}
-	}
+    /* parse arguments */
+    if(argc != NARGS+1) {
+        return PMM_EXIT_ARGFAIL;
+    }
+    for(i=0; i<NARGS; i++) {
+        if(sscanf(argv[i+1], "%lf", &arg[i]) == 0) {
+            return PMM_EXIT_ARGPARSEFAIL;
+        }
+    }
 
-	m = (size_t)arg[0];
-	n = (size_t)arg[1];
-	k = (size_t)arg[2];
+    m = (size_t)arg[0];
+    n = (size_t)arg[1];
+    k = (size_t)arg[2];
 
-	/* calculate complexity */
-	c = 2*m*n*(long long)k;
+    /* calculate complexity */
+    c = 2*m*n*(long long)k;
 
-	/* initialise data */
-	A = gsl_matrix_alloc(m, n);
-	B = gsl_matrix_alloc(n, k);
-	C = gsl_matrix_alloc(m, k);
+    /* initialise data */
+    A = gsl_matrix_alloc(m, n);
+    B = gsl_matrix_alloc(n, k);
+    C = gsl_matrix_alloc(m, k);
 
 
-	gsl_matrix_set_all(A, 2.5);
-	gsl_matrix_set_all(B, 4.9);
-	gsl_matrix_set_zero(C);
+    gsl_matrix_set_all(A, 2.5);
+    gsl_matrix_set_all(B, 4.9);
+    gsl_matrix_set_zero(C);
 
-	/* initialise timer */
-	pmm_timer_init(c);
+    /* initialise timer */
+    pmm_timer_init(c);
 
-	/* start timer */
-	pmm_timer_start();
+    /* start timer */
+    pmm_timer_start();
 
-	/* execute routine */
-	gsl_blas_dgemm(CblasNoTrans, CblasNoTrans, 1.0, A, B, 0.0, C);
+    /* execute routine */
+    gsl_blas_dgemm(CblasNoTrans, CblasNoTrans, 1.0, A, B, 0.0, C);
 
-	/* stop timer */
-	pmm_timer_stop();
+    /* stop timer */
+    pmm_timer_stop();
 
-	/* get timing result */
-	pmm_timer_result();
+    /* get timing result */
+    pmm_timer_result();
 
-	/* destroy timer */
-	pmm_timer_destroy();
+    /* destroy timer */
+    pmm_timer_destroy();
 
-	gsl_matrix_free(A);
-	gsl_matrix_free(B);
-	gsl_matrix_free(C);
+    gsl_matrix_free(A);
+    gsl_matrix_free(B);
+    gsl_matrix_free(C);
 
-	return PMM_EXIT_SUCCESS;
+    return PMM_EXIT_SUCCESS;
 }

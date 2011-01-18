@@ -1,11 +1,11 @@
 
 /*-------------------------------------------------------------------------*/
 /**
-  @file		gnuplot_i.h
-  @author	N. Devillard
-  @date		Sep 1998, Oct 2004, Sept 2005, Nov 2005, Apr 2006, Dec 2009
-  @version	$Revision: 1.11.4 $
-  @brief	C interface to gnuplot.
+  @file     gnuplot_i.h
+  @author   N. Devillard
+  @date     Sep 1998, Oct 2004, Sept 2005, Nov 2005, Apr 2006, Dec 2009
+  @version  $Revision: 1.11.4 $
+  @brief    C interface to gnuplot.
 
   gnuplot is a freely available, command-driven graphical display tool for
   Unix. It compiles and works quite well on a number of Unix flavours as
@@ -27,10 +27,10 @@
 /*--------------------------------------------------------------------------*/
 
 /*
-	$Id: gnuplot_i.h,v 1.11 2003/01/27 08:58:04 ndevilla Exp $
-	$Author: ndevilla $
-	$Date: 2003/01/27 08:58:04 $
-	$Revision: 1.11.2 $
+    $Id: gnuplot_i.h,v 1.11 2003/01/27 08:58:04 ndevilla Exp $
+    $Author: ndevilla $
+    $Date: 2003/01/27 08:58:04 $
+    $Revision: 1.11.2 $
  */
 
 #ifndef _GNUPLOT_PIPES_H_
@@ -60,8 +60,8 @@
 
 /*-------------------------------------------------------------------------*/
 /**
-  @typedef	gnuplot_ctrl
-  @brief	gnuplot session handle (opaque type).
+  @typedef  gnuplot_ctrl
+  @brief    gnuplot session handle (opaque type).
 
   This structure holds all necessary information to talk to a gnuplot
   session. It is built and returned by gnuplot_init() and later used
@@ -79,7 +79,7 @@ typedef struct _GNUPLOT_CTRL_ {
 
     /** Number of currently active plots */
     int       nplots ;
-	/** Current plotting style */
+    /** Current plotting style */
     char      pstyle[32] ;
     /** Axes to plot on */
     char      axes[10] ;
@@ -88,7 +88,7 @@ typedef struct _GNUPLOT_CTRL_ {
 
     /** Name of temporary files */
     char      to_delete[GP_MAX_TMP_FILES][GP_TMP_NAME_SIZE] ;
-	/** Number of temporary files */
+    /** Number of temporary files */
     int       ntmp ;
 } gnuplot_ctrl ;
 
@@ -253,10 +253,10 @@ void gnuplot_setaxes(gnuplot_ctrl * h, char * plot_axes);
 
 /*-------------------------------------------------------------------------*/
 /**
-  @brief	Change the terminal of a gnuplot session.
-  @param	h Gnuplot session control handle
-  @param	terminal Terminal name (character string)
-  @return	void
+  @brief    Change the terminal of a gnuplot session.
+  @param    h Gnuplot session control handle
+  @param    terminal Terminal name (character string)
+  @return   void
 
   No attempt is made to check the validity of the terminal name.  This function
   simply makes a note of it and calls gnuplot_cmd to change the name
@@ -412,13 +412,13 @@ int gnuplot_splot(
 
 /*-------------------------------------------------------------------------*/
 /**
-  @brief	Plot a 3d graph from a grid of points.
-  @param	handle		Gnuplot session control handle.
-  @param	points		Pointer to a grid of points (rows,cols).
-  @param	rows       	Number of rows (y points).
-  @param	cols       	Number of columns (x points).
-  @param	title		Title of the plot.
-  @return	void
+  @brief    Plot a 3d graph from a grid of points.
+  @param    handle      Gnuplot session control handle.
+  @param    points      Pointer to a grid of points (rows,cols).
+  @param    rows        Number of rows (y points).
+  @param    cols        Number of columns (x points).
+  @param    title       Title of the plot.
+  @return   void
 
   gnuplot_splot_grid(handle,(double *) points,rows,cols,title);
   Based on gnuplot_splot, modifications by Robert Bradley 2/4/2006
@@ -431,15 +431,15 @@ int gnuplot_splot_grid(gnuplot_ctrl *handle, double *points, int rows, int cols,
 
 /*-------------------------------------------------------------------------*/
 /**
-  @brief	Plot contours from a list of points.
-  @param	handle		Gnuplot session control handle.
-  @param	x			Pointer to a list of x coordinates. (length=nx*ny)
-  @param	y			Pointer to a list of y coordinates. (length=nx*ny)
-  @param	z			Pointer to a list of z coordinates. (length=nx*ny)
-  @param	nx			Number of doubles in x-direction
-  @param	ny			Number of doubles in y-direction
-  @param	title		Title of the plot.
-  @return	void
+  @brief    Plot contours from a list of points.
+  @param    handle      Gnuplot session control handle.
+  @param    x           Pointer to a list of x coordinates. (length=nx*ny)
+  @param    y           Pointer to a list of y coordinates. (length=nx*ny)
+  @param    z           Pointer to a list of z coordinates. (length=nx*ny)
+  @param    nx          Number of doubles in x-direction
+  @param    ny          Number of doubles in y-direction
+  @param    title       Title of the plot.
+  @return   void
 
   gnuplot_contour_plot(handle,x,y,z,n,title);
   Based on gnuplot_splot, modifications by Robert Bradley 23/11/2005
@@ -448,7 +448,7 @@ int gnuplot_splot_grid(gnuplot_ctrl *handle, double *points, int rows, int cols,
 
     @code
     gnuplot_ctrl    *h ;
-	double x[50] ; y[50] ; z[50];
+    double x[50] ; y[50] ; z[50];
     int i ;
 
     h = gnuplot_init() ;
@@ -474,22 +474,22 @@ int gnuplot_contour_plot(gnuplot_ctrl *handle, double *x, double *y, double *z, 
 
 /*-------------------------------------------------------------------------*/
 /**
-  @brief	Plot a 3d graph using callback functions to return the points
-  @param	handle		Gnuplot session control handle.
-  @param	obj			Pointer to an arbitrary object.
-  @param	getPoint	Pointer to a callback function.
-  @param	n			Number of doubles in x (y and z must be the the same).
-  @param	title		Title of the plot.
-  @return	void
+  @brief    Plot a 3d graph using callback functions to return the points
+  @param    handle      Gnuplot session control handle.
+  @param    obj         Pointer to an arbitrary object.
+  @param    getPoint    Pointer to a callback function.
+  @param    n           Number of doubles in x (y and z must be the the same).
+  @param    title       Title of the plot.
+  @return   void
 
 Calback:
 
 void getPoint(void *object,gnuplot_point *point,int index,int pointCount);
-  @param	obj			Pointer to an arbitrary object
-  @param	point		Pointer to the returned point struct (double x,y,z)
-  @param	i			Index of the current point (0 to n-1)
-  @param	n			Number of points
-  @return	void
+  @param    obj         Pointer to an arbitrary object
+  @param    point       Pointer to the returned point struct (double x,y,z)
+  @param    i           Index of the current point (0 to n-1)
+  @param    n           Number of points
+  @return   void
  */
 /*--------------------------------------------------------------------------*/
 
@@ -500,23 +500,23 @@ int gnuplot_splot_obj(gnuplot_ctrl *handle,
                       char *title);
 
 /*
-  @brief	Plot a 2d graph using a callback function to return points.
-  @param	handle		Gnuplot session control handle.
-  @param	obj			Pointer to an arbitrary object.
-  @param	getPoint	Pointer to a callback function.
-  @param	n			Number of points.
-  @param	title		Title of the plot.
-  @return	void
+  @brief    Plot a 2d graph using a callback function to return points.
+  @param    handle       Gnuplot session control handle.
+  @param    obj          Pointer to an arbitrary object.
+  @param    getPoint     Pointer to a callback function.
+  @param    n            Number of points.
+  @param    title        Title of the plot.
+  @return   void
 
 The callback function is of the following form, and is called once for each
 point plotted:
 
 void getPoint(void *object,gnuplot_point *point,int index,int pointCount);
-  @param	obj			Pointer to an arbitrary object
-  @param	point		Pointer to the returned point struct (double x,y,z)
-  @param	i			Index of the current point (0 to n-1)
-  @param	n			Number of points
-  @return	void
+  @param    obj         Pointer to an arbitrary object
+  @param    point       Pointer to the returned point struct (double x,y,z)
+  @param    i           Index of the current point (0 to n-1)
+  @param    n           Number of points
+  @return    void
 */
 
 int gnuplot_plot_obj_xy(
