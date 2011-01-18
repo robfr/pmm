@@ -2787,7 +2787,8 @@ void free_routine(struct pmm_routine **r) {
     (*r)->exe_path = NULL;
 
 	//free paramdef set
-    free_paramdef_set(&(*r)->pd_set);
+    if((*r)->pd_set != NULL)
+        free_paramdef_set(&(*r)->pd_set);
 
 	free(*r);
     *r = NULL;
