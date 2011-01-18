@@ -18,7 +18,7 @@
     along with PMM.  If not, see <http://www.gnu.org/licenses/>.
 */
 /*!
- * @file   pmm_data.h
+ * @file   pmm_model.h
  * @brief  general PMM data structures
  *
  * Data structures representing models, routines and the benchmarking

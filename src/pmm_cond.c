@@ -38,7 +38,7 @@
 #include <unistd.h>         // for stat
 #include <sys/param.h>      // for MAXPATHLEN
 
-#include "pmm_data.h"
+#include "pmm_model.h"
 #include "pmm_cond.h"
 
 int ttystat(char *line, int sz);

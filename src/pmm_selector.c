@@ -30,7 +30,7 @@
 
 #include <stdlib.h>     // for malloc, free, rand, exit
 
-#include "pmm_data.h"
+#include "pmm_model.h"
 #include "pmm_selector.h"
 #include "pmm_interval.h"
 #include "pmm_param.h"

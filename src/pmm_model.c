@@ -18,7 +18,7 @@
     along with PMM.  If not, see <http://www.gnu.org/licenses/>.
 */
 /*!
- * @file pmm_data.c
+ * @file pmm_model.c
  *
  * @brief functions for operating on PMM model, benchmark and other data
  * structures
@@ -35,7 +35,7 @@
 #include <ctype.h>          // for isdigit
 #include <string.h>         // for strcpy/memset
 
-#include "pmm_data.h"
+#include "pmm_model.h"
 #include "pmm_octave.h"
 #include "pmm_interval.h"
 #include "pmm_param.h"

@@ -56,7 +56,7 @@
 #include <libgen.h>
 #include <string.h>
 
-#include "pmm_data.h"
+#include "pmm_model.h"
 #include "pmm_octave.h"
 #include "pmm_interval.h"
 #include "pmm_log.h"
@@ -99,7 +99,7 @@ test_model_files_modified(struct pmm_model **m_array, int n);
 int
 test_model_file_modified(struct pmm_model *m);
 
-// TODO remove reference to this global variable in pmm_data.c and put the
+// TODO remove reference to this global variable in pmm_model.c and put the
 // history maniuplation in a seperate file that can be included only where
 // needed (i.e. not here!)
 pthread_rwlock_t history_rwlock;

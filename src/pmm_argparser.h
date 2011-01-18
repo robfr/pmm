@@ -24,7 +24,7 @@
 #include "config.h"
 #endif
 
-#include "pmm_data.h"   // for pmm_config
+#include "pmm_model.h"   // for pmm_config
 
 #define PMM_VIEW_NULL 0             /*!< pmm_view unset operation mode */
 #define PMM_VIEW_PRINT_LIST 1       /*!< pmm_view list routines mode */

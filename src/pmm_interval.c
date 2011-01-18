@@ -33,7 +33,7 @@
 
 #include "pmm_log.h"
 #include "pmm_interval.h"
-#include "pmm_data.h" // for param_array_copy, print_params
+#include "pmm_model.h" // for param_array_copy, print_params
 
 /*!
  * Allocate and return an interval list structure

@@ -25,7 +25,7 @@
 #endif
 
 #include <libxml/xmlwriter.h>
-#include "pmm_data.h"
+#include "pmm_model.h"
 #include "pmm_load.h"
 #include "pmm_interval.h"
 

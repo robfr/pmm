@@ -56,7 +56,7 @@
 #include "pmm_octave.h"
 
 extern "C" {
-	#include "pmm_data.h"
+	#include "pmm_model.h"
 	#include "pmm_log.h"
 }
 

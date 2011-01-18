@@ -37,7 +37,7 @@
 #include <gsl/gsl_statistics_double.h>
 
 
-#include "pmm_data.h"
+#include "pmm_model.h"
 #include "pmm_octave.h"
 #include "pmm_cfgparser.h"
 #include "pmm_log.h"

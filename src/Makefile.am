@@ -26,7 +26,7 @@
 
 CC		= $(PTHREAD_CC)
 
-# noinst_HEADERS	= pmm_argparser.h pmm_cfgparser.h pmm_cond.h pmm_data.h \
+# noinst_HEADERS	= pmm_argparser.h pmm_cfgparser.h pmm_cond.h pmm_model.h \
 #		pmm_executor.h pmm_scheduler.h pmm_util.h
 
 bin_PROGRAMS	= pmmd
@@ -66,7 +66,7 @@ pmm_comp_CXXFLAGS = $(OCTAVE_CXXFLAGS)
 
 lib_LTLIBRARIES = libpmm.la
 
-libpmm_la_SOURCES = pmm_util.c pmm_data.c pmm_param.c pmm_interval.c pmm_load.c pmm_cfgparser.c pmm_cond.c \
+libpmm_la_SOURCES = pmm_util.c pmm_model.c pmm_param.c pmm_interval.c pmm_load.c pmm_cfgparser.c pmm_cond.c \
 		pmm_octave.cc pmm_muparse.cc
 libpmm_la_LDFLAGS =  $(XML_LIBS) $(OCTAVE_LIBS) $(PAPI_LDFLAGS) $(MUPARSER_LIBS) $(MUPARSER_LDFLAGS)
 libpmm_la_CPPFLAGS = $(XML_CFLAGS) $(PAPI_CPPFLAGS) \
@@ -78,7 +78,7 @@ libpmm_la_CXXFLAGS = $(OCTAVE_CXXFLAGS) $(MUPARSER_CPPFLAGS)
 
 pkgdata_DATA = pmm_griddatan.m
 
-EXTRA_DIST	= pmm_argparser.h pmm_cfgparser.h pmm_cond.h pmm_data.h \
+EXTRA_DIST	= pmm_argparser.h pmm_cfgparser.h pmm_cond.h pmm_model.h \
 		pmm_interval.h pmm_param.h pmm_load.h pmm_loadmonitor.h \
 		pmm_executor.h pmm_scheduler.h pmm_util.h pmm_selector.h gnuplot_i.h \
 		pmm_octave.h pmm_log.h pmm_muparse.h pmm_griddatan.m

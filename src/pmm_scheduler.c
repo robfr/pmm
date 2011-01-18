@@ -28,7 +28,7 @@
 #include "config.h"
 #endif
 
-#include "pmm_data.h"
+#include "pmm_model.h"
 #include "pmm_cond.h"
 
 /*!

@@ -47,7 +47,7 @@
 #include <errno.h>          // for perror, errno, etc
 #include <libgen.h>         // for basename
 
-#include "pmm_data.h"
+#include "pmm_model.h"
 #include "pmm_selector.h"
 #include "pmm_cfgparser.h"
 #include "pmm_log.h"
