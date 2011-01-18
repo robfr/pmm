@@ -62,7 +62,7 @@ struct pmm_paramdef_set* new_paramdef_set()
  * Initialise a parameter array to all start values, as descripted by the
  * parameter definitions
  *
- * @param   pd_array    pointer to parameter definition set
+ * @param   pd_set    pointer to parameter definition set
  *
  * @return  pointer to an array of parameters with all start values of size n
  */
@@ -520,6 +520,7 @@ isequal_paramdef_set(struct pmm_paramdef_set *pds_a,
  *
  * @param   pd_array_a  pointer to first parameter array
  * @param   pd_array_b  pointer to second parameter array
+ * @param   n_p         number of parameters in the array
  *
  * @return 0 if arrays contain different parameter definitions, 1 if they
  * are identical
@@ -613,8 +614,7 @@ params_cmp(int *p1, int *p2, int n)
  * @param   end         pointer to array describing the start point
  * @param   step        number of steps to take along the interval (- to step
  *                      backwards, + to step forwards)
- * @param   pd_array    pointer to the parameter definition array
- * @param   n_p         number of parameters
+ * @param   pd_set      pointer to the parameter definition set
  *
  * @return 0 on success, -1 if the step will exceed the end-point of the
  * interval or -2 on error

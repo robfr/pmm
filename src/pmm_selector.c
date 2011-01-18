@@ -324,15 +324,6 @@ multi_naive_select_new_bench(struct pmm_routine *r)
 /*!
  * Process the insertion of a new benchmark into a model being constructed
  * with a naive method.
- *
- * Benchmark is inserted into model and statistics are gathered on the
- * set of benchmarks in the model at the corresponding point. If certain
- * thresholds are exceeded the benchmark point will be removed from the
- * construction stack and the next point will be added to the stack
- *
- * The next point is calculated by 
- *
- * TODO rename pmm_interval to something more general ... ?
  */
 int
 multi_naive_insert_bench(struct pmm_routine *r, struct pmm_benchmark *b)
@@ -425,8 +416,8 @@ check_benchmarking_minimums(struct pmm_routine *r, double t, int n)
  * We iterate through such a set of points in lexicographical order, i.e.
  * given points a and b in P, they are successive iff:
  *
- *  (a_1, a_2, \dots, a_n) <^d (b_1,b_2, \dots, b_n) \iff
- *  (\exists\ m > 0) \ (\forall\ i < m) (a_i = b_i) \land (a_m <_m b_m) 
+ *  \f$(a_1, a_2, \dots, a_n) <^d (b_1,b_2, \dots, b_n) \iff
+ *  (\exists\ m > 0) \ (\forall\ i < m) (a_i = b_i) \land (a_m <_m b_m) \f$
  *
  * Given a point p, incrementing it to p' involves the following: Increment
  * the first term, if this incremented value is greater than the end defined
@@ -705,6 +696,8 @@ naive_1d_bisect_select_new_bench(struct pmm_routine *r)
  * further 'point' type intervals are created at the end points of the
  * bisection interval.
  *
+ * @param   r   pointer to the routine
+ *
  * @return 0 on success or -1 on failure
  */
 int
@@ -975,6 +968,8 @@ multi_gbbp_naive_select_new_bench(struct pmm_routine *r)
  * Other intervals are added to benchmark neccessary extremeties of the
  * parameter space and to tag the completion of the diagonal and the whole
  * model in general.
+ *
+ * @param   r   pointer to the routine
  *
  * @return 0 on success or -1 on failure
  */
@@ -1751,7 +1746,6 @@ adjust_interval_with_param_constraint_max(struct pmm_interval *i,
  *
  * @param   i           pointer to the interval
  * @param   pd_set      pointer to the parameter defintion set
- * @param   n           number of parameters
  *
  * @return 0 if not zero end point, 1 if nonzero end point
  *
@@ -2027,6 +2021,10 @@ new_projection_interval(int *p, struct pmm_paramdef *pd, int d, int n)
  *   - if stack is empty
  *     - mark model construction as complete
  *
+ * @param   r   pointer to the routine to build for
+ *
+ * @return pointer to a newly allocated array containing the parameters of
+ * the selected benchmark
  *
  */
 int*
@@ -2528,9 +2526,10 @@ naive_1d_bisect_insert_bench(struct pmm_routine *r, struct pmm_benchmark *b)
  *
  * if the model is climbing we test the new benchmark to see if the model is
  * still climbing, or has levelled out, or has begun to decrease. If the
- * model is not still climbing or levelled out, we change the state to bisection.
+ * model is not still climbing or levelled out, we change the state to
+ * bisection.  The bisection state permits the optimal selection of new
+ * benchmarking points.
  *
- * The bisection state permits the optimal selection of new benchmarking points.
  * In this state, any new benchmark being inserted is comparted to the existing
  * model. If the model already accurately approximates the benchmark the state
  * is set to inflection.
@@ -2538,6 +2537,9 @@ naive_1d_bisect_insert_bench(struct pmm_routine *r, struct pmm_benchmark *b)
  * The inflection state is a second level of bisection, in this state if a new
  * benchmark is again accurately approximated by the existing model we deem the
  * model to be complete in this region
+ *
+ * Most of this functionality is actually implemented in a deeper function
+ * process_interval(), process_it_gbbp_climb(), process_it_gbbp_bisect(), etc.
  *
  * @return 0 on success, -1 on failure to process intervals, -2 on failure
  * to insert benchmark
@@ -3067,8 +3069,7 @@ process_it_gbbp_climb(struct pmm_routine *r, struct pmm_interval *i,
  * @param   step        number of steps to take along the interval (- to step
  *                      backwards, + to step forwards)
  * @param   i           pointer to the interval to step along
- * @param   pd_array    pointer to the parameter definition array
- * @param   n_p         number of parameters
+ * @param   pd_set      pointer to the parameter definition set
  *
  * @pre interval should have start and end points set (i.e. be of the type
  * IT_EMTPY, IT_GBBP_CLIMB, IT_GBBP_BISECT, IT_GBBP_INFLECT) though the
