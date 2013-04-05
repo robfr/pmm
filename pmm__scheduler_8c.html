@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">pmm
-   &#160;<span id="projectnumber">0.0.1</span>
+   &#160;<span id="projectnumber">1.0.0</span>
    </div>
   </td>
  </tr>
@@ -94,7 +94,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="pmm__model_8h_source.html">pmm_model.h</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="pmm__cond_8h_source.html">pmm_cond.h</a>&quot;</code><br/>
-</div><table class="memberdecls">
+</div>
+<p><a href="pmm__scheduler_8c_source.html">Go to the source code of this file.</a></p>
+<table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:add912276b723522e8a7e430e633a2b7f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pmm__scheduler_8c.html#add912276b723522e8a7e430e633a2b7f">schedule_routine</a> (struct <a class="el" href="structpmm__routine.html">pmm_routine</a> **scheduled, struct <a class="el" href="structpmm__routine.html">pmm_routine</a> **r, int n)</td></tr>
@@ -102,6 +104,8 @@ Functions</h2></td></tr>
 <a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Choose next routine to benchmark. </p>
 <p>Code to select next routine that should be benchmarked. </p>
+
+<p>Definition in file <a class="el" href="pmm__scheduler_8c_source.html">pmm_scheduler.c</a>.</p>
 </div><h2>Function Documentation</h2>
 <a class="anchor" id="add912276b723522e8a7e430e633a2b7f"></a>
 <div class="memitem">
@@ -143,12 +147,14 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 if all routines are already complete (so we don't need to try to schedule them any longer), 1 if there is a schedulable routine, 2 if there are no schedulable routines at present (but some are still incomplete) </dd></dl>
 
+<p>Definition at line <a class="el" href="pmm__scheduler_8c_source.html#l00048">48</a> of file <a class="el" href="pmm__scheduler_8c_source.html">pmm_scheduler.c</a>.</p>
+
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 5 2013 14:58:33 for pmm by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Apr 5 2013 17:40:48 for pmm by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.1.2
 </small></address>

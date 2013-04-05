@@ -95,93 +95,93 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &lt;stdlib.h&gt;</span></div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &lt;ffi.h&gt;</span></div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;</div>
-<div class="line"><a name="l00009"></a><span class="lineno"><a class="code" href="executor__test_8c.html#acb1b98fe4b4002de5d1321df345bb172">    9</a></span>&#160;<span class="keywordtype">int</span> <a class="code" href="pmm-1_80_80_2routines_2cblas_2cblas__dgemm_8c.html#a3c04138a5bfe5d72780bb7e82a18e627">main</a>(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>* argv) {</div>
+<div class="line"><a name="l00009"></a><span class="lineno"><a class="code" href="executor__test_8c.html#acb1b98fe4b4002de5d1321df345bb172">    9</a></span>&#160;<span class="keywordtype">int</span> <a class="code" href="cblas__dgemm_8c.html#a3c04138a5bfe5d72780bb7e82a18e627">main</a>(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>* argv) {</div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;        <span class="keywordtype">void</span> *lib_handle;</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;        double (*pow)(double, double);</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;        <span class="keyword">const</span> <span class="keywordtype">char</span> *dlsym_error;</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;    <span class="keywordtype">void</span> *lib_handle;</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;    double (*pow)(double, double);</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">char</span> *dlsym_error;</div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;        <span class="keywordtype">char</span> *library_file = <span class="stringliteral">&quot;/usr/lib/libm.dylib&quot;</span>;</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;        <span class="keywordtype">char</span> *routine_name = <span class="stringliteral">&quot;pow&quot;</span>;</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;        void (*routine_handle);</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;    <span class="keywordtype">char</span> *library_file = <span class="stringliteral">&quot;/usr/lib/libm.dylib&quot;</span>;</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    <span class="keywordtype">char</span> *routine_name = <span class="stringliteral">&quot;pow&quot;</span>;</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;    void (*routine_handle);</div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;        <span class="comment">// load the library libm</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        lib_handle = dlopen(library_file, RTLD_LAZY);</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;    <span class="comment">// load the library libm</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;    lib_handle = dlopen(library_file, RTLD_LAZY);</div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;        <span class="comment">// check we could open the library</span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;        <span class="keywordflow">if</span>(!lib_handle) {</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;                printf(<span class="stringliteral">&quot;Cannot open library: %s\n&quot;</span>, dlerror());</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;                <span class="keywordflow">return</span> 1;</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;        } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;                printf(<span class="stringliteral">&quot;Library opened: %s\n&quot;</span>, library_file);</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        }</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    <span class="comment">// check we could open the library</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;    <span class="keywordflow">if</span>(!lib_handle) {</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;        printf(<span class="stringliteral">&quot;Cannot open library: %s\n&quot;</span>, dlerror());</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        <span class="keywordflow">return</span> 1;</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;        printf(<span class="stringliteral">&quot;Library opened: %s\n&quot;</span>, library_file);</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    }</div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;                <span class="comment">//reset errors</span></div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;        dlerror();</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        <span class="comment">//reset errors</span></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    dlerror();</div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;        routine_handle = dlsym(lib_handle, routine_name);</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    routine_handle = dlsym(lib_handle, routine_name);</div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;        dlsym_error = dlerror();</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    dlsym_error = dlerror();</div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        <span class="keywordflow">if</span>(dlsym_error) {</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;                printf(<span class="stringliteral">&quot;Cannot load symbol: &#39;pow&#39;: %s\n&quot;</span>, dlsym_error);</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;                dlclose(lib_handle);</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;                <span class="keywordflow">return</span> 1;</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;                printf(<span class="stringliteral">&quot;Symbol loaded: %s\n&quot;</span>, routine_name);</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        }</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    <span class="keywordflow">if</span>(dlsym_error) {</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        printf(<span class="stringliteral">&quot;Cannot load symbol: &#39;pow&#39;: %s\n&quot;</span>, dlsym_error);</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        dlclose(lib_handle);</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        <span class="keywordflow">return</span> 1;</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        printf(<span class="stringliteral">&quot;Symbol loaded: %s\n&quot;</span>, routine_name);</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    }</div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        <span class="comment">//printf(&quot;foo: %.2f\n&quot;, (double) routine_handle(4.0, 3.0));</span></div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        {</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;                ffi_cif cif;</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;                ffi_type **args;</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;                <span class="keywordtype">int</span> n_args;</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;                <span class="keywordtype">void</span> **values;</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;                <span class="keywordtype">double</span> *rc;</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;                <span class="keywordtype">int</span> i;</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;                <span class="keywordtype">double</span> a, b;</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <span class="comment">//printf(&quot;foo: %.2f\n&quot;, (double) routine_handle(4.0, 3.0));</span></div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    {</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        ffi_cif cif;</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        ffi_type **args;</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        <span class="keywordtype">int</span> n_args;</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        <span class="keywordtype">void</span> **values;</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        <span class="keywordtype">double</span> *rc;</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        <span class="keywordtype">int</span> i;</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        <span class="keywordtype">double</span> a, b;</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;                args = malloc(n_args*<span class="keyword">sizeof</span>(ffi_type*));</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;                values = malloc(n_args*<span class="keyword">sizeof</span>(<span class="keywordtype">void</span>*));</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;                rc = malloc(<span class="keyword">sizeof</span>(<span class="keywordtype">double</span>));</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        args = malloc(n_args*<span class="keyword">sizeof</span>(ffi_type*));</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        values = malloc(n_args*<span class="keyword">sizeof</span>(<span class="keywordtype">void</span>*));</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        rc = malloc(<span class="keyword">sizeof</span>(<span class="keywordtype">double</span>));</div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;                <span class="keywordflow">if</span>(!args || !values || !rc) {</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;                        printf(<span class="stringliteral">&quot;Could not allocate memory for ffi\n&quot;</span>);</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;                        <span class="keywordflow">return</span> 1;</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;                } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;                        printf(<span class="stringliteral">&quot;ffi memory allocated\n&quot;</span>);</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;                }</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        <span class="keywordflow">if</span>(!args || !values || !rc) {</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;            printf(<span class="stringliteral">&quot;Could not allocate memory for ffi\n&quot;</span>);</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;            <span class="keywordflow">return</span> 1;</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;            printf(<span class="stringliteral">&quot;ffi memory allocated\n&quot;</span>);</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        }</div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;                <span class="keywordflow">for</span>(i=0; i&lt;n_args; i++) {</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;                        args[i] = &amp;ffi_type_double;</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        <span class="keywordflow">for</span>(i=0; i&lt;n_args; i++) {</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;            args[i] = &amp;ffi_type_double;</div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;                }</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        }</div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;                values[0] = &amp;a;</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;                values[1] = &amp;b;</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        values[0] = &amp;a;</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        values[1] = &amp;b;</div>
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;                <span class="keywordflow">if</span>(ffi_prep_cif(&amp;cif, FFI_DEFAULT_ABI, n_args, &amp;ffi_type_double, args) == FFI_OK) {</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;        <span class="keywordflow">if</span>(ffi_prep_cif(&amp;cif, FFI_DEFAULT_ABI, n_args, &amp;ffi_type_double, args) == FFI_OK) {</div>
 <div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;                        ffi_call(&amp;cif, routine_name, rc, values);</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;            ffi_call(&amp;cif, routine_name, rc, values);</div>
 <div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;                        printf(<span class="stringliteral">&quot;%d\n&quot;</span>, (<span class="keywordtype">double</span>)*rc);</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;                }</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;            printf(<span class="stringliteral">&quot;%d\n&quot;</span>, (<span class="keywordtype">double</span>)*rc);</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        }</div>
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;</div>
 <div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;                <span class="keywordflow">for</span>(i=0;i&lt;n_args;i++) {</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;                        free(values[i]);</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;                }</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        }</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        dlclose(lib_handle);</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;        <span class="keywordflow">return</span> 0;</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        <span class="keywordflow">for</span>(i=0;i&lt;n_args;i++) {</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;            free(values[i]);</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;        }</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    }</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    dlclose(lib_handle);</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    <span class="keywordflow">return</span> 0;</div>
 <div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;}</div>
 <div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;</div>
 <div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;</div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 5 2013 16:05:26 for pmm by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Apr 5 2013 17:40:48 for pmm by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.1.2
 </small></address>

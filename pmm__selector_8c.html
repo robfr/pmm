@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">pmm
-   &#160;<span id="projectnumber">0.0.1</span>
+   &#160;<span id="projectnumber">1.0.0</span>
    </div>
   </td>
  </tr>
@@ -99,7 +99,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <code>#include &quot;<a class="el" href="pmm__param_8h_source.html">pmm_param.h</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="pmm__load_8h_source.html">pmm_load.h</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="pmm__log_8h_source.html">pmm_log.h</a>&quot;</code><br/>
-</div><table class="memberdecls">
+</div>
+<p><a href="pmm__selector_8c_source.html">Go to the source code of this file.</a></p>
+<table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a1237701870be277692964ab748b9ae7f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pmm__selector_8c.html#a1237701870be277692964ab748b9ae7f">check_benchmarking_minimums</a> (struct <a class="el" href="structpmm__routine.html">pmm_routine</a> *r, double t, int n)</td></tr>
@@ -142,6 +144,8 @@ Functions</h2></td></tr>
 <a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Code for chosing benchmark points. </p>
 <p>This is the core of the application, implementing many methods to choose benchmarking points to minimise the construction time of a model </p>
+
+<p>Definition in file <a class="el" href="pmm__selector_8c_source.html">pmm_selector.c</a>.</p>
 </div><h2>Function Documentation</h2>
 <a class="anchor" id="a12336867ec278870f344473f1c7b05ed"></a>
 <div class="memitem">
@@ -175,6 +179,8 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on success or -1 on failure </dd></dl>
+
+<p>Definition at line <a class="el" href="pmm__selector_8c_source.html#l01596">1596</a> of file <a class="el" href="pmm__selector_8c_source.html">pmm_selector.c</a>.</p>
 
 </div>
 </div>
@@ -210,6 +216,8 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on success or -1 on failure </dd></dl>
+
+<p>Definition at line <a class="el" href="pmm__selector_8c_source.html#l01463">1463</a> of file <a class="el" href="pmm__selector_8c_source.html">pmm_selector.c</a>.</p>
 
 </div>
 </div>
@@ -252,6 +260,8 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 if minimums are not satisfied, 1 if they are </dd></dl>
+
+<p>Definition at line <a class="el" href="pmm__selector_8c_source.html#l00388">388</a> of file <a class="el" href="pmm__selector_8c_source.html">pmm_selector.c</a>.</p>
 
 </div>
 </div>
@@ -303,6 +313,8 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on successful search (found or not found), -1 on failure </dd></dl>
 
+<p>Definition at line <a class="el" href="pmm__selector_8c_source.html#l02615">2615</a> of file <a class="el" href="pmm__selector_8c_source.html">pmm_selector.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="ab51341bc23606f2b7d76956a4b7d74df"></a>
@@ -326,6 +338,8 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>o on success, -1 on failure </dd></dl>
+
+<p>Definition at line <a class="el" href="pmm__selector_8c_source.html#l02160">2160</a> of file <a class="el" href="pmm__selector_8c_source.html">pmm_selector.c</a>.</p>
 
 </div>
 </div>
@@ -355,6 +369,8 @@ Functions</h2></td></tr>
 <p>Other intervals are added to benchmark neccessary extremeties of the parameter space and to tag the completion of the diagonal and the whole model in general.</p>
 <dl class="section return"><dt>Returns</dt><dd>0 on success or -1 on failure </dd></dl>
 
+<p>Definition at line <a class="el" href="pmm__selector_8c_source.html#l01305">1305</a> of file <a class="el" href="pmm__selector_8c_source.html">pmm_selector.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a92b97347d3b0d3878c3d2ee9aea78c5f"></a>
@@ -372,7 +388,15 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>Function initialises a construction intervals in a grid form across the whole parameter space. To form the grid, for each parameter, for all possible parameter values on that axis, intervals are projected parallel to all other axes.</p>
 <p>Other intervals are added to benchmark neccessary extremeties of the parameter space and to tag the completion of the diagonal and the whole model in general.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">r</td><td>pointer to the routine</td></tr>
+  </table>
+  </dd>
+</dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on success or -1 on failure </dd></dl>
+
+<p>Definition at line <a class="el" href="pmm__selector_8c_source.html#l00977">977</a> of file <a class="el" href="pmm__selector_8c_source.html">pmm_selector.c</a>.</p>
 
 </div>
 </div>
@@ -390,7 +414,15 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Function initialises a construction intervals for 1d naive bisection. A interval covering the problem space with bisection type is created. Two further 'point' type intervals are created at the end points of the bisection interval.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">r</td><td>pointer to the routine</td></tr>
+  </table>
+  </dd>
+</dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on success or -1 on failure </dd></dl>
+
+<p>Definition at line <a class="el" href="pmm__selector_8c_source.html#l00704">704</a> of file <a class="el" href="pmm__selector_8c_source.html">pmm_selector.c</a>.</p>
 
 </div>
 </div>
@@ -431,6 +463,8 @@ Functions</h2></td></tr>
 <dl class="section pre"><dt>Precondition</dt><dd>interval is of type IT_GBBP_CLIMB, IT_GBBP_BISECT or IT_GBBP_INFLECT</dd></dl>
 <p>TODO 'divisible' is the wrong adjective to describe this function </p>
 
+<p>Definition at line <a class="el" href="pmm__selector_8c_source.html#l03721">3721</a> of file <a class="el" href="pmm__selector_8c_source.html">pmm_selector.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a6ea3328595730175e11f693fd5183f16"></a>
@@ -468,6 +502,8 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 if not zero end point, 1 if nonzero end point </dd></dl>
 
+<p>Definition at line <a class="el" href="pmm__selector_8c_source.html#l01754">1754</a> of file <a class="el" href="pmm__selector_8c_source.html">pmm_selector.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="aae08ee9abe40ae2d60d6d47086e1bf0d"></a>
@@ -490,6 +526,8 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+<p>Definition at line <a class="el" href="pmm__selector_8c_source.html#l02288">2288</a> of file <a class="el" href="pmm__selector_8c_source.html">pmm_selector.c</a>.</p>
 
 </div>
 </div>
@@ -535,6 +573,8 @@ Functions</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>0 on success, -1 if no benchmark is associated with the interval type (i.e. IT_COMPLETE) or -2 on an error</dd></dl>
 <dl class="section pre"><dt>Precondition</dt><dd>params is a pointer to allocated memory of the correct size </dd></dl>
 
+<p>Definition at line <a class="el" href="pmm__selector_8c_source.html#l03816">3816</a> of file <a class="el" href="pmm__selector_8c_source.html">pmm_selector.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="adcc4067e41409ac46c806b2f2fc619d9"></a>
@@ -558,6 +598,8 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>pointer to an array describing the new benchmark point or NULL on failure </dd></dl>
+
+<p>Definition at line <a class="el" href="pmm__selector_8c_source.html#l01155">1155</a> of file <a class="el" href="pmm__selector_8c_source.html">pmm_selector.c</a>.</p>
 
 </div>
 </div>
@@ -609,6 +651,8 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 onsucces, -1 on failure to process intervals, -2 on complete failure to add benchmark to model </dd></dl>
 
+<p>Definition at line <a class="el" href="pmm__selector_8c_source.html#l02555">2555</a> of file <a class="el" href="pmm__selector_8c_source.html">pmm_selector.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a82f337eb3386410813f5135a60811f57"></a>
@@ -633,6 +677,8 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>pointer to an array describing the new benchmark point or NULL on failure </dd></dl>
 
+<p>Definition at line <a class="el" href="pmm__selector_8c_source.html#l00888">888</a> of file <a class="el" href="pmm__selector_8c_source.html">pmm_selector.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a34b247ec5756844a437899a17e31d2fd"></a>
@@ -648,7 +694,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>multi_gbbp - builds multi-parameter piece-wise performance models using the GBBP optimisation</p>
+<p>builds multi-parameter piece-wise performance models using the GBBP optimisation</p>
 <p>Alorithm description:</p>
 <p>init</p>
 <ul>
@@ -675,10 +721,19 @@ Functions</h2></td></tr>
 </ul>
 </li>
 <li>if stack is empty<ul>
-<li>mark model construction as complete </li>
+<li>mark model construction as complete</li>
 </ul>
 </li>
 </ul>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">r</td><td>pointer to the routine to build for</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>pointer to a newly allocated array containing the parameters of the selected benchmark </dd></dl>
+
+<p>Definition at line <a class="el" href="pmm__selector_8c_source.html#l02031">2031</a> of file <a class="el" href="pmm__selector_8c_source.html">pmm_selector.c</a>.</p>
 
 </div>
 </div>
@@ -707,6 +762,8 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>Process the insertion of a new benchmark into a model being constructed with a naive method. </p>
 
+<p>Definition at line <a class="el" href="pmm__selector_8c_source.html#l00329">329</a> of file <a class="el" href="pmm__selector_8c_source.html">pmm_selector.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="aea58aec78b0aba344c4332266eeb3294"></a>
@@ -731,6 +788,8 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>pointer to newly allocated parameter array describing next bench point or NULL on error </dd></dl>
+
+<p>Definition at line <a class="el" href="pmm__selector_8c_source.html#l00192">192</a> of file <a class="el" href="pmm__selector_8c_source.html">pmm_selector.c</a>.</p>
 
 </div>
 </div>
@@ -758,6 +817,8 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>pointer to newly allocated array describing parameters for the benchmark </dd></dl>
+
+<p>Definition at line <a class="el" href="pmm__selector_8c_source.html#l00797">797</a> of file <a class="el" href="pmm__selector_8c_source.html">pmm_selector.c</a>.</p>
 
 </div>
 </div>
@@ -794,6 +855,8 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on success, -1 on failure to process intervals, -2 on failure to insert benchmark </dd></dl>
 
+<p>Definition at line <a class="el" href="pmm__selector_8c_source.html#l02391">2391</a> of file <a class="el" href="pmm__selector_8c_source.html">pmm_selector.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a5456b8440d0037cffd3c8928e57c4bf0"></a>
@@ -817,6 +880,8 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>pointer to an array describing the new benchmark point or NULL on failure </dd></dl>
+
+<p>Definition at line <a class="el" href="pmm__selector_8c_source.html#l00609">609</a> of file <a class="el" href="pmm__selector_8c_source.html">pmm_selector.c</a>.</p>
 
 </div>
 </div>
@@ -858,6 +923,8 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on success, -1 on failure </dd></dl>
 
+<p>Definition at line <a class="el" href="pmm__selector_8c_source.html#l00436">436</a> of file <a class="el" href="pmm__selector_8c_source.html">pmm_selector.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="ae5b5e81cfa4bacb727711dd557da5ddb"></a>
@@ -892,6 +959,8 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>index of the last parameter that was incremented or N (the number of parameters) when all paramters overflowed, i.e. the start point could not be stepped and the last naive benchmark has been reached. </dd></dl>
+
+<p>Definition at line <a class="el" href="pmm__selector_8c_source.html#l00558">558</a> of file <a class="el" href="pmm__selector_8c_source.html">pmm_selector.c</a>.</p>
 
 </div>
 </div>
@@ -950,6 +1019,8 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>pointer to a new interval going from p_0,p_1, ... start_d, ... p_n to p_0, p_1, .... end_d, ... p_n </dd></dl>
 
+<p>Definition at line <a class="el" href="pmm__selector_8c_source.html#l01966">1966</a> of file <a class="el" href="pmm__selector_8c_source.html">pmm_selector.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a1d320975d86d119e6b950c78d4a313d1"></a>
@@ -999,6 +1070,8 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>1 if processing is successful, and no further intervals should be processed, 0 if processing is successful but further intervals should be processed, -1 if an error occurs. </dd></dl>
 
+<p>Definition at line <a class="el" href="pmm__selector_8c_source.html#l02785">2785</a> of file <a class="el" href="pmm__selector_8c_source.html">pmm_selector.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a89d53446deeabfc1cfc6c3380d5e86c7"></a>
@@ -1040,6 +1113,8 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on successful processing of interval, -1 on failure </dd></dl>
+
+<p>Definition at line <a class="el" href="pmm__selector_8c_source.html#l02699">2699</a> of file <a class="el" href="pmm__selector_8c_source.html">pmm_selector.c</a>.</p>
 
 </div>
 </div>
@@ -1097,6 +1172,8 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on success, -1 on failure </dd></dl>
 
+<p>Definition at line <a class="el" href="pmm__selector_8c_source.html#l03132">3132</a> of file <a class="el" href="pmm__selector_8c_source.html">pmm_selector.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a60cb009e16d60782c83ab8655545896c"></a>
@@ -1147,6 +1224,8 @@ Functions</h2></td></tr>
 <dl class="section pre"><dt>Precondition</dt><dd>interval i and benchmark b match, m is the correct model, etc.</dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on success, -1 on failure </dd></dl>
 
+<p>Definition at line <a class="el" href="pmm__selector_8c_source.html#l02889">2889</a> of file <a class="el" href="pmm__selector_8c_source.html">pmm_selector.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="adf60cbb408d9407a003eec3a8032a8c7"></a>
@@ -1183,6 +1262,8 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section pre"><dt>Precondition</dt><dd>i as the type IT_GBBP_EMPTY</dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on success </dd></dl>
+
+<p>Definition at line <a class="el" href="pmm__selector_8c_source.html#l02854">2854</a> of file <a class="el" href="pmm__selector_8c_source.html">pmm_selector.c</a>.</p>
 
 </div>
 </div>
@@ -1239,6 +1320,8 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on success, -1 on failure </dd></dl>
 
+<p>Definition at line <a class="el" href="pmm__selector_8c_source.html#l03430">3430</a> of file <a class="el" href="pmm__selector_8c_source.html">pmm_selector.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a66edda4b90cc972c59e1218936499632"></a>
@@ -1275,6 +1358,8 @@ Functions</h2></td></tr>
 <dl class="section pre"><dt>Precondition</dt><dd>interval i has a type IT_POINT</dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on success, -1 on failure </dd></dl>
 
+<p>Definition at line <a class="el" href="pmm__selector_8c_source.html#l03678">3678</a> of file <a class="el" href="pmm__selector_8c_source.html">pmm_selector.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a1982a78477698e3b99563456a3b238f0"></a>
@@ -1300,6 +1385,8 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on success, -1 on failure </dd></dl>
+
+<p>Definition at line <a class="el" href="pmm__selector_8c_source.html#l01800">1800</a> of file <a class="el" href="pmm__selector_8c_source.html">pmm_selector.c</a>.</p>
 
 </div>
 </div>
@@ -1335,6 +1422,8 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>random integer between the two values passed </dd></dl>
+
+<p>Definition at line <a class="el" href="pmm__selector_8c_source.html#l00856">856</a> of file <a class="el" href="pmm__selector_8c_source.html">pmm_selector.c</a>.</p>
 
 </div>
 </div>
@@ -1384,6 +1473,8 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 
+<p>Definition at line <a class="el" href="pmm__selector_8c_source.html#l02327">2327</a> of file <a class="el" href="pmm__selector_8c_source.html">pmm_selector.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="af0b037601262a05a6d04d07c4f4a1f58"></a>
@@ -1419,6 +1510,8 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section pre"><dt>Precondition</dt><dd>p is allocated and i is an interval of the correct type, with start and end points set (IT_BISECT, IT_INFLECT) </dd></dl>
+
+<p>Definition at line <a class="el" href="pmm__selector_8c_source.html#l03895">3895</a> of file <a class="el" href="pmm__selector_8c_source.html">pmm_selector.c</a>.</p>
 
 </div>
 </div>
@@ -1470,12 +1563,14 @@ Functions</h2></td></tr>
 <dl class="section pre"><dt>Precondition</dt><dd>interval should have start and end points set (i.e. be of the type IT_EMTPY, IT_GBBP_CLIMB, IT_GBBP_BISECT, IT_GBBP_INFLECT) though the function is only intended to operate on IT_GBBP_CLIMB interval types</dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on success, -1 if the step will exceed the end-point of the interval or -2 on error </dd></dl>
 
+<p>Definition at line <a class="el" href="pmm__selector_8c_source.html#l03082">3082</a> of file <a class="el" href="pmm__selector_8c_source.html">pmm_selector.c</a>.</p>
+
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 5 2013 14:58:33 for pmm by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Apr 5 2013 17:40:48 for pmm by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.1.2
 </small></address>

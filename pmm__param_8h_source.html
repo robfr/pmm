@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">pmm
-   &#160;<span id="projectnumber">0.0.1</span>
+   &#160;<span id="projectnumber">1.0.0</span>
    </div>
   </td>
  </tr>
@@ -105,7 +105,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment"></span></div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment">    You should have received a copy of the GNU General Public License</span></div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment">    along with PMM.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span></div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment">*/</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment">*/</span><span class="comment"></span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment">/*!</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment"> * @file   pmm_param.h</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment"> * @brief  data structures for model/benchmark parameters</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="comment"> *</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="comment"> */</span></div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#ifndef PMM_PARAM_H_</span></div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PMM_PARAM_H_</span></div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor"></span></div>
@@ -120,32 +125,44 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="preprocessor">#ifdef HAVE_MUPARSER</span></div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="preprocessor"></span><span class="keyword">struct </span><a class="code" href="structpmm__param__constraint__muparser.html">pmm_param_constraint_muparser</a>;   <span class="comment">//&lt; forward declaration</span></div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="preprocessor"></span><span class="comment">/*!</span></div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="comment"> * Structure defining a parameter of a routine</span></div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="comment"> */</span></div>
 <div class="line"><a name="l00042"></a><span class="lineno"><a class="code" href="structpmm__paramdef.html">   42</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="structpmm__paramdef.html">pmm_paramdef</a> {</div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="comment">/*</span></div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="comment">     * TODO allow definition of a mathematical sequence to govern permissable</span></div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="comment">     * parameters. At present stride and offset allow a sequence equvilent</span></div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="comment">     * to: a*x + b where a = stride and b = offset</span></div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00048"></a><span class="lineno"><a class="code" href="structpmm__paramdef.html#a2fd54ad669ea6676bc54e3a8c0ccc063">   48</a></span>&#160;        <span class="keywordtype">char</span> *<a class="code" href="structpmm__paramdef.html#a2fd54ad669ea6676bc54e3a8c0ccc063">name</a>;         </div>
-<div class="line"><a name="l00049"></a><span class="lineno"><a class="code" href="structpmm__paramdef.html#a9574b1c9c8b8fdf6fbaec045f11c9b09">   49</a></span>&#160;        <span class="keywordtype">int</span> <a class="code" href="structpmm__paramdef.html#a9574b1c9c8b8fdf6fbaec045f11c9b09">type</a>;           </div>
-<div class="line"><a name="l00050"></a><span class="lineno"><a class="code" href="structpmm__paramdef.html#a37daef9b55c74e8bf65821d5b8f31afa">   50</a></span>&#160;        <span class="keywordtype">int</span> <a class="code" href="structpmm__paramdef.html#a37daef9b55c74e8bf65821d5b8f31afa">order</a>;          </div>
-<div class="line"><a name="l00052"></a><span class="lineno"><a class="code" href="structpmm__paramdef.html#ac48fd1f2b85c4c705bff24e1455be42b">   52</a></span>&#160;    <span class="keywordtype">int</span> <a class="code" href="structpmm__paramdef.html#ac48fd1f2b85c4c705bff24e1455be42b">nonzero_end</a>;    </div>
-<div class="line"><a name="l00054"></a><span class="lineno"><a class="code" href="structpmm__paramdef.html#aeefe385ef1f9223ce7b9917ffe846737">   54</a></span>&#160;        <span class="keywordtype">int</span> <a class="code" href="structpmm__paramdef.html#aeefe385ef1f9223ce7b9917ffe846737">end</a>;            </div>
-<div class="line"><a name="l00055"></a><span class="lineno"><a class="code" href="structpmm__paramdef.html#a832e0696b11902af685bca8e8ca99c57">   55</a></span>&#160;        <span class="keywordtype">int</span> <a class="code" href="structpmm__paramdef.html#a832e0696b11902af685bca8e8ca99c57">start</a>;          </div>
-<div class="line"><a name="l00056"></a><span class="lineno"><a class="code" href="structpmm__paramdef.html#aa6d5577edc2faf9df52ffbcd5c8cce67">   56</a></span>&#160;    <span class="keywordtype">int</span> <a class="code" href="structpmm__paramdef.html#aa6d5577edc2faf9df52ffbcd5c8cce67">stride</a>;         </div>
-<div class="line"><a name="l00057"></a><span class="lineno"><a class="code" href="structpmm__paramdef.html#aa41fd62c9db57508f30397eaedfe5a86">   57</a></span>&#160;    <span class="keywordtype">int</span> <a class="code" href="structpmm__paramdef.html#aa41fd62c9db57508f30397eaedfe5a86">offset</a>;         </div>
+<div class="line"><a name="l00048"></a><span class="lineno"><a class="code" href="structpmm__paramdef.html#a2fd54ad669ea6676bc54e3a8c0ccc063">   48</a></span>&#160;    <span class="keywordtype">char</span> *<a class="code" href="structpmm__paramdef.html#a2fd54ad669ea6676bc54e3a8c0ccc063">name</a>;         <span class="comment">/*!&lt; name of parameter */</span></div>
+<div class="line"><a name="l00049"></a><span class="lineno"><a class="code" href="structpmm__paramdef.html#a9574b1c9c8b8fdf6fbaec045f11c9b09">   49</a></span>&#160;    <span class="keywordtype">int</span> <a class="code" href="structpmm__paramdef.html#a9574b1c9c8b8fdf6fbaec045f11c9b09">type</a>;           <span class="comment">/*!&lt; */</span></div>
+<div class="line"><a name="l00050"></a><span class="lineno"><a class="code" href="structpmm__paramdef.html#a37daef9b55c74e8bf65821d5b8f31afa">   50</a></span>&#160;    <span class="keywordtype">int</span> <a class="code" href="structpmm__paramdef.html#a37daef9b55c74e8bf65821d5b8f31afa">order</a>;          <span class="comment">/*!&lt; order in the sequence of parameters passed to</span></div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="comment">                             benchmarking routine */</span></div>
+<div class="line"><a name="l00052"></a><span class="lineno"><a class="code" href="structpmm__paramdef.html#ac48fd1f2b85c4c705bff24e1455be42b">   52</a></span>&#160;    <span class="keywordtype">int</span> <a class="code" href="structpmm__paramdef.html#ac48fd1f2b85c4c705bff24e1455be42b">nonzero_end</a>;    <span class="comment">/*!&lt; toggle assumtion of zero speed at parameter end</span></div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="comment">                             value */</span></div>
+<div class="line"><a name="l00054"></a><span class="lineno"><a class="code" href="structpmm__paramdef.html#aeefe385ef1f9223ce7b9917ffe846737">   54</a></span>&#160;    <span class="keywordtype">int</span> <a class="code" href="structpmm__paramdef.html#aeefe385ef1f9223ce7b9917ffe846737">end</a>;            <span class="comment">/*!&lt; ending value of parameter range */</span></div>
+<div class="line"><a name="l00055"></a><span class="lineno"><a class="code" href="structpmm__paramdef.html#a832e0696b11902af685bca8e8ca99c57">   55</a></span>&#160;    <span class="keywordtype">int</span> <a class="code" href="structpmm__paramdef.html#a832e0696b11902af685bca8e8ca99c57">start</a>;          <span class="comment">/*!&lt; starting value of parameter range */</span></div>
+<div class="line"><a name="l00056"></a><span class="lineno"><a class="code" href="structpmm__paramdef.html#aa6d5577edc2faf9df52ffbcd5c8cce67">   56</a></span>&#160;    <span class="keywordtype">int</span> <a class="code" href="structpmm__paramdef.html#aa6d5577edc2faf9df52ffbcd5c8cce67">stride</a>;         <span class="comment">/*!&lt; stride to use traversing parameter range */</span></div>
+<div class="line"><a name="l00057"></a><span class="lineno"><a class="code" href="structpmm__paramdef.html#aa41fd62c9db57508f30397eaedfe5a86">   57</a></span>&#160;    <span class="keywordtype">int</span> <a class="code" href="structpmm__paramdef.html#aa41fd62c9db57508f30397eaedfe5a86">offset</a>;         <span class="comment">/*!&lt; offset from starting value to use traversing</span></div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="comment">                             parameter range */</span></div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;} <a class="code" href="pmm__param_8h.html#a97219015064f4c4c6573dfccd436d20a">PMM_Paramdef</a>;</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="comment"></span></div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="comment">/*!</span></div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="comment"> * structure describing a set of parameters and a formula in terms of</span></div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="comment"> * those parameters which may be constrained (i.e. parameters a, b, formula:a*b,</span></div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="comment"> * constraint on formula &lt; 1000)</span></div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="comment"> */</span></div>
 <div class="line"><a name="l00066"></a><span class="lineno"><a class="code" href="structpmm__paramdef__set.html">   66</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="structpmm__paramdef__set.html">pmm_paramdef_set</a> {</div>
-<div class="line"><a name="l00067"></a><span class="lineno"><a class="code" href="structpmm__paramdef__set.html#aaf2e3c0d854fddee13df808d7b8c13e8">   67</a></span>&#160;    <span class="keywordtype">int</span> <a class="code" href="structpmm__paramdef__set.html#aaf2e3c0d854fddee13df808d7b8c13e8">n_p</a>;                            </div>
-<div class="line"><a name="l00068"></a><span class="lineno"><a class="code" href="structpmm__paramdef__set.html#a21002ef85eabb0d96750c6a0cdce96c0">   68</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structpmm__paramdef.html">pmm_paramdef</a> *<a class="code" href="structpmm__paramdef__set.html#a21002ef85eabb0d96750c6a0cdce96c0">pd_array</a>;      </div>
-<div class="line"><a name="l00069"></a><span class="lineno"><a class="code" href="structpmm__paramdef__set.html#a464c3f385beb49086fbea74a3ce229d0">   69</a></span>&#160;    <span class="keywordtype">char</span> *<a class="code" href="structpmm__paramdef__set.html#a464c3f385beb49086fbea74a3ce229d0">pc_formula</a>;                   </div>
-<div class="line"><a name="l00070"></a><span class="lineno"><a class="code" href="structpmm__paramdef__set.html#a9749805cd8bc1b6ccd757cc9148683d8">   70</a></span>&#160;    <span class="keywordtype">int</span> <a class="code" href="structpmm__paramdef__set.html#a9749805cd8bc1b6ccd757cc9148683d8">pc_max</a>;                         </div>
+<div class="line"><a name="l00067"></a><span class="lineno"><a class="code" href="structpmm__paramdef__set.html#aaf2e3c0d854fddee13df808d7b8c13e8">   67</a></span>&#160;    <span class="keywordtype">int</span> <a class="code" href="structpmm__paramdef__set.html#aaf2e3c0d854fddee13df808d7b8c13e8">n_p</a>;                            <span class="comment">/*!&lt; number of parameters in set */</span></div>
+<div class="line"><a name="l00068"></a><span class="lineno"><a class="code" href="structpmm__paramdef__set.html#a21002ef85eabb0d96750c6a0cdce96c0">   68</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structpmm__paramdef.html">pmm_paramdef</a> *<a class="code" href="structpmm__paramdef__set.html#a21002ef85eabb0d96750c6a0cdce96c0">pd_array</a>;      <span class="comment">/*!&lt; array of parameter definitions */</span></div>
+<div class="line"><a name="l00069"></a><span class="lineno"><a class="code" href="structpmm__paramdef__set.html#a464c3f385beb49086fbea74a3ce229d0">   69</a></span>&#160;    <span class="keywordtype">char</span> *<a class="code" href="structpmm__paramdef__set.html#a464c3f385beb49086fbea74a3ce229d0">pc_formula</a>;                   <span class="comment">/*!&lt; formula for parameter constraint */</span></div>
+<div class="line"><a name="l00070"></a><span class="lineno"><a class="code" href="structpmm__paramdef__set.html#a9749805cd8bc1b6ccd757cc9148683d8">   70</a></span>&#160;    <span class="keywordtype">int</span> <a class="code" href="structpmm__paramdef__set.html#a9749805cd8bc1b6ccd757cc9148683d8">pc_max</a>;                         <span class="comment">/*!&lt; max of parameter constraint */</span></div>
 <div class="line"><a name="l00071"></a><span class="lineno"><a class="code" href="structpmm__paramdef__set.html#ab69c42d0bb271fb104d45d5f9266e645">   71</a></span>&#160;    <span class="keywordtype">int</span> <a class="code" href="structpmm__paramdef__set.html#ab69c42d0bb271fb104d45d5f9266e645">pc_min</a>;                         <span class="comment">/*&lt; min of parameter constraint */</span></div>
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;</div>
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="preprocessor">#ifdef HAVE_MUPARSER</span></div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="preprocessor"></span>    <span class="keyword">struct </span><a class="code" href="structpmm__param__constraint__muparser.html">pmm_param_constraint_muparser</a> *pc_parser; </div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="preprocessor"></span>    <span class="keyword">struct </span><a class="code" href="structpmm__param__constraint__muparser.html">pmm_param_constraint_muparser</a> *pc_parser; <span class="comment">/*!&lt; muparser structure</span></div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="comment">                                                          used for parameter</span></div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;<span class="comment">                                                          constraint */</span></div>
 <div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;<span class="preprocessor"></span></div>
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;} <a class="code" href="pmm__param_8h.html#a948da8cb9c84581b600ce3fd505ac0de">PMM_Paramdef_Set</a>;</div>
@@ -216,7 +233,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 5 2013 14:58:33 for pmm by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Apr 5 2013 17:40:47 for pmm by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.1.2
 </small></address>

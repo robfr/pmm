@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">pmm
-   &#160;<span id="projectnumber">0.0.1</span>
+   &#160;<span id="projectnumber">1.0.0</span>
    </div>
   </td>
  </tr>
@@ -102,7 +102,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <code>#include &lt;sys/param.h&gt;</code><br/>
 <code>#include &quot;<a class="el" href="pmm__model_8h_source.html">pmm_model.h</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="pmm__cond_8h_source.html">pmm_cond.h</a>&quot;</code><br/>
-</div><table class="memberdecls">
+</div>
+<p><a href="pmm__cond_8c_source.html">Go to the source code of this file.</a></p>
+<table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a5ce75821a21badfcc4ba19c17221ed41"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pmm__cond_8c.html#a5ce75821a21badfcc4ba19c17221ed41">ttystat</a> (char *line, int sz)</td></tr>
@@ -114,6 +116,8 @@ Functions</h2></td></tr>
 <a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Functions to test system conditions. </p>
 <p>this file contains the code for testing system conditions which may limit or permit the construction of models by the pmm daemon </p>
+
+<p>Definition in file <a class="el" href="pmm__cond_8c_source.html">pmm_cond.c</a>.</p>
 </div><h2>Function Documentation</h2>
 <a class="anchor" id="a7d820e16efe20d53ec309f55c73377a2"></a>
 <div class="memitem">
@@ -137,6 +141,8 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 if routine is not execuable based on conditions, 1 if it is </dd></dl>
 
+<p>Definition at line <a class="el" href="pmm__cond_8c_source.html#l00170">170</a> of file <a class="el" href="pmm__cond_8c_source.html">pmm_cond.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a52d2182f99ae8254a660a7ed1dfd32e3"></a>
@@ -155,6 +161,8 @@ Functions</h2></td></tr>
 <p>true if 5 minute load is below 0.1</p>
 <p>return 0 if not idle, 1 if idle </p>
 
+<p>Definition at line <a class="el" href="pmm__cond_8c_source.html#l00143">143</a> of file <a class="el" href="pmm__cond_8c_source.html">pmm_cond.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="affec7c579a43c6332b4363c6b6fd9c49"></a>
@@ -169,6 +177,8 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="pmm__cond_8c_source.html#l00128">128</a> of file <a class="el" href="pmm__cond_8c_source.html">pmm_cond.c</a>.</p>
 
 </div>
 </div>
@@ -187,6 +197,8 @@ Functions</h2></td></tr>
 <p>counts the number of users logged into a system by reading utmp returns the number of users logged in.</p>
 <p>code comes from FreeBSD /usr/src/usr.bin/w/w.c</p>
 <dl class="section return"><dt>Returns</dt><dd>number of users logged in </dd></dl>
+
+<p>Definition at line <a class="el" href="pmm__cond_8c_source.html#l00090">90</a> of file <a class="el" href="pmm__cond_8c_source.html">pmm_cond.c</a>.</p>
 
 </div>
 </div>
@@ -225,12 +237,14 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>1 if user has a tty, 0 if user does not. </dd></dl>
 
+<p>Definition at line <a class="el" href="pmm__cond_8c_source.html#l00062">62</a> of file <a class="el" href="pmm__cond_8c_source.html">pmm_cond.c</a>.</p>
+
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 5 2013 14:58:33 for pmm by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Apr 5 2013 17:40:48 for pmm by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.1.2
 </small></address>

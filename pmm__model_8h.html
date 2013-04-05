@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">pmm
-   &#160;<span id="projectnumber">0.0.1</span>
+   &#160;<span id="projectnumber">1.0.0</span>
    </div>
   </td>
  </tr>
@@ -222,6 +222,8 @@ Functions</h2></td></tr>
 <a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>general PMM data structures </p>
 <p>Data structures representing models, routines and the benchmarking server configuration are described here, along with functions that operate on them. </p>
+
+<p>Definition in file <a class="el" href="pmm__model_8h_source.html">pmm_model.h</a>.</p>
 </div><h2>Typedef Documentation</h2>
 <a class="anchor" id="ab14790c8648668b9fd27f4a2bc3e28a5"></a>
 <div class="memitem">
@@ -344,6 +346,8 @@ Functions</h2></td></tr>
 </dd>
 </dl>
 
+<p>Definition at line <a class="el" href="pmm__model_8h_source.html#l00047">47</a> of file <a class="el" href="pmm__model_8h_source.html">pmm_model.h</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="aaa50bee09f2f605a884a2d93de5bf0d0"></a>
@@ -378,6 +382,8 @@ Functions</h2></td></tr>
 </table>
 </dd>
 </dl>
+
+<p>Definition at line <a class="el" href="pmm__model_8h_source.html#l00094">94</a> of file <a class="el" href="pmm__model_8h_source.html">pmm_model.h</a>.</p>
 
 </div>
 </div>
@@ -424,6 +430,8 @@ Functions</h2></td></tr>
 <dd>
 all benchmarks have non-performance data identical (param array, etc). </dd></dl>
 
+<p>Definition at line <a class="el" href="pmm__model_8c_source.html#l01391">1391</a> of file <a class="el" href="pmm__model_8c_source.html">pmm_model.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a421a0e28e1bb090ede413503c0eef5a5"></a>
@@ -458,6 +466,8 @@ all benchmarks have non-performance data identical (param array, etc). </dd></dl
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on success, -1 on failure </dd></dl>
+
+<p>Definition at line <a class="el" href="pmm__model_8c_source.html#l00393">393</a> of file <a class="el" href="pmm__model_8c_source.html">pmm_model.c</a>.</p>
 
 </div>
 </div>
@@ -502,6 +512,8 @@ all benchmarks have non-performance data identical (param array, etc). </dd></dl
 <dl class="section pre"><dt>Precondition</dt><dd>benchmarks in the sequence defined by start &amp; end are all at the same point, i.e. the values in their p array are identical </dd>
 <dd>
 b is a non-NULL allocated structure </dd></dl>
+
+<p>Definition at line <a class="el" href="pmm__model_8c_source.html#l01324">1324</a> of file <a class="el" href="pmm__model_8c_source.html">pmm_model.c</a>.</p>
 
 </div>
 </div>
@@ -557,6 +569,8 @@ b is a non-NULL allocated structure </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>1 if the values of the model at b1 contain the values of the model at b2, 0 otherwise </dd></dl>
+
+<p>Definition at line <a class="el" href="pmm__model_8c_source.html#l02120">2120</a> of file <a class="el" href="pmm__model_8c_source.html">pmm_model.c</a>.</p>
 
 </div>
 </div>
@@ -617,6 +631,8 @@ b is a non-NULL allocated structure </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>1 if the values of the model at b1 are greater than the values of the model at b2, 0 otherwise </dd></dl>
 
+<p>Definition at line <a class="el" href="pmm__model_8c_source.html#l02259">2259</a> of file <a class="el" href="pmm__model_8c_source.html">pmm_model.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a5ea851425749f76c6ad925a544ab02ab"></a>
@@ -673,6 +689,8 @@ b is a non-NULL allocated structure </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>1 if values of model at b1 intersect values of model at b2, 0 otherwise </dd></dl>
 
+<p>Definition at line <a class="el" href="pmm__model_8c_source.html#l02194">2194</a> of file <a class="el" href="pmm__model_8c_source.html">pmm_model.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="ad2a4f4ae37ea1ab33cfa049fd5255c64"></a>
@@ -715,6 +733,8 @@ b is a non-NULL allocated structure </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>1 if the values of the model at b1 are less than the values of the model at b2, 0 otherwise </dd></dl>
 
+<p>Definition at line <a class="el" href="pmm__model_8c_source.html#l02283">2283</a> of file <a class="el" href="pmm__model_8c_source.html">pmm_model.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a29cf08b08020514b1545927e81c25558"></a>
@@ -749,6 +769,8 @@ b is a non-NULL allocated structure </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the plane index of the axis the benchmark belongs to or -1 if on all boundaries (i.e. at origin), or -2 if on no boundaries </dd></dl>
+
+<p>Definition at line <a class="el" href="pmm__model_8c_source.html#l00683">683</a> of file <a class="el" href="pmm__model_8c_source.html">pmm_model.c</a>.</p>
 
 </div>
 </div>
@@ -799,6 +821,8 @@ b is a non-NULL allocated structure </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>double that is the number of secounds spent benchmarking the point described by param </dd></dl>
 
+<p>Definition at line <a class="el" href="pmm__model_8c_source.html#l01760">1760</a> of file <a class="el" href="pmm__model_8c_source.html">pmm_model.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="aa6e0da715f273efb1fafcf2f9218c94e"></a>
@@ -822,6 +846,8 @@ b is a non-NULL allocated structure </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>time spend executing benchmarks in model </dd></dl>
+
+<p>Definition at line <a class="el" href="pmm__model_8c_source.html#l01806">1806</a> of file <a class="el" href="pmm__model_8c_source.html">pmm_model.c</a>.</p>
 
 </div>
 </div>
@@ -847,6 +873,8 @@ b is a non-NULL allocated structure </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>1 if routine is OK, 0 if routine is BAD </dd></dl>
 
+<p>Definition at line <a class="el" href="pmm__model_8c_source.html#l02684">2684</a> of file <a class="el" href="pmm__model_8c_source.html">pmm_model.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a8269d0349026172d3b6b83ee62e7cb52"></a>
@@ -871,6 +899,8 @@ b is a non-NULL allocated structure </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>pointer to a character array describing the condition </dd></dl>
 
+<p>Definition at line <a class="el" href="pmm__model_8c_source.html#l02333">2333</a> of file <a class="el" href="pmm__model_8c_source.html">pmm_model.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="ae19e0ad31ade2c5ce94f6dfbc2825fd5"></a>
@@ -894,6 +924,8 @@ b is a non-NULL allocated structure </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>pointer to a character array describing the method </dd></dl>
+
+<p>Definition at line <a class="el" href="pmm__model_8c_source.html#l02305">2305</a> of file <a class="el" href="pmm__model_8c_source.html">pmm_model.c</a>.</p>
 
 </div>
 </div>
@@ -931,6 +963,8 @@ b is a non-NULL allocated structure </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>-1 on failure, 0 on success</dd></dl>
 <dl class="section pre"><dt>Precondition</dt><dd>dst structure is non NULL, but it's p array element is NULL </dd></dl>
 
+<p>Definition at line <a class="el" href="pmm__model_8c_source.html#l00702">702</a> of file <a class="el" href="pmm__model_8c_source.html">pmm_model.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a8092d34302f5faf6264ea0b3f7d58259"></a>
@@ -966,6 +1000,8 @@ b is a non-NULL allocated structure </dd></dl>
 </dl>
 <dl class="section pre"><dt>Precondition</dt><dd>src and dst are non-NULL </dd></dl>
 
+<p>Definition at line <a class="el" href="pmm__model_8c_source.html#l01459">1459</a> of file <a class="el" href="pmm__model_8c_source.html">pmm_model.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a8e00c5d2d264e05c334f5272467caf09"></a>
@@ -989,6 +1025,8 @@ b is a non-NULL allocated structure </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>number of benchmarks in the list </dd></dl>
+
+<p>Definition at line <a class="el" href="pmm__model_8c_source.html#l00633">633</a> of file <a class="el" href="pmm__model_8c_source.html">pmm_model.c</a>.</p>
 
 </div>
 </div>
@@ -1014,6 +1052,8 @@ b is a non-NULL allocated structure </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>number of benchmarks </dd></dl>
 
+<p>Definition at line <a class="el" href="pmm__model_8c_source.html#l00614">614</a> of file <a class="el" href="pmm__model_8c_source.html">pmm_model.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a63614db8b5a22cf1762538e8de2e789d"></a>
@@ -1037,6 +1077,8 @@ b is a non-NULL allocated structure </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>number of unqiue benchmarks in the list </dd></dl>
+
+<p>Definition at line <a class="el" href="pmm__model_8c_source.html#l00656">656</a> of file <a class="el" href="pmm__model_8c_source.html">pmm_model.c</a>.</p>
 
 </div>
 </div>
@@ -1084,6 +1126,8 @@ divisor is non-zero and positive </dd>
 <dd>
 all benchmarks have identical non-performance data (param array, etc). </dd></dl>
 
+<p>Definition at line <a class="el" href="pmm__model_8c_source.html#l01417">1417</a> of file <a class="el" href="pmm__model_8c_source.html">pmm_model.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a9e5588c4f198e99174b9515a879d965a"></a>
@@ -1118,6 +1162,8 @@ all benchmarks have identical non-performance data (param array, etc). </dd></dl
   </dd>
 </dl>
 
+<p>Definition at line <a class="el" href="pmm__model_8c_source.html#l01501">1501</a> of file <a class="el" href="pmm__model_8c_source.html">pmm_model.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a2979e7519234ce449cfe5c84973707a8"></a>
@@ -1151,6 +1197,8 @@ all benchmarks have identical non-performance data (param array, etc). </dd></dl
   </table>
   </dd>
 </dl>
+
+<p>Definition at line <a class="el" href="pmm__model_8c_source.html#l01486">1486</a> of file <a class="el" href="pmm__model_8c_source.html">pmm_model.c</a>.</p>
 
 </div>
 </div>
@@ -1196,6 +1244,8 @@ all benchmarks have identical non-performance data (param array, etc). </dd></dl
 <dl class="section return"><dt>Returns</dt><dd>pointer to the fastest benchmark in the list, in place, or NULL on error</dd></dl>
 <dl class="section pre"><dt>Precondition</dt><dd>start must point to a benchmark that is positioned in the sorted list before, or as the very first instance of a benchmark matching the target parameters, otherwise the max returned may not be correct </dd></dl>
 
+<p>Definition at line <a class="el" href="pmm__model_8c_source.html#l00992">992</a> of file <a class="el" href="pmm__model_8c_source.html">pmm_model.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a9d37a50293372657605dcc3ee758113f"></a>
@@ -1239,6 +1289,8 @@ all benchmarks have identical non-performance data (param array, etc). </dd></dl
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>a pointer to a newly allocated benchmark that gives an approximation of the model at the target point, ignoring any data at the exact point or NULL on error </dd></dl>
 
+<p>Definition at line <a class="el" href="pmm__model_8c_source.html#l01904">1904</a> of file <a class="el" href="pmm__model_8c_source.html">pmm_model.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="abc1b39702607a09f50512901ab940e41"></a>
@@ -1261,6 +1313,8 @@ all benchmarks have identical non-performance data (param array, etc). </dd></dl
   </table>
   </dd>
 </dl>
+
+<p>Definition at line <a class="el" href="pmm__model_8c_source.html#l02826">2826</a> of file <a class="el" href="pmm__model_8c_source.html">pmm_model.c</a>.</p>
 
 </div>
 </div>
@@ -1285,6 +1339,8 @@ all benchmarks have identical non-performance data (param array, etc). </dd></dl
   </dd>
 </dl>
 
+<p>Definition at line <a class="el" href="pmm__model_8c_source.html#l02881">2881</a> of file <a class="el" href="pmm__model_8c_source.html">pmm_model.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="ad62c9c4e64faaf442d12636552c445b5"></a>
@@ -1307,6 +1363,8 @@ all benchmarks have identical non-performance data (param array, etc). </dd></dl
   </table>
   </dd>
 </dl>
+
+<p>Definition at line <a class="el" href="pmm__model_8c_source.html#l02862">2862</a> of file <a class="el" href="pmm__model_8c_source.html">pmm_model.c</a>.</p>
 
 </div>
 </div>
@@ -1331,6 +1389,8 @@ all benchmarks have identical non-performance data (param array, etc). </dd></dl
   </dd>
 </dl>
 
+<p>Definition at line <a class="el" href="pmm__model_8c_source.html#l02841">2841</a> of file <a class="el" href="pmm__model_8c_source.html">pmm_model.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a1307b9686ad3732790226d4b5762eaa3"></a>
@@ -1353,6 +1413,8 @@ all benchmarks have identical non-performance data (param array, etc). </dd></dl
   </table>
   </dd>
 </dl>
+
+<p>Definition at line <a class="el" href="pmm__model_8c_source.html#l02751">2751</a> of file <a class="el" href="pmm__model_8c_source.html">pmm_model.c</a>.</p>
 
 </div>
 </div>
@@ -1377,6 +1439,8 @@ all benchmarks have identical non-performance data (param array, etc). </dd></dl
   </dd>
 </dl>
 
+<p>Definition at line <a class="el" href="pmm__load_8c_source.html#l00243">243</a> of file <a class="el" href="pmm__load_8c_source.html">pmm_load.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a25e509a5c5657676dd17839a48dfbc1d"></a>
@@ -1400,6 +1464,8 @@ all benchmarks have identical non-performance data (param array, etc). </dd></dl
   </dd>
 </dl>
 
+<p>Definition at line <a class="el" href="pmm__model_8c_source.html#l02803">2803</a> of file <a class="el" href="pmm__model_8c_source.html">pmm_model.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a38cedff395b230e80739edac0779b28d"></a>
@@ -1422,6 +1488,8 @@ all benchmarks have identical non-performance data (param array, etc). </dd></dl
   </table>
   </dd>
 </dl>
+
+<p>Definition at line <a class="el" href="pmm__model_8c_source.html#l02773">2773</a> of file <a class="el" href="pmm__model_8c_source.html">pmm_model.c</a>.</p>
 
 </div>
 </div>
@@ -1467,6 +1535,8 @@ all benchmarks have identical non-performance data (param array, etc). </dd></dl
 <dl class="section return"><dt>Returns</dt><dd>pointer to a newly allocated benchmark that is an average of all benchmarks with matching aligned parameters or NULL on error</dd></dl>
 <dl class="section pre"><dt>Precondition</dt><dd>the parameter array has the same size as the number of parameters the model has been built in terms of </dd></dl>
 
+<p>Definition at line <a class="el" href="pmm__model_8c_source.html#l01694">1694</a> of file <a class="el" href="pmm__model_8c_source.html">pmm_model.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="ad3a14ba3fa6b3670b7b2ac6e8ecbf1d3"></a>
@@ -1510,6 +1580,8 @@ all benchmarks have identical non-performance data (param array, etc). </dd></dl
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>pointer to a newly allocated benchmark that is an average of all benchmarks with matching parameters</dd></dl>
 <dl class="section pre"><dt>Precondition</dt><dd>the parameter array has the same size as the number of parameters the model has been built in terms of </dd></dl>
+
+<p>Definition at line <a class="el" href="pmm__model_8c_source.html#l01733">1733</a> of file <a class="el" href="pmm__model_8c_source.html">pmm_model.c</a>.</p>
 
 </div>
 </div>
@@ -1555,6 +1627,8 @@ all benchmarks have identical non-performance data (param array, etc). </dd></dl
 <dl class="section return"><dt>Returns</dt><dd>pointer to a newly allocated benchmark that is an average of any benchmarks found in the boundary model with matching parameters or NULL if no benchmark with matching parameters is found</dd></dl>
 <dl class="section pre"><dt>Precondition</dt><dd>start must point to a benchmark that is positioned in the sorted list before, or as the very first instance of a benchmark matching the target parameters, otherwise the average returned will not be accurate </dd></dl>
 
+<p>Definition at line <a class="el" href="pmm__model_8c_source.html#l01046">1046</a> of file <a class="el" href="pmm__model_8c_source.html">pmm_model.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a8c36369b90a21469e3bd86e5404ed3ee"></a>
@@ -1598,6 +1672,8 @@ all benchmarks have identical non-performance data (param array, etc). </dd></dl
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>pointer to the first instance of a benchmark with parameters matching the param array</dd></dl>
 <dl class="section pre"><dt>Precondition</dt><dd>the parameter array has the same size as the number of parameters the model has been built in terms of </dd></dl>
+
+<p>Definition at line <a class="el" href="pmm__model_8c_source.html#l01665">1665</a> of file <a class="el" href="pmm__model_8c_source.html">pmm_model.c</a>.</p>
 
 </div>
 </div>
@@ -1643,6 +1719,8 @@ all benchmarks have identical non-performance data (param array, etc). </dd></dl
 <dl class="section return"><dt>Returns</dt><dd>pointer to the first occurance of a benchmark with matching parameters or NULL if no such benchmark is found</dd></dl>
 <dl class="section pre"><dt>Precondition</dt><dd>the number of parameters of the param array and the list model are equal </dd></dl>
 
+<p>Definition at line <a class="el" href="pmm__model_8c_source.html#l01596">1596</a> of file <a class="el" href="pmm__model_8c_source.html">pmm_model.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="ac3c0ea2f54c13f2086b292f57b6f253c"></a>
@@ -1675,6 +1753,8 @@ all benchmarks have identical non-performance data (param array, etc). </dd></dl
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>pointer to the next benchmark in the list (that b belongs to), which has a different set of parameters associated with it. This may be null if the benchmark b is the last benchmark in the list </dd></dl>
 
+<p>Definition at line <a class="el" href="pmm__model_8c_source.html#l01245">1245</a> of file <a class="el" href="pmm__model_8c_source.html">pmm_model.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a422464d759c6ed60ea0e17517af6ab7a"></a>
@@ -1706,6 +1786,8 @@ all benchmarks have identical non-performance data (param array, etc). </dd></dl
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>pointer to the previous benchmark in the list (that b belongs to), which has a different set of parameters associated with it. This may be NULL if the benchmark b is the first benchmark in the list. </dd></dl>
+
+<p>Definition at line <a class="el" href="pmm__model_8c_source.html#l01288">1288</a> of file <a class="el" href="pmm__model_8c_source.html">pmm_model.c</a>.</p>
 
 </div>
 </div>
@@ -1743,6 +1825,8 @@ all benchmarks have identical non-performance data (param array, etc). </dd></dl
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on success, -1 on failure </dd></dl>
+
+<p>Definition at line <a class="el" href="pmm__model_8c_source.html#l00207">207</a> of file <a class="el" href="pmm__model_8c_source.html">pmm_model.c</a>.</p>
 
 </div>
 </div>
@@ -1787,6 +1871,8 @@ all benchmarks have identical non-performance data (param array, etc). </dd></dl
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>pointer to a newly allocated benchmark structure with zero speed in given position </dd></dl>
 
+<p>Definition at line <a class="el" href="pmm__model_8c_source.html#l00356">356</a> of file <a class="el" href="pmm__model_8c_source.html">pmm_model.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="add2110295fcda85e3b04c3eef0d27411"></a>
@@ -1823,6 +1909,8 @@ all benchmarks have identical non-performance data (param array, etc). </dd></dl
 <dl class="section post"><dt>Postcondition</dt><dd>parameter b becomes part of the model and must not be freed until the model itself is freed or it is removed from the model explicitly</dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on success, -1 on failure </dd></dl>
 
+<p>Definition at line <a class="el" href="pmm__model_8c_source.html#l00521">521</a> of file <a class="el" href="pmm__model_8c_source.html">pmm_model.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="ac244e2c6b16e001ff41ca8c15bcdfa4a"></a>
@@ -1849,6 +1937,8 @@ all benchmarks have identical non-performance data (param array, etc). </dd></dl
       </table>
 </div><div class="memdoc">
 <dl class="section return"><dt>Returns</dt><dd>0 on success, -1 on failure </dd></dl>
+
+<p>Definition at line <a class="el" href="pmm__model_8c_source.html#l00485">485</a> of file <a class="el" href="pmm__model_8c_source.html">pmm_model.c</a>.</p>
 
 </div>
 </div>
@@ -1891,6 +1981,8 @@ all benchmarks have identical non-performance data (param array, etc). </dd></dl
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on success if benchmark was not unique to the list, 1 on success if the benchmark was unique to the list, -1 on failure </dd></dl>
+
+<p>Definition at line <a class="el" href="pmm__model_8c_source.html#l00434">434</a> of file <a class="el" href="pmm__model_8c_source.html">pmm_model.c</a>.</p>
 
 </div>
 </div>
@@ -1944,6 +2036,8 @@ all benchmarks have identical non-performance data (param array, etc). </dd></dl
 after is NULL pointer only if list is empty</dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on success, -1 on failure </dd></dl>
 
+<p>Definition at line <a class="el" href="pmm__model_8c_source.html#l00797">797</a> of file <a class="el" href="pmm__model_8c_source.html">pmm_model.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="ae2c713b5791ef888e2c2582cf36a185a"></a>
@@ -1996,6 +2090,8 @@ after is NULL pointer only if list is empty</dd></dl>
 after is NULL pointer only if list is empty</dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on success, -1 on failure </dd></dl>
 
+<p>Definition at line <a class="el" href="pmm__model_8c_source.html#l00743">743</a> of file <a class="el" href="pmm__model_8c_source.html">pmm_model.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a85732bee7b673a3bc68616a6a4eaaf83"></a>
@@ -2040,6 +2136,8 @@ after is NULL pointer only if list is empty</dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>pointer to a newly allocated benchmark structure which describes the flops performance at the point p.</dd></dl>
 <p>TODO this does not use the average of benchmarks with the same parameters </p>
 
+<p>Definition at line <a class="el" href="pmm__model_8c_source.html#l01977">1977</a> of file <a class="el" href="pmm__model_8c_source.html">pmm_model.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="abda890b2152d5bb096464c638f6737fe"></a>
@@ -2063,6 +2161,8 @@ after is NULL pointer only if list is empty</dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>char string describing interval </dd></dl>
+
+<p>Definition at line <a class="el" href="pmm__interval_8c_source.html#l00400">400</a> of file <a class="el" href="pmm__interval_8c_source.html">pmm_interval.c</a>.</p>
 
 </div>
 </div>
@@ -2110,6 +2210,8 @@ after is NULL pointer only if list is empty</dd></dl>
 <dd>
 -1 if there is a mismatch between number of parameters </dd></dl>
 
+<p>Definition at line <a class="el" href="pmm__model_8c_source.html#l00547">547</a> of file <a class="el" href="pmm__model_8c_source.html">pmm_model.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a8f54399f1e6b3149e309746ae318c110"></a>
@@ -2135,6 +2237,8 @@ after is NULL pointer only if list is empty</dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 if model is not empty, 1 if model is empty </dd></dl>
+
+<p>Definition at line <a class="el" href="pmm__model_8c_source.html#l00586">586</a> of file <a class="el" href="pmm__model_8c_source.html">pmm_model.c</a>.</p>
 
 </div>
 </div>
@@ -2170,6 +2274,8 @@ after is NULL pointer only if list is empty</dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 if benchmarks are not equal, 1 if benchmarks are equal </dd></dl>
+
+<p>Definition at line <a class="el" href="pmm__model_8c_source.html#l01624">1624</a> of file <a class="el" href="pmm__model_8c_source.html">pmm_model.c</a>.</p>
 
 </div>
 </div>
@@ -2214,6 +2320,8 @@ after is NULL pointer only if list is empty</dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>newly allocated benchmark describing performance at p or NULL on failure </dd></dl>
 
+<p>Definition at line <a class="el" href="pmm__model_8c_source.html#l01940">1940</a> of file <a class="el" href="pmm__model_8c_source.html">pmm_model.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a8e2bad28200d7712ec00999415df87ce"></a>
@@ -2257,6 +2365,8 @@ after is NULL pointer only if list is empty</dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>pointer to newly allocated <a class="el" href="structpmm__bench__list.html">pmm_bench_list</a> </dd></dl>
 
+<p>Definition at line <a class="el" href="pmm__model_8c_source.html#l00167">167</a> of file <a class="el" href="pmm__model_8c_source.html">pmm_model.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="ab3fdb3fa97eef7d5e915622268998310"></a>
@@ -2281,6 +2391,8 @@ after is NULL pointer only if list is empty</dd></dl>
 </div><div class="memdoc">
 <p>Allocate and return a benchmark structure with values set to invalids, with the parameter array p still unallocated and next/previous pointers set to NULL</p>
 <dl class="section return"><dt>Returns</dt><dd>pointer to a newly allocated benchmark structure </dd></dl>
+
+<p>Definition at line <a class="el" href="pmm__model_8c_source.html#l00320">320</a> of file <a class="el" href="pmm__model_8c_source.html">pmm_model.c</a>.</p>
 
 </div>
 </div>
@@ -2307,6 +2419,8 @@ after is NULL pointer only if list is empty</dd></dl>
 <p>Allocates memory for the <a class="el" href="structpmm__config.html">pmm_config</a> structure. Sets some default values in the config.</p>
 <dl class="section return"><dt>Returns</dt><dd>pointer to newly allocated <a class="el" href="structpmm__config.html">pmm_config</a> structure or NULL on failure </dd></dl>
 
+<p>Definition at line <a class="el" href="pmm__model_8c_source.html#l00058">58</a> of file <a class="el" href="pmm__model_8c_source.html">pmm_model.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a769716bfab7f5eadd42d8a6bc964e987"></a>
@@ -2331,6 +2445,8 @@ after is NULL pointer only if list is empty</dd></dl>
 </div><div class="memdoc">
 <p>Create a new model structure. Note <a class="el" href="structpmm__bench__list.html">pmm_bench_list</a> member will not yet be allocated.</p>
 <dl class="section return"><dt>Returns</dt><dd>pointer to newly allocated <a class="el" href="structpmm__model.html">pmm_model</a> structure </dd></dl>
+
+<p>Definition at line <a class="el" href="pmm__model_8c_source.html#l00132">132</a> of file <a class="el" href="pmm__model_8c_source.html">pmm_model.c</a>.</p>
 
 </div>
 </div>
@@ -2357,6 +2473,8 @@ after is NULL pointer only if list is empty</dd></dl>
 <p>Allocates memory for a new routine and sets some default values</p>
 <dl class="section return"><dt>Returns</dt><dd>pointer to newly allocated routine structure </dd></dl>
 
+<p>Definition at line <a class="el" href="pmm__model_8c_source.html#l00098">98</a> of file <a class="el" href="pmm__model_8c_source.html">pmm_model.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a885b9be4dd3996fcbda3b96e3c57493c"></a>
@@ -2380,6 +2498,8 @@ after is NULL pointer only if list is empty</dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>date converted to a time_t value </dd></dl>
+
+<p>Definition at line <a class="el" href="pmm__model_8c_source.html#l02585">2585</a> of file <a class="el" href="pmm__model_8c_source.html">pmm_model.c</a>.</p>
 
 </div>
 </div>
@@ -2415,6 +2535,8 @@ after is NULL pointer only if list is empty</dd></dl>
   </dd>
 </dl>
 
+<p>Definition at line <a class="el" href="pmm__model_8c_source.html#l02447">2447</a> of file <a class="el" href="pmm__model_8c_source.html">pmm_model.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a95ca2ab25bbab3948d8303e44382694c"></a>
@@ -2448,6 +2570,8 @@ after is NULL pointer only if list is empty</dd></dl>
   </table>
   </dd>
 </dl>
+
+<p>Definition at line <a class="el" href="pmm__model_8c_source.html#l02478">2478</a> of file <a class="el" href="pmm__model_8c_source.html">pmm_model.c</a>.</p>
 
 </div>
 </div>
@@ -2483,6 +2607,8 @@ after is NULL pointer only if list is empty</dd></dl>
   </dd>
 </dl>
 
+<p>Definition at line <a class="el" href="pmm__model_8c_source.html#l02717">2717</a> of file <a class="el" href="pmm__model_8c_source.html">pmm_model.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="af4fa420c7e941a166b192f3345cb44a7"></a>
@@ -2517,6 +2643,8 @@ after is NULL pointer only if list is empty</dd></dl>
   </dd>
 </dl>
 
+<p>Definition at line <a class="el" href="pmm__model_8c_source.html#l02410">2410</a> of file <a class="el" href="pmm__model_8c_source.html">pmm_model.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a8f40ee3ec14e697af2f643654bbd2114"></a>
@@ -2550,6 +2678,8 @@ after is NULL pointer only if list is empty</dd></dl>
   </table>
   </dd>
 </dl>
+
+<p>Definition at line <a class="el" href="pmm__model_8c_source.html#l02506">2506</a> of file <a class="el" href="pmm__model_8c_source.html">pmm_model.c</a>.</p>
 
 </div>
 </div>
@@ -2587,6 +2717,8 @@ after is NULL pointer only if list is empty</dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on success, -1 on failure</dd></dl>
 <dl class="section pre"><dt>Precondition</dt><dd>b is part of the bench list </dd></dl>
 <dl class="section post"><dt>Postcondition</dt><dd>b is removed from the list but still allocated (having next/previous pointers set to NULL </dd></dl>
+
+<p>Definition at line <a class="el" href="pmm__model_8c_source.html#l00922">922</a> of file <a class="el" href="pmm__model_8c_source.html">pmm_model.c</a>.</p>
 
 </div>
 </div>
@@ -2632,6 +2764,8 @@ after is NULL pointer only if list is empty</dd></dl>
 <dl class="section pre"><dt>Precondition</dt><dd>b is part of the list </dd></dl>
 <dl class="section post"><dt>Postcondition</dt><dd>b is removed from the list but still allocated (having next/previous pointers set to NULL </dd></dl>
 
+<p>Definition at line <a class="el" href="pmm__model_8c_source.html#l00849">849</a> of file <a class="el" href="pmm__model_8c_source.html">pmm_model.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a7a07c020c68d4e679d9debe7926c1bdb"></a>
@@ -2675,6 +2809,8 @@ after is NULL pointer only if list is empty</dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>the number of benchmarks found and removed from the model or -1 on error</dd></dl>
 <dl class="section pre"><dt>Precondition</dt><dd>removed_array is unallocated </dd></dl>
 <dl class="section post"><dt>Postcondition</dt><dd>removed_array is allocated with a size matching the number of benchmarks found and removed </dd></dl>
+
+<p>Definition at line <a class="el" href="pmm__model_8c_source.html#l01840">1840</a> of file <a class="el" href="pmm__model_8c_source.html">pmm_model.c</a>.</p>
 
 </div>
 </div>
@@ -2743,6 +2879,8 @@ after is NULL pointer only if list is empty</dd></dl>
 benchmark list mst be sorted</dd></dl>
 <dl class="section post"><dt>Postcondition</dt><dd>first and last are NULL if no matching benchmark is found, first is non-NULL and last is NULL if only one matching benchmark is found, finally first and last are non-NULL if a sequence of matching benchmarks are found. They do not depend on the search direction, i.e. first and last are not reordered if the search direction is reversed, they will always be presented in the order that occurs in the model. </dd></dl>
 
+<p>Definition at line <a class="el" href="pmm__model_8c_source.html#l01137">1137</a> of file <a class="el" href="pmm__model_8c_source.html">pmm_model.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a8995ca614e3f8ed052e9866f6b0efcdc"></a>
@@ -2777,6 +2915,8 @@ benchmark list mst be sorted</dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on failure, 1 on success </dd></dl>
+
+<p>Definition at line <a class="el" href="pmm__model_8c_source.html#l02546">2546</a> of file <a class="el" href="pmm__model_8c_source.html">pmm_model.c</a>.</p>
 
 </div>
 </div>
@@ -2821,6 +2961,8 @@ benchmark list mst be sorted</dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>the number of benchmarks added to the sum as an integer</dd></dl>
 <dl class="section pre"><dt>Precondition</dt><dd>all benchmarks are allocated and non NULL. sum is initialized with zero data values </dd></dl>
 
+<p>Definition at line <a class="el" href="pmm__model_8c_source.html#l01355">1355</a> of file <a class="el" href="pmm__model_8c_source.html">pmm_model.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a71727b8e752c764edc066e9f58108e3b"></a>
@@ -2862,6 +3004,8 @@ benchmark list mst be sorted</dd></dl>
   </dd>
 </dl>
 
+<p>Definition at line <a class="el" href="pmm__model_8c_source.html#l01517">1517</a> of file <a class="el" href="pmm__model_8c_source.html">pmm_model.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="ae6c80148fa72702b4e1573ce8202374b"></a>
@@ -2897,6 +3041,8 @@ benchmark list mst be sorted</dd></dl>
 </dl>
 <dl class="section pre"><dt>Precondition</dt><dd>divisor should be non zero </dd></dl>
 
+<p>Definition at line <a class="el" href="pmm__model_8c_source.html#l01538">1538</a> of file <a class="el" href="pmm__model_8c_source.html">pmm_model.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a74070a2a68ec8c7946553a2ad7646401"></a>
@@ -2921,12 +3067,14 @@ benchmark list mst be sorted</dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>value of the timeval in seconds as a double </dd></dl>
 
+<p>Definition at line <a class="el" href="pmm__model_8c_source.html#l01473">1473</a> of file <a class="el" href="pmm__model_8c_source.html">pmm_model.c</a>.</p>
+
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 5 2013 14:58:33 for pmm by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Apr 5 2013 17:40:48 for pmm by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.1.2
 </small></address>

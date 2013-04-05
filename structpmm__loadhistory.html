@@ -86,38 +86,38 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="pmm-1_80_80_2src_2pmm__load_8h_source.html">pmm_load.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="pmm__load_8h_source.html">pmm_load.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2><a name="pub-attribs"></a>
 Data Fields</h2></td></tr>
 <tr class="memitem:ab7ecf5a0323e3b846f120cd6ef3c7bc2"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structpmm__loadhistory.html#ab7ecf5a0323e3b846f120cd6ef3c7bc2">write_period</a></td></tr>
-<tr class="memitem:aa320b4bcf12d95b63142aeb2bc6269e8"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="structpmm__load.html">pmm_load</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structpmm__loadhistory.html#aa320b4bcf12d95b63142aeb2bc6269e8">history</a></td></tr>
+<tr class="memitem:ac1a03c7b76da5e55fa51faab0b4a1adf"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="structpmm__load.html">pmm_load</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structpmm__loadhistory.html#ac1a03c7b76da5e55fa51faab0b4a1adf">history</a></td></tr>
 <tr class="memitem:aa94cad9b8b853fcd64e5f5ac5dd7add1"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structpmm__loadhistory.html#aa94cad9b8b853fcd64e5f5ac5dd7add1">size</a></td></tr>
 <tr class="memitem:ab4ba4ac36c795a0e44613fb705717d6d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structpmm__loadhistory.html#ab4ba4ac36c795a0e44613fb705717d6d">size_mod</a></td></tr>
-<tr class="memitem:a085687859c82baa65bf955c14c521e9e"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="structpmm__load.html">pmm_load</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structpmm__loadhistory.html#a085687859c82baa65bf955c14c521e9e">start</a></td></tr>
-<tr class="memitem:a85fd48136a6b1e1b19042b4293ed6a8c"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="structpmm__load.html">pmm_load</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structpmm__loadhistory.html#a85fd48136a6b1e1b19042b4293ed6a8c">end</a></td></tr>
+<tr class="memitem:ab707ce6e315991228742ea379694d888"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="structpmm__load.html">pmm_load</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structpmm__loadhistory.html#ab707ce6e315991228742ea379694d888">start</a></td></tr>
+<tr class="memitem:a5e799b7ad1c650bd965a2f672b730e78"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="structpmm__load.html">pmm_load</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structpmm__loadhistory.html#a5e799b7ad1c650bd965a2f672b730e78">end</a></td></tr>
 <tr class="memitem:ab9e44fcb5987f5a6a891da336c43d213"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structpmm__loadhistory.html#ab9e44fcb5987f5a6a891da336c43d213">start_i</a></td></tr>
 <tr class="memitem:a5625aa601ce71467ddc8f4720db32a73"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structpmm__loadhistory.html#a5625aa601ce71467ddc8f4720db32a73">end_i</a></td></tr>
-<tr class="memitem:a4ab235ef34a4e379179ce5ad29f3fa8f"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structpmm__loadhistory.html#a4ab235ef34a4e379179ce5ad29f3fa8f">load_path</a></td></tr>
+<tr class="memitem:a8e8ae65131890372da0bbeff437fad31"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structpmm__loadhistory.html#a8e8ae65131890372da0bbeff437fad31">load_path</a></td></tr>
 <tr class="memitem:ae0fbcd6252ab6a1ab49be6f891271ccb"><td class="memItemLeft" align="right" valign="top">pthread_rwlock_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structpmm__loadhistory.html#ae0fbcd6252ab6a1ab49be6f891271ccb">history_rwlock</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>this is a circular array of load history, size determined at run time </p>
 
-<p>Definition at line <a class="el" href="pmm-1_80_80_2src_2pmm__load_8h_source.html#l00040">40</a> of file <a class="el" href="pmm-1_80_80_2src_2pmm__load_8h_source.html">pmm_load.h</a>.</p>
+<p>Definition at line <a class="el" href="pmm__load_8h_source.html#l00040">40</a> of file <a class="el" href="pmm__load_8h_source.html">pmm_load.h</a>.</p>
 </div><h2>Field Documentation</h2>
-<a class="anchor" id="a85fd48136a6b1e1b19042b4293ed6a8c"></a>
+<a class="anchor" id="a5e799b7ad1c650bd965a2f672b730e78"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">struct <a class="el" href="structpmm__load.html">pmm_load</a> * pmm_loadhistory::end</td>
+          <td class="memname">struct <a class="el" href="structpmm__load.html">pmm_load</a>* pmm_loadhistory::end</td>
         </tr>
       </table>
 </div><div class="memdoc">
 <p>pointer to ending element of c.array </p>
 
-<p>Definition at line <a class="el" href="pmm-1_80_80_2src_2pmm__load_8h_source.html#l00048">48</a> of file <a class="el" href="pmm-1_80_80_2src_2pmm__load_8h_source.html">pmm_load.h</a>.</p>
+<p>Definition at line <a class="el" href="pmm__load_8h_source.html#l00048">48</a> of file <a class="el" href="pmm__load_8h_source.html">pmm_load.h</a>.</p>
 
 </div>
 </div>
@@ -132,22 +132,22 @@ Data Fields</h2></td></tr>
 </div><div class="memdoc">
 <p>starting element in the circular array </p>
 
-<p>Definition at line <a class="el" href="pmm-1_80_80_2src_2pmm__load_8h_source.html#l00050">50</a> of file <a class="el" href="pmm-1_80_80_2src_2pmm__load_8h_source.html">pmm_load.h</a>.</p>
+<p>Definition at line <a class="el" href="pmm__load_8h_source.html#l00050">50</a> of file <a class="el" href="pmm__load_8h_source.html">pmm_load.h</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="aa320b4bcf12d95b63142aeb2bc6269e8"></a>
+<a class="anchor" id="ac1a03c7b76da5e55fa51faab0b4a1adf"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">struct <a class="el" href="structpmm__load.html">pmm_load</a> * pmm_loadhistory::history</td>
+          <td class="memname">struct <a class="el" href="structpmm__load.html">pmm_load</a>* pmm_loadhistory::history</td>
         </tr>
       </table>
 </div><div class="memdoc">
 <p>pointer to the circular array </p>
 
-<p>Definition at line <a class="el" href="pmm-1_80_80_2src_2pmm__load_8h_source.html#l00043">43</a> of file <a class="el" href="pmm-1_80_80_2src_2pmm__load_8h_source.html">pmm_load.h</a>.</p>
+<p>Definition at line <a class="el" href="pmm__load_8h_source.html#l00043">43</a> of file <a class="el" href="pmm__load_8h_source.html">pmm_load.h</a>.</p>
 
 </div>
 </div>
@@ -162,22 +162,22 @@ Data Fields</h2></td></tr>
 </div><div class="memdoc">
 <p>mutex for accessing history </p>
 
-<p>Definition at line <a class="el" href="pmm-1_80_80_2src_2pmm__load_8h_source.html#l00054">54</a> of file <a class="el" href="pmm-1_80_80_2src_2pmm__load_8h_source.html">pmm_load.h</a>.</p>
+<p>Definition at line <a class="el" href="pmm__load_8h_source.html#l00054">54</a> of file <a class="el" href="pmm__load_8h_source.html">pmm_load.h</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a4ab235ef34a4e379179ce5ad29f3fa8f"></a>
+<a class="anchor" id="a8e8ae65131890372da0bbeff437fad31"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">char * pmm_loadhistory::load_path</td>
+          <td class="memname">char* pmm_loadhistory::load_path</td>
         </tr>
       </table>
 </div><div class="memdoc">
 <p>path to load history file </p>
 
-<p>Definition at line <a class="el" href="pmm-1_80_80_2src_2pmm__load_8h_source.html#l00052">52</a> of file <a class="el" href="pmm-1_80_80_2src_2pmm__load_8h_source.html">pmm_load.h</a>.</p>
+<p>Definition at line <a class="el" href="pmm__load_8h_source.html#l00052">52</a> of file <a class="el" href="pmm__load_8h_source.html">pmm_load.h</a>.</p>
 
 </div>
 </div>
@@ -192,7 +192,7 @@ Data Fields</h2></td></tr>
 </div><div class="memdoc">
 <p>size of circular array </p>
 
-<p>Definition at line <a class="el" href="pmm-1_80_80_2src_2pmm__load_8h_source.html#l00044">44</a> of file <a class="el" href="pmm-1_80_80_2src_2pmm__load_8h_source.html">pmm_load.h</a>.</p>
+<p>Definition at line <a class="el" href="pmm__load_8h_source.html#l00044">44</a> of file <a class="el" href="pmm__load_8h_source.html">pmm_load.h</a>.</p>
 
 </div>
 </div>
@@ -206,22 +206,22 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="pmm-1_80_80_2src_2pmm__load_8h_source.html#l00045">45</a> of file <a class="el" href="pmm-1_80_80_2src_2pmm__load_8h_source.html">pmm_load.h</a>.</p>
+<p>Definition at line <a class="el" href="pmm__load_8h_source.html#l00045">45</a> of file <a class="el" href="pmm__load_8h_source.html">pmm_load.h</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a085687859c82baa65bf955c14c521e9e"></a>
+<a class="anchor" id="ab707ce6e315991228742ea379694d888"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">struct <a class="el" href="structpmm__load.html">pmm_load</a> * pmm_loadhistory::start</td>
+          <td class="memname">struct <a class="el" href="structpmm__load.html">pmm_load</a>* pmm_loadhistory::start</td>
         </tr>
       </table>
 </div><div class="memdoc">
 <p>pointer to starting element of c.array </p>
 
-<p>Definition at line <a class="el" href="pmm-1_80_80_2src_2pmm__load_8h_source.html#l00047">47</a> of file <a class="el" href="pmm-1_80_80_2src_2pmm__load_8h_source.html">pmm_load.h</a>.</p>
+<p>Definition at line <a class="el" href="pmm__load_8h_source.html#l00047">47</a> of file <a class="el" href="pmm__load_8h_source.html">pmm_load.h</a>.</p>
 
 </div>
 </div>
@@ -236,7 +236,7 @@ Data Fields</h2></td></tr>
 </div><div class="memdoc">
 <p>ending element of the circular array </p>
 
-<p>Definition at line <a class="el" href="pmm-1_80_80_2src_2pmm__load_8h_source.html#l00049">49</a> of file <a class="el" href="pmm-1_80_80_2src_2pmm__load_8h_source.html">pmm_load.h</a>.</p>
+<p>Definition at line <a class="el" href="pmm__load_8h_source.html#l00049">49</a> of file <a class="el" href="pmm__load_8h_source.html">pmm_load.h</a>.</p>
 
 </div>
 </div>
@@ -251,18 +251,17 @@ Data Fields</h2></td></tr>
 </div><div class="memdoc">
 <p>how often to write load history to disk </p>
 
-<p>Definition at line <a class="el" href="pmm-1_80_80_2src_2pmm__load_8h_source.html#l00041">41</a> of file <a class="el" href="pmm-1_80_80_2src_2pmm__load_8h_source.html">pmm_load.h</a>.</p>
+<p>Definition at line <a class="el" href="pmm__load_8h_source.html#l00041">41</a> of file <a class="el" href="pmm__load_8h_source.html">pmm_load.h</a>.</p>
 
 </div>
 </div>
-<hr/>The documentation for this struct was generated from the following files:<ul>
-<li>/home/rhiggins/phd/pmm_github/pmm-1.0.0/src/<a class="el" href="pmm-1_80_80_2src_2pmm__load_8h_source.html">pmm_load.h</a></li>
-<li>/home/rhiggins/phd/pmm_github/src/<a class="el" href="src_2pmm__load_8h_source.html">pmm_load.h</a></li>
+<hr/>The documentation for this struct was generated from the following file:<ul>
+<li>/home/rhiggins/phd/pmm_github/src/<a class="el" href="pmm__load_8h_source.html">pmm_load.h</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 5 2013 16:05:27 for pmm by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Apr 5 2013 17:40:48 for pmm by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.1.2
 </small></address>

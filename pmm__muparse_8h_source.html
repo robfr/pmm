@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">pmm
-   &#160;<span id="projectnumber">0.0.1</span>
+   &#160;<span id="projectnumber">1.0.0</span>
    </div>
   </td>
  </tr>
@@ -105,7 +105,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment"></span></div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment">    You should have received a copy of the GNU General Public License</span></div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment">    along with PMM.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span></div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment">*/</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment">*/</span><span class="comment"></span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment">/*!</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment"> * @file    pmm_muparse.h</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment"> * @brief   muparser structures</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="comment"> *</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="comment"> */</span></div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#ifndef PMM_MUPARSE_H_</span></div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PMM_MUPARSE_H_</span></div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor"></span></div>
@@ -128,11 +133,14 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="comment">//#include &quot;pmm_param.h&quot;</span></div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="keyword">struct </span><a class="code" href="structpmm__paramdef__set.html">pmm_paramdef_set</a>; <span class="comment">//&lt; forward declaration</span></div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="comment"></span></div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="comment">/*!</span></div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="comment"> * Structure to hold muparser object and variable array</span></div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="comment"> */</span></div>
 <div class="line"><a name="l00051"></a><span class="lineno"><a class="code" href="structpmm__param__constraint__muparser.html">   51</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="structpmm__param__constraint__muparser.html">pmm_param_constraint_muparser</a> {</div>
-<div class="line"><a name="l00052"></a><span class="lineno"><a class="code" href="structpmm__param__constraint__muparser.html#a670f84c0b0d20f80250c52744886bd09">   52</a></span>&#160;    <a class="code" href="structParser.html">Parser</a> <a class="code" href="structpmm__param__constraint__muparser.html#a670f84c0b0d20f80250c52744886bd09">p</a>;       </div>
-<div class="line"><a name="l00053"></a><span class="lineno"><a class="code" href="structpmm__param__constraint__muparser.html#ad85004e88259f4d0e9549babd77dfd2a">   53</a></span>&#160;    <span class="keywordtype">double</span> *<a class="code" href="structpmm__param__constraint__muparser.html#ad85004e88259f4d0e9549babd77dfd2a">vars</a>;   </div>
-<div class="line"><a name="l00054"></a><span class="lineno"><a class="code" href="structpmm__param__constraint__muparser.html#ad9d429b167ea7f345c0cda4e41ded404">   54</a></span>&#160;    <span class="keywordtype">int</span> <a class="code" href="structpmm__param__constraint__muparser.html#ad9d429b167ea7f345c0cda4e41ded404">n_p</a>;        </div>
+<div class="line"><a name="l00052"></a><span class="lineno"><a class="code" href="structpmm__param__constraint__muparser.html#a670f84c0b0d20f80250c52744886bd09">   52</a></span>&#160;    <a class="code" href="structParser.html">Parser</a> <a class="code" href="structpmm__param__constraint__muparser.html#a670f84c0b0d20f80250c52744886bd09">p</a>;       <span class="comment">/*!&lt; muparser parser object */</span></div>
+<div class="line"><a name="l00053"></a><span class="lineno"><a class="code" href="structpmm__param__constraint__muparser.html#ad85004e88259f4d0e9549babd77dfd2a">   53</a></span>&#160;    <span class="keywordtype">double</span> *<a class="code" href="structpmm__param__constraint__muparser.html#ad85004e88259f4d0e9549babd77dfd2a">vars</a>;   <span class="comment">/*!&lt; variable array that will be linked to parser object */</span></div>
+<div class="line"><a name="l00054"></a><span class="lineno"><a class="code" href="structpmm__param__constraint__muparser.html#ad9d429b167ea7f345c0cda4e41ded404">   54</a></span>&#160;    <span class="keywordtype">int</span> <a class="code" href="structpmm__param__constraint__muparser.html#ad9d429b167ea7f345c0cda4e41ded404">n_p</a>;        <span class="comment">/*!&lt; length of variable array */</span></div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;} <a class="code" href="pmm__muparse_8h.html#a7b06c0f87a52270faf0d36ca8e6491f4">PMM_Param_Constraint_Muparser</a>;</div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="keywordtype">int</span></div>
@@ -155,7 +163,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 5 2013 14:58:33 for pmm by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Apr 5 2013 17:40:47 for pmm by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.1.2
 </small></address>

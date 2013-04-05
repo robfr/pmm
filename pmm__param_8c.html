@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">pmm
-   &#160;<span id="projectnumber">0.0.1</span>
+   &#160;<span id="projectnumber">1.0.0</span>
    </div>
   </td>
  </tr>
@@ -97,7 +97,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <code>#include &lt;limits.h&gt;</code><br/>
 <code>#include &quot;<a class="el" href="pmm__log_8h_source.html">pmm_log.h</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="pmm__model_8h_source.html">pmm_model.h</a>&quot;</code><br/>
-</div><table class="memberdecls">
+</div>
+<p><a href="pmm__param_8c_source.html">Go to the source code of this file.</a></p>
+<table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a10edb7ff79b2c6d562e4a0051f9ffbf1"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="structpmm__paramdef__set.html">pmm_paramdef_set</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pmm__param_8c.html#a10edb7ff79b2c6d562e4a0051f9ffbf1">new_paramdef_set</a> ()</td></tr>
@@ -129,6 +131,8 @@ Functions</h2></td></tr>
 <a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>functions operating on benchmark and model parameters </p>
 <p>this file contains the code for working with parameters, parameter definitions, parameter arrays and so forth. </p>
+
+<p>Definition in file <a class="el" href="pmm__param_8c_source.html">pmm_param.c</a>.</p>
 </div><h2>Function Documentation</h2>
 <a class="anchor" id="a1cee4eeadf19b6ed0f3e89975df3571a"></a>
 <div class="memitem">
@@ -164,6 +168,8 @@ Functions</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>the aligned parameter</dd></dl>
 <dl class="section post"><dt>Postcondition</dt><dd>the return value is aligned as closely as possible to the passed param. In cases where the aligned parameter is greater than the end, the parameter is decremented by the stride until it is within the end bound. If nonzero en is set, the end point is considered a valid point and the parameter is aligned to this, regardless if it is within the stride &amp; offset describing the parameter sequence. If the aligned parameter is less than the start it is set to the start value, regardless of whether this is within the stride &amp; offset describing the parameter sequence. </dd></dl>
 
+<p>Definition at line <a class="el" href="pmm__param_8c_source.html#l00351">351</a> of file <a class="el" href="pmm__param_8c_source.html">pmm_param.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a9a3cb57dcdaa93913f05bef51345fcea"></a>
@@ -197,6 +203,8 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+<p>Definition at line <a class="el" href="pmm__param_8c_source.html#l00441">441</a> of file <a class="el" href="pmm__param_8c_source.html">pmm_param.c</a>.</p>
 
 </div>
 </div>
@@ -234,6 +242,8 @@ Functions</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>0 on success, -1 on failure</dd></dl>
 <dl class="section pre"><dt>Precondition</dt><dd>src and dst point to allocated structures </dd></dl>
 
+<p>Definition at line <a class="el" href="pmm__param_8c_source.html#l00215">215</a> of file <a class="el" href="pmm__param_8c_source.html">pmm_param.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a3874f81070efac940ff144bb1fd508bc"></a>
@@ -268,6 +278,8 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 
+<p>Definition at line <a class="el" href="pmm__param_8c_source.html#l00893">893</a> of file <a class="el" href="pmm__param_8c_source.html">pmm_param.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a57db934b9e2e58477c71850b2ac83df7"></a>
@@ -290,6 +302,8 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+<p>Definition at line <a class="el" href="pmm__param_8c_source.html#l00873">873</a> of file <a class="el" href="pmm__param_8c_source.html">pmm_param.c</a>.</p>
 
 </div>
 </div>
@@ -326,6 +340,8 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>allocated array of aligned parameters or NULL on failure </dd></dl>
 
+<p>Definition at line <a class="el" href="pmm__param_8c_source.html#l00465">465</a> of file <a class="el" href="pmm__param_8c_source.html">pmm_param.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="abd25a2b5495b9ec466b94ddab90d0e57"></a>
@@ -361,6 +377,8 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>pointer to copied parameter array or NULL on failure </dd></dl>
 
+<p>Definition at line <a class="el" href="pmm__param_8c_source.html#l00164">164</a> of file <a class="el" href="pmm__param_8c_source.html">pmm_param.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a0b70ad8b8428ce41f419ddec9cd64c6d"></a>
@@ -385,6 +403,8 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>pointer to an array of parameters with all end values of size n </dd></dl>
 
+<p>Definition at line <a class="el" href="pmm__param_8c_source.html#l00094">94</a> of file <a class="el" href="pmm__param_8c_source.html">pmm_param.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a71455e4b99fda128e7ce77b10c971ebb"></a>
@@ -408,6 +428,8 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>pointer to an array of parameters with all start values of size n </dd></dl>
+
+<p>Definition at line <a class="el" href="pmm__param_8c_source.html#l00070">70</a> of file <a class="el" href="pmm__param_8c_source.html">pmm_param.c</a>.</p>
 
 </div>
 </div>
@@ -443,6 +465,8 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 if not identical, 1 if identical </dd></dl>
+
+<p>Definition at line <a class="el" href="pmm__param_8c_source.html#l00552">552</a> of file <a class="el" href="pmm__param_8c_source.html">pmm_param.c</a>.</p>
 
 </div>
 </div>
@@ -486,6 +510,8 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 if arrays contain different parameter definitions, 1 if they are identical </dd></dl>
 
+<p>Definition at line <a class="el" href="pmm__param_8c_source.html#l00529">529</a> of file <a class="el" href="pmm__param_8c_source.html">pmm_param.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="aba1570acb0ddf62aac96c5b03b94669e"></a>
@@ -521,6 +547,8 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 if not identical, 1 if identical </dd></dl>
 
+<p>Definition at line <a class="el" href="pmm__param_8c_source.html#l00489">489</a> of file <a class="el" href="pmm__param_8c_source.html">pmm_param.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a10edb7ff79b2c6d562e4a0051f9ffbf1"></a>
@@ -545,6 +573,8 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>Create an empty parameter definition set structure. Note pd_array will not yet be allocated</p>
 <dl class="section return"><dt>Returns</dt><dd>pointer to newly allocated structure </dd></dl>
+
+<p>Definition at line <a class="el" href="pmm__param_8c_source.html#l00046">46</a> of file <a class="el" href="pmm__param_8c_source.html">pmm_param.c</a>.</p>
 
 </div>
 </div>
@@ -588,6 +618,8 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the plane index of the parameter axis the benchmark belongs to or -1 if on all axes (i.e. at origin), or -2 if on no boundaries </dd></dl>
 
+<p>Definition at line <a class="el" href="pmm__param_8c_source.html#l00246">246</a> of file <a class="el" href="pmm__param_8c_source.html">pmm_param.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="ab049db79300631e5e64162a6dfa7d294"></a>
@@ -622,6 +654,8 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>1 if parameter is within the parameter space defined by the parameter defintion. I.e. it is between the start and end points </dd></dl>
+
+<p>Definition at line <a class="el" href="pmm__param_8c_source.html#l00316">316</a> of file <a class="el" href="pmm__param_8c_source.html">pmm_param.c</a>.</p>
 
 </div>
 </div>
@@ -666,6 +700,8 @@ Functions</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>&gt;0 if array p1 is 'greater' than p2, &lt;0 if p1 is 'less' than 'p2' or 0 of p1 is equal to p2.</dd></dl>
 <dl class="section pre"><dt>Precondition</dt><dd>arrays must be of the same length and not NULL </dd></dl>
 
+<p>Definition at line <a class="el" href="pmm__param_8c_source.html#l00586">586</a> of file <a class="el" href="pmm__param_8c_source.html">pmm_param.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="aaeba58786f6df41a5b135419797aa486"></a>
@@ -708,6 +744,8 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>1 if parameter p is within the parameter space defined by the parameter definitions, 0 if it is not </dd></dl>
 
+<p>Definition at line <a class="el" href="pmm__param_8c_source.html#l00291">291</a> of file <a class="el" href="pmm__param_8c_source.html">pmm_param.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="aff57eb41ca5d769d8d0ecdb9b6ff7d3c"></a>
@@ -741,6 +779,8 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+<p>Definition at line <a class="el" href="pmm__param_8c_source.html#l00830">830</a> of file <a class="el" href="pmm__param_8c_source.html">pmm_param.c</a>.</p>
 
 </div>
 </div>
@@ -783,6 +823,8 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 
+<p>Definition at line <a class="el" href="pmm__param_8c_source.html#l00813">813</a> of file <a class="el" href="pmm__param_8c_source.html">pmm_param.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a7a180d60a5724967cfc9988df3e6df7e"></a>
@@ -816,6 +858,8 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+<p>Definition at line <a class="el" href="pmm__param_8c_source.html#l00852">852</a> of file <a class="el" href="pmm__param_8c_source.html">pmm_param.c</a>.</p>
 
 </div>
 </div>
@@ -857,6 +901,8 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+<p>Definition at line <a class="el" href="pmm__param_8c_source.html#l00796">796</a> of file <a class="el" href="pmm__param_8c_source.html">pmm_param.c</a>.</p>
 
 </div>
 </div>
@@ -901,6 +947,8 @@ Functions</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>0 on success, -1 on failure</dd></dl>
 <dl class="section pre"><dt>Precondition</dt><dd>src and dst arrays are of the same size (n) </dd></dl>
 
+<p>Definition at line <a class="el" href="pmm__param_8c_source.html#l00193">193</a> of file <a class="el" href="pmm__param_8c_source.html">pmm_param.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a83cd116349d492b549392e33799158bc"></a>
@@ -936,6 +984,8 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section pre"><dt>Precondition</dt><dd>p must be a pointer to allocated memory, the number of elements in the p array must be identical to the number of parameter definitions </dd></dl>
 
+<p>Definition at line <a class="el" href="pmm__param_8c_source.html#l00142">142</a> of file <a class="el" href="pmm__param_8c_source.html">pmm_param.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a1380db5c3c40a89def5a3130e16db0e1"></a>
@@ -970,6 +1020,8 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section pre"><dt>Precondition</dt><dd>p must be a pointer to allocated memory, the number of elements in the p array must be identical to the number of parameter definitions </dd></dl>
+
+<p>Definition at line <a class="el" href="pmm__param_8c_source.html#l00120">120</a> of file <a class="el" href="pmm__param_8c_source.html">pmm_param.c</a>.</p>
 
 </div>
 </div>
@@ -1027,12 +1079,14 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on success, -1 if the step will exceed the end-point of the interval or -2 on error </dd></dl>
 
+<p>Definition at line <a class="el" href="pmm__param_8c_source.html#l00623">623</a> of file <a class="el" href="pmm__param_8c_source.html">pmm_param.c</a>.</p>
+
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 5 2013 14:58:33 for pmm by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Apr 5 2013 17:40:48 for pmm by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.1.2
 </small></address>

@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">pmm
-   &#160;<span id="projectnumber">0.0.1</span>
+   &#160;<span id="projectnumber">1.0.0</span>
    </div>
   </td>
  </tr>
@@ -121,6 +121,8 @@ Functions</h2></td></tr>
 <a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Load data structures. </p>
 <p>Data structures representing the load and load history of a system </p>
+
+<p>Definition in file <a class="el" href="pmm__load_8h_source.html">pmm_load.h</a>.</p>
 </div><h2>Typedef Documentation</h2>
 <a class="anchor" id="ab5cfe4877b6b9d2e35ea8350d7438bf5"></a>
 <div class="memitem">
@@ -181,6 +183,8 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 
+<p>Definition at line <a class="el" href="pmm__load_8c_source.html#l00120">120</a> of file <a class="el" href="pmm__load_8c_source.html">pmm_load.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a29614e7a74815e916206e98f515d5848"></a>
@@ -204,6 +208,8 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>1 if load history passes check, 0 if it fails </dd></dl>
+
+<p>Definition at line <a class="el" href="pmm__load_8c_source.html#l00160">160</a> of file <a class="el" href="pmm__load_8c_source.html">pmm_load.c</a>.</p>
 
 </div>
 </div>
@@ -241,6 +247,8 @@ Functions</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>0 on success, -1 on failure</dd></dl>
 <p>TODO check that history is not already allocated, free in this case first </p>
 
+<p>Definition at line <a class="el" href="pmm__load_8c_source.html#l00090">90</a> of file <a class="el" href="pmm__load_8c_source.html">pmm_load.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="ab8e9e631f77e07614e60d53f00a37474"></a>
@@ -265,6 +273,8 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>initialized a new load observation structure</p>
 <dl class="section return"><dt>Returns</dt><dd>pointer to an allocated and intialized load structure </dd></dl>
+
+<p>Definition at line <a class="el" href="pmm__load_8c_source.html#l00191">191</a> of file <a class="el" href="pmm__load_8c_source.html">pmm_load.c</a>.</p>
 
 </div>
 </div>
@@ -291,6 +301,8 @@ Functions</h2></td></tr>
 <p>Allocates and initialises memory for a new load history structure. This is a circular array arrangement with pointers to the beginning and end. Iteration over the array is done using the modulus operator to wrap the physically beginning and end addresses.</p>
 <p>note for a given size we must keep size+1 elements in the array. Thus we store two different sizes. 'size' refers to the number of accessible elements in the circular array. 'size_mod' refers to actual allocated elements in the array and is only to be used when iterating through the accessible elements using i+1size_mod. 'size_mod' will always be the accessible size 'size' + 1</p>
 <dl class="section return"><dt>Returns</dt><dd>pointer to a new loadhistory structure or NULL on failure </dd></dl>
+
+<p>Definition at line <a class="el" href="pmm__load_8c_source.html#l00050">50</a> of file <a class="el" href="pmm__load_8c_source.html">pmm_load.c</a>.</p>
 
 </div>
 </div>
@@ -326,6 +338,8 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 
+<p>Definition at line <a class="el" href="pmm__load_8c_source.html#l00233">233</a> of file <a class="el" href="pmm__load_8c_source.html">pmm_load.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a79f5c035105980a40ff28beb44623d99"></a>
@@ -360,12 +374,14 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 
+<p>Definition at line <a class="el" href="pmm__load_8c_source.html#l00211">211</a> of file <a class="el" href="pmm__load_8c_source.html">pmm_load.c</a>.</p>
+
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 5 2013 14:58:33 for pmm by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Apr 5 2013 17:40:48 for pmm by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.1.2
 </small></address>

@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">pmm
-   &#160;<span id="projectnumber">0.0.1</span>
+   &#160;<span id="projectnumber">1.0.0</span>
    </div>
   </td>
  </tr>
@@ -105,7 +105,15 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment"></span></div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment">    You should have received a copy of the GNU General Public License</span></div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment">    along with PMM.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span></div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment">*/</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment">*/</span><span class="comment"></span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment">/*!</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment"> * @file   pmm_load.h</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment"> * @brief  Load data structures</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="comment"> *</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="comment"> * Data structures representing the load and load history of a system</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="comment"> *</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="comment"> */</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;</div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#ifndef PMM_LOAD_H_</span></div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PMM_LOAD_H_</span></div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor"></span></div>
@@ -114,24 +122,33 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="preprocessor"></span></div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="preprocessor">#include &lt;pthread.h&gt;</span>    <span class="comment">// for pthread_rwlock_t</span></div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="comment"></span></div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="comment">/*!</span></div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="comment"> * this is a circular array of load history, size determined at run time</span></div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="comment"> */</span></div>
 <div class="line"><a name="l00040"></a><span class="lineno"><a class="code" href="structpmm__loadhistory.html">   40</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="structpmm__loadhistory.html">pmm_loadhistory</a> {</div>
-<div class="line"><a name="l00041"></a><span class="lineno"><a class="code" href="structpmm__loadhistory.html#ab7ecf5a0323e3b846f120cd6ef3c7bc2">   41</a></span>&#160;        <span class="keywordtype">int</span> <a class="code" href="structpmm__loadhistory.html#ab7ecf5a0323e3b846f120cd6ef3c7bc2">write_period</a>; </div>
-<div class="line"><a name="l00043"></a><span class="lineno"><a class="code" href="structpmm__loadhistory.html#ac1a03c7b76da5e55fa51faab0b4a1adf">   43</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structpmm__load.html">pmm_load</a> *<a class="code" href="structpmm__loadhistory.html#ac1a03c7b76da5e55fa51faab0b4a1adf">history</a>;   </div>
-<div class="line"><a name="l00044"></a><span class="lineno"><a class="code" href="structpmm__loadhistory.html#aa94cad9b8b853fcd64e5f5ac5dd7add1">   44</a></span>&#160;    <span class="keywordtype">int</span> <a class="code" href="structpmm__loadhistory.html#aa94cad9b8b853fcd64e5f5ac5dd7add1">size</a>;                   </div>
-<div class="line"><a name="l00045"></a><span class="lineno"><a class="code" href="structpmm__loadhistory.html#ab4ba4ac36c795a0e44613fb705717d6d">   45</a></span>&#160;        <span class="keywordtype">int</span> <a class="code" href="structpmm__loadhistory.html#ab4ba4ac36c795a0e44613fb705717d6d">size_mod</a>;</div>
+<div class="line"><a name="l00041"></a><span class="lineno"><a class="code" href="structpmm__loadhistory.html#ab7ecf5a0323e3b846f120cd6ef3c7bc2">   41</a></span>&#160;    <span class="keywordtype">int</span> <a class="code" href="structpmm__loadhistory.html#ab7ecf5a0323e3b846f120cd6ef3c7bc2">write_period</a>; <span class="comment">/*!&lt; how often to write load history to disk */</span></div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;</div>
+<div class="line"><a name="l00043"></a><span class="lineno"><a class="code" href="structpmm__loadhistory.html#ac1a03c7b76da5e55fa51faab0b4a1adf">   43</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structpmm__load.html">pmm_load</a> *<a class="code" href="structpmm__loadhistory.html#ac1a03c7b76da5e55fa51faab0b4a1adf">history</a>;   <span class="comment">/*!&lt; pointer to the circular array */</span></div>
+<div class="line"><a name="l00044"></a><span class="lineno"><a class="code" href="structpmm__loadhistory.html#aa94cad9b8b853fcd64e5f5ac5dd7add1">   44</a></span>&#160;    <span class="keywordtype">int</span> <a class="code" href="structpmm__loadhistory.html#aa94cad9b8b853fcd64e5f5ac5dd7add1">size</a>;                   <span class="comment">/*!&lt; size of circular array */</span></div>
+<div class="line"><a name="l00045"></a><span class="lineno"><a class="code" href="structpmm__loadhistory.html#ab4ba4ac36c795a0e44613fb705717d6d">   45</a></span>&#160;    <span class="keywordtype">int</span> <a class="code" href="structpmm__loadhistory.html#ab4ba4ac36c795a0e44613fb705717d6d">size_mod</a>;</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;</div>
-<div class="line"><a name="l00047"></a><span class="lineno"><a class="code" href="structpmm__loadhistory.html#ab707ce6e315991228742ea379694d888">   47</a></span>&#160;        <span class="keyword">struct </span><a class="code" href="structpmm__load.html">pmm_load</a> *<a class="code" href="structpmm__loadhistory.html#ab707ce6e315991228742ea379694d888">start</a>;   </div>
-<div class="line"><a name="l00048"></a><span class="lineno"><a class="code" href="structpmm__loadhistory.html#a5e799b7ad1c650bd965a2f672b730e78">   48</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structpmm__load.html">pmm_load</a> *<a class="code" href="structpmm__loadhistory.html#a5e799b7ad1c650bd965a2f672b730e78">end</a>;     </div>
-<div class="line"><a name="l00049"></a><span class="lineno"><a class="code" href="structpmm__loadhistory.html#ab9e44fcb5987f5a6a891da336c43d213">   49</a></span>&#160;        <span class="keywordtype">int</span> <a class="code" href="structpmm__loadhistory.html#ab9e44fcb5987f5a6a891da336c43d213">start_i</a>;              </div>
-<div class="line"><a name="l00050"></a><span class="lineno"><a class="code" href="structpmm__loadhistory.html#a5625aa601ce71467ddc8f4720db32a73">   50</a></span>&#160;    <span class="keywordtype">int</span> <a class="code" href="structpmm__loadhistory.html#a5625aa601ce71467ddc8f4720db32a73">end_i</a>;                </div>
-<div class="line"><a name="l00052"></a><span class="lineno"><a class="code" href="structpmm__loadhistory.html#a8e8ae65131890372da0bbeff437fad31">   52</a></span>&#160;        <span class="keywordtype">char</span> *<a class="code" href="structpmm__loadhistory.html#a8e8ae65131890372da0bbeff437fad31">load_path</a>;          </div>
-<div class="line"><a name="l00054"></a><span class="lineno"><a class="code" href="structpmm__loadhistory.html#ae0fbcd6252ab6a1ab49be6f891271ccb">   54</a></span>&#160;        pthread_rwlock_t <a class="code" href="structpmm__loadhistory.html#ae0fbcd6252ab6a1ab49be6f891271ccb">history_rwlock</a>;    </div>
+<div class="line"><a name="l00047"></a><span class="lineno"><a class="code" href="structpmm__loadhistory.html#ab707ce6e315991228742ea379694d888">   47</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structpmm__load.html">pmm_load</a> *<a class="code" href="structpmm__loadhistory.html#ab707ce6e315991228742ea379694d888">start</a>;   <span class="comment">/*!&lt; pointer to starting element of c.array */</span></div>
+<div class="line"><a name="l00048"></a><span class="lineno"><a class="code" href="structpmm__loadhistory.html#a5e799b7ad1c650bd965a2f672b730e78">   48</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structpmm__load.html">pmm_load</a> *<a class="code" href="structpmm__loadhistory.html#a5e799b7ad1c650bd965a2f672b730e78">end</a>;     <span class="comment">/*!&lt; pointer to ending element of c.array */</span></div>
+<div class="line"><a name="l00049"></a><span class="lineno"><a class="code" href="structpmm__loadhistory.html#ab9e44fcb5987f5a6a891da336c43d213">   49</a></span>&#160;    <span class="keywordtype">int</span> <a class="code" href="structpmm__loadhistory.html#ab9e44fcb5987f5a6a891da336c43d213">start_i</a>;              <span class="comment">/*!&lt; ending element of the circular array */</span></div>
+<div class="line"><a name="l00050"></a><span class="lineno"><a class="code" href="structpmm__loadhistory.html#a5625aa601ce71467ddc8f4720db32a73">   50</a></span>&#160;    <span class="keywordtype">int</span> <a class="code" href="structpmm__loadhistory.html#a5625aa601ce71467ddc8f4720db32a73">end_i</a>;                <span class="comment">/*!&lt; starting element in the circular array */</span></div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;</div>
+<div class="line"><a name="l00052"></a><span class="lineno"><a class="code" href="structpmm__loadhistory.html#a8e8ae65131890372da0bbeff437fad31">   52</a></span>&#160;    <span class="keywordtype">char</span> *<a class="code" href="structpmm__loadhistory.html#a8e8ae65131890372da0bbeff437fad31">load_path</a>;          <span class="comment">/*!&lt; path to load history file */</span></div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;</div>
+<div class="line"><a name="l00054"></a><span class="lineno"><a class="code" href="structpmm__loadhistory.html#ae0fbcd6252ab6a1ab49be6f891271ccb">   54</a></span>&#160;    pthread_rwlock_t <a class="code" href="structpmm__loadhistory.html#ae0fbcd6252ab6a1ab49be6f891271ccb">history_rwlock</a>;    <span class="comment">/*!&lt; mutex for accessing history */</span></div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;} <a class="code" href="pmm__load_8h.html#a63b379a40108602247c0cf5c2f5b5311">PMM_Loadhistory</a>;</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="comment"></span></div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="comment">/*!</span></div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="comment"> * this is a record of system load</span></div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="comment"> */</span></div>
 <div class="line"><a name="l00060"></a><span class="lineno"><a class="code" href="structpmm__load.html">   60</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="structpmm__load.html">pmm_load</a> {</div>
-<div class="line"><a name="l00061"></a><span class="lineno"><a class="code" href="structpmm__load.html#ae5ccbe20b22c2a13f8f40ff0e07fe99b">   61</a></span>&#160;        time_t <a class="code" href="structpmm__load.html#ae5ccbe20b22c2a13f8f40ff0e07fe99b">time</a>;    </div>
-<div class="line"><a name="l00062"></a><span class="lineno"><a class="code" href="structpmm__load.html#a0478a333891fd07f97f5104ae5603bc2">   62</a></span>&#160;        <span class="keywordtype">double</span> <a class="code" href="structpmm__load.html#a0478a333891fd07f97f5104ae5603bc2">load</a>[3]; </div>
+<div class="line"><a name="l00061"></a><span class="lineno"><a class="code" href="structpmm__load.html#ae5ccbe20b22c2a13f8f40ff0e07fe99b">   61</a></span>&#160;    time_t <a class="code" href="structpmm__load.html#ae5ccbe20b22c2a13f8f40ff0e07fe99b">time</a>;    <span class="comment">/*!&lt; time at which load was recorded */</span></div>
+<div class="line"><a name="l00062"></a><span class="lineno"><a class="code" href="structpmm__load.html#a0478a333891fd07f97f5104ae5603bc2">   62</a></span>&#160;    <span class="keywordtype">double</span> <a class="code" href="structpmm__load.html#a0478a333891fd07f97f5104ae5603bc2">load</a>[3]; <span class="comment">/*!&lt; 1, 5 &amp; 15 minute load averages TODO use float? */</span></div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;} <a class="code" href="pmm__load_8h.html#ab5cfe4877b6b9d2e35ea8350d7438bf5">PMM_Load</a>;</div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;</div>
 <div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;</div>
@@ -149,7 +166,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 5 2013 14:58:33 for pmm by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Apr 5 2013 17:40:47 for pmm by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.1.2
 </small></address>

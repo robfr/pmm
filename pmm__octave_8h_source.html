@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">pmm
-   &#160;<span id="projectnumber">0.0.1</span>
+   &#160;<span id="projectnumber">1.0.0</span>
    </div>
   </td>
  </tr>
@@ -105,7 +105,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment"></span></div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment">    You should have received a copy of the GNU General Public License</span></div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment">    along with PMM.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span></div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment">*/</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment">*/</span><span class="comment"></span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment">/*!</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment"> * @file    pmm_octave.h</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment"> * @brief   data structure for interaction with octave</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="comment"> */</span></div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#ifndef PMM_OCTAVE_H_</span></div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PMM_OCTAVE_H_</span></div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor"></span></div>
@@ -143,18 +147,24 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#undef PACKAGE_TARNAME</span></div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#undef PACKAGE_VERSION</span></div>
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="preprocessor"></span><span class="comment"></span></div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="comment">/*!</span></div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="comment"> * Structure containing octave objects which are used in interpolation of</span></div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="comment"> * models</span></div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="comment"> */</span></div>
 <div class="line"><a name="l00066"></a><span class="lineno"><a class="code" href="structpmm__octave__data.html">   66</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="structpmm__octave__data.html">pmm_octave_data</a> {</div>
-<div class="line"><a name="l00067"></a><span class="lineno"><a class="code" href="structpmm__octave__data.html#ace2f8907e7666e70d025dbe0b3482ff3">   67</a></span>&#160;    <a class="code" href="structMatrix.html">Matrix</a> <a class="code" href="structpmm__octave__data.html#ace2f8907e7666e70d025dbe0b3482ff3">x</a>;           </div>
-<div class="line"><a name="l00068"></a><span class="lineno"><a class="code" href="structpmm__octave__data.html#aeba4f191e9bb831df791d1ce91bf60ac">   68</a></span>&#160;    <a class="code" href="structColumnVector.html">ColumnVector</a> <a class="code" href="structpmm__octave__data.html#aeba4f191e9bb831df791d1ce91bf60ac">y</a>;     </div>
-<div class="line"><a name="l00069"></a><span class="lineno"><a class="code" href="structpmm__octave__data.html#adaeccdb402cc77226d20750d43953db8">   69</a></span>&#160;    <a class="code" href="structMatrix.html">Matrix</a> <a class="code" href="structpmm__octave__data.html#adaeccdb402cc77226d20750d43953db8">tri</a>;         </div>
+<div class="line"><a name="l00067"></a><span class="lineno"><a class="code" href="structpmm__octave__data.html#ace2f8907e7666e70d025dbe0b3482ff3">   67</a></span>&#160;    <a class="code" href="structMatrix.html">Matrix</a> <a class="code" href="structpmm__octave__data.html#ace2f8907e7666e70d025dbe0b3482ff3">x</a>;           <span class="comment">/*!&lt; matrix containing the parameter values */</span></div>
+<div class="line"><a name="l00068"></a><span class="lineno"><a class="code" href="structpmm__octave__data.html#aeba4f191e9bb831df791d1ce91bf60ac">   68</a></span>&#160;    <a class="code" href="structColumnVector.html">ColumnVector</a> <a class="code" href="structpmm__octave__data.html#aeba4f191e9bb831df791d1ce91bf60ac">y</a>;     <span class="comment">/*!&lt; vector containing the value of model at @a x */</span></div>
+<div class="line"><a name="l00069"></a><span class="lineno"><a class="code" href="structpmm__octave__data.html#adaeccdb402cc77226d20750d43953db8">   69</a></span>&#160;    <a class="code" href="structMatrix.html">Matrix</a> <a class="code" href="structpmm__octave__data.html#adaeccdb402cc77226d20750d43953db8">tri</a>;         <span class="comment">/*!&lt; matix containing the triangulation of the point</span></div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="comment">                             cloud described by @a x and @a y */</span></div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;} <a class="code" href="pmm__octave_8h.html#a43879c11d8787269e8ce882715728470">PMM_Octave_Data</a>;</div>
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;</div>
-<div class="line"><a name="l00073"></a><span class="lineno"><a class="code" href="pmm__octave_8h.html#aef24b228b2c90a5ca0395f5ea9417bba">   73</a></span>&#160;<span class="preprocessor">#define PMM_ALL 0 </span></div>
-<div class="line"><a name="l00074"></a><span class="lineno"><a class="code" href="pmm__octave_8h.html#af35f1e0a3158a27454760d29820b54f2">   74</a></span>&#160;<span class="preprocessor">#define PMM_AVG 1 </span></div>
-<div class="line"><a name="l00075"></a><span class="lineno"><a class="code" href="pmm__octave_8h.html#ac9ab3988d2d70274fa8f0b597399798c">   75</a></span>&#160;<span class="preprocessor">#define PMM_MAX 2 </span></div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="preprocessor">void octave_init();</span></div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;<span class="preprocessor"></span><span class="keyword">struct </span><a class="code" href="structpmm__octave__data.html">pmm_octave_data</a>*</div>
+<div class="line"><a name="l00073"></a><span class="lineno"><a class="code" href="pmm__octave_8h.html#aef24b228b2c90a5ca0395f5ea9417bba">   73</a></span>&#160;<span class="preprocessor">#define PMM_ALL 0 </span><span class="comment">/*!&lt; use all points */</span><span class="preprocessor"></span></div>
+<div class="line"><a name="l00074"></a><span class="lineno"><a class="code" href="pmm__octave_8h.html#af35f1e0a3158a27454760d29820b54f2">   74</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PMM_AVG 1 </span><span class="comment">/*!&lt; use average of points with identical parameters */</span><span class="preprocessor"></span></div>
+<div class="line"><a name="l00075"></a><span class="lineno"><a class="code" href="pmm__octave_8h.html#ac9ab3988d2d70274fa8f0b597399798c">   75</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PMM_MAX 2 </span><span class="comment">/*!&lt; use maximum of points with identical parameters */</span><span class="preprocessor"></span></div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="keywordtype">void</span> <a class="code" href="pmm__octave_8h.html#aad5714ea7ea84d00bcc8e48e13834e87">octave_init</a>();</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;<span class="keyword">struct </span><a class="code" href="structpmm__octave__data.html">pmm_octave_data</a>*</div>
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;<a class="code" href="pmm__octave_8h.html#ae399128d36839b0686e89e14e192bf67">fill_octave_input_matrices</a>(<span class="keyword">struct</span> <a class="code" href="structpmm__model.html">pmm_model</a> *m, <span class="keywordtype">int</span> mode);</div>
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;<span class="keywordtype">int</span></div>
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;<a class="code" href="pmm__octave_8h.html#a5e5f280bfc2f1d3e2894aead0e2e42ba">octave_triangulate</a>(<span class="keyword">struct</span> <a class="code" href="structpmm__octave__data.html">pmm_octave_data</a> *oct_data);</div>
@@ -180,7 +190,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 5 2013 14:58:33 for pmm by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Apr 5 2013 17:40:47 for pmm by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.1.2
 </small></address>
