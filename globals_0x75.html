@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
-<title>pmm: Main Page</title>
+<title>pmm: Globals</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -36,9 +36,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </script>
   <div id="navrow1" class="tabs">
     <ul class="tablist">
-      <li class="current"><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="annotated.html"><span>Data&#160;Structures</span></a></li>
-      <li><a href="files.html"><span>Files</span></a></li>
+      <li class="current"><a href="files.html"><span>Files</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -57,6 +57,51 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       </li>
     </ul>
   </div>
+  <div id="navrow2" class="tabs2">
+    <ul class="tablist">
+      <li><a href="files.html"><span>File&#160;List</span></a></li>
+      <li class="current"><a href="globals.html"><span>Globals</span></a></li>
+    </ul>
+  </div>
+  <div id="navrow3" class="tabs2">
+    <ul class="tablist">
+      <li class="current"><a href="globals.html"><span>All</span></a></li>
+      <li><a href="globals_func.html"><span>Functions</span></a></li>
+      <li><a href="globals_vars.html"><span>Variables</span></a></li>
+      <li><a href="globals_type.html"><span>Typedefs</span></a></li>
+      <li><a href="globals_enum.html"><span>Enumerations</span></a></li>
+      <li><a href="globals_eval.html"><span>Enumerator</span></a></li>
+      <li><a href="globals_defs.html"><span>Macros</span></a></li>
+    </ul>
+  </div>
+  <div id="navrow4" class="tabs3">
+    <ul class="tablist">
+      <li><a href="globals.html#index__"><span>_</span></a></li>
+      <li><a href="globals_0x61.html#index_a"><span>a</span></a></li>
+      <li><a href="globals_0x62.html#index_b"><span>b</span></a></li>
+      <li><a href="globals_0x63.html#index_c"><span>c</span></a></li>
+      <li><a href="globals_0x64.html#index_d"><span>d</span></a></li>
+      <li><a href="globals_0x65.html#index_e"><span>e</span></a></li>
+      <li><a href="globals_0x66.html#index_f"><span>f</span></a></li>
+      <li><a href="globals_0x67.html#index_g"><span>g</span></a></li>
+      <li><a href="globals_0x68.html#index_h"><span>h</span></a></li>
+      <li><a href="globals_0x69.html#index_i"><span>i</span></a></li>
+      <li><a href="globals_0x6c.html#index_l"><span>l</span></a></li>
+      <li><a href="globals_0x6d.html#index_m"><span>m</span></a></li>
+      <li><a href="globals_0x6e.html#index_n"><span>n</span></a></li>
+      <li><a href="globals_0x6f.html#index_o"><span>o</span></a></li>
+      <li><a href="globals_0x70.html#index_p"><span>p</span></a></li>
+      <li><a href="globals_0x72.html#index_r"><span>r</span></a></li>
+      <li><a href="globals_0x73.html#index_s"><span>s</span></a></li>
+      <li><a href="globals_0x74.html#index_t"><span>t</span></a></li>
+      <li class="current"><a href="globals_0x75.html#index_u"><span>u</span></a></li>
+      <li><a href="globals_0x76.html#index_v"><span>v</span></a></li>
+      <li><a href="globals_0x77.html#index_w"><span>w</span></a></li>
+      <li><a href="globals_0x78.html#index_x"><span>x</span></a></li>
+      <li><a href="globals_0x79.html#index_y"><span>y</span></a></li>
+      <li><a href="globals_0x7a.html#index_z"><span>z</span></a></li>
+    </ul>
+  </div>
 </div><!-- top -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
@@ -72,26 +117,33 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </iframe>
 </div>
 
-<div class="header">
-  <div class="headertitle">
-<div class="title">pmm Documentation</div>  </div>
-</div><!--header-->
 <div class="contents">
-<div class="textblock"><p>Performance Model Manager</p>
-<p>PMM is a tool that has been developed to address issues surrounding the construction, maintenance and use of Functional Performance Models in a variety of parallel computing environments. It consists of three main features:</p>
-<ul>
-<li>Firstly it implements the Geometric Bisection Building Procedure for multi-parameter FPMs, optimizing the construction of a problem’s performance model.</li>
-<li>Secondly, it permits a large number of problems to have their construction managed by implementing a flexible benchmarking scheduler, suitable for use where a queuing system does not exist.</li>
-<li>Finally it provides access to the models in a variety of ways, allowing feedback from actual executions and providing tools to use the models in scheduling decisions.</li>
+<div class="textblock">Here is a list of all functions, variables, defines, enums, and typedefs with links to the files they belong to:</div>
+
+<h3><a class="anchor" id="index_u"></a>- u -</h3><ul>
+<li>usage()
+: <a class="el" href="pmm__argparser_8c.html#a2ef30c42cbc289d899a8be5d2d8f77d0">pmm_argparser.c</a>
+, <a class="el" href="pmm__argparser_8h.html#a2ef30c42cbc289d899a8be5d2d8f77d0">pmm_argparser.h</a>
+, <a class="el" href="pmm__comp_8c.html#a2ef30c42cbc289d899a8be5d2d8f77d0">pmm_comp.c</a>
+</li>
+<li>usage_end
+: <a class="el" href="pmm__util_8c.html#a1cf512d20c2a468a9a5fe78cc6574f38">pmm_util.c</a>
+</li>
+<li>usage_pmm_view()
+: <a class="el" href="pmm__argparser_8c.html#a2b44d32a4bfc670223a243a377a82d9a">pmm_argparser.c</a>
+, <a class="el" href="pmm__argparser_8h.html#a2b44d32a4bfc670223a243a377a82d9a">pmm_argparser.h</a>
+</li>
+<li>usage_start
+: <a class="el" href="pmm__util_8c.html#a49367d8742ef971a43e66a1100441c03">pmm_util.c</a>
+</li>
+<li>usage_temp
+: <a class="el" href="pmm__util_8c.html#a44d31bc7991eff1b16bf2246080bd6f6">pmm_util.c</a>
+</li>
+<li>usedtime_total
+: <a class="el" href="pmm__util_8c.html#a6ce9396343b7e5a273e3492b16ae773e">pmm_util.c</a>
+</li>
 </ul>
-<p>This documentation describes the internal code that makes up PMM. The user guide can be found under docs/manual.pdf.</p>
-<p>Further details on the application and optimised building can be found in:</p>
-<p>Higgins, R., and A. Lastovetsky, <a href="http://hcl.ucd.ie/biblio/266">"Managing the Construction and Use of
-Functional Performance Models in a Grid Environment"</a>, The 23rd IEEE International Parallel and Distributed Processing Symposium, Rome, Italy, May 25-29, 2009.</p>
-<p>Lastovetsky, A., R. Reddy, and R. Higgins, <a href="http://hcl.ucd.ie/biblio/59">"Building the Functional Performance Model
-of a Processor"</a>, Proceedings of the 21st Annual ACM Symposium on Applied Computing (SAC 2006), Dijon, France, ACM, April 23-27 2006.</p>
-<p><em>pmmd</em> is the main model building tool. It begins in <a class="el" href="pmm__main_8c.html" title="The pmm application.">pmm_main.c</a> <em>pmm_view</em>, a viewer for models, is found in <a class="el" href="pmm__view_8c.html" title="Basic viewer program for models constructed by PMM.">pmm_view.c</a>. GBBP the primary research algorithm implemented in this software can be found in <a class="el" href="pmm__selector_8c.html" title="Code for chosing benchmark points.">pmm_selector.c</a>, between <a class="el" href="pmm__selector_8c.html#a34b247ec5756844a437899a17e31d2fd">multi_gbbp_select_new_bench()</a> and <a class="el" href="pmm__selector_8c.html#aeeee1b08f092e9bb40ab829caa8eb438">multi_gbbp_insert_bench()</a> </p>
-</div></div><!-- contents -->
+</div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated on Fri Apr 5 2013 14:46:34 for pmm by &#160;<a href="http://www.doxygen.org/index.html">

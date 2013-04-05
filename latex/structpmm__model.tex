@@ -1,0 +1,86 @@
+\hypertarget{structpmm__model}{\section{pmm\-\_\-model Struct Reference}
+\label{structpmm__model}\index{pmm\-\_\-model@{pmm\-\_\-model}}
+}
+
+
+{\ttfamily \#include $<$pmm\-\_\-model.\-h$>$}
+
+\subsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+char $\ast$ \hyperlink{structpmm__model_aba56fe203b7b1c2a19a7d1c29afae80f}{model\-\_\-path}
+\item 
+int \hyperlink{structpmm__model_a63d3fe02fc90ce9f48b6aae94ef25dfc}{unwritten\-\_\-num\-\_\-execs}
+\item 
+double \hyperlink{structpmm__model_a6a06f632cf4913a674b29808622dbd39}{unwritten\-\_\-time\-\_\-spend}
+\item 
+time\-\_\-t \hyperlink{structpmm__model_a74b64763a97bc359a4e0861010e090d3}{mtime}
+\item 
+int \hyperlink{structpmm__model_aa911d7af855c1a761fbcebd9545dc2c1}{n\-\_\-p}
+\item 
+int \hyperlink{structpmm__model_a8e6211f2cd32b0b31581241bb32a8190}{completion}
+\item 
+int \hyperlink{structpmm__model_a793e727d1ef15e739b140dacc5cea1f1}{complete}
+\item 
+int \hyperlink{structpmm__model_abcba0be210c29849b2594efb1dee7611}{unique\-\_\-benches}
+\item 
+struct \hyperlink{structpmm__bench__list}{pmm\-\_\-bench\-\_\-list} $\ast$ \hyperlink{structpmm__model_a024c61407d559a45ca20c076f732eb5c}{bench\-\_\-list}
+\item 
+double \hyperlink{structpmm__model_a71f976917c0db11c7a5a9b8efe0aaf93}{peak\-\_\-flops}
+\item 
+struct \hyperlink{structpmm__interval__list}{pmm\-\_\-interval\-\_\-list} $\ast$ \hyperlink{structpmm__model_a11a127e6d5d5c3c28ceceea2d3d31081}{interval\-\_\-list}
+\item 
+struct \hyperlink{structpmm__paramdef__set}{pmm\-\_\-paramdef\-\_\-set} $\ast$ \hyperlink{structpmm__model_a30f07ca77b7d593ec85bd1cc6d9ff1bc}{pd\-\_\-set}
+\item 
+struct \hyperlink{structpmm__routine}{pmm\-\_\-routine} $\ast$ \hyperlink{structpmm__model_a6a2335135513ba6f9bd43f56f9311431}{parent\-\_\-routine}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+functional performance model of a routine 
+
+\subsection{Field Documentation}
+\hypertarget{structpmm__model_a024c61407d559a45ca20c076f732eb5c}{\index{pmm\-\_\-model@{pmm\-\_\-model}!bench\-\_\-list@{bench\-\_\-list}}
+\index{bench\-\_\-list@{bench\-\_\-list}!pmm_model@{pmm\-\_\-model}}
+\subsubsection[{bench\-\_\-list}]{\setlength{\rightskip}{0pt plus 5cm}struct {\bf pmm\-\_\-bench\-\_\-list}$\ast$ pmm\-\_\-model\-::bench\-\_\-list}}\label{structpmm__model_a024c61407d559a45ca20c076f732eb5c}
+\hypertarget{structpmm__model_a793e727d1ef15e739b140dacc5cea1f1}{\index{pmm\-\_\-model@{pmm\-\_\-model}!complete@{complete}}
+\index{complete@{complete}!pmm_model@{pmm\-\_\-model}}
+\subsubsection[{complete}]{\setlength{\rightskip}{0pt plus 5cm}int pmm\-\_\-model\-::complete}}\label{structpmm__model_a793e727d1ef15e739b140dacc5cea1f1}
+is model complete \hypertarget{structpmm__model_a8e6211f2cd32b0b31581241bb32a8190}{\index{pmm\-\_\-model@{pmm\-\_\-model}!completion@{completion}}
+\index{completion@{completion}!pmm_model@{pmm\-\_\-model}}
+\subsubsection[{completion}]{\setlength{\rightskip}{0pt plus 5cm}int pmm\-\_\-model\-::completion}}\label{structpmm__model_a8e6211f2cd32b0b31581241bb32a8190}
+completion state of the model \hypertarget{structpmm__model_a11a127e6d5d5c3c28ceceea2d3d31081}{\index{pmm\-\_\-model@{pmm\-\_\-model}!interval\-\_\-list@{interval\-\_\-list}}
+\index{interval\-\_\-list@{interval\-\_\-list}!pmm_model@{pmm\-\_\-model}}
+\subsubsection[{interval\-\_\-list}]{\setlength{\rightskip}{0pt plus 5cm}struct {\bf pmm\-\_\-interval\-\_\-list}$\ast$ pmm\-\_\-model\-::interval\-\_\-list}}\label{structpmm__model_a11a127e6d5d5c3c28ceceea2d3d31081}
+intervals describing unfinished parts of the model \hypertarget{structpmm__model_aba56fe203b7b1c2a19a7d1c29afae80f}{\index{pmm\-\_\-model@{pmm\-\_\-model}!model\-\_\-path@{model\-\_\-path}}
+\index{model\-\_\-path@{model\-\_\-path}!pmm_model@{pmm\-\_\-model}}
+\subsubsection[{model\-\_\-path}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ pmm\-\_\-model\-::model\-\_\-path}}\label{structpmm__model_aba56fe203b7b1c2a19a7d1c29afae80f}
+path to model filee \hypertarget{structpmm__model_a74b64763a97bc359a4e0861010e090d3}{\index{pmm\-\_\-model@{pmm\-\_\-model}!mtime@{mtime}}
+\index{mtime@{mtime}!pmm_model@{pmm\-\_\-model}}
+\subsubsection[{mtime}]{\setlength{\rightskip}{0pt plus 5cm}time\-\_\-t pmm\-\_\-model\-::mtime}}\label{structpmm__model_a74b64763a97bc359a4e0861010e090d3}
+modified time of the model file \hypertarget{structpmm__model_aa911d7af855c1a761fbcebd9545dc2c1}{\index{pmm\-\_\-model@{pmm\-\_\-model}!n\-\_\-p@{n\-\_\-p}}
+\index{n\-\_\-p@{n\-\_\-p}!pmm_model@{pmm\-\_\-model}}
+\subsubsection[{n\-\_\-p}]{\setlength{\rightskip}{0pt plus 5cm}int pmm\-\_\-model\-::n\-\_\-p}}\label{structpmm__model_aa911d7af855c1a761fbcebd9545dc2c1}
+number of parameters of the model \hypertarget{structpmm__model_a6a2335135513ba6f9bd43f56f9311431}{\index{pmm\-\_\-model@{pmm\-\_\-model}!parent\-\_\-routine@{parent\-\_\-routine}}
+\index{parent\-\_\-routine@{parent\-\_\-routine}!pmm_model@{pmm\-\_\-model}}
+\subsubsection[{parent\-\_\-routine}]{\setlength{\rightskip}{0pt plus 5cm}struct {\bf pmm\-\_\-routine}$\ast$ pmm\-\_\-model\-::parent\-\_\-routine}}\label{structpmm__model_a6a2335135513ba6f9bd43f56f9311431}
+routine to which the model belongs \hypertarget{structpmm__model_a30f07ca77b7d593ec85bd1cc6d9ff1bc}{\index{pmm\-\_\-model@{pmm\-\_\-model}!pd\-\_\-set@{pd\-\_\-set}}
+\index{pd\-\_\-set@{pd\-\_\-set}!pmm_model@{pmm\-\_\-model}}
+\subsubsection[{pd\-\_\-set}]{\setlength{\rightskip}{0pt plus 5cm}struct {\bf pmm\-\_\-paramdef\-\_\-set}$\ast$ pmm\-\_\-model\-::pd\-\_\-set}}\label{structpmm__model_a30f07ca77b7d593ec85bd1cc6d9ff1bc}
+set of parameter definition for the routine \hypertarget{structpmm__model_a71f976917c0db11c7a5a9b8efe0aaf93}{\index{pmm\-\_\-model@{pmm\-\_\-model}!peak\-\_\-flops@{peak\-\_\-flops}}
+\index{peak\-\_\-flops@{peak\-\_\-flops}!pmm_model@{pmm\-\_\-model}}
+\subsubsection[{peak\-\_\-flops}]{\setlength{\rightskip}{0pt plus 5cm}double pmm\-\_\-model\-::peak\-\_\-flops}}\label{structpmm__model_a71f976917c0db11c7a5a9b8efe0aaf93}
+pointer to benchmark list peak speed observed over all benchmarks \hypertarget{structpmm__model_abcba0be210c29849b2594efb1dee7611}{\index{pmm\-\_\-model@{pmm\-\_\-model}!unique\-\_\-benches@{unique\-\_\-benches}}
+\index{unique\-\_\-benches@{unique\-\_\-benches}!pmm_model@{pmm\-\_\-model}}
+\subsubsection[{unique\-\_\-benches}]{\setlength{\rightskip}{0pt plus 5cm}int pmm\-\_\-model\-::unique\-\_\-benches}}\label{structpmm__model_abcba0be210c29849b2594efb1dee7611}
+number of unique benchmarks made to build model \hypertarget{structpmm__model_a63d3fe02fc90ce9f48b6aae94ef25dfc}{\index{pmm\-\_\-model@{pmm\-\_\-model}!unwritten\-\_\-num\-\_\-execs@{unwritten\-\_\-num\-\_\-execs}}
+\index{unwritten\-\_\-num\-\_\-execs@{unwritten\-\_\-num\-\_\-execs}!pmm_model@{pmm\-\_\-model}}
+\subsubsection[{unwritten\-\_\-num\-\_\-execs}]{\setlength{\rightskip}{0pt plus 5cm}int pmm\-\_\-model\-::unwritten\-\_\-num\-\_\-execs}}\label{structpmm__model_a63d3fe02fc90ce9f48b6aae94ef25dfc}
+number of executions since last write \hypertarget{structpmm__model_a6a06f632cf4913a674b29808622dbd39}{\index{pmm\-\_\-model@{pmm\-\_\-model}!unwritten\-\_\-time\-\_\-spend@{unwritten\-\_\-time\-\_\-spend}}
+\index{unwritten\-\_\-time\-\_\-spend@{unwritten\-\_\-time\-\_\-spend}!pmm_model@{pmm\-\_\-model}}
+\subsubsection[{unwritten\-\_\-time\-\_\-spend}]{\setlength{\rightskip}{0pt plus 5cm}double pmm\-\_\-model\-::unwritten\-\_\-time\-\_\-spend}}\label{structpmm__model_a6a06f632cf4913a674b29808622dbd39}
+benchmarking time spend since last write 
+
+The documentation for this struct was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+/home/rhiggins/phd/pmm\-\_\-github/src/\hyperlink{pmm__model_8h}{pmm\-\_\-model.\-h}\end{DoxyCompactItemize}

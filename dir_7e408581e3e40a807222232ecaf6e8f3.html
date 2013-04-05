@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
-<title>pmm: Main Page</title>
+<title>pmm: /home/rhiggins/phd/pmm_github/routines/gsl/blas/ Directory Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -36,7 +36,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </script>
   <div id="navrow1" class="tabs">
     <ul class="tablist">
-      <li class="current"><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="annotated.html"><span>Data&#160;Structures</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -57,7 +57,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       </li>
     </ul>
   </div>
-</div><!-- top -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
@@ -72,26 +71,25 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </iframe>
 </div>
 
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_7529878b64b9c02e42cc659f9a51715a.html">routines</a></li><li class="navelem"><a class="el" href="dir_9015ef18b3b972469a80b725a69e94b7.html">gsl</a></li><li class="navelem"><a class="el" href="dir_7e408581e3e40a807222232ecaf6e8f3.html">blas</a></li>  </ul>
+</div>
+</div><!-- top -->
 <div class="header">
   <div class="headertitle">
-<div class="title">pmm Documentation</div>  </div>
+<div class="title">blas Directory Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p>Performance Model Manager</p>
-<p>PMM is a tool that has been developed to address issues surrounding the construction, maintenance and use of Functional Performance Models in a variety of parallel computing environments. It consists of three main features:</p>
-<ul>
-<li>Firstly it implements the Geometric Bisection Building Procedure for multi-parameter FPMs, optimizing the construction of a problem’s performance model.</li>
-<li>Secondly, it permits a large number of problems to have their construction managed by implementing a flexible benchmarking scheduler, suitable for use where a queuing system does not exist.</li>
-<li>Finally it provides access to the models in a variety of ways, allowing feedback from actual executions and providing tools to use the models in scheduling decisions.</li>
-</ul>
-<p>This documentation describes the internal code that makes up PMM. The user guide can be found under docs/manual.pdf.</p>
-<p>Further details on the application and optimised building can be found in:</p>
-<p>Higgins, R., and A. Lastovetsky, <a href="http://hcl.ucd.ie/biblio/266">"Managing the Construction and Use of
-Functional Performance Models in a Grid Environment"</a>, The 23rd IEEE International Parallel and Distributed Processing Symposium, Rome, Italy, May 25-29, 2009.</p>
-<p>Lastovetsky, A., R. Reddy, and R. Higgins, <a href="http://hcl.ucd.ie/biblio/59">"Building the Functional Performance Model
-of a Processor"</a>, Proceedings of the 21st Annual ACM Symposium on Applied Computing (SAC 2006), Dijon, France, ACM, April 23-27 2006.</p>
-<p><em>pmmd</em> is the main model building tool. It begins in <a class="el" href="pmm__main_8c.html" title="The pmm application.">pmm_main.c</a> <em>pmm_view</em>, a viewer for models, is found in <a class="el" href="pmm__view_8c.html" title="Basic viewer program for models constructed by PMM.">pmm_view.c</a>. GBBP the primary research algorithm implemented in this software can be found in <a class="el" href="pmm__selector_8c.html" title="Code for chosing benchmark points.">pmm_selector.c</a>, between <a class="el" href="pmm__selector_8c.html#a34b247ec5756844a437899a17e31d2fd">multi_gbbp_select_new_bench()</a> and <a class="el" href="pmm__selector_8c.html#aeeee1b08f092e9bb40ab829caa8eb438">multi_gbbp_insert_bench()</a> </p>
-</div></div><!-- contents -->
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2><a name="files"></a>
+Files</h2></td></tr>
+<tr class="memitem:dgemm_8c"><td class="memItemLeft" align="right" valign="top">file &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="dgemm_8c.html">dgemm.c</a></td></tr>
+<tr class="memitem:dgemm2_8c"><td class="memItemLeft" align="right" valign="top">file &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="dgemm2_8c.html">dgemm2.c</a></td></tr>
+<tr class="memitem:dgemm3_8c"><td class="memItemLeft" align="right" valign="top">file &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="dgemm3_8c.html">dgemm3.c</a></td></tr>
+<tr class="memitem:dsyrk_8c"><td class="memItemLeft" align="right" valign="top">file &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="dsyrk_8c.html">dsyrk.c</a></td></tr>
+</table>
+</div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated on Fri Apr 5 2013 14:46:34 for pmm by &#160;<a href="http://www.doxygen.org/index.html">

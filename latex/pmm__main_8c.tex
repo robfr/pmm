@@ -1,0 +1,173 @@
+\hypertarget{pmm__main_8c}{\section{/home/rhiggins/phd/pmm\-\_\-github/src/pmm\-\_\-main.c File Reference}
+\label{pmm__main_8c}\index{/home/rhiggins/phd/pmm\-\_\-github/src/pmm\-\_\-main.\-c@{/home/rhiggins/phd/pmm\-\_\-github/src/pmm\-\_\-main.\-c}}
+}
+
+
+The pmm application.  
+
+
+{\ttfamily \#include $<$stdio.\-h$>$}\\*
+{\ttfamily \#include $<$stdlib.\-h$>$}\\*
+{\ttfamily \#include $<$signal.\-h$>$}\\*
+{\ttfamily \#include $<$sys/signal.\-h$>$}\\*
+{\ttfamily \#include $<$pthread.\-h$>$}\\*
+{\ttfamily \#include $<$unistd.\-h$>$}\\*
+{\ttfamily \#include $<$sys/time.\-h$>$}\\*
+{\ttfamily \#include $<$time.\-h$>$}\\*
+{\ttfamily \#include $<$paths.\-h$>$}\\*
+{\ttfamily \#include $<$sys/types.\-h$>$}\\*
+{\ttfamily \#include $<$sys/stat.\-h$>$}\\*
+{\ttfamily \#include \char`\"{}pmm\-\_\-model.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}pmm\-\_\-load.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}pmm\-\_\-loadmonitor.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}pmm\-\_\-argparser.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}pmm\-\_\-cfgparser.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}pmm\-\_\-scheduler.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}pmm\-\_\-executor.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}pmm\-\_\-log.\-h\char`\"{}}\\*
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{pmm__main_8c_a06d144d486b0670b1d268e0a7ff29ce8}{run\-\_\-as\-\_\-daemon} ()
+\item 
+void \hyperlink{pmm__main_8c_a1af0728240fbff82caab1f1e97e81970}{sig\-\_\-cleanup} (int sig)
+\item 
+void \hyperlink{pmm__main_8c_a783e744853ab46e5e450656b35d0b52c}{sig\-\_\-do\-\_\-nothing} ()
+\item 
+void $\ast$ \hyperlink{pmm__main_8c_acf468b5aa146dcdeff5404f6fd24f2c4}{signal\-\_\-handler} (void $\ast$arg)
+\item 
+void \hyperlink{pmm__main_8c_adc4c041654cf016bc036841f249cfc32}{redirect\-\_\-output} (char $\ast$logfile)
+\item 
+int \hyperlink{pmm__main_8c_a3c04138a5bfe5d72780bb7e82a18e627}{main} (int argc, char $\ast$$\ast$argv)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{pmm__main_8c_a0a8f5d539698cacf1b39e10fa15fd2f1}{executing\-\_\-benchmark}
+\begin{DoxyCompactList}\small\item\em daemon executing variable or not \end{DoxyCompactList}\item 
+pthread\-\_\-mutex\-\_\-t \hyperlink{pmm__main_8c_a9c2a8272c2122c6c0e3b0ec2cc4aa78d}{executing\-\_\-benchmark\-\_\-mutex}
+\begin{DoxyCompactList}\small\item\em mutex for accessing executing\-\_\-benchmark variable \end{DoxyCompactList}\item 
+int \hyperlink{pmm__main_8c_ac26321b66bfa16f4fd6b94164a328db6}{signal\-\_\-quit} = 0
+\begin{DoxyCompactList}\small\item\em signal to indicate benchmark should be terminated \end{DoxyCompactList}\item 
+pthread\-\_\-mutex\-\_\-t \hyperlink{pmm__main_8c_a8fc222adb17037b4738800f9d112d930}{signal\-\_\-quit\-\_\-mutex} = P\-T\-H\-R\-E\-A\-D\-\_\-\-M\-U\-T\-E\-X\-\_\-\-I\-N\-I\-T\-I\-A\-L\-I\-Z\-E\-R
+\begin{DoxyCompactList}\small\item\em mutex for accessing singal\-\_\-quit \end{DoxyCompactList}\item 
+volatile sig\-\_\-atomic\-\_\-t \hyperlink{pmm__main_8c_a245fd7c7c36904e4e3a7b7fffc633594}{sig\-\_\-cleanup\-\_\-received} = 0
+\item 
+volatile sig\-\_\-atomic\-\_\-t \hyperlink{pmm__main_8c_a355f143933c845780939b3bc4af5d269}{sig\-\_\-pause\-\_\-received} = 0
+\item 
+volatile sig\-\_\-atomic\-\_\-t \hyperlink{pmm__main_8c_a5e738e8de8dacc83f9a16bf23f0a046d}{sig\-\_\-unpause\-\_\-received} = 0
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+The pmm application. Main function for the pmm application 
+
+\subsection{Function Documentation}
+\hypertarget{pmm__main_8c_a3c04138a5bfe5d72780bb7e82a18e627}{\index{pmm\-\_\-main.\-c@{pmm\-\_\-main.\-c}!main@{main}}
+\index{main@{main}!pmm_main.c@{pmm\-\_\-main.\-c}}
+\subsubsection[{main}]{\setlength{\rightskip}{0pt plus 5cm}int main (
+\begin{DoxyParamCaption}
+\item[{int}]{argc, }
+\item[{char $\ast$$\ast$}]{argv}
+\end{DoxyParamCaption}
+)}}\label{pmm__main_8c_a3c04138a5bfe5d72780bb7e82a18e627}
+the main function
+
+Structure of the main function is as follows\-:
+
+
+\begin{DoxyItemize}
+\item set up signal handlers
+\item parse command line arguments
+\item read configuration file, models and load history
+\item launch load monitoring thread
+\item enter main loop
+\begin{DoxyItemize}
+\item if not executing benchmark
+\begin{DoxyItemize}
+\item clean up previous benchmark execution
+\item pick a new benchmark launch benchmarking thread
+\end{DoxyItemize}
+\end{DoxyItemize}
+\end{DoxyItemize}
+
+All the while checking for termination signals, handling shutdown and so on. \hypertarget{pmm__main_8c_adc4c041654cf016bc036841f249cfc32}{\index{pmm\-\_\-main.\-c@{pmm\-\_\-main.\-c}!redirect\-\_\-output@{redirect\-\_\-output}}
+\index{redirect\-\_\-output@{redirect\-\_\-output}!pmm_main.c@{pmm\-\_\-main.\-c}}
+\subsubsection[{redirect\-\_\-output}]{\setlength{\rightskip}{0pt plus 5cm}void redirect\-\_\-output (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{logfile}
+\end{DoxyParamCaption}
+)}}\label{pmm__main_8c_adc4c041654cf016bc036841f249cfc32}
+\hypertarget{pmm__main_8c_a06d144d486b0670b1d268e0a7ff29ce8}{\index{pmm\-\_\-main.\-c@{pmm\-\_\-main.\-c}!run\-\_\-as\-\_\-daemon@{run\-\_\-as\-\_\-daemon}}
+\index{run\-\_\-as\-\_\-daemon@{run\-\_\-as\-\_\-daemon}!pmm_main.c@{pmm\-\_\-main.\-c}}
+\subsubsection[{run\-\_\-as\-\_\-daemon}]{\setlength{\rightskip}{0pt plus 5cm}void run\-\_\-as\-\_\-daemon (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{pmm__main_8c_a06d144d486b0670b1d268e0a7ff29ce8}
+\hypertarget{pmm__main_8c_a1af0728240fbff82caab1f1e97e81970}{\index{pmm\-\_\-main.\-c@{pmm\-\_\-main.\-c}!sig\-\_\-cleanup@{sig\-\_\-cleanup}}
+\index{sig\-\_\-cleanup@{sig\-\_\-cleanup}!pmm_main.c@{pmm\-\_\-main.\-c}}
+\subsubsection[{sig\-\_\-cleanup}]{\setlength{\rightskip}{0pt plus 5cm}void sig\-\_\-cleanup (
+\begin{DoxyParamCaption}
+\item[{int}]{sig}
+\end{DoxyParamCaption}
+)}}\label{pmm__main_8c_a1af0728240fbff82caab1f1e97e81970}
+\hypertarget{pmm__main_8c_a783e744853ab46e5e450656b35d0b52c}{\index{pmm\-\_\-main.\-c@{pmm\-\_\-main.\-c}!sig\-\_\-do\-\_\-nothing@{sig\-\_\-do\-\_\-nothing}}
+\index{sig\-\_\-do\-\_\-nothing@{sig\-\_\-do\-\_\-nothing}!pmm_main.c@{pmm\-\_\-main.\-c}}
+\subsubsection[{sig\-\_\-do\-\_\-nothing}]{\setlength{\rightskip}{0pt plus 5cm}void sig\-\_\-do\-\_\-nothing (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{pmm__main_8c_a783e744853ab46e5e450656b35d0b52c}
+\hypertarget{pmm__main_8c_acf468b5aa146dcdeff5404f6fd24f2c4}{\index{pmm\-\_\-main.\-c@{pmm\-\_\-main.\-c}!signal\-\_\-handler@{signal\-\_\-handler}}
+\index{signal\-\_\-handler@{signal\-\_\-handler}!pmm_main.c@{pmm\-\_\-main.\-c}}
+\subsubsection[{signal\-\_\-handler}]{\setlength{\rightskip}{0pt plus 5cm}void$\ast$ signal\-\_\-handler (
+\begin{DoxyParamCaption}
+\item[{void $\ast$}]{arg}
+\end{DoxyParamCaption}
+)}}\label{pmm__main_8c_acf468b5aa146dcdeff5404f6fd24f2c4}
+single handler thread that should catch signals and set appropriate gobal variables
+
+\begin{DoxyWarning}{Warning}
+Do not use $\ast$\-P\-R\-I\-N\-T\-F logging facility in this thread, it is not 'async-\/signal-\/safe' (though it is threadsafe). 
+\end{DoxyWarning}
+
+
+\subsection{Variable Documentation}
+\hypertarget{pmm__main_8c_a0a8f5d539698cacf1b39e10fa15fd2f1}{\index{pmm\-\_\-main.\-c@{pmm\-\_\-main.\-c}!executing\-\_\-benchmark@{executing\-\_\-benchmark}}
+\index{executing\-\_\-benchmark@{executing\-\_\-benchmark}!pmm_main.c@{pmm\-\_\-main.\-c}}
+\subsubsection[{executing\-\_\-benchmark}]{\setlength{\rightskip}{0pt plus 5cm}int executing\-\_\-benchmark}}\label{pmm__main_8c_a0a8f5d539698cacf1b39e10fa15fd2f1}
+
+
+daemon executing variable or not 
+
+\hypertarget{pmm__main_8c_a9c2a8272c2122c6c0e3b0ec2cc4aa78d}{\index{pmm\-\_\-main.\-c@{pmm\-\_\-main.\-c}!executing\-\_\-benchmark\-\_\-mutex@{executing\-\_\-benchmark\-\_\-mutex}}
+\index{executing\-\_\-benchmark\-\_\-mutex@{executing\-\_\-benchmark\-\_\-mutex}!pmm_main.c@{pmm\-\_\-main.\-c}}
+\subsubsection[{executing\-\_\-benchmark\-\_\-mutex}]{\setlength{\rightskip}{0pt plus 5cm}pthread\-\_\-mutex\-\_\-t executing\-\_\-benchmark\-\_\-mutex}}\label{pmm__main_8c_a9c2a8272c2122c6c0e3b0ec2cc4aa78d}
+
+
+mutex for accessing executing\-\_\-benchmark variable 
+
+\hypertarget{pmm__main_8c_a245fd7c7c36904e4e3a7b7fffc633594}{\index{pmm\-\_\-main.\-c@{pmm\-\_\-main.\-c}!sig\-\_\-cleanup\-\_\-received@{sig\-\_\-cleanup\-\_\-received}}
+\index{sig\-\_\-cleanup\-\_\-received@{sig\-\_\-cleanup\-\_\-received}!pmm_main.c@{pmm\-\_\-main.\-c}}
+\subsubsection[{sig\-\_\-cleanup\-\_\-received}]{\setlength{\rightskip}{0pt plus 5cm}volatile sig\-\_\-atomic\-\_\-t sig\-\_\-cleanup\-\_\-received = 0}}\label{pmm__main_8c_a245fd7c7c36904e4e3a7b7fffc633594}
+\hypertarget{pmm__main_8c_a355f143933c845780939b3bc4af5d269}{\index{pmm\-\_\-main.\-c@{pmm\-\_\-main.\-c}!sig\-\_\-pause\-\_\-received@{sig\-\_\-pause\-\_\-received}}
+\index{sig\-\_\-pause\-\_\-received@{sig\-\_\-pause\-\_\-received}!pmm_main.c@{pmm\-\_\-main.\-c}}
+\subsubsection[{sig\-\_\-pause\-\_\-received}]{\setlength{\rightskip}{0pt plus 5cm}volatile sig\-\_\-atomic\-\_\-t sig\-\_\-pause\-\_\-received = 0}}\label{pmm__main_8c_a355f143933c845780939b3bc4af5d269}
+\hypertarget{pmm__main_8c_a5e738e8de8dacc83f9a16bf23f0a046d}{\index{pmm\-\_\-main.\-c@{pmm\-\_\-main.\-c}!sig\-\_\-unpause\-\_\-received@{sig\-\_\-unpause\-\_\-received}}
+\index{sig\-\_\-unpause\-\_\-received@{sig\-\_\-unpause\-\_\-received}!pmm_main.c@{pmm\-\_\-main.\-c}}
+\subsubsection[{sig\-\_\-unpause\-\_\-received}]{\setlength{\rightskip}{0pt plus 5cm}volatile sig\-\_\-atomic\-\_\-t sig\-\_\-unpause\-\_\-received = 0}}\label{pmm__main_8c_a5e738e8de8dacc83f9a16bf23f0a046d}
+\hypertarget{pmm__main_8c_ac26321b66bfa16f4fd6b94164a328db6}{\index{pmm\-\_\-main.\-c@{pmm\-\_\-main.\-c}!signal\-\_\-quit@{signal\-\_\-quit}}
+\index{signal\-\_\-quit@{signal\-\_\-quit}!pmm_main.c@{pmm\-\_\-main.\-c}}
+\subsubsection[{signal\-\_\-quit}]{\setlength{\rightskip}{0pt plus 5cm}int signal\-\_\-quit = 0}}\label{pmm__main_8c_ac26321b66bfa16f4fd6b94164a328db6}
+
+
+signal to indicate benchmark should be terminated 
+
+\hypertarget{pmm__main_8c_a8fc222adb17037b4738800f9d112d930}{\index{pmm\-\_\-main.\-c@{pmm\-\_\-main.\-c}!signal\-\_\-quit\-\_\-mutex@{signal\-\_\-quit\-\_\-mutex}}
+\index{signal\-\_\-quit\-\_\-mutex@{signal\-\_\-quit\-\_\-mutex}!pmm_main.c@{pmm\-\_\-main.\-c}}
+\subsubsection[{signal\-\_\-quit\-\_\-mutex}]{\setlength{\rightskip}{0pt plus 5cm}pthread\-\_\-mutex\-\_\-t signal\-\_\-quit\-\_\-mutex = P\-T\-H\-R\-E\-A\-D\-\_\-\-M\-U\-T\-E\-X\-\_\-\-I\-N\-I\-T\-I\-A\-L\-I\-Z\-E\-R}}\label{pmm__main_8c_a8fc222adb17037b4738800f9d112d930}
+
+
+mutex for accessing singal\-\_\-quit 
+

@@ -1,0 +1,377 @@
+\hypertarget{pmm__cfgparser_8h}{\section{/home/rhiggins/phd/pmm\-\_\-github/src/pmm\-\_\-cfgparser.h File Reference}
+\label{pmm__cfgparser_8h}\index{/home/rhiggins/phd/pmm\-\_\-github/src/pmm\-\_\-cfgparser.\-h@{/home/rhiggins/phd/pmm\-\_\-github/src/pmm\-\_\-cfgparser.\-h}}
+}
+{\ttfamily \#include $<$libxml/xmlwriter.\-h$>$}\\*
+{\ttfamily \#include \char`\"{}pmm\-\_\-model.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}pmm\-\_\-load.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}pmm\-\_\-interval.\-h\char`\"{}}\\*
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{pmm__cfgparser_8h_a9ac7b03fb02cf734e2df2a276441e259}{parse\-\_\-config} (struct \hyperlink{structpmm__config}{pmm\-\_\-config} $\ast$cfg)
+\item 
+int \hyperlink{pmm__cfgparser_8h_aa0c9b646c58e79e4d84332dc7fb720f6}{parse\-\_\-history} (struct \hyperlink{structpmm__loadhistory}{pmm\-\_\-loadhistory} $\ast$h)
+\item 
+int \hyperlink{pmm__cfgparser_8h_abdadaa21aaf7baad787ccb34d69e741a}{parse\-\_\-model} (struct \hyperlink{structpmm__model}{pmm\-\_\-model} $\ast$m)
+\item 
+int \hyperlink{pmm__cfgparser_8h_a2fa257c1e2a9946215b5550dfd057b51}{parse\-\_\-models} (struct \hyperlink{structpmm__config}{pmm\-\_\-config} $\ast$c)
+\item 
+int \hyperlink{pmm__cfgparser_8h_a973c40b61a1ea3c11c231ea98a288750}{write\-\_\-loadhistory} (struct \hyperlink{structpmm__loadhistory}{pmm\-\_\-loadhistory} $\ast$h)
+\item 
+int \hyperlink{pmm__cfgparser_8h_aace927c339efaace4903fa14c92dda42}{write\-\_\-loadhistory\-\_\-xtwp} (xml\-Text\-Writer\-Ptr writer, struct \hyperlink{structpmm__loadhistory}{pmm\-\_\-loadhistory} $\ast$h)
+\item 
+int \hyperlink{pmm__cfgparser_8h_a913869f9537f932f9e74b249a4433364}{write\-\_\-models} (struct \hyperlink{structpmm__config}{pmm\-\_\-config} $\ast$cfg)
+\item 
+int \hyperlink{pmm__cfgparser_8h_a3de32ff7c1ff42d777108dd0a84e4e54}{write\-\_\-model} (struct \hyperlink{structpmm__model}{pmm\-\_\-model} $\ast$m)
+\item 
+int \hyperlink{pmm__cfgparser_8h_a833508c94c9d360bf8d1e5a74cd8203a}{write\-\_\-model\-\_\-xtwp} (xml\-Text\-Writer\-Ptr writer, struct \hyperlink{structpmm__model}{pmm\-\_\-model} $\ast$m)
+\item 
+int \hyperlink{pmm__cfgparser_8h_abe4b3a7e20a9a8a5cc8e5080b29dcb3c}{write\-\_\-bench\-\_\-list\-\_\-xtwp} (xml\-Text\-Writer\-Ptr writer, struct \hyperlink{structpmm__bench__list}{pmm\-\_\-bench\-\_\-list} $\ast$bench\-\_\-list)
+\item 
+int \hyperlink{pmm__cfgparser_8h_a650ce3f2bd2c8490ffaa74e8ca350db2}{write\-\_\-benchmark\-\_\-xtwp} (xml\-Text\-Writer\-Ptr writer, struct \hyperlink{structpmm__benchmark}{pmm\-\_\-benchmark} $\ast$b)
+\item 
+int \hyperlink{pmm__cfgparser_8h_acb39cfd72eff5e3c1bd78c671c674d4a}{write\-\_\-paramdef\-\_\-set\-\_\-xtwp} (xml\-Text\-Writer\-Ptr writer, struct \hyperlink{structpmm__paramdef__set}{pmm\-\_\-paramdef\-\_\-set} $\ast$pd\-\_\-set)
+\item 
+int \hyperlink{pmm__cfgparser_8h_a34ed084d14b0930214120b584d4d53cd}{write\-\_\-paramdef\-\_\-xtwp} (xml\-Text\-Writer\-Ptr writer, struct \hyperlink{structpmm__paramdef}{pmm\-\_\-paramdef} $\ast$pd)
+\item 
+int \hyperlink{pmm__cfgparser_8h_a90f61ed981ffa85dd57b03b6e9936eda}{write\-\_\-parameter\-\_\-array\-\_\-xtwp} (xml\-Text\-Writer\-Ptr writer, int $\ast$p, int n)
+\item 
+int \hyperlink{pmm__cfgparser_8h_a561a685077216f8148acaa5442a24805}{write\-\_\-interval\-\_\-xtwp} (xml\-Text\-Writer\-Ptr writer, struct \hyperlink{structpmm__interval}{pmm\-\_\-interval} $\ast$i)
+\item 
+int \hyperlink{pmm__cfgparser_8h_a4cd71a277d266a5d74bed336b5bde5cb}{write\-\_\-timeval\-\_\-xtwp} (xml\-Text\-Writer\-Ptr writer, struct timeval $\ast$t)
+\item 
+void \hyperlink{pmm__cfgparser_8h_afff91b7400257caf8e7ccabce0dbe8e2}{xmlparser\-\_\-init} ()
+\item 
+void \hyperlink{pmm__cfgparser_8h_a27d543da391436aea88a76ae942f696a}{xmlparser\-\_\-cleanup} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\hypertarget{pmm__cfgparser_8h_a9ac7b03fb02cf734e2df2a276441e259}{\index{pmm\-\_\-cfgparser.\-h@{pmm\-\_\-cfgparser.\-h}!parse\-\_\-config@{parse\-\_\-config}}
+\index{parse\-\_\-config@{parse\-\_\-config}!pmm_cfgparser.h@{pmm\-\_\-cfgparser.\-h}}
+\subsubsection[{parse\-\_\-config}]{\setlength{\rightskip}{0pt plus 5cm}int parse\-\_\-config (
+\begin{DoxyParamCaption}
+\item[{struct {\bf pmm\-\_\-config} $\ast$}]{cfg}
+\end{DoxyParamCaption}
+)}}\label{pmm__cfgparser_8h_a9ac7b03fb02cf734e2df2a276441e259}
+Parse xml config file into config structure.
+
+
+\begin{DoxyParams}{Parameters}
+{\em cfg} & pointer to config structure to store parsed data\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success, -\/1 on failure
+\end{DoxyReturn}
+\begin{DoxyPrecond}{Precondition}
+cfg points to an allocated \hyperlink{structpmm__config}{pmm\-\_\-config} structure 
+
+cfg structure member 'configfile' must be set to the config file path or this function will return an error 
+\end{DoxyPrecond}
+\hypertarget{pmm__cfgparser_8h_aa0c9b646c58e79e4d84332dc7fb720f6}{\index{pmm\-\_\-cfgparser.\-h@{pmm\-\_\-cfgparser.\-h}!parse\-\_\-history@{parse\-\_\-history}}
+\index{parse\-\_\-history@{parse\-\_\-history}!pmm_cfgparser.h@{pmm\-\_\-cfgparser.\-h}}
+\subsubsection[{parse\-\_\-history}]{\setlength{\rightskip}{0pt plus 5cm}int parse\-\_\-history (
+\begin{DoxyParamCaption}
+\item[{struct {\bf pmm\-\_\-loadhistory} $\ast$}]{h}
+\end{DoxyParamCaption}
+)}}\label{pmm__cfgparser_8h_aa0c9b646c58e79e4d84332dc7fb720f6}
+Parse the load history file.
+
+
+\begin{DoxyParams}{Parameters}
+{\em h} & pointer to a load history structure, already populated with config data (i.\-e. the load history file path)\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success, -\/1 on failure. 
+\end{DoxyReturn}
+\hypertarget{pmm__cfgparser_8h_abdadaa21aaf7baad787ccb34d69e741a}{\index{pmm\-\_\-cfgparser.\-h@{pmm\-\_\-cfgparser.\-h}!parse\-\_\-model@{parse\-\_\-model}}
+\index{parse\-\_\-model@{parse\-\_\-model}!pmm_cfgparser.h@{pmm\-\_\-cfgparser.\-h}}
+\subsubsection[{parse\-\_\-model}]{\setlength{\rightskip}{0pt plus 5cm}int parse\-\_\-model (
+\begin{DoxyParamCaption}
+\item[{struct {\bf pmm\-\_\-model} $\ast$}]{m}
+\end{DoxyParamCaption}
+)}}\label{pmm__cfgparser_8h_abdadaa21aaf7baad787ccb34d69e741a}
+Parses a model from an xml file. The model structure is expected to have the path of the file already stored.
+
+
+\begin{DoxyParams}{Parameters}
+{\em m} & pointer to the model\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success, -\/1 if no model file exists, -\/2 on other error 
+\end{DoxyReturn}
+\hypertarget{pmm__cfgparser_8h_a2fa257c1e2a9946215b5550dfd057b51}{\index{pmm\-\_\-cfgparser.\-h@{pmm\-\_\-cfgparser.\-h}!parse\-\_\-models@{parse\-\_\-models}}
+\index{parse\-\_\-models@{parse\-\_\-models}!pmm_cfgparser.h@{pmm\-\_\-cfgparser.\-h}}
+\subsubsection[{parse\-\_\-models}]{\setlength{\rightskip}{0pt plus 5cm}int parse\-\_\-models (
+\begin{DoxyParamCaption}
+\item[{struct {\bf pmm\-\_\-config} $\ast$}]{c}
+\end{DoxyParamCaption}
+)}}\label{pmm__cfgparser_8h_a2fa257c1e2a9946215b5550dfd057b51}
+Parse models of routines listed in the config structure.
+
+
+\begin{DoxyParams}{Parameters}
+{\em c} & pointer to the config with all routine details\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success, -\/1 on failure 
+\end{DoxyReturn}
+\hypertarget{pmm__cfgparser_8h_abe4b3a7e20a9a8a5cc8e5080b29dcb3c}{\index{pmm\-\_\-cfgparser.\-h@{pmm\-\_\-cfgparser.\-h}!write\-\_\-bench\-\_\-list\-\_\-xtwp@{write\-\_\-bench\-\_\-list\-\_\-xtwp}}
+\index{write\-\_\-bench\-\_\-list\-\_\-xtwp@{write\-\_\-bench\-\_\-list\-\_\-xtwp}!pmm_cfgparser.h@{pmm\-\_\-cfgparser.\-h}}
+\subsubsection[{write\-\_\-bench\-\_\-list\-\_\-xtwp}]{\setlength{\rightskip}{0pt plus 5cm}int write\-\_\-bench\-\_\-list\-\_\-xtwp (
+\begin{DoxyParamCaption}
+\item[{xml\-Text\-Writer\-Ptr}]{writer, }
+\item[{struct {\bf pmm\-\_\-bench\-\_\-list} $\ast$}]{bench\-\_\-list}
+\end{DoxyParamCaption}
+)}}\label{pmm__cfgparser_8h_abe4b3a7e20a9a8a5cc8e5080b29dcb3c}
+Write a benchmark list to an xml\-Text\-Writer\-Ptr object
+
+
+\begin{DoxyParams}{Parameters}
+{\em writer} & xml\-Text\-Writer pointer \\
+\hline
+{\em bench\-\_\-list} & pointer to the benchmark list\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success, -\/1 on failure 
+\end{DoxyReturn}
+\hypertarget{pmm__cfgparser_8h_a650ce3f2bd2c8490ffaa74e8ca350db2}{\index{pmm\-\_\-cfgparser.\-h@{pmm\-\_\-cfgparser.\-h}!write\-\_\-benchmark\-\_\-xtwp@{write\-\_\-benchmark\-\_\-xtwp}}
+\index{write\-\_\-benchmark\-\_\-xtwp@{write\-\_\-benchmark\-\_\-xtwp}!pmm_cfgparser.h@{pmm\-\_\-cfgparser.\-h}}
+\subsubsection[{write\-\_\-benchmark\-\_\-xtwp}]{\setlength{\rightskip}{0pt plus 5cm}int write\-\_\-benchmark\-\_\-xtwp (
+\begin{DoxyParamCaption}
+\item[{xml\-Text\-Writer\-Ptr}]{writer, }
+\item[{struct {\bf pmm\-\_\-benchmark} $\ast$}]{b}
+\end{DoxyParamCaption}
+)}}\label{pmm__cfgparser_8h_a650ce3f2bd2c8490ffaa74e8ca350db2}
+Write a benchmark to an xml\-Text\-Writer\-Ptr object
+
+
+\begin{DoxyParams}{Parameters}
+{\em writer} & xml\-Text\-Writer pointer \\
+\hline
+{\em b} & pointer to the benchmark\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success -\/1 on error 
+\end{DoxyReturn}
+\hypertarget{pmm__cfgparser_8h_a561a685077216f8148acaa5442a24805}{\index{pmm\-\_\-cfgparser.\-h@{pmm\-\_\-cfgparser.\-h}!write\-\_\-interval\-\_\-xtwp@{write\-\_\-interval\-\_\-xtwp}}
+\index{write\-\_\-interval\-\_\-xtwp@{write\-\_\-interval\-\_\-xtwp}!pmm_cfgparser.h@{pmm\-\_\-cfgparser.\-h}}
+\subsubsection[{write\-\_\-interval\-\_\-xtwp}]{\setlength{\rightskip}{0pt plus 5cm}int write\-\_\-interval\-\_\-xtwp (
+\begin{DoxyParamCaption}
+\item[{xml\-Text\-Writer\-Ptr}]{writer, }
+\item[{struct {\bf pmm\-\_\-interval} $\ast$}]{i}
+\end{DoxyParamCaption}
+)}}\label{pmm__cfgparser_8h_a561a685077216f8148acaa5442a24805}
+write an interval structure to disk in xml
+
+
+\begin{DoxyParams}{Parameters}
+{\em writer} & xml\-Text\-Writer\-Ptr to use to write with \\
+\hline
+{\em i} & pointer to interval structure to write to disk\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success, -\/1 on failure 
+\end{DoxyReturn}
+\hypertarget{pmm__cfgparser_8h_a973c40b61a1ea3c11c231ea98a288750}{\index{pmm\-\_\-cfgparser.\-h@{pmm\-\_\-cfgparser.\-h}!write\-\_\-loadhistory@{write\-\_\-loadhistory}}
+\index{write\-\_\-loadhistory@{write\-\_\-loadhistory}!pmm_cfgparser.h@{pmm\-\_\-cfgparser.\-h}}
+\subsubsection[{write\-\_\-loadhistory}]{\setlength{\rightskip}{0pt plus 5cm}int write\-\_\-loadhistory (
+\begin{DoxyParamCaption}
+\item[{struct {\bf pmm\-\_\-loadhistory} $\ast$}]{h}
+\end{DoxyParamCaption}
+)}}\label{pmm__cfgparser_8h_a973c40b61a1ea3c11c231ea98a288750}
+write the load history to file
+
+opens an xml\-Text\-Writer and writes the history to the file specified in the history structure
+
+
+\begin{DoxyParams}{Parameters}
+{\em h} & pointer to the load history\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success, -\/1 on failure 
+\end{DoxyReturn}
+\hypertarget{pmm__cfgparser_8h_aace927c339efaace4903fa14c92dda42}{\index{pmm\-\_\-cfgparser.\-h@{pmm\-\_\-cfgparser.\-h}!write\-\_\-loadhistory\-\_\-xtwp@{write\-\_\-loadhistory\-\_\-xtwp}}
+\index{write\-\_\-loadhistory\-\_\-xtwp@{write\-\_\-loadhistory\-\_\-xtwp}!pmm_cfgparser.h@{pmm\-\_\-cfgparser.\-h}}
+\subsubsection[{write\-\_\-loadhistory\-\_\-xtwp}]{\setlength{\rightskip}{0pt plus 5cm}int write\-\_\-loadhistory\-\_\-xtwp (
+\begin{DoxyParamCaption}
+\item[{xml\-Text\-Writer\-Ptr}]{writer, }
+\item[{struct {\bf pmm\-\_\-loadhistory} $\ast$}]{h}
+\end{DoxyParamCaption}
+)}}\label{pmm__cfgparser_8h_aace927c339efaace4903fa14c92dda42}
+Write load history to the xml\-Text\-Writer\-Ptr
+
+
+\begin{DoxyParams}{Parameters}
+{\em writer} & an xml\-Text\-Writer pointer \\
+\hline
+{\em h} & pointer to load load history structure\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success, -\/1 on failure 
+\end{DoxyReturn}
+\hypertarget{pmm__cfgparser_8h_a3de32ff7c1ff42d777108dd0a84e4e54}{\index{pmm\-\_\-cfgparser.\-h@{pmm\-\_\-cfgparser.\-h}!write\-\_\-model@{write\-\_\-model}}
+\index{write\-\_\-model@{write\-\_\-model}!pmm_cfgparser.h@{pmm\-\_\-cfgparser.\-h}}
+\subsubsection[{write\-\_\-model}]{\setlength{\rightskip}{0pt plus 5cm}int write\-\_\-model (
+\begin{DoxyParamCaption}
+\item[{struct {\bf pmm\-\_\-model} $\ast$}]{m}
+\end{DoxyParamCaption}
+)}}\label{pmm__cfgparser_8h_a3de32ff7c1ff42d777108dd0a84e4e54}
+write an individual model to disk
+
+
+\begin{DoxyParams}{Parameters}
+{\em m} & pointer to the model\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success, -\/1 on failure 
+\end{DoxyReturn}
+\hypertarget{pmm__cfgparser_8h_a833508c94c9d360bf8d1e5a74cd8203a}{\index{pmm\-\_\-cfgparser.\-h@{pmm\-\_\-cfgparser.\-h}!write\-\_\-model\-\_\-xtwp@{write\-\_\-model\-\_\-xtwp}}
+\index{write\-\_\-model\-\_\-xtwp@{write\-\_\-model\-\_\-xtwp}!pmm_cfgparser.h@{pmm\-\_\-cfgparser.\-h}}
+\subsubsection[{write\-\_\-model\-\_\-xtwp}]{\setlength{\rightskip}{0pt plus 5cm}int write\-\_\-model\-\_\-xtwp (
+\begin{DoxyParamCaption}
+\item[{xml\-Text\-Writer\-Ptr}]{writer, }
+\item[{struct {\bf pmm\-\_\-model} $\ast$}]{m}
+\end{DoxyParamCaption}
+)}}\label{pmm__cfgparser_8h_a833508c94c9d360bf8d1e5a74cd8203a}
+Write a model list to an xml\-Text\-Writer\-Ptr object
+
+
+\begin{DoxyParams}{Parameters}
+{\em writer} & xml\-Text\-Writer pointer \\
+\hline
+{\em m} & pointer to the model\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success, -\/1 on failure 
+\end{DoxyReturn}
+\hypertarget{pmm__cfgparser_8h_a913869f9537f932f9e74b249a4433364}{\index{pmm\-\_\-cfgparser.\-h@{pmm\-\_\-cfgparser.\-h}!write\-\_\-models@{write\-\_\-models}}
+\index{write\-\_\-models@{write\-\_\-models}!pmm_cfgparser.h@{pmm\-\_\-cfgparser.\-h}}
+\subsubsection[{write\-\_\-models}]{\setlength{\rightskip}{0pt plus 5cm}int write\-\_\-models (
+\begin{DoxyParamCaption}
+\item[{struct {\bf pmm\-\_\-config} $\ast$}]{cfg}
+\end{DoxyParamCaption}
+)}}\label{pmm__cfgparser_8h_a913869f9537f932f9e74b249a4433364}
+write all models in the configuration
+
+
+\begin{DoxyParams}{Parameters}
+{\em cfg} & pointer to the configuration\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success, -\/1 on failure 
+\end{DoxyReturn}
+\hypertarget{pmm__cfgparser_8h_acb39cfd72eff5e3c1bd78c671c674d4a}{\index{pmm\-\_\-cfgparser.\-h@{pmm\-\_\-cfgparser.\-h}!write\-\_\-paramdef\-\_\-set\-\_\-xtwp@{write\-\_\-paramdef\-\_\-set\-\_\-xtwp}}
+\index{write\-\_\-paramdef\-\_\-set\-\_\-xtwp@{write\-\_\-paramdef\-\_\-set\-\_\-xtwp}!pmm_cfgparser.h@{pmm\-\_\-cfgparser.\-h}}
+\subsubsection[{write\-\_\-paramdef\-\_\-set\-\_\-xtwp}]{\setlength{\rightskip}{0pt plus 5cm}int write\-\_\-paramdef\-\_\-set\-\_\-xtwp (
+\begin{DoxyParamCaption}
+\item[{xml\-Text\-Writer\-Ptr}]{writer, }
+\item[{struct {\bf pmm\-\_\-paramdef\-\_\-set} $\ast$}]{pd\-\_\-set}
+\end{DoxyParamCaption}
+)}}\label{pmm__cfgparser_8h_acb39cfd72eff5e3c1bd78c671c674d4a}
+Write the parameter definition set to an xml\-Text\-Writer\-Ptr object
+
+
+\begin{DoxyParams}{Parameters}
+{\em writer} & xml\-Text\-Writer pointer \\
+\hline
+{\em pd\-\_\-set} & pointer to the parameter defintion set\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success, -\/1 on failure 
+\end{DoxyReturn}
+\hypertarget{pmm__cfgparser_8h_a34ed084d14b0930214120b584d4d53cd}{\index{pmm\-\_\-cfgparser.\-h@{pmm\-\_\-cfgparser.\-h}!write\-\_\-paramdef\-\_\-xtwp@{write\-\_\-paramdef\-\_\-xtwp}}
+\index{write\-\_\-paramdef\-\_\-xtwp@{write\-\_\-paramdef\-\_\-xtwp}!pmm_cfgparser.h@{pmm\-\_\-cfgparser.\-h}}
+\subsubsection[{write\-\_\-paramdef\-\_\-xtwp}]{\setlength{\rightskip}{0pt plus 5cm}int write\-\_\-paramdef\-\_\-xtwp (
+\begin{DoxyParamCaption}
+\item[{xml\-Text\-Writer\-Ptr}]{writer, }
+\item[{struct {\bf pmm\-\_\-paramdef} $\ast$}]{pd}
+\end{DoxyParamCaption}
+)}}\label{pmm__cfgparser_8h_a34ed084d14b0930214120b584d4d53cd}
+Write a parameter definition to an xml\-Text\-Writer\-Ptr object
+
+
+\begin{DoxyParams}{Parameters}
+{\em writer} & xml\-Text\-Writer pointer \\
+\hline
+{\em pd} & pointer to the parameter definition to write\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success -\/1 on error 
+\end{DoxyReturn}
+\hypertarget{pmm__cfgparser_8h_a90f61ed981ffa85dd57b03b6e9936eda}{\index{pmm\-\_\-cfgparser.\-h@{pmm\-\_\-cfgparser.\-h}!write\-\_\-parameter\-\_\-array\-\_\-xtwp@{write\-\_\-parameter\-\_\-array\-\_\-xtwp}}
+\index{write\-\_\-parameter\-\_\-array\-\_\-xtwp@{write\-\_\-parameter\-\_\-array\-\_\-xtwp}!pmm_cfgparser.h@{pmm\-\_\-cfgparser.\-h}}
+\subsubsection[{write\-\_\-parameter\-\_\-array\-\_\-xtwp}]{\setlength{\rightskip}{0pt plus 5cm}int write\-\_\-parameter\-\_\-array\-\_\-xtwp (
+\begin{DoxyParamCaption}
+\item[{xml\-Text\-Writer\-Ptr}]{writer, }
+\item[{int $\ast$}]{p, }
+\item[{int}]{n}
+\end{DoxyParamCaption}
+)}}\label{pmm__cfgparser_8h_a90f61ed981ffa85dd57b03b6e9936eda}
+Write a parameter array to an xml\-Text\-Writer\-Ptr object
+
+In the form\-:
+
+$<$parameter\-\_\-array$>$ $<$n\-\_\-p$>$n$<$/n\-\_\-p$>$ $<$parameter$>$p\mbox{[}0\mbox{]}$<$/parameter$>$ $<$parameter$>$ .... $<$/parameter\-\_\-array$>$
+
+
+\begin{DoxyParams}{Parameters}
+{\em writer} & writer to use \\
+\hline
+{\em p} & parameter array \\
+\hline
+{\em n} & number of parameters in array\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on succes, -\/1 on failure 
+\end{DoxyReturn}
+\hypertarget{pmm__cfgparser_8h_a4cd71a277d266a5d74bed336b5bde5cb}{\index{pmm\-\_\-cfgparser.\-h@{pmm\-\_\-cfgparser.\-h}!write\-\_\-timeval\-\_\-xtwp@{write\-\_\-timeval\-\_\-xtwp}}
+\index{write\-\_\-timeval\-\_\-xtwp@{write\-\_\-timeval\-\_\-xtwp}!pmm_cfgparser.h@{pmm\-\_\-cfgparser.\-h}}
+\subsubsection[{write\-\_\-timeval\-\_\-xtwp}]{\setlength{\rightskip}{0pt plus 5cm}int write\-\_\-timeval\-\_\-xtwp (
+\begin{DoxyParamCaption}
+\item[{xml\-Text\-Writer\-Ptr}]{writer, }
+\item[{struct timeval $\ast$}]{t}
+\end{DoxyParamCaption}
+)}}\label{pmm__cfgparser_8h_a4cd71a277d266a5d74bed336b5bde5cb}
+Write a timeval to an xml\-Text\-Writer\-Ptr object
+
+
+\begin{DoxyParams}{Parameters}
+{\em writer} & xml\-Text\-Writer pointer \\
+\hline
+{\em t} & pointer to the timeval\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success -\/1 on error 
+\end{DoxyReturn}
+\hypertarget{pmm__cfgparser_8h_a27d543da391436aea88a76ae942f696a}{\index{pmm\-\_\-cfgparser.\-h@{pmm\-\_\-cfgparser.\-h}!xmlparser\-\_\-cleanup@{xmlparser\-\_\-cleanup}}
+\index{xmlparser\-\_\-cleanup@{xmlparser\-\_\-cleanup}!pmm_cfgparser.h@{pmm\-\_\-cfgparser.\-h}}
+\subsubsection[{xmlparser\-\_\-cleanup}]{\setlength{\rightskip}{0pt plus 5cm}void xmlparser\-\_\-cleanup (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{pmm__cfgparser_8h_a27d543da391436aea88a76ae942f696a}
+clean up libxml parser \hypertarget{pmm__cfgparser_8h_afff91b7400257caf8e7ccabce0dbe8e2}{\index{pmm\-\_\-cfgparser.\-h@{pmm\-\_\-cfgparser.\-h}!xmlparser\-\_\-init@{xmlparser\-\_\-init}}
+\index{xmlparser\-\_\-init@{xmlparser\-\_\-init}!pmm_cfgparser.h@{pmm\-\_\-cfgparser.\-h}}
+\subsubsection[{xmlparser\-\_\-init}]{\setlength{\rightskip}{0pt plus 5cm}void xmlparser\-\_\-init (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{pmm__cfgparser_8h_afff91b7400257caf8e7ccabce0dbe8e2}
+initialized libxml2 parser 

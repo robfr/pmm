@@ -1,0 +1,231 @@
+\hypertarget{pmm__selector_8h}{\section{/home/rhiggins/phd/pmm\-\_\-github/src/pmm\-\_\-selector.h File Reference}
+\label{pmm__selector_8h}\index{/home/rhiggins/phd/pmm\-\_\-github/src/pmm\-\_\-selector.\-h@{/home/rhiggins/phd/pmm\-\_\-github/src/pmm\-\_\-selector.\-h}}
+}
+{\ttfamily \#include \char`\"{}pmm\-\_\-interval.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}pmm\-\_\-model.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}pmm\-\_\-load.\-h\char`\"{}}\\*
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int $\ast$ \hyperlink{pmm__selector_8h_a88b607d0a67f7a5d0df4747c15608779}{multi\-\_\-random\-\_\-select\-\_\-new\-\_\-bench} (struct \hyperlink{structpmm__routine}{pmm\-\_\-routine} $\ast$r)
+\item 
+int $\ast$ \hyperlink{pmm__selector_8h_a5456b8440d0037cffd3c8928e57c4bf0}{naive\-\_\-1d\-\_\-bisect\-\_\-select\-\_\-new\-\_\-bench} (struct \hyperlink{structpmm__routine}{pmm\-\_\-routine} $\ast$r)
+\item 
+int \hyperlink{pmm__selector_8h_aa2b222d3ac0479e4e0f657c969e01e98}{naive\-\_\-1d\-\_\-bisect\-\_\-insert\-\_\-bench} (struct \hyperlink{structpmm__routine}{pmm\-\_\-routine} $\ast$r, struct \hyperlink{structpmm__benchmark}{pmm\-\_\-benchmark} $\ast$b)
+\item 
+int $\ast$ \hyperlink{pmm__selector_8h_aea58aec78b0aba344c4332266eeb3294}{multi\-\_\-naive\-\_\-select\-\_\-new\-\_\-bench} (struct \hyperlink{structpmm__routine}{pmm\-\_\-routine} $\ast$r)
+\item 
+int \hyperlink{pmm__selector_8h_ab7f013d04bc554c71ea11ba1fe2ffa3e}{multi\-\_\-naive\-\_\-insert\-\_\-bench} (struct \hyperlink{structpmm__routine}{pmm\-\_\-routine} $\ast$r, struct \hyperlink{structpmm__benchmark}{pmm\-\_\-benchmark} $\ast$b)
+\item 
+int $\ast$ \hyperlink{pmm__selector_8h_a82f337eb3386410813f5135a60811f57}{multi\-\_\-gbbp\-\_\-naive\-\_\-select\-\_\-new\-\_\-bench} (struct \hyperlink{structpmm__routine}{pmm\-\_\-routine} $\ast$r)
+\item 
+int $\ast$ \hyperlink{pmm__selector_8h_adcc4067e41409ac46c806b2f2fc619d9}{multi\-\_\-gbbp\-\_\-diagonal\-\_\-select\-\_\-new\-\_\-bench} (struct \hyperlink{structpmm__routine}{pmm\-\_\-routine} $\ast$r)
+\item 
+int $\ast$ \hyperlink{pmm__selector_8h_a34b247ec5756844a437899a17e31d2fd}{multi\-\_\-gbbp\-\_\-select\-\_\-new\-\_\-bench} (struct \hyperlink{structpmm__routine}{pmm\-\_\-routine} $\ast$r)
+\item 
+int \hyperlink{pmm__selector_8h_aeeee1b08f092e9bb40ab829caa8eb438}{multi\-\_\-gbbp\-\_\-insert\-\_\-bench} (struct \hyperlink{structpmm__loadhistory}{pmm\-\_\-loadhistory} $\ast$h, struct \hyperlink{structpmm__routine}{pmm\-\_\-routine} $\ast$r, struct \hyperlink{structpmm__benchmark}{pmm\-\_\-benchmark} $\ast$b)
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\hypertarget{pmm__selector_8h_adcc4067e41409ac46c806b2f2fc619d9}{\index{pmm\-\_\-selector.\-h@{pmm\-\_\-selector.\-h}!multi\-\_\-gbbp\-\_\-diagonal\-\_\-select\-\_\-new\-\_\-bench@{multi\-\_\-gbbp\-\_\-diagonal\-\_\-select\-\_\-new\-\_\-bench}}
+\index{multi\-\_\-gbbp\-\_\-diagonal\-\_\-select\-\_\-new\-\_\-bench@{multi\-\_\-gbbp\-\_\-diagonal\-\_\-select\-\_\-new\-\_\-bench}!pmm_selector.h@{pmm\-\_\-selector.\-h}}
+\subsubsection[{multi\-\_\-gbbp\-\_\-diagonal\-\_\-select\-\_\-new\-\_\-bench}]{\setlength{\rightskip}{0pt plus 5cm}int$\ast$ multi\-\_\-gbbp\-\_\-diagonal\-\_\-select\-\_\-new\-\_\-bench (
+\begin{DoxyParamCaption}
+\item[{struct {\bf pmm\-\_\-routine} $\ast$}]{r}
+\end{DoxyParamCaption}
+)}}\label{pmm__selector_8h_adcc4067e41409ac46c806b2f2fc619d9}
+Returns a new point to benchmark using the Multidimensional Diagonal G\-B\-B\-P method. Briefly, this method first constructs, using the G\-B\-B\-P algorithm, on an interval from the start point of all parameter definitions to the end point of those definitions. After construction along this interval is complete, all points that were measured along it are used to project new construction intervals. From each point N construction intervals are projected parallel to each of the N parameter axes. G\-B\-B\-P is then applied to these new construction intervals, completing the model.
+
+
+\begin{DoxyParams}{Parameters}
+{\em r} & pointer to the routine for which we will find a new benchmark point\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+pointer to an array describing the new benchmark point or N\-U\-L\-L on failure 
+\end{DoxyReturn}
+\hypertarget{pmm__selector_8h_aeeee1b08f092e9bb40ab829caa8eb438}{\index{pmm\-\_\-selector.\-h@{pmm\-\_\-selector.\-h}!multi\-\_\-gbbp\-\_\-insert\-\_\-bench@{multi\-\_\-gbbp\-\_\-insert\-\_\-bench}}
+\index{multi\-\_\-gbbp\-\_\-insert\-\_\-bench@{multi\-\_\-gbbp\-\_\-insert\-\_\-bench}!pmm_selector.h@{pmm\-\_\-selector.\-h}}
+\subsubsection[{multi\-\_\-gbbp\-\_\-insert\-\_\-bench}]{\setlength{\rightskip}{0pt plus 5cm}int multi\-\_\-gbbp\-\_\-insert\-\_\-bench (
+\begin{DoxyParamCaption}
+\item[{struct {\bf pmm\-\_\-loadhistory} $\ast$}]{h, }
+\item[{struct {\bf pmm\-\_\-routine} $\ast$}]{r, }
+\item[{struct {\bf pmm\-\_\-benchmark} $\ast$}]{b}
+\end{DoxyParamCaption}
+)}}\label{pmm__selector_8h_aeeee1b08f092e9bb40ab829caa8eb438}
+Insert a benchmark into a multi-\/parameter model being constructed with the G\-B\-B\-P method.
+
+The second half of the gbbp proceedure. After a benchmark has been made it must be added to the model and the state of the building proceedure must be adjusted according to the new shape of the model.
+
+The rules that govern this adjustment and the specific adjustments are as follows\-:
+
+if the model is empty, we add the benchmark to the model and set the state to be climbing.
+
+if the model is climbing we test the new benchmark to see if the model is still climbing, or has levelled out, or has begun to decrease. If the model is not still climbing or levelled out, we change the state to bisection. The bisection state permits the optimal selection of new benchmarking points.
+
+In this state, any new benchmark being inserted is comparted to the existing model. If the model already accurately approximates the benchmark the state is set to inflection.
+
+The inflection state is a second level of bisection, in this state if a new benchmark is again accurately approximated by the existing model we deem the model to be complete in this region
+
+Most of this functionality is actually implemented in a deeper function \hyperlink{pmm__selector_8c_a1d320975d86d119e6b950c78d4a313d1}{process\-\_\-interval()}, \hyperlink{pmm__selector_8c_a60cb009e16d60782c83ab8655545896c}{process\-\_\-it\-\_\-gbbp\-\_\-climb()}, \hyperlink{pmm__selector_8c_a5a31bb9019f68803df994b90d957ba73}{process\-\_\-it\-\_\-gbbp\-\_\-bisect()}, etc.
+
+\begin{DoxyReturn}{Returns}
+0 on success, -\/1 on failure to process intervals, -\/2 on failure to insert benchmark
+\end{DoxyReturn}
+
+\begin{DoxyParams}{Parameters}
+{\em h} & pointer to the load history \\
+\hline
+{\em r} & pointer to the routine to which the benchmark is added \\
+\hline
+{\em b} & pointer to the benchmark to be added\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 onsucces, -\/1 on failure to process intervals, -\/2 on complete failure to add benchmark to model 
+\end{DoxyReturn}
+\hypertarget{pmm__selector_8h_a82f337eb3386410813f5135a60811f57}{\index{pmm\-\_\-selector.\-h@{pmm\-\_\-selector.\-h}!multi\-\_\-gbbp\-\_\-naive\-\_\-select\-\_\-new\-\_\-bench@{multi\-\_\-gbbp\-\_\-naive\-\_\-select\-\_\-new\-\_\-bench}}
+\index{multi\-\_\-gbbp\-\_\-naive\-\_\-select\-\_\-new\-\_\-bench@{multi\-\_\-gbbp\-\_\-naive\-\_\-select\-\_\-new\-\_\-bench}!pmm_selector.h@{pmm\-\_\-selector.\-h}}
+\subsubsection[{multi\-\_\-gbbp\-\_\-naive\-\_\-select\-\_\-new\-\_\-bench}]{\setlength{\rightskip}{0pt plus 5cm}int$\ast$ multi\-\_\-gbbp\-\_\-naive\-\_\-select\-\_\-new\-\_\-bench (
+\begin{DoxyParamCaption}
+\item[{struct {\bf pmm\-\_\-routine} $\ast$}]{r}
+\end{DoxyParamCaption}
+)}}\label{pmm__selector_8h_a82f337eb3386410813f5135a60811f57}
+Returns a new point to benchmark using the Multidimensional Naive G\-B\-B\-P method. Briefly, this method initialises construction intervals in a grid form, through all possible points as defined by the parameter definitions. Then G\-B\-B\-P is applied to all construction intervals to select benchmark points, until the model has been built along all lines in the grid.
+
+
+\begin{DoxyParams}{Parameters}
+{\em r} & pointer to the routine for which we will find a new benchmark point\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+pointer to an array describing the new benchmark point or N\-U\-L\-L on failure 
+\end{DoxyReturn}
+\hypertarget{pmm__selector_8h_a34b247ec5756844a437899a17e31d2fd}{\index{pmm\-\_\-selector.\-h@{pmm\-\_\-selector.\-h}!multi\-\_\-gbbp\-\_\-select\-\_\-new\-\_\-bench@{multi\-\_\-gbbp\-\_\-select\-\_\-new\-\_\-bench}}
+\index{multi\-\_\-gbbp\-\_\-select\-\_\-new\-\_\-bench@{multi\-\_\-gbbp\-\_\-select\-\_\-new\-\_\-bench}!pmm_selector.h@{pmm\-\_\-selector.\-h}}
+\subsubsection[{multi\-\_\-gbbp\-\_\-select\-\_\-new\-\_\-bench}]{\setlength{\rightskip}{0pt plus 5cm}int$\ast$ multi\-\_\-gbbp\-\_\-select\-\_\-new\-\_\-bench (
+\begin{DoxyParamCaption}
+\item[{struct {\bf pmm\-\_\-routine} $\ast$}]{r}
+\end{DoxyParamCaption}
+)}}\label{pmm__selector_8h_a34b247ec5756844a437899a17e31d2fd}
+multi\-\_\-gbbp -\/ builds multi-\/parameter piece-\/wise performance models using the G\-B\-B\-P optimisation
+
+Alorithm description\-:
+
+init
+\begin{DoxyItemize}
+\item push boundary\-\_\-complete onto empty interval stack
+\item for each parameter of the model
+\begin{DoxyItemize}
+\item push boundary model of that parameter onto interval stack
+\end{DoxyItemize}
+\end{DoxyItemize}
+
+main
+\begin{DoxyItemize}
+\item read interval from top of stack
+\item if interval is of of a boundary type
+\begin{DoxyItemize}
+\item apply G\-B\-B\-P to the construction of the boundary model
+\end{DoxyItemize}
+\item if interval is tagged boundary\-\_\-complete
+\begin{DoxyItemize}
+\item mesh points on each boundary model to create interior benchmark points. Push each of these points onto the interval stack with a point\-\_\-inteval tag.
+\item pop the top point\-\_\-interval and execute a benchmark on it
+\end{DoxyItemize}
+\item if interval is of the point\-\_\-interval type
+\begin{DoxyItemize}
+\item execute a benchmark on the point and add to model
+\end{DoxyItemize}
+\item if stack is empty
+\begin{DoxyItemize}
+\item mark model construction as complete 
+\end{DoxyItemize}
+\end{DoxyItemize}\hypertarget{pmm__selector_8h_ab7f013d04bc554c71ea11ba1fe2ffa3e}{\index{pmm\-\_\-selector.\-h@{pmm\-\_\-selector.\-h}!multi\-\_\-naive\-\_\-insert\-\_\-bench@{multi\-\_\-naive\-\_\-insert\-\_\-bench}}
+\index{multi\-\_\-naive\-\_\-insert\-\_\-bench@{multi\-\_\-naive\-\_\-insert\-\_\-bench}!pmm_selector.h@{pmm\-\_\-selector.\-h}}
+\subsubsection[{multi\-\_\-naive\-\_\-insert\-\_\-bench}]{\setlength{\rightskip}{0pt plus 5cm}int multi\-\_\-naive\-\_\-insert\-\_\-bench (
+\begin{DoxyParamCaption}
+\item[{struct {\bf pmm\-\_\-routine} $\ast$}]{r, }
+\item[{struct {\bf pmm\-\_\-benchmark} $\ast$}]{b}
+\end{DoxyParamCaption}
+)}}\label{pmm__selector_8h_ab7f013d04bc554c71ea11ba1fe2ffa3e}
+Process the insertion of a new benchmark into a model being constructed with a naive method. \hypertarget{pmm__selector_8h_aea58aec78b0aba344c4332266eeb3294}{\index{pmm\-\_\-selector.\-h@{pmm\-\_\-selector.\-h}!multi\-\_\-naive\-\_\-select\-\_\-new\-\_\-bench@{multi\-\_\-naive\-\_\-select\-\_\-new\-\_\-bench}}
+\index{multi\-\_\-naive\-\_\-select\-\_\-new\-\_\-bench@{multi\-\_\-naive\-\_\-select\-\_\-new\-\_\-bench}!pmm_selector.h@{pmm\-\_\-selector.\-h}}
+\subsubsection[{multi\-\_\-naive\-\_\-select\-\_\-new\-\_\-bench}]{\setlength{\rightskip}{0pt plus 5cm}int$\ast$ multi\-\_\-naive\-\_\-select\-\_\-new\-\_\-bench (
+\begin{DoxyParamCaption}
+\item[{struct {\bf pmm\-\_\-routine} $\ast$}]{r}
+\end{DoxyParamCaption}
+)}}\label{pmm__selector_8h_aea58aec78b0aba344c4332266eeb3294}
+Select a new benchmark following a naive construction method where every possible point in the model is benchmarked.
+
+This action is simply taking the top interval from the construction stack and returning the parameters it describes.
+
+
+\begin{DoxyParams}{Parameters}
+{\em r} & pointer to the routine who's model is under construction\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+pointer to newly allocated parameter array describing next bench point or N\-U\-L\-L on error 
+\end{DoxyReturn}
+\hypertarget{pmm__selector_8h_a88b607d0a67f7a5d0df4747c15608779}{\index{pmm\-\_\-selector.\-h@{pmm\-\_\-selector.\-h}!multi\-\_\-random\-\_\-select\-\_\-new\-\_\-bench@{multi\-\_\-random\-\_\-select\-\_\-new\-\_\-bench}}
+\index{multi\-\_\-random\-\_\-select\-\_\-new\-\_\-bench@{multi\-\_\-random\-\_\-select\-\_\-new\-\_\-bench}!pmm_selector.h@{pmm\-\_\-selector.\-h}}
+\subsubsection[{multi\-\_\-random\-\_\-select\-\_\-new\-\_\-bench}]{\setlength{\rightskip}{0pt plus 5cm}int$\ast$ multi\-\_\-random\-\_\-select\-\_\-new\-\_\-bench (
+\begin{DoxyParamCaption}
+\item[{struct {\bf pmm\-\_\-routine} $\ast$}]{r}
+\end{DoxyParamCaption}
+)}}\label{pmm__selector_8h_a88b607d0a67f7a5d0df4747c15608779}
+builds a multi-\/parameter piece-\/wise performance model using a random selection of benchmark points
+
+Alogirthm description\-:
+
+if model is empty select start values for all parameters and return benchmark point else seed random generator
+
+for each parameter select a random parameter size based on the paramdef limits and return
+
+
+\begin{DoxyParams}{Parameters}
+{\em r} & pointer to routine for which the model is being built\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+pointer to newly allocated array describing parameters for the benchmark 
+\end{DoxyReturn}
+\hypertarget{pmm__selector_8h_aa2b222d3ac0479e4e0f657c969e01e98}{\index{pmm\-\_\-selector.\-h@{pmm\-\_\-selector.\-h}!naive\-\_\-1d\-\_\-bisect\-\_\-insert\-\_\-bench@{naive\-\_\-1d\-\_\-bisect\-\_\-insert\-\_\-bench}}
+\index{naive\-\_\-1d\-\_\-bisect\-\_\-insert\-\_\-bench@{naive\-\_\-1d\-\_\-bisect\-\_\-insert\-\_\-bench}!pmm_selector.h@{pmm\-\_\-selector.\-h}}
+\subsubsection[{naive\-\_\-1d\-\_\-bisect\-\_\-insert\-\_\-bench}]{\setlength{\rightskip}{0pt plus 5cm}int naive\-\_\-1d\-\_\-bisect\-\_\-insert\-\_\-bench (
+\begin{DoxyParamCaption}
+\item[{struct {\bf pmm\-\_\-routine} $\ast$}]{r, }
+\item[{struct {\bf pmm\-\_\-benchmark} $\ast$}]{b}
+\end{DoxyParamCaption}
+)}}\label{pmm__selector_8h_aa2b222d3ac0479e4e0f657c969e01e98}
+Insert a benchmark into a 1 parameter model being constructed with the naive bisection method.
+
+
+\begin{DoxyParams}{Parameters}
+{\em r} & pointer to the routine forwhich the model is being constructed \\
+\hline
+{\em b} & benchmark to insert\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success, -\/1 on failure to process intervals, -\/2 on failure to insert benchmark 
+\end{DoxyReturn}
+\hypertarget{pmm__selector_8h_a5456b8440d0037cffd3c8928e57c4bf0}{\index{pmm\-\_\-selector.\-h@{pmm\-\_\-selector.\-h}!naive\-\_\-1d\-\_\-bisect\-\_\-select\-\_\-new\-\_\-bench@{naive\-\_\-1d\-\_\-bisect\-\_\-select\-\_\-new\-\_\-bench}}
+\index{naive\-\_\-1d\-\_\-bisect\-\_\-select\-\_\-new\-\_\-bench@{naive\-\_\-1d\-\_\-bisect\-\_\-select\-\_\-new\-\_\-bench}!pmm_selector.h@{pmm\-\_\-selector.\-h}}
+\subsubsection[{naive\-\_\-1d\-\_\-bisect\-\_\-select\-\_\-new\-\_\-bench}]{\setlength{\rightskip}{0pt plus 5cm}int$\ast$ naive\-\_\-1d\-\_\-bisect\-\_\-select\-\_\-new\-\_\-bench (
+\begin{DoxyParamCaption}
+\item[{struct {\bf pmm\-\_\-routine} $\ast$}]{r}
+\end{DoxyParamCaption}
+)}}\label{pmm__selector_8h_a5456b8440d0037cffd3c8928e57c4bf0}
+Returns a new point to benchmark using the naive bisection in 1 dimension method. Briefly, this method initialises a bisection construction interval across the problem space (1-\/d only). Then recursively bisects this interval and benchmarks at bisection points, until it is no longer divisible.
+
+
+\begin{DoxyParams}{Parameters}
+{\em r} & pointer to the routine for which we will find a new benchmark point\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+pointer to an array describing the new benchmark point or N\-U\-L\-L on failure 
+\end{DoxyReturn}

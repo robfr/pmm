@@ -1,0 +1,71 @@
+\hypertarget{pmm__muparse_8h}{\section{/home/rhiggins/phd/pmm\-\_\-github/src/pmm\-\_\-muparse.h File Reference}
+\label{pmm__muparse_8h}\index{/home/rhiggins/phd/pmm\-\_\-github/src/pmm\-\_\-muparse.\-h@{/home/rhiggins/phd/pmm\-\_\-github/src/pmm\-\_\-muparse.\-h}}
+}
+
+
+muparser structures  
+
+
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structParser}{Parser}
+\item 
+struct \hyperlink{structpmm__param__constraint__muparser}{pmm\-\_\-param\-\_\-constraint\-\_\-muparser}
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{structParser}{Parser} \hyperlink{pmm__muparse_8h_a22c0b9cdca08fd976f4d10da819c72a7}{Parser}
+\item 
+typedef struct \\*
+\hyperlink{structpmm__param__constraint__muparser}{pmm\-\_\-param\-\_\-constraint\-\_\-muparser} \hyperlink{pmm__muparse_8h_a7b06c0f87a52270faf0d36ca8e6491f4}{P\-M\-M\-\_\-\-Param\-\_\-\-Constraint\-\_\-\-Muparser}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{pmm__muparse_8h_a793f192c068d02d85bdf46550b7027f6}{create\-\_\-param\-\_\-constraint\-\_\-muparser} (struct \hyperlink{structpmm__paramdef__set}{pmm\-\_\-paramdef\-\_\-set} $\ast$pd\-\_\-set)
+\item 
+int \hyperlink{pmm__muparse_8h_a8095509493758867d388a7aa632282bb}{evaluate\-\_\-constraint\-\_\-with\-\_\-params} (struct \hyperlink{structpmm__param__constraint__muparser}{pmm\-\_\-param\-\_\-constraint\-\_\-muparser} $\ast$pc\-\_\-parser, int $\ast$params, double $\ast$value)
+\item 
+int \hyperlink{pmm__muparse_8h_a182bc233e652cb0c1fb3539859fe3186}{evaluate\-\_\-constraint} (struct \hyperlink{structpmm__param__constraint__muparser}{pmm\-\_\-param\-\_\-constraint\-\_\-muparser} $\ast$pc\-\_\-parser, double $\ast$value)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+muparser structures 
+
+\subsection{Typedef Documentation}
+\hypertarget{pmm__muparse_8h_a22c0b9cdca08fd976f4d10da819c72a7}{\index{pmm\-\_\-muparse.\-h@{pmm\-\_\-muparse.\-h}!Parser@{Parser}}
+\index{Parser@{Parser}!pmm_muparse.h@{pmm\-\_\-muparse.\-h}}
+\subsubsection[{Parser}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf Parser}  {\bf Parser}}}\label{pmm__muparse_8h_a22c0b9cdca08fd976f4d10da819c72a7}
+\hypertarget{pmm__muparse_8h_a7b06c0f87a52270faf0d36ca8e6491f4}{\index{pmm\-\_\-muparse.\-h@{pmm\-\_\-muparse.\-h}!P\-M\-M\-\_\-\-Param\-\_\-\-Constraint\-\_\-\-Muparser@{P\-M\-M\-\_\-\-Param\-\_\-\-Constraint\-\_\-\-Muparser}}
+\index{P\-M\-M\-\_\-\-Param\-\_\-\-Constraint\-\_\-\-Muparser@{P\-M\-M\-\_\-\-Param\-\_\-\-Constraint\-\_\-\-Muparser}!pmm_muparse.h@{pmm\-\_\-muparse.\-h}}
+\subsubsection[{P\-M\-M\-\_\-\-Param\-\_\-\-Constraint\-\_\-\-Muparser}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf pmm\-\_\-param\-\_\-constraint\-\_\-muparser}  {\bf P\-M\-M\-\_\-\-Param\-\_\-\-Constraint\-\_\-\-Muparser}}}\label{pmm__muparse_8h_a7b06c0f87a52270faf0d36ca8e6491f4}
+Structure to hold muparser object and variable array 
+
+\subsection{Function Documentation}
+\hypertarget{pmm__muparse_8h_a793f192c068d02d85bdf46550b7027f6}{\index{pmm\-\_\-muparse.\-h@{pmm\-\_\-muparse.\-h}!create\-\_\-param\-\_\-constraint\-\_\-muparser@{create\-\_\-param\-\_\-constraint\-\_\-muparser}}
+\index{create\-\_\-param\-\_\-constraint\-\_\-muparser@{create\-\_\-param\-\_\-constraint\-\_\-muparser}!pmm_muparse.h@{pmm\-\_\-muparse.\-h}}
+\subsubsection[{create\-\_\-param\-\_\-constraint\-\_\-muparser}]{\setlength{\rightskip}{0pt plus 5cm}int create\-\_\-param\-\_\-constraint\-\_\-muparser (
+\begin{DoxyParamCaption}
+\item[{struct {\bf pmm\-\_\-paramdef\-\_\-set} $\ast$}]{pd\-\_\-set}
+\end{DoxyParamCaption}
+)}}\label{pmm__muparse_8h_a793f192c068d02d85bdf46550b7027f6}
+\hypertarget{pmm__muparse_8h_a182bc233e652cb0c1fb3539859fe3186}{\index{pmm\-\_\-muparse.\-h@{pmm\-\_\-muparse.\-h}!evaluate\-\_\-constraint@{evaluate\-\_\-constraint}}
+\index{evaluate\-\_\-constraint@{evaluate\-\_\-constraint}!pmm_muparse.h@{pmm\-\_\-muparse.\-h}}
+\subsubsection[{evaluate\-\_\-constraint}]{\setlength{\rightskip}{0pt plus 5cm}int evaluate\-\_\-constraint (
+\begin{DoxyParamCaption}
+\item[{struct {\bf pmm\-\_\-param\-\_\-constraint\-\_\-muparser} $\ast$}]{pc\-\_\-parser, }
+\item[{double $\ast$}]{value}
+\end{DoxyParamCaption}
+)}}\label{pmm__muparse_8h_a182bc233e652cb0c1fb3539859fe3186}
+\hypertarget{pmm__muparse_8h_a8095509493758867d388a7aa632282bb}{\index{pmm\-\_\-muparse.\-h@{pmm\-\_\-muparse.\-h}!evaluate\-\_\-constraint\-\_\-with\-\_\-params@{evaluate\-\_\-constraint\-\_\-with\-\_\-params}}
+\index{evaluate\-\_\-constraint\-\_\-with\-\_\-params@{evaluate\-\_\-constraint\-\_\-with\-\_\-params}!pmm_muparse.h@{pmm\-\_\-muparse.\-h}}
+\subsubsection[{evaluate\-\_\-constraint\-\_\-with\-\_\-params}]{\setlength{\rightskip}{0pt plus 5cm}int evaluate\-\_\-constraint\-\_\-with\-\_\-params (
+\begin{DoxyParamCaption}
+\item[{struct {\bf pmm\-\_\-param\-\_\-constraint\-\_\-muparser} $\ast$}]{pc\-\_\-parser, }
+\item[{int $\ast$}]{params, }
+\item[{double $\ast$}]{value}
+\end{DoxyParamCaption}
+)}}\label{pmm__muparse_8h_a8095509493758867d388a7aa632282bb}

@@ -1,0 +1,1 @@
+\form#0:$(a_1, a_2, \dots, a_n) <^d (b_1,b_2, \dots, b_n) \iff (\exists\ m > 0) \ (\forall\ i < m) (a_i = b_i) \land (a_m <_m b_m) $

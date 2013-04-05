@@ -1,0 +1,71 @@
+\hypertarget{structpmm__loadhistory}{\section{pmm\-\_\-loadhistory Struct Reference}
+\label{structpmm__loadhistory}\index{pmm\-\_\-loadhistory@{pmm\-\_\-loadhistory}}
+}
+
+
+{\ttfamily \#include $<$pmm\-\_\-load.\-h$>$}
+
+\subsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{structpmm__loadhistory_ab7ecf5a0323e3b846f120cd6ef3c7bc2}{write\-\_\-period}
+\item 
+struct \hyperlink{structpmm__load}{pmm\-\_\-load} $\ast$ \hyperlink{structpmm__loadhistory_ac1a03c7b76da5e55fa51faab0b4a1adf}{history}
+\item 
+int \hyperlink{structpmm__loadhistory_aa94cad9b8b853fcd64e5f5ac5dd7add1}{size}
+\item 
+int \hyperlink{structpmm__loadhistory_ab4ba4ac36c795a0e44613fb705717d6d}{size\-\_\-mod}
+\item 
+struct \hyperlink{structpmm__load}{pmm\-\_\-load} $\ast$ \hyperlink{structpmm__loadhistory_ab707ce6e315991228742ea379694d888}{start}
+\item 
+struct \hyperlink{structpmm__load}{pmm\-\_\-load} $\ast$ \hyperlink{structpmm__loadhistory_a5e799b7ad1c650bd965a2f672b730e78}{end}
+\item 
+int \hyperlink{structpmm__loadhistory_ab9e44fcb5987f5a6a891da336c43d213}{start\-\_\-i}
+\item 
+int \hyperlink{structpmm__loadhistory_a5625aa601ce71467ddc8f4720db32a73}{end\-\_\-i}
+\item 
+char $\ast$ \hyperlink{structpmm__loadhistory_a8e8ae65131890372da0bbeff437fad31}{load\-\_\-path}
+\item 
+pthread\-\_\-rwlock\-\_\-t \hyperlink{structpmm__loadhistory_ae0fbcd6252ab6a1ab49be6f891271ccb}{history\-\_\-rwlock}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+this is a circular array of load history, size determined at run time 
+
+\subsection{Field Documentation}
+\hypertarget{structpmm__loadhistory_a5e799b7ad1c650bd965a2f672b730e78}{\index{pmm\-\_\-loadhistory@{pmm\-\_\-loadhistory}!end@{end}}
+\index{end@{end}!pmm_loadhistory@{pmm\-\_\-loadhistory}}
+\subsubsection[{end}]{\setlength{\rightskip}{0pt plus 5cm}struct {\bf pmm\-\_\-load}$\ast$ pmm\-\_\-loadhistory\-::end}}\label{structpmm__loadhistory_a5e799b7ad1c650bd965a2f672b730e78}
+pointer to ending element of c.\-array \hypertarget{structpmm__loadhistory_a5625aa601ce71467ddc8f4720db32a73}{\index{pmm\-\_\-loadhistory@{pmm\-\_\-loadhistory}!end\-\_\-i@{end\-\_\-i}}
+\index{end\-\_\-i@{end\-\_\-i}!pmm_loadhistory@{pmm\-\_\-loadhistory}}
+\subsubsection[{end\-\_\-i}]{\setlength{\rightskip}{0pt plus 5cm}int pmm\-\_\-loadhistory\-::end\-\_\-i}}\label{structpmm__loadhistory_a5625aa601ce71467ddc8f4720db32a73}
+starting element in the circular array \hypertarget{structpmm__loadhistory_ac1a03c7b76da5e55fa51faab0b4a1adf}{\index{pmm\-\_\-loadhistory@{pmm\-\_\-loadhistory}!history@{history}}
+\index{history@{history}!pmm_loadhistory@{pmm\-\_\-loadhistory}}
+\subsubsection[{history}]{\setlength{\rightskip}{0pt plus 5cm}struct {\bf pmm\-\_\-load}$\ast$ pmm\-\_\-loadhistory\-::history}}\label{structpmm__loadhistory_ac1a03c7b76da5e55fa51faab0b4a1adf}
+pointer to the circular array \hypertarget{structpmm__loadhistory_ae0fbcd6252ab6a1ab49be6f891271ccb}{\index{pmm\-\_\-loadhistory@{pmm\-\_\-loadhistory}!history\-\_\-rwlock@{history\-\_\-rwlock}}
+\index{history\-\_\-rwlock@{history\-\_\-rwlock}!pmm_loadhistory@{pmm\-\_\-loadhistory}}
+\subsubsection[{history\-\_\-rwlock}]{\setlength{\rightskip}{0pt plus 5cm}pthread\-\_\-rwlock\-\_\-t pmm\-\_\-loadhistory\-::history\-\_\-rwlock}}\label{structpmm__loadhistory_ae0fbcd6252ab6a1ab49be6f891271ccb}
+mutex for accessing history \hypertarget{structpmm__loadhistory_a8e8ae65131890372da0bbeff437fad31}{\index{pmm\-\_\-loadhistory@{pmm\-\_\-loadhistory}!load\-\_\-path@{load\-\_\-path}}
+\index{load\-\_\-path@{load\-\_\-path}!pmm_loadhistory@{pmm\-\_\-loadhistory}}
+\subsubsection[{load\-\_\-path}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ pmm\-\_\-loadhistory\-::load\-\_\-path}}\label{structpmm__loadhistory_a8e8ae65131890372da0bbeff437fad31}
+path to load history file \hypertarget{structpmm__loadhistory_aa94cad9b8b853fcd64e5f5ac5dd7add1}{\index{pmm\-\_\-loadhistory@{pmm\-\_\-loadhistory}!size@{size}}
+\index{size@{size}!pmm_loadhistory@{pmm\-\_\-loadhistory}}
+\subsubsection[{size}]{\setlength{\rightskip}{0pt plus 5cm}int pmm\-\_\-loadhistory\-::size}}\label{structpmm__loadhistory_aa94cad9b8b853fcd64e5f5ac5dd7add1}
+size of circular array \hypertarget{structpmm__loadhistory_ab4ba4ac36c795a0e44613fb705717d6d}{\index{pmm\-\_\-loadhistory@{pmm\-\_\-loadhistory}!size\-\_\-mod@{size\-\_\-mod}}
+\index{size\-\_\-mod@{size\-\_\-mod}!pmm_loadhistory@{pmm\-\_\-loadhistory}}
+\subsubsection[{size\-\_\-mod}]{\setlength{\rightskip}{0pt plus 5cm}int pmm\-\_\-loadhistory\-::size\-\_\-mod}}\label{structpmm__loadhistory_ab4ba4ac36c795a0e44613fb705717d6d}
+\hypertarget{structpmm__loadhistory_ab707ce6e315991228742ea379694d888}{\index{pmm\-\_\-loadhistory@{pmm\-\_\-loadhistory}!start@{start}}
+\index{start@{start}!pmm_loadhistory@{pmm\-\_\-loadhistory}}
+\subsubsection[{start}]{\setlength{\rightskip}{0pt plus 5cm}struct {\bf pmm\-\_\-load}$\ast$ pmm\-\_\-loadhistory\-::start}}\label{structpmm__loadhistory_ab707ce6e315991228742ea379694d888}
+pointer to starting element of c.\-array \hypertarget{structpmm__loadhistory_ab9e44fcb5987f5a6a891da336c43d213}{\index{pmm\-\_\-loadhistory@{pmm\-\_\-loadhistory}!start\-\_\-i@{start\-\_\-i}}
+\index{start\-\_\-i@{start\-\_\-i}!pmm_loadhistory@{pmm\-\_\-loadhistory}}
+\subsubsection[{start\-\_\-i}]{\setlength{\rightskip}{0pt plus 5cm}int pmm\-\_\-loadhistory\-::start\-\_\-i}}\label{structpmm__loadhistory_ab9e44fcb5987f5a6a891da336c43d213}
+ending element of the circular array \hypertarget{structpmm__loadhistory_ab7ecf5a0323e3b846f120cd6ef3c7bc2}{\index{pmm\-\_\-loadhistory@{pmm\-\_\-loadhistory}!write\-\_\-period@{write\-\_\-period}}
+\index{write\-\_\-period@{write\-\_\-period}!pmm_loadhistory@{pmm\-\_\-loadhistory}}
+\subsubsection[{write\-\_\-period}]{\setlength{\rightskip}{0pt plus 5cm}int pmm\-\_\-loadhistory\-::write\-\_\-period}}\label{structpmm__loadhistory_ab7ecf5a0323e3b846f120cd6ef3c7bc2}
+how often to write load history to disk 
+
+The documentation for this struct was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+/home/rhiggins/phd/pmm\-\_\-github/src/\hyperlink{pmm__load_8h}{pmm\-\_\-load.\-h}\end{DoxyCompactItemize}

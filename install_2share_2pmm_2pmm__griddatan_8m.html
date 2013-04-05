@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
-<title>pmm: Main Page</title>
+<title>pmm: /home/rhiggins/phd/pmm_github/install/share/pmm/pmm_griddatan.m File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -36,9 +36,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </script>
   <div id="navrow1" class="tabs">
     <ul class="tablist">
-      <li class="current"><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="annotated.html"><span>Data&#160;Structures</span></a></li>
-      <li><a href="files.html"><span>Files</span></a></li>
+      <li class="current"><a href="files.html"><span>Files</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -57,7 +57,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       </li>
     </ul>
   </div>
-</div><!-- top -->
+  <div id="navrow2" class="tabs2">
+    <ul class="tablist">
+      <li><a href="files.html"><span>File&#160;List</span></a></li>
+      <li><a href="globals.html"><span>Globals</span></a></li>
+    </ul>
+  </div>
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
@@ -72,26 +77,88 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </iframe>
 </div>
 
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_e3a4aa6ae53c85312025264fe419cff9.html">install</a></li><li class="navelem"><a class="el" href="dir_827889db5c2c55dcc85efc3ea9e4ef08.html">share</a></li><li class="navelem"><a class="el" href="dir_c43b4ae48f2c6355584425d78eb03c70.html">pmm</a></li>  </ul>
+</div>
+</div><!-- top -->
 <div class="header">
+  <div class="summary">
+<a href="#func-members">Functions</a> &#124;
+<a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
-<div class="title">pmm Documentation</div>  </div>
+<div class="title">pmm_griddatan.m File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p>Performance Model Manager</p>
-<p>PMM is a tool that has been developed to address issues surrounding the construction, maintenance and use of Functional Performance Models in a variety of parallel computing environments. It consists of three main features:</p>
-<ul>
-<li>Firstly it implements the Geometric Bisection Building Procedure for multi-parameter FPMs, optimizing the construction of a problem’s performance model.</li>
-<li>Secondly, it permits a large number of problems to have their construction managed by implementing a flexible benchmarking scheduler, suitable for use where a queuing system does not exist.</li>
-<li>Finally it provides access to the models in a variety of ways, allowing feedback from actual executions and providing tools to use the models in scheduling decisions.</li>
-</ul>
-<p>This documentation describes the internal code that makes up PMM. The user guide can be found under docs/manual.pdf.</p>
-<p>Further details on the application and optimised building can be found in:</p>
-<p>Higgins, R., and A. Lastovetsky, <a href="http://hcl.ucd.ie/biblio/266">"Managing the Construction and Use of
-Functional Performance Models in a Grid Environment"</a>, The 23rd IEEE International Parallel and Distributed Processing Symposium, Rome, Italy, May 25-29, 2009.</p>
-<p>Lastovetsky, A., R. Reddy, and R. Higgins, <a href="http://hcl.ucd.ie/biblio/59">"Building the Functional Performance Model
-of a Processor"</a>, Proceedings of the 21st Annual ACM Symposium on Applied Computing (SAC 2006), Dijon, France, ACM, April 23-27 2006.</p>
-<p><em>pmmd</em> is the main model building tool. It begins in <a class="el" href="pmm__main_8c.html" title="The pmm application.">pmm_main.c</a> <em>pmm_view</em>, a viewer for models, is found in <a class="el" href="pmm__view_8c.html" title="Basic viewer program for models constructed by PMM.">pmm_view.c</a>. GBBP the primary research algorithm implemented in this software can be found in <a class="el" href="pmm__selector_8c.html" title="Code for chosing benchmark points.">pmm_selector.c</a>, between <a class="el" href="pmm__selector_8c.html#a34b247ec5756844a437899a17e31d2fd">multi_gbbp_select_new_bench()</a> and <a class="el" href="pmm__selector_8c.html#aeeee1b08f092e9bb40ab829caa8eb438">multi_gbbp_insert_bench()</a> </p>
-</div></div><!-- contents -->
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2><a name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:a5ece557339168c6fc43407d6929fe4c5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="src_2pmm__griddatan_8m.html#a39b9270a0c4c40c734014714a59fa2be">endif</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="install_2share_2pmm_2pmm__griddatan_8m.html#a5ece557339168c6fc43407d6929fe4c5">if</a> (nargin&lt; 3) print_usage()</td></tr>
+<tr class="memitem:a02827491a6ab36785abbc363f6a53292"><td class="memItemLeft" align="right" valign="top"><a class="el" href="src_2pmm__griddatan_8m.html#a39b9270a0c4c40c734014714a59fa2be">endif</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="install_2share_2pmm_2pmm__griddatan_8m.html#a02827491a6ab36785abbc363f6a53292">if</a> (ischar(method)) method</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2><a name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:a851347961a6f5c628188a76a7060e574"><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="install_2share_2pmm_2pmm__griddatan_8m.html#a851347961a6f5c628188a76a7060e574">yi</a> = &quot;linear&quot;</td></tr>
+<tr class="memitem:a39b9270a0c4c40c734014714a59fa2be"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="install_2share_2pmm_2pmm__griddatan_8m.html#a39b9270a0c4c40c734014714a59fa2be">endif</a> [m, n] = size (x)</td></tr>
+</table>
+<h2>Function Documentation</h2>
+<a class="anchor" id="a5ece557339168c6fc43407d6929fe4c5"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="src_2pmm__griddatan_8m.html#a39b9270a0c4c40c734014714a59fa2be">endif</a> if </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a02827491a6ab36785abbc363f6a53292"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="src_2pmm__griddatan_8m.html#a39b9270a0c4c40c734014714a59fa2be">endif</a> if </td>
+          <td>(</td>
+          <td class="paramtype">ischar(method)&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2>Variable Documentation</h2>
+<a class="anchor" id="a39b9270a0c4c40c734014714a59fa2be"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">endif[m, n] = size (x)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a851347961a6f5c628188a76a7060e574"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">function yi = &quot;linear&quot;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+</div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated on Fri Apr 5 2013 14:46:34 for pmm by &#160;<a href="http://www.doxygen.org/index.html">

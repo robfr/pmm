@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
-<title>pmm: Main Page</title>
+<title>pmm: Data Structure Index</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -36,8 +36,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </script>
   <div id="navrow1" class="tabs">
     <ul class="tablist">
-      <li class="current"><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="annotated.html"><span>Data&#160;Structures</span></a></li>
+      <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li class="current"><a href="annotated.html"><span>Data&#160;Structures</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
@@ -57,6 +57,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       </li>
     </ul>
   </div>
+  <div id="navrow2" class="tabs2">
+    <ul class="tablist">
+      <li><a href="annotated.html"><span>Data&#160;Structures</span></a></li>
+      <li><a href="functions.html"><span>Data&#160;Fields</span></a></li>
+    </ul>
+  </div>
 </div><!-- top -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
@@ -74,24 +80,25 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <div class="header">
   <div class="headertitle">
-<div class="title">pmm Documentation</div>  </div>
+<div class="title">Data Structure Index</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p>Performance Model Manager</p>
-<p>PMM is a tool that has been developed to address issues surrounding the construction, maintenance and use of Functional Performance Models in a variety of parallel computing environments. It consists of three main features:</p>
-<ul>
-<li>Firstly it implements the Geometric Bisection Building Procedure for multi-parameter FPMs, optimizing the construction of a problem’s performance model.</li>
-<li>Secondly, it permits a large number of problems to have their construction managed by implementing a flexible benchmarking scheduler, suitable for use where a queuing system does not exist.</li>
-<li>Finally it provides access to the models in a variety of ways, allowing feedback from actual executions and providing tools to use the models in scheduling decisions.</li>
-</ul>
-<p>This documentation describes the internal code that makes up PMM. The user guide can be found under docs/manual.pdf.</p>
-<p>Further details on the application and optimised building can be found in:</p>
-<p>Higgins, R., and A. Lastovetsky, <a href="http://hcl.ucd.ie/biblio/266">"Managing the Construction and Use of
-Functional Performance Models in a Grid Environment"</a>, The 23rd IEEE International Parallel and Distributed Processing Symposium, Rome, Italy, May 25-29, 2009.</p>
-<p>Lastovetsky, A., R. Reddy, and R. Higgins, <a href="http://hcl.ucd.ie/biblio/59">"Building the Functional Performance Model
-of a Processor"</a>, Proceedings of the 21st Annual ACM Symposium on Applied Computing (SAC 2006), Dijon, France, ACM, April 23-27 2006.</p>
-<p><em>pmmd</em> is the main model building tool. It begins in <a class="el" href="pmm__main_8c.html" title="The pmm application.">pmm_main.c</a> <em>pmm_view</em>, a viewer for models, is found in <a class="el" href="pmm__view_8c.html" title="Basic viewer program for models constructed by PMM.">pmm_view.c</a>. GBBP the primary research algorithm implemented in this software can be found in <a class="el" href="pmm__selector_8c.html" title="Code for chosing benchmark points.">pmm_selector.c</a>, between <a class="el" href="pmm__selector_8c.html#a34b247ec5756844a437899a17e31d2fd">multi_gbbp_select_new_bench()</a> and <a class="el" href="pmm__selector_8c.html#aeeee1b08f092e9bb40ab829caa8eb438">multi_gbbp_insert_bench()</a> </p>
-</div></div><!-- contents -->
+<div class="qindex"><a class="qindex" href="#letter_C">C</a>&#160;|&#160;<a class="qindex" href="#letter_M">M</a>&#160;|&#160;<a class="qindex" href="#letter_P">P</a>&#160;|&#160;<a class="qindex" href="#letter__">_</a></div>
+<table style="margin: 10px; white-space: nowrap;" align="center" width="95%" border="0" cellspacing="0" cellpadding="0">
+<tr><td rowspan="2" valign="bottom"><a name="letter_C"></a><table border="0" cellspacing="0" cellpadding="0"><tr><td><div class="ah">&#160;&#160;C&#160;&#160;</div></td></tr></table>
+</td><td rowspan="2" valign="bottom"><a name="letter_P"></a><table border="0" cellspacing="0" cellpadding="0"><tr><td><div class="ah">&#160;&#160;P&#160;&#160;</div></td></tr></table>
+</td><td valign="top"><a class="el" href="structpmm__config.html">pmm_config</a>&#160;&#160;&#160;</td><td valign="top"><a class="el" href="structpmm__octave__data.html">pmm_octave_data</a>&#160;&#160;&#160;</td><td rowspan="2" valign="bottom"><a name="letter__"></a><table border="0" cellspacing="0" cellpadding="0"><tr><td><div class="ah">&#160;&#160;_&#160;&#160;</div></td></tr></table>
+</td></tr>
+<tr><td valign="top"><a class="el" href="structpmm__interval.html">pmm_interval</a>&#160;&#160;&#160;</td><td valign="top"><a class="el" href="structpmm__param__constraint__muparser.html">pmm_param_constraint_muparser</a>&#160;&#160;&#160;</td></tr>
+<tr><td valign="top"><a class="el" href="structColumnVector.html">ColumnVector</a>&#160;&#160;&#160;</td><td valign="top"><a class="el" href="structParser.html">Parser</a>&#160;&#160;&#160;</td><td valign="top"><a class="el" href="structpmm__interval__list.html">pmm_interval_list</a>&#160;&#160;&#160;</td><td valign="top"><a class="el" href="structpmm__paramdef.html">pmm_paramdef</a>&#160;&#160;&#160;</td><td valign="top"><a class="el" href="struct__GNUPLOT__CTRL__.html">_GNUPLOT_CTRL_</a>&#160;&#160;&#160;</td></tr>
+<tr><td rowspan="2" valign="bottom"><a name="letter_M"></a><table border="0" cellspacing="0" cellpadding="0"><tr><td><div class="ah">&#160;&#160;M&#160;&#160;</div></td></tr></table>
+</td><td valign="top"><a class="el" href="structpmm__bench__list.html">pmm_bench_list</a>&#160;&#160;&#160;</td><td valign="top"><a class="el" href="structpmm__load.html">pmm_load</a>&#160;&#160;&#160;</td><td valign="top"><a class="el" href="structpmm__paramdef__set.html">pmm_paramdef_set</a>&#160;&#160;&#160;</td><td valign="top"><a class="el" href="struct__GNUPLOT__POINT__.html">_GNUPLOT_POINT_</a>&#160;&#160;&#160;</td></tr>
+<tr><td valign="top"><a class="el" href="structpmm__benchmark.html">pmm_benchmark</a>&#160;&#160;&#160;</td><td valign="top"><a class="el" href="structpmm__loadhistory.html">pmm_loadhistory</a>&#160;&#160;&#160;</td><td valign="top"><a class="el" href="structpmm__routine.html">pmm_routine</a>&#160;&#160;&#160;</td><td></td></tr>
+<tr><td valign="top"><a class="el" href="structMatrix.html">Matrix</a>&#160;&#160;&#160;</td><td valign="top"><a class="el" href="structpmm__comp__options.html">pmm_comp_options</a>&#160;&#160;&#160;</td><td valign="top"><a class="el" href="structpmm__model.html">pmm_model</a>&#160;&#160;&#160;</td><td valign="top"><a class="el" href="structpmm__view__options.html">pmm_view_options</a>&#160;&#160;&#160;</td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
+<div class="qindex"><a class="qindex" href="#letter_C">C</a>&#160;|&#160;<a class="qindex" href="#letter_M">M</a>&#160;|&#160;<a class="qindex" href="#letter_P">P</a>&#160;|&#160;<a class="qindex" href="#letter__">_</a></div>
+</div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated on Fri Apr 5 2013 14:46:34 for pmm by &#160;<a href="http://www.doxygen.org/index.html">

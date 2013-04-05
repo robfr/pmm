@@ -1,0 +1,91 @@
+\hypertarget{structpmm__routine}{\section{pmm\-\_\-routine Struct Reference}
+\label{structpmm__routine}\index{pmm\-\_\-routine@{pmm\-\_\-routine}}
+}
+
+
+{\ttfamily \#include $<$pmm\-\_\-model.\-h$>$}
+
+\subsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+char $\ast$ \hyperlink{structpmm__routine_a521a61160c00c9adb1eba49b7dd757ae}{name}
+\item 
+char $\ast$ \hyperlink{structpmm__routine_a252b019e555def99e6b89d00ca94a9a6}{exe\-\_\-path}
+\item 
+char $\ast$ \hyperlink{structpmm__routine_a9ba0602ed7998074e27d09f3d84af1d1}{exe\-\_\-args}
+\item 
+struct \hyperlink{structpmm__paramdef__set}{pmm\-\_\-paramdef\-\_\-set} $\ast$ \hyperlink{structpmm__routine_afc1739e7dd564019db164b2b1b729e2d}{pd\-\_\-set}
+\item 
+enum \hyperlink{pmm__model_8h_a8f9119fce50fe8189b6c3067e0cea724}{pmm\-\_\-construction\-\_\-condition} \hyperlink{structpmm__routine_a99d29ad1702b5fb35a3ea26e2599f0c0}{condition}
+\item 
+int \hyperlink{structpmm__routine_a58c57e2623c560c895b6fef809c20fd5}{priority}
+\item 
+int \hyperlink{structpmm__routine_a7d23ff1fa04ae3364eef3cab8bdbd684}{executable}
+\item 
+enum \hyperlink{pmm__model_8h_aaa50bee09f2f605a884a2d93de5bf0d0}{pmm\-\_\-construction\-\_\-method} \hyperlink{structpmm__routine_a6aa0c60517889f830e3d533ccf022556}{construction\-\_\-method}
+\item 
+int \hyperlink{structpmm__routine_a221cb65185ab20cfa469683a3b0cdb59}{min\-\_\-sample\-\_\-num}
+\item 
+int \hyperlink{structpmm__routine_a1100a0314d4d64440a0a2fb9467e69a0}{min\-\_\-sample\-\_\-time}
+\item 
+int \hyperlink{structpmm__routine_ab8f49fc3bbd1e464e2740f17d962f2e6}{max\-\_\-completion}
+\item 
+struct \hyperlink{structpmm__model}{pmm\-\_\-model} $\ast$ \hyperlink{structpmm__routine_a8bd08af93178ac419df0657486609594}{model}
+\item 
+struct \hyperlink{structpmm__routine}{pmm\-\_\-routine} $\ast$ \hyperlink{structpmm__routine_a0867b006cd2a3f1dfc332fd8fd2f5ec4}{next\-\_\-routine}
+\item 
+struct \hyperlink{structpmm__config}{pmm\-\_\-config} $\ast$ \hyperlink{structpmm__routine_a2169ce86ef3483856130ac7a1d523931}{parent\-\_\-config}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+structure describing a routine to be benchmarked by pmm 
+
+\subsection{Field Documentation}
+\hypertarget{structpmm__routine_a99d29ad1702b5fb35a3ea26e2599f0c0}{\index{pmm\-\_\-routine@{pmm\-\_\-routine}!condition@{condition}}
+\index{condition@{condition}!pmm_routine@{pmm\-\_\-routine}}
+\subsubsection[{condition}]{\setlength{\rightskip}{0pt plus 5cm}enum {\bf pmm\-\_\-construction\-\_\-condition} pmm\-\_\-routine\-::condition}}\label{structpmm__routine_a99d29ad1702b5fb35a3ea26e2599f0c0}
+benchmarking condition \hypertarget{structpmm__routine_a6aa0c60517889f830e3d533ccf022556}{\index{pmm\-\_\-routine@{pmm\-\_\-routine}!construction\-\_\-method@{construction\-\_\-method}}
+\index{construction\-\_\-method@{construction\-\_\-method}!pmm_routine@{pmm\-\_\-routine}}
+\subsubsection[{construction\-\_\-method}]{\setlength{\rightskip}{0pt plus 5cm}enum {\bf pmm\-\_\-construction\-\_\-method} pmm\-\_\-routine\-::construction\-\_\-method}}\label{structpmm__routine_a6aa0c60517889f830e3d533ccf022556}
+model construction method \hypertarget{structpmm__routine_a9ba0602ed7998074e27d09f3d84af1d1}{\index{pmm\-\_\-routine@{pmm\-\_\-routine}!exe\-\_\-args@{exe\-\_\-args}}
+\index{exe\-\_\-args@{exe\-\_\-args}!pmm_routine@{pmm\-\_\-routine}}
+\subsubsection[{exe\-\_\-args}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ pmm\-\_\-routine\-::exe\-\_\-args}}\label{structpmm__routine_a9ba0602ed7998074e27d09f3d84af1d1}
+extra arguments of benchmark \hypertarget{structpmm__routine_a252b019e555def99e6b89d00ca94a9a6}{\index{pmm\-\_\-routine@{pmm\-\_\-routine}!exe\-\_\-path@{exe\-\_\-path}}
+\index{exe\-\_\-path@{exe\-\_\-path}!pmm_routine@{pmm\-\_\-routine}}
+\subsubsection[{exe\-\_\-path}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ pmm\-\_\-routine\-::exe\-\_\-path}}\label{structpmm__routine_a252b019e555def99e6b89d00ca94a9a6}
+path to benchmark executable \hypertarget{structpmm__routine_a7d23ff1fa04ae3364eef3cab8bdbd684}{\index{pmm\-\_\-routine@{pmm\-\_\-routine}!executable@{executable}}
+\index{executable@{executable}!pmm_routine@{pmm\-\_\-routine}}
+\subsubsection[{executable}]{\setlength{\rightskip}{0pt plus 5cm}int pmm\-\_\-routine\-::executable}}\label{structpmm__routine_a7d23ff1fa04ae3364eef3cab8bdbd684}
+toggle for executability \hypertarget{structpmm__routine_ab8f49fc3bbd1e464e2740f17d962f2e6}{\index{pmm\-\_\-routine@{pmm\-\_\-routine}!max\-\_\-completion@{max\-\_\-completion}}
+\index{max\-\_\-completion@{max\-\_\-completion}!pmm_routine@{pmm\-\_\-routine}}
+\subsubsection[{max\-\_\-completion}]{\setlength{\rightskip}{0pt plus 5cm}int pmm\-\_\-routine\-::max\-\_\-completion}}\label{structpmm__routine_ab8f49fc3bbd1e464e2740f17d962f2e6}
+maximum number of model points \hypertarget{structpmm__routine_a221cb65185ab20cfa469683a3b0cdb59}{\index{pmm\-\_\-routine@{pmm\-\_\-routine}!min\-\_\-sample\-\_\-num@{min\-\_\-sample\-\_\-num}}
+\index{min\-\_\-sample\-\_\-num@{min\-\_\-sample\-\_\-num}!pmm_routine@{pmm\-\_\-routine}}
+\subsubsection[{min\-\_\-sample\-\_\-num}]{\setlength{\rightskip}{0pt plus 5cm}int pmm\-\_\-routine\-::min\-\_\-sample\-\_\-num}}\label{structpmm__routine_a221cb65185ab20cfa469683a3b0cdb59}
+minimum samples for each model point \hypertarget{structpmm__routine_a1100a0314d4d64440a0a2fb9467e69a0}{\index{pmm\-\_\-routine@{pmm\-\_\-routine}!min\-\_\-sample\-\_\-time@{min\-\_\-sample\-\_\-time}}
+\index{min\-\_\-sample\-\_\-time@{min\-\_\-sample\-\_\-time}!pmm_routine@{pmm\-\_\-routine}}
+\subsubsection[{min\-\_\-sample\-\_\-time}]{\setlength{\rightskip}{0pt plus 5cm}int pmm\-\_\-routine\-::min\-\_\-sample\-\_\-time}}\label{structpmm__routine_a1100a0314d4d64440a0a2fb9467e69a0}
+minimum time to spend benchmarking each model point \hypertarget{structpmm__routine_a8bd08af93178ac419df0657486609594}{\index{pmm\-\_\-routine@{pmm\-\_\-routine}!model@{model}}
+\index{model@{model}!pmm_routine@{pmm\-\_\-routine}}
+\subsubsection[{model}]{\setlength{\rightskip}{0pt plus 5cm}struct {\bf pmm\-\_\-model}$\ast$ pmm\-\_\-routine\-::model}}\label{structpmm__routine_a8bd08af93178ac419df0657486609594}
+pointer to model \hypertarget{structpmm__routine_a521a61160c00c9adb1eba49b7dd757ae}{\index{pmm\-\_\-routine@{pmm\-\_\-routine}!name@{name}}
+\index{name@{name}!pmm_routine@{pmm\-\_\-routine}}
+\subsubsection[{name}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ pmm\-\_\-routine\-::name}}\label{structpmm__routine_a521a61160c00c9adb1eba49b7dd757ae}
+name of routine \hypertarget{structpmm__routine_a0867b006cd2a3f1dfc332fd8fd2f5ec4}{\index{pmm\-\_\-routine@{pmm\-\_\-routine}!next\-\_\-routine@{next\-\_\-routine}}
+\index{next\-\_\-routine@{next\-\_\-routine}!pmm_routine@{pmm\-\_\-routine}}
+\subsubsection[{next\-\_\-routine}]{\setlength{\rightskip}{0pt plus 5cm}struct {\bf pmm\-\_\-routine}$\ast$ pmm\-\_\-routine\-::next\-\_\-routine}}\label{structpmm__routine_a0867b006cd2a3f1dfc332fd8fd2f5ec4}
+next routine in routine array/list \hypertarget{structpmm__routine_a2169ce86ef3483856130ac7a1d523931}{\index{pmm\-\_\-routine@{pmm\-\_\-routine}!parent\-\_\-config@{parent\-\_\-config}}
+\index{parent\-\_\-config@{parent\-\_\-config}!pmm_routine@{pmm\-\_\-routine}}
+\subsubsection[{parent\-\_\-config}]{\setlength{\rightskip}{0pt plus 5cm}struct {\bf pmm\-\_\-config}$\ast$ pmm\-\_\-routine\-::parent\-\_\-config}}\label{structpmm__routine_a2169ce86ef3483856130ac7a1d523931}
+configuration of host \hypertarget{structpmm__routine_afc1739e7dd564019db164b2b1b729e2d}{\index{pmm\-\_\-routine@{pmm\-\_\-routine}!pd\-\_\-set@{pd\-\_\-set}}
+\index{pd\-\_\-set@{pd\-\_\-set}!pmm_routine@{pmm\-\_\-routine}}
+\subsubsection[{pd\-\_\-set}]{\setlength{\rightskip}{0pt plus 5cm}struct {\bf pmm\-\_\-paramdef\-\_\-set}$\ast$ pmm\-\_\-routine\-::pd\-\_\-set}}\label{structpmm__routine_afc1739e7dd564019db164b2b1b729e2d}
+set of parameter defintions \hypertarget{structpmm__routine_a58c57e2623c560c895b6fef809c20fd5}{\index{pmm\-\_\-routine@{pmm\-\_\-routine}!priority@{priority}}
+\index{priority@{priority}!pmm_routine@{pmm\-\_\-routine}}
+\subsubsection[{priority}]{\setlength{\rightskip}{0pt plus 5cm}int pmm\-\_\-routine\-::priority}}\label{structpmm__routine_a58c57e2623c560c895b6fef809c20fd5}
+benchmarking priority 
+
+The documentation for this struct was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+/home/rhiggins/phd/pmm\-\_\-github/src/\hyperlink{pmm__model_8h}{pmm\-\_\-model.\-h}\end{DoxyCompactItemize}

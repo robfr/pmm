@@ -1,0 +1,140 @@
+\hypertarget{pmm__octave_8h}{\section{/home/rhiggins/phd/pmm\-\_\-github/src/pmm\-\_\-octave.h File Reference}
+\label{pmm__octave_8h}\index{/home/rhiggins/phd/pmm\-\_\-github/src/pmm\-\_\-octave.\-h@{/home/rhiggins/phd/pmm\-\_\-github/src/pmm\-\_\-octave.\-h}}
+}
+
+
+data structure for interaction with octave  
+
+
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structMatrix}{Matrix}
+\item 
+struct \hyperlink{structColumnVector}{Column\-Vector}
+\item 
+struct \hyperlink{structpmm__octave__data}{pmm\-\_\-octave\-\_\-data}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{pmm__octave_8h_aef24b228b2c90a5ca0395f5ea9417bba}{P\-M\-M\-\_\-\-A\-L\-L}~0
+\item 
+\#define \hyperlink{pmm__octave_8h_af35f1e0a3158a27454760d29820b54f2}{P\-M\-M\-\_\-\-A\-V\-G}~1
+\item 
+\#define \hyperlink{pmm__octave_8h_ac9ab3988d2d70274fa8f0b597399798c}{P\-M\-M\-\_\-\-M\-A\-X}~2
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{structMatrix}{Matrix} \hyperlink{pmm__octave_8h_aaa00d25d0e42fc6df50e33e2fa296964}{Matrix}
+\item 
+typedef struct \hyperlink{structColumnVector}{Column\-Vector} \hyperlink{pmm__octave_8h_a5925e05d1601354fcbddbc97aabbdfc2}{Column\-Vector}
+\item 
+typedef struct \hyperlink{structpmm__octave__data}{pmm\-\_\-octave\-\_\-data} \hyperlink{pmm__octave_8h_a43879c11d8787269e8ce882715728470}{P\-M\-M\-\_\-\-Octave\-\_\-\-Data}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{pmm__octave_8h_aad5714ea7ea84d00bcc8e48e13834e87}{octave\-\_\-init} ()
+\item 
+struct \hyperlink{structpmm__octave__data}{pmm\-\_\-octave\-\_\-data} $\ast$ \hyperlink{pmm__octave_8h_ae399128d36839b0686e89e14e192bf67}{fill\-\_\-octave\-\_\-input\-\_\-matrices} (struct \hyperlink{structpmm__model}{pmm\-\_\-model} $\ast$m, int mode)
+\item 
+int \hyperlink{pmm__octave_8h_a5e5f280bfc2f1d3e2894aead0e2e42ba}{octave\-\_\-triangulate} (struct \hyperlink{structpmm__octave__data}{pmm\-\_\-octave\-\_\-data} $\ast$oct\-\_\-data)
+\item 
+double \hyperlink{pmm__octave_8h_aab9a822323bfed70c74611962d762831}{octave\-\_\-interp} (struct \hyperlink{structpmm__octave__data}{pmm\-\_\-octave\-\_\-data} $\ast$oct\-\_\-data, int $\ast$p, int n)
+\item 
+double $\ast$ \hyperlink{pmm__octave_8h_a8e6d29040fabbeda770667e6892475d0}{octave\-\_\-interp\-\_\-array} (struct \hyperlink{structpmm__octave__data}{pmm\-\_\-octave\-\_\-data} $\ast$oct\-\_\-data, int $\ast$$\ast$p, int n, int l)
+\item 
+double \hyperlink{pmm__octave_8h_a2758cc95a5436ca5078f7cffdb6f924f}{octave\-\_\-interpolate} (struct \hyperlink{structpmm__octave__data}{pmm\-\_\-octave\-\_\-data} $\ast$oct\-\_\-data, int $\ast$p, int n)
+\item 
+struct \hyperlink{structpmm__benchmark}{pmm\-\_\-benchmark} $\ast$ \hyperlink{pmm__octave_8h_ad19fcf9315d428c1942565f6c1b6d675}{interpolate\-\_\-griddatan} (struct \hyperlink{structpmm__model}{pmm\-\_\-model} $\ast$m, int $\ast$p)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+data structure for interaction with octave 
+
+\subsection{Macro Definition Documentation}
+\hypertarget{pmm__octave_8h_aef24b228b2c90a5ca0395f5ea9417bba}{\index{pmm\-\_\-octave.\-h@{pmm\-\_\-octave.\-h}!P\-M\-M\-\_\-\-A\-L\-L@{P\-M\-M\-\_\-\-A\-L\-L}}
+\index{P\-M\-M\-\_\-\-A\-L\-L@{P\-M\-M\-\_\-\-A\-L\-L}!pmm_octave.h@{pmm\-\_\-octave.\-h}}
+\subsubsection[{P\-M\-M\-\_\-\-A\-L\-L}]{\setlength{\rightskip}{0pt plus 5cm}\#define P\-M\-M\-\_\-\-A\-L\-L~0}}\label{pmm__octave_8h_aef24b228b2c90a5ca0395f5ea9417bba}
+use all points \hypertarget{pmm__octave_8h_af35f1e0a3158a27454760d29820b54f2}{\index{pmm\-\_\-octave.\-h@{pmm\-\_\-octave.\-h}!P\-M\-M\-\_\-\-A\-V\-G@{P\-M\-M\-\_\-\-A\-V\-G}}
+\index{P\-M\-M\-\_\-\-A\-V\-G@{P\-M\-M\-\_\-\-A\-V\-G}!pmm_octave.h@{pmm\-\_\-octave.\-h}}
+\subsubsection[{P\-M\-M\-\_\-\-A\-V\-G}]{\setlength{\rightskip}{0pt plus 5cm}\#define P\-M\-M\-\_\-\-A\-V\-G~1}}\label{pmm__octave_8h_af35f1e0a3158a27454760d29820b54f2}
+use average of points with identical parameters \hypertarget{pmm__octave_8h_ac9ab3988d2d70274fa8f0b597399798c}{\index{pmm\-\_\-octave.\-h@{pmm\-\_\-octave.\-h}!P\-M\-M\-\_\-\-M\-A\-X@{P\-M\-M\-\_\-\-M\-A\-X}}
+\index{P\-M\-M\-\_\-\-M\-A\-X@{P\-M\-M\-\_\-\-M\-A\-X}!pmm_octave.h@{pmm\-\_\-octave.\-h}}
+\subsubsection[{P\-M\-M\-\_\-\-M\-A\-X}]{\setlength{\rightskip}{0pt plus 5cm}\#define P\-M\-M\-\_\-\-M\-A\-X~2}}\label{pmm__octave_8h_ac9ab3988d2d70274fa8f0b597399798c}
+use maximum of points with identical parameters 
+
+\subsection{Typedef Documentation}
+\hypertarget{pmm__octave_8h_a5925e05d1601354fcbddbc97aabbdfc2}{\index{pmm\-\_\-octave.\-h@{pmm\-\_\-octave.\-h}!Column\-Vector@{Column\-Vector}}
+\index{Column\-Vector@{Column\-Vector}!pmm_octave.h@{pmm\-\_\-octave.\-h}}
+\subsubsection[{Column\-Vector}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf Column\-Vector}  {\bf Column\-Vector}}}\label{pmm__octave_8h_a5925e05d1601354fcbddbc97aabbdfc2}
+\hypertarget{pmm__octave_8h_aaa00d25d0e42fc6df50e33e2fa296964}{\index{pmm\-\_\-octave.\-h@{pmm\-\_\-octave.\-h}!Matrix@{Matrix}}
+\index{Matrix@{Matrix}!pmm_octave.h@{pmm\-\_\-octave.\-h}}
+\subsubsection[{Matrix}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf Matrix}  {\bf Matrix}}}\label{pmm__octave_8h_aaa00d25d0e42fc6df50e33e2fa296964}
+\hypertarget{pmm__octave_8h_a43879c11d8787269e8ce882715728470}{\index{pmm\-\_\-octave.\-h@{pmm\-\_\-octave.\-h}!P\-M\-M\-\_\-\-Octave\-\_\-\-Data@{P\-M\-M\-\_\-\-Octave\-\_\-\-Data}}
+\index{P\-M\-M\-\_\-\-Octave\-\_\-\-Data@{P\-M\-M\-\_\-\-Octave\-\_\-\-Data}!pmm_octave.h@{pmm\-\_\-octave.\-h}}
+\subsubsection[{P\-M\-M\-\_\-\-Octave\-\_\-\-Data}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf pmm\-\_\-octave\-\_\-data}  {\bf P\-M\-M\-\_\-\-Octave\-\_\-\-Data}}}\label{pmm__octave_8h_a43879c11d8787269e8ce882715728470}
+Structure containing octave objects which are used in interpolation of models 
+
+\subsection{Function Documentation}
+\hypertarget{pmm__octave_8h_ae399128d36839b0686e89e14e192bf67}{\index{pmm\-\_\-octave.\-h@{pmm\-\_\-octave.\-h}!fill\-\_\-octave\-\_\-input\-\_\-matrices@{fill\-\_\-octave\-\_\-input\-\_\-matrices}}
+\index{fill\-\_\-octave\-\_\-input\-\_\-matrices@{fill\-\_\-octave\-\_\-input\-\_\-matrices}!pmm_octave.h@{pmm\-\_\-octave.\-h}}
+\subsubsection[{fill\-\_\-octave\-\_\-input\-\_\-matrices}]{\setlength{\rightskip}{0pt plus 5cm}struct {\bf pmm\-\_\-octave\-\_\-data}$\ast$ fill\-\_\-octave\-\_\-input\-\_\-matrices (
+\begin{DoxyParamCaption}
+\item[{struct {\bf pmm\-\_\-model} $\ast$}]{m, }
+\item[{int}]{mode}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [read]}}}\label{pmm__octave_8h_ae399128d36839b0686e89e14e192bf67}
+\hypertarget{pmm__octave_8h_ad19fcf9315d428c1942565f6c1b6d675}{\index{pmm\-\_\-octave.\-h@{pmm\-\_\-octave.\-h}!interpolate\-\_\-griddatan@{interpolate\-\_\-griddatan}}
+\index{interpolate\-\_\-griddatan@{interpolate\-\_\-griddatan}!pmm_octave.h@{pmm\-\_\-octave.\-h}}
+\subsubsection[{interpolate\-\_\-griddatan}]{\setlength{\rightskip}{0pt plus 5cm}struct {\bf pmm\-\_\-benchmark}$\ast$ interpolate\-\_\-griddatan (
+\begin{DoxyParamCaption}
+\item[{struct {\bf pmm\-\_\-model} $\ast$}]{m, }
+\item[{int $\ast$}]{p}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [read]}}}\label{pmm__octave_8h_ad19fcf9315d428c1942565f6c1b6d675}
+\hypertarget{pmm__octave_8h_aad5714ea7ea84d00bcc8e48e13834e87}{\index{pmm\-\_\-octave.\-h@{pmm\-\_\-octave.\-h}!octave\-\_\-init@{octave\-\_\-init}}
+\index{octave\-\_\-init@{octave\-\_\-init}!pmm_octave.h@{pmm\-\_\-octave.\-h}}
+\subsubsection[{octave\-\_\-init}]{\setlength{\rightskip}{0pt plus 5cm}void octave\-\_\-init (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{pmm__octave_8h_aad5714ea7ea84d00bcc8e48e13834e87}
+\hypertarget{pmm__octave_8h_aab9a822323bfed70c74611962d762831}{\index{pmm\-\_\-octave.\-h@{pmm\-\_\-octave.\-h}!octave\-\_\-interp@{octave\-\_\-interp}}
+\index{octave\-\_\-interp@{octave\-\_\-interp}!pmm_octave.h@{pmm\-\_\-octave.\-h}}
+\subsubsection[{octave\-\_\-interp}]{\setlength{\rightskip}{0pt plus 5cm}double octave\-\_\-interp (
+\begin{DoxyParamCaption}
+\item[{struct {\bf pmm\-\_\-octave\-\_\-data} $\ast$}]{oct\-\_\-data, }
+\item[{int $\ast$}]{p, }
+\item[{int}]{n}
+\end{DoxyParamCaption}
+)}}\label{pmm__octave_8h_aab9a822323bfed70c74611962d762831}
+\hypertarget{pmm__octave_8h_a8e6d29040fabbeda770667e6892475d0}{\index{pmm\-\_\-octave.\-h@{pmm\-\_\-octave.\-h}!octave\-\_\-interp\-\_\-array@{octave\-\_\-interp\-\_\-array}}
+\index{octave\-\_\-interp\-\_\-array@{octave\-\_\-interp\-\_\-array}!pmm_octave.h@{pmm\-\_\-octave.\-h}}
+\subsubsection[{octave\-\_\-interp\-\_\-array}]{\setlength{\rightskip}{0pt plus 5cm}double$\ast$ octave\-\_\-interp\-\_\-array (
+\begin{DoxyParamCaption}
+\item[{struct {\bf pmm\-\_\-octave\-\_\-data} $\ast$}]{oct\-\_\-data, }
+\item[{int $\ast$$\ast$}]{p, }
+\item[{int}]{n, }
+\item[{int}]{l}
+\end{DoxyParamCaption}
+)}}\label{pmm__octave_8h_a8e6d29040fabbeda770667e6892475d0}
+\hypertarget{pmm__octave_8h_a2758cc95a5436ca5078f7cffdb6f924f}{\index{pmm\-\_\-octave.\-h@{pmm\-\_\-octave.\-h}!octave\-\_\-interpolate@{octave\-\_\-interpolate}}
+\index{octave\-\_\-interpolate@{octave\-\_\-interpolate}!pmm_octave.h@{pmm\-\_\-octave.\-h}}
+\subsubsection[{octave\-\_\-interpolate}]{\setlength{\rightskip}{0pt plus 5cm}double octave\-\_\-interpolate (
+\begin{DoxyParamCaption}
+\item[{struct {\bf pmm\-\_\-octave\-\_\-data} $\ast$}]{oct\-\_\-data, }
+\item[{int $\ast$}]{p, }
+\item[{int}]{n}
+\end{DoxyParamCaption}
+)}}\label{pmm__octave_8h_a2758cc95a5436ca5078f7cffdb6f924f}
+\hypertarget{pmm__octave_8h_a5e5f280bfc2f1d3e2894aead0e2e42ba}{\index{pmm\-\_\-octave.\-h@{pmm\-\_\-octave.\-h}!octave\-\_\-triangulate@{octave\-\_\-triangulate}}
+\index{octave\-\_\-triangulate@{octave\-\_\-triangulate}!pmm_octave.h@{pmm\-\_\-octave.\-h}}
+\subsubsection[{octave\-\_\-triangulate}]{\setlength{\rightskip}{0pt plus 5cm}int octave\-\_\-triangulate (
+\begin{DoxyParamCaption}
+\item[{struct {\bf pmm\-\_\-octave\-\_\-data} $\ast$}]{oct\-\_\-data}
+\end{DoxyParamCaption}
+)}}\label{pmm__octave_8h_a5e5f280bfc2f1d3e2894aead0e2e42ba}

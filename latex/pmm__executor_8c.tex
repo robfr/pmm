@@ -1,0 +1,334 @@
+\hypertarget{pmm__executor_8c}{\section{/home/rhiggins/phd/pmm\-\_\-github/src/pmm\-\_\-executor.c File Reference}
+\label{pmm__executor_8c}\index{/home/rhiggins/phd/pmm\-\_\-github/src/pmm\-\_\-executor.\-c@{/home/rhiggins/phd/pmm\-\_\-github/src/pmm\-\_\-executor.\-c}}
+}
+
+
+Functions for executing a benchmark.  
+
+
+{\ttfamily \#include $<$stdlib.\-h$>$}\\*
+{\ttfamily \#include $<$signal.\-h$>$}\\*
+{\ttfamily \#include $<$sys/signal.\-h$>$}\\*
+{\ttfamily \#include $<$pthread.\-h$>$}\\*
+{\ttfamily \#include $<$sys/time.\-h$>$}\\*
+{\ttfamily \#include $<$sys/types.\-h$>$}\\*
+{\ttfamily \#include $<$time.\-h$>$}\\*
+{\ttfamily \#include $<$paths.\-h$>$}\\*
+{\ttfamily \#include $<$sys/wait.\-h$>$}\\*
+{\ttfamily \#include $<$fcntl.\-h$>$}\\*
+{\ttfamily \#include $<$unistd.\-h$>$}\\*
+{\ttfamily \#include $<$errno.\-h$>$}\\*
+{\ttfamily \#include $<$libgen.\-h$>$}\\*
+{\ttfamily \#include \char`\"{}pmm\-\_\-model.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}pmm\-\_\-selector.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}pmm\-\_\-cfgparser.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}pmm\-\_\-log.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}pmm\-\_\-util.\-h\char`\"{}}\\*
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{pmm__executor_8c_a5526d485a5b43a13f6a72394828518c1}{my\-\_\-popen} (char $\ast$cmd, char $\ast$$\ast$args, int n, pid\-\_\-t $\ast$pid)
+\item 
+int \hyperlink{pmm__executor_8c_a02113c8824bad0f80c20102a1756634b}{set\-\_\-non\-\_\-blocking} (int fd)
+\item 
+struct \hyperlink{structpmm__benchmark}{pmm\-\_\-benchmark} $\ast$ \hyperlink{pmm__executor_8c_adcdba1af96df96a56cb959e673be72cb}{parse\-\_\-bench\-\_\-output} (char $\ast$output, int n\-\_\-p, int $\ast$rargs)
+\item 
+int \hyperlink{pmm__executor_8c_aa230be1c004097151fa007ee5daef995}{read\-\_\-benchmark\-\_\-output} (int fd, char $\ast$$\ast$output\-\_\-p, pid\-\_\-t bench\-\_\-pid)
+\item 
+void \hyperlink{pmm__executor_8c_a5588fe2c42be2b004926f06fce1c6597}{sig\-\_\-childexit} (int sig)
+\item 
+double \hyperlink{pmm__executor_8c_a814caa4f292deeaa78c27e19ab7cae5b}{calculate\-\_\-flops} (struct timeval tv, long long int complexity)
+\item 
+double \hyperlink{pmm__executor_8c_abe5b664883daea2b6c6a66e474146551}{timeval\-\_\-to\-\_\-seconds} (struct timeval tv)
+\item 
+void \hyperlink{pmm__executor_8c_aa230817acc0fda50c562fb75ffa2d98d}{set\-\_\-executing\-\_\-benchmark} (int i)
+\item 
+char $\ast$ \hyperlink{pmm__executor_8c_a52b24f7bdffea9e64e920e006001bdde}{pmm\-\_\-bench\-\_\-exit\-\_\-status\-\_\-to\-\_\-string} (int bench\-\_\-status)
+\item 
+int \hyperlink{pmm__executor_8c_a66e429ad5725d679097aa38208e816e0}{spawn\-\_\-benchmark\-\_\-process} (struct \hyperlink{structpmm__routine}{pmm\-\_\-routine} $\ast$r, int $\ast$params, pid\-\_\-t $\ast$bench\-\_\-pid)
+\item 
+void \hyperlink{pmm__executor_8c_a0114b791c365e5fdd11040125d6cb605}{cleanup\-\_\-benchmark\-\_\-process} (F\-I\-L\-E $\ast$fp, pid\-\_\-t bench\-\_\-pid)
+\item 
+void $\ast$ \hyperlink{pmm__executor_8c_a76960e2ab75466e9b7cb06005f0911ee}{benchmark} (void $\ast$scheduled\-\_\-r)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{pmm__executor_8c_a0a8f5d539698cacf1b39e10fa15fd2f1}{executing\-\_\-benchmark}
+\begin{DoxyCompactList}\small\item\em daemon executing variable or not \end{DoxyCompactList}\item 
+pthread\-\_\-mutex\-\_\-t \hyperlink{pmm__executor_8c_a9c2a8272c2122c6c0e3b0ec2cc4aa78d}{executing\-\_\-benchmark\-\_\-mutex}
+\begin{DoxyCompactList}\small\item\em mutex for accessing executing\-\_\-benchmark variable \end{DoxyCompactList}\item 
+int \hyperlink{pmm__executor_8c_ac26321b66bfa16f4fd6b94164a328db6}{signal\-\_\-quit}
+\begin{DoxyCompactList}\small\item\em signal to indicate benchmark should be terminated \end{DoxyCompactList}\item 
+pthread\-\_\-mutex\-\_\-t \hyperlink{pmm__executor_8c_a8fc222adb17037b4738800f9d112d930}{signal\-\_\-quit\-\_\-mutex}
+\begin{DoxyCompactList}\small\item\em mutex for accessing singal\-\_\-quit \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Functions for executing a benchmark. This file contains code for calling a benchmark executable from the pmm daemon, dealing with the system level requirements of spawning the benchmark process and parsing the output of said benchmark. 
+
+\subsection{Function Documentation}
+\hypertarget{pmm__executor_8c_a76960e2ab75466e9b7cb06005f0911ee}{\index{pmm\-\_\-executor.\-c@{pmm\-\_\-executor.\-c}!benchmark@{benchmark}}
+\index{benchmark@{benchmark}!pmm_executor.c@{pmm\-\_\-executor.\-c}}
+\subsubsection[{benchmark}]{\setlength{\rightskip}{0pt plus 5cm}void$\ast$ benchmark (
+\begin{DoxyParamCaption}
+\item[{void $\ast$}]{scheduled\-\_\-r}
+\end{DoxyParamCaption}
+)}}\label{pmm__executor_8c_a76960e2ab75466e9b7cb06005f0911ee}
+Given a routine to benchmark, select a point, execute the benchmark and insert the new point into the model. Set the global 'executing\-\_\-benchark' to false/0 when the operation is complete (or has failed).
+
+
+\begin{DoxyParams}{Parameters}
+{\em scheduled\-\_\-r} & void pointer to a routine structure that has been scheduled for a benchmark execution\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void pointer to an integer with value of\-: 0 on success, 1 on quit from signal, -\/1 on failure 
+\end{DoxyReturn}
+\hypertarget{pmm__executor_8c_a814caa4f292deeaa78c27e19ab7cae5b}{\index{pmm\-\_\-executor.\-c@{pmm\-\_\-executor.\-c}!calculate\-\_\-flops@{calculate\-\_\-flops}}
+\index{calculate\-\_\-flops@{calculate\-\_\-flops}!pmm_executor.c@{pmm\-\_\-executor.\-c}}
+\subsubsection[{calculate\-\_\-flops}]{\setlength{\rightskip}{0pt plus 5cm}double calculate\-\_\-flops (
+\begin{DoxyParamCaption}
+\item[{struct timeval}]{tv, }
+\item[{long long int}]{complexity}
+\end{DoxyParamCaption}
+)}}\label{pmm__executor_8c_a814caa4f292deeaa78c27e19ab7cae5b}
+calculate (F\-L)O\-P\-S (floating point operations per second or any other type of operations per second)
+
+
+\begin{DoxyParams}{Parameters}
+{\em tv} & timeval structure representing duration of computation \\
+\hline
+{\em complexity} & complexity of computation (volume of operations)\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+flops as a double 
+\end{DoxyReturn}
+\hypertarget{pmm__executor_8c_a0114b791c365e5fdd11040125d6cb605}{\index{pmm\-\_\-executor.\-c@{pmm\-\_\-executor.\-c}!cleanup\-\_\-benchmark\-\_\-process@{cleanup\-\_\-benchmark\-\_\-process}}
+\index{cleanup\-\_\-benchmark\-\_\-process@{cleanup\-\_\-benchmark\-\_\-process}!pmm_executor.c@{pmm\-\_\-executor.\-c}}
+\subsubsection[{cleanup\-\_\-benchmark\-\_\-process}]{\setlength{\rightskip}{0pt plus 5cm}void cleanup\-\_\-benchmark\-\_\-process (
+\begin{DoxyParamCaption}
+\item[{F\-I\-L\-E $\ast$}]{fp, }
+\item[{pid\-\_\-t}]{bench\-\_\-pid}
+\end{DoxyParamCaption}
+)}}\label{pmm__executor_8c_a0114b791c365e5fdd11040125d6cb605}
+clean up a benchmark process
+
+closes file handles and kills the process
+
+
+\begin{DoxyParams}{Parameters}
+{\em fp} & file pointer to the benchmarks standard output \\
+\hline
+{\em bench\-\_\-pid} & benchmark process id \\
+\hline
+\end{DoxyParams}
+\hypertarget{pmm__executor_8c_a5526d485a5b43a13f6a72394828518c1}{\index{pmm\-\_\-executor.\-c@{pmm\-\_\-executor.\-c}!my\-\_\-popen@{my\-\_\-popen}}
+\index{my\-\_\-popen@{my\-\_\-popen}!pmm_executor.c@{pmm\-\_\-executor.\-c}}
+\subsubsection[{my\-\_\-popen}]{\setlength{\rightskip}{0pt plus 5cm}int my\-\_\-popen (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{cmd, }
+\item[{char $\ast$$\ast$}]{args, }
+\item[{int}]{n, }
+\item[{pid\-\_\-t $\ast$}]{pid}
+\end{DoxyParamCaption}
+)}}\label{pmm__executor_8c_a5526d485a5b43a13f6a72394828518c1}
+Forks a process that executes and external program with a an argument string and returns a file distriptor and sets the child processes pid
+
+
+\begin{DoxyParams}{Parameters}
+{\em cmd} & string with the full path of the program \\
+\hline
+{\em args} & array of strings with all arguments of the program \\
+\hline
+{\em n} & number of arguments in arg vector \\
+\hline
+{\em pid} & pointer to the pid which will be set to the pid of the external program\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+file descriptor of the pipe opened to the command cmd.
+\end{DoxyReturn}
+T\-O\-D\-O test for file not found \hypertarget{pmm__executor_8c_adcdba1af96df96a56cb959e673be72cb}{\index{pmm\-\_\-executor.\-c@{pmm\-\_\-executor.\-c}!parse\-\_\-bench\-\_\-output@{parse\-\_\-bench\-\_\-output}}
+\index{parse\-\_\-bench\-\_\-output@{parse\-\_\-bench\-\_\-output}!pmm_executor.c@{pmm\-\_\-executor.\-c}}
+\subsubsection[{parse\-\_\-bench\-\_\-output}]{\setlength{\rightskip}{0pt plus 5cm}struct {\bf pmm\-\_\-benchmark} $\ast$ parse\-\_\-bench\-\_\-output (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{output, }
+\item[{int}]{n\-\_\-p, }
+\item[{int $\ast$}]{rargs}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [read]}}}\label{pmm__executor_8c_adcdba1af96df96a56cb959e673be72cb}
+Given the output of a benchmark execution parse and create a new benchmark structure storing all the information gained
+
+
+\begin{DoxyParams}{Parameters}
+{\em output} & pointer to benchmark output string \\
+\hline
+{\em n\-\_\-p} & number of parameters of benchmark \\
+\hline
+{\em rargs} & arguments passed to the benchmarked routine\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+pointer to newly allocated benchmark reflecting the parsed output 
+\end{DoxyReturn}
+\hypertarget{pmm__executor_8c_a52b24f7bdffea9e64e920e006001bdde}{\index{pmm\-\_\-executor.\-c@{pmm\-\_\-executor.\-c}!pmm\-\_\-bench\-\_\-exit\-\_\-status\-\_\-to\-\_\-string@{pmm\-\_\-bench\-\_\-exit\-\_\-status\-\_\-to\-\_\-string}}
+\index{pmm\-\_\-bench\-\_\-exit\-\_\-status\-\_\-to\-\_\-string@{pmm\-\_\-bench\-\_\-exit\-\_\-status\-\_\-to\-\_\-string}!pmm_executor.c@{pmm\-\_\-executor.\-c}}
+\subsubsection[{pmm\-\_\-bench\-\_\-exit\-\_\-status\-\_\-to\-\_\-string}]{\setlength{\rightskip}{0pt plus 5cm}char $\ast$ pmm\-\_\-bench\-\_\-exit\-\_\-status\-\_\-to\-\_\-string (
+\begin{DoxyParamCaption}
+\item[{int}]{bench\-\_\-status}
+\end{DoxyParamCaption}
+)}}\label{pmm__executor_8c_a52b24f7bdffea9e64e920e006001bdde}
+convert benchmark exit status to a string
+
+
+\begin{DoxyParams}{Parameters}
+{\em bench\-\_\-status} & benchmark status represented by an int\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+pointer to a character string 
+\end{DoxyReturn}
+\hypertarget{pmm__executor_8c_aa230be1c004097151fa007ee5daef995}{\index{pmm\-\_\-executor.\-c@{pmm\-\_\-executor.\-c}!read\-\_\-benchmark\-\_\-output@{read\-\_\-benchmark\-\_\-output}}
+\index{read\-\_\-benchmark\-\_\-output@{read\-\_\-benchmark\-\_\-output}!pmm_executor.c@{pmm\-\_\-executor.\-c}}
+\subsubsection[{read\-\_\-benchmark\-\_\-output}]{\setlength{\rightskip}{0pt plus 5cm}int read\-\_\-benchmark\-\_\-output (
+\begin{DoxyParamCaption}
+\item[{int}]{fd, }
+\item[{char $\ast$$\ast$}]{output\-\_\-p, }
+\item[{pid\-\_\-t}]{bench\-\_\-pid}
+\end{DoxyParamCaption}
+)}}\label{pmm__executor_8c_aa230be1c004097151fa007ee5daef995}
+Read the output of a benchmark process
+
+
+\begin{DoxyParams}{Parameters}
+{\em fd} & benchmark process output file descriptor \\
+\hline
+{\em output\-\_\-p} & pointer to a character array where output will be stored \\
+\hline
+{\em bench\-\_\-pid} & process id of the benchmark process\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success, -\/1 if there was an error reading (output\-\_\-p also set to N\-U\-L\-L) 1 if a quit signal was received while waiting for output 
+\end{DoxyReturn}
+\hypertarget{pmm__executor_8c_aa230817acc0fda50c562fb75ffa2d98d}{\index{pmm\-\_\-executor.\-c@{pmm\-\_\-executor.\-c}!set\-\_\-executing\-\_\-benchmark@{set\-\_\-executing\-\_\-benchmark}}
+\index{set\-\_\-executing\-\_\-benchmark@{set\-\_\-executing\-\_\-benchmark}!pmm_executor.c@{pmm\-\_\-executor.\-c}}
+\subsubsection[{set\-\_\-executing\-\_\-benchmark}]{\setlength{\rightskip}{0pt plus 5cm}void set\-\_\-executing\-\_\-benchmark (
+\begin{DoxyParamCaption}
+\item[{int}]{i}
+\end{DoxyParamCaption}
+)}}\label{pmm__executor_8c_aa230817acc0fda50c562fb75ffa2d98d}
+set the executing\-\_\-benchmark variable via mutex
+
+
+\begin{DoxyParams}{Parameters}
+{\em i} & value to set variable with \\
+\hline
+\end{DoxyParams}
+\hypertarget{pmm__executor_8c_a02113c8824bad0f80c20102a1756634b}{\index{pmm\-\_\-executor.\-c@{pmm\-\_\-executor.\-c}!set\-\_\-non\-\_\-blocking@{set\-\_\-non\-\_\-blocking}}
+\index{set\-\_\-non\-\_\-blocking@{set\-\_\-non\-\_\-blocking}!pmm_executor.c@{pmm\-\_\-executor.\-c}}
+\subsubsection[{set\-\_\-non\-\_\-blocking}]{\setlength{\rightskip}{0pt plus 5cm}int set\-\_\-non\-\_\-blocking (
+\begin{DoxyParamCaption}
+\item[{int}]{fd}
+\end{DoxyParamCaption}
+)}}\label{pmm__executor_8c_a02113c8824bad0f80c20102a1756634b}
+a roughly portable way of setting a file descriptor for non-\/blocking I/\-O.
+
+
+\begin{DoxyParams}{Parameters}
+{\em fd} & file descriptor to modify\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+-\/1 on error, 0 on success 
+\end{DoxyReturn}
+\hypertarget{pmm__executor_8c_a5588fe2c42be2b004926f06fce1c6597}{\index{pmm\-\_\-executor.\-c@{pmm\-\_\-executor.\-c}!sig\-\_\-childexit@{sig\-\_\-childexit}}
+\index{sig\-\_\-childexit@{sig\-\_\-childexit}!pmm_executor.c@{pmm\-\_\-executor.\-c}}
+\subsubsection[{sig\-\_\-childexit}]{\setlength{\rightskip}{0pt plus 5cm}void sig\-\_\-childexit (
+\begin{DoxyParamCaption}
+\item[{int}]{sig}
+\end{DoxyParamCaption}
+)}}\label{pmm__executor_8c_a5588fe2c42be2b004926f06fce1c6597}
+S\-I\-G\-C\-H\-L\-D signal handler
+
+
+\begin{DoxyParams}{Parameters}
+{\em sig} & the signal\\
+\hline
+\end{DoxyParams}
+\begin{DoxyWarning}{Warning}
+Do not use $\ast$\-P\-R\-I\-N\-T\-F logging facility in this thread, it is not 'async-\/signal-\/safe' (though it is threadsafe). 
+\end{DoxyWarning}
+\hypertarget{pmm__executor_8c_a66e429ad5725d679097aa38208e816e0}{\index{pmm\-\_\-executor.\-c@{pmm\-\_\-executor.\-c}!spawn\-\_\-benchmark\-\_\-process@{spawn\-\_\-benchmark\-\_\-process}}
+\index{spawn\-\_\-benchmark\-\_\-process@{spawn\-\_\-benchmark\-\_\-process}!pmm_executor.c@{pmm\-\_\-executor.\-c}}
+\subsubsection[{spawn\-\_\-benchmark\-\_\-process}]{\setlength{\rightskip}{0pt plus 5cm}int spawn\-\_\-benchmark\-\_\-process (
+\begin{DoxyParamCaption}
+\item[{struct {\bf pmm\-\_\-routine} $\ast$}]{r, }
+\item[{int $\ast$}]{params, }
+\item[{pid\-\_\-t $\ast$}]{bench\-\_\-pid}
+\end{DoxyParamCaption}
+)}}\label{pmm__executor_8c_a66e429ad5725d679097aa38208e816e0}
+Convert params to an array of strings and call my\-\_\-popen
+
+
+\begin{DoxyParams}{Parameters}
+{\em r} & pointer to routine that will be executed \\
+\hline
+{\em params} & pointer to array of parameters \\
+\hline
+{\em bench\-\_\-pid} & pointer to pid\-\_\-t to store spawned process pid\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int index of file descriptor that points to the stdout of the spawned process, or -\/1 if there is an error 
+\end{DoxyReturn}
+\hypertarget{pmm__executor_8c_abe5b664883daea2b6c6a66e474146551}{\index{pmm\-\_\-executor.\-c@{pmm\-\_\-executor.\-c}!timeval\-\_\-to\-\_\-seconds@{timeval\-\_\-to\-\_\-seconds}}
+\index{timeval\-\_\-to\-\_\-seconds@{timeval\-\_\-to\-\_\-seconds}!pmm_executor.c@{pmm\-\_\-executor.\-c}}
+\subsubsection[{timeval\-\_\-to\-\_\-seconds}]{\setlength{\rightskip}{0pt plus 5cm}double timeval\-\_\-to\-\_\-seconds (
+\begin{DoxyParamCaption}
+\item[{struct timeval}]{tv}
+\end{DoxyParamCaption}
+)}}\label{pmm__executor_8c_abe5b664883daea2b6c6a66e474146551}
+convert a timeval to second in double
+
+
+\begin{DoxyParams}{Parameters}
+{\em tv} & timeval structure\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+timeval as seconds 
+\end{DoxyReturn}
+
+
+\subsection{Variable Documentation}
+\hypertarget{pmm__executor_8c_a0a8f5d539698cacf1b39e10fa15fd2f1}{\index{pmm\-\_\-executor.\-c@{pmm\-\_\-executor.\-c}!executing\-\_\-benchmark@{executing\-\_\-benchmark}}
+\index{executing\-\_\-benchmark@{executing\-\_\-benchmark}!pmm_executor.c@{pmm\-\_\-executor.\-c}}
+\subsubsection[{executing\-\_\-benchmark}]{\setlength{\rightskip}{0pt plus 5cm}int executing\-\_\-benchmark}}\label{pmm__executor_8c_a0a8f5d539698cacf1b39e10fa15fd2f1}
+
+
+daemon executing variable or not 
+
+\hypertarget{pmm__executor_8c_a9c2a8272c2122c6c0e3b0ec2cc4aa78d}{\index{pmm\-\_\-executor.\-c@{pmm\-\_\-executor.\-c}!executing\-\_\-benchmark\-\_\-mutex@{executing\-\_\-benchmark\-\_\-mutex}}
+\index{executing\-\_\-benchmark\-\_\-mutex@{executing\-\_\-benchmark\-\_\-mutex}!pmm_executor.c@{pmm\-\_\-executor.\-c}}
+\subsubsection[{executing\-\_\-benchmark\-\_\-mutex}]{\setlength{\rightskip}{0pt plus 5cm}pthread\-\_\-mutex\-\_\-t executing\-\_\-benchmark\-\_\-mutex}}\label{pmm__executor_8c_a9c2a8272c2122c6c0e3b0ec2cc4aa78d}
+
+
+mutex for accessing executing\-\_\-benchmark variable 
+
+\hypertarget{pmm__executor_8c_ac26321b66bfa16f4fd6b94164a328db6}{\index{pmm\-\_\-executor.\-c@{pmm\-\_\-executor.\-c}!signal\-\_\-quit@{signal\-\_\-quit}}
+\index{signal\-\_\-quit@{signal\-\_\-quit}!pmm_executor.c@{pmm\-\_\-executor.\-c}}
+\subsubsection[{signal\-\_\-quit}]{\setlength{\rightskip}{0pt plus 5cm}int signal\-\_\-quit}}\label{pmm__executor_8c_ac26321b66bfa16f4fd6b94164a328db6}
+
+
+signal to indicate benchmark should be terminated 
+
+\hypertarget{pmm__executor_8c_a8fc222adb17037b4738800f9d112d930}{\index{pmm\-\_\-executor.\-c@{pmm\-\_\-executor.\-c}!signal\-\_\-quit\-\_\-mutex@{signal\-\_\-quit\-\_\-mutex}}
+\index{signal\-\_\-quit\-\_\-mutex@{signal\-\_\-quit\-\_\-mutex}!pmm_executor.c@{pmm\-\_\-executor.\-c}}
+\subsubsection[{signal\-\_\-quit\-\_\-mutex}]{\setlength{\rightskip}{0pt plus 5cm}pthread\-\_\-mutex\-\_\-t signal\-\_\-quit\-\_\-mutex}}\label{pmm__executor_8c_a8fc222adb17037b4738800f9d112d930}
+
+
+mutex for accessing singal\-\_\-quit 
+

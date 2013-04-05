@@ -1,0 +1,26 @@
+var searchData=
+[
+  ['schedule_5froutine',['schedule_routine',['../pmm__scheduler_8c.html#add912276b723522e8a7e430e633a2b7f',1,'schedule_routine(struct pmm_routine **scheduled, struct pmm_routine **r, int n):&#160;pmm_scheduler.c'],['../pmm__scheduler_8h.html#add912276b723522e8a7e430e633a2b7f',1,'schedule_routine(struct pmm_routine **scheduled, struct pmm_routine **r, int n):&#160;pmm_scheduler.c']]],
+  ['search_5fsorted_5fbench_5flist',['search_sorted_bench_list',['../pmm__model_8c.html#a6836117fac9ab29cd8f2a2622748f1be',1,'search_sorted_bench_list(int direction, struct pmm_benchmark *start, int *param, int n_p, struct pmm_benchmark **first, struct pmm_benchmark **last):&#160;pmm_model.c'],['../pmm__model_8h.html#a6836117fac9ab29cd8f2a2622748f1be',1,'search_sorted_bench_list(int direction, struct pmm_benchmark *start, int *param, int n_p, struct pmm_benchmark **first, struct pmm_benchmark **last):&#160;pmm_model.c']]],
+  ['set_5fexecuting_5fbenchmark',['set_executing_benchmark',['../pmm__executor_8c.html#aa230817acc0fda50c562fb75ffa2d98d',1,'pmm_executor.c']]],
+  ['set_5fnon_5fblocking',['set_non_blocking',['../pmm__executor_8c.html#a02113c8824bad0f80c20102a1756634b',1,'pmm_executor.c']]],
+  ['set_5fparam_5farray_5fcopy',['set_param_array_copy',['../pmm__param_8c.html#a960a855d49d2ffb738cb0377494c11bd',1,'set_param_array_copy(int *dst, int *src, int n):&#160;pmm_param.c'],['../pmm__param_8h.html#a960a855d49d2ffb738cb0377494c11bd',1,'set_param_array_copy(int *dst, int *src, int n):&#160;pmm_param.c']]],
+  ['set_5fparam_5farray_5fend',['set_param_array_end',['../pmm__param_8c.html#a83cd116349d492b549392e33799158bc',1,'set_param_array_end(int *p, struct pmm_paramdef_set *pd_set):&#160;pmm_param.c'],['../pmm__param_8h.html#aafff9455ec38893cb86ff80c1308fb47',1,'set_param_array_end(int *p, struct pmm_paramdef_set *pds):&#160;pmm_param.c']]],
+  ['set_5fparam_5farray_5fstart',['set_param_array_start',['../pmm__param_8c.html#a1380db5c3c40a89def5a3130e16db0e1',1,'set_param_array_start(int *p, struct pmm_paramdef_set *pd_set):&#160;pmm_param.c'],['../pmm__param_8h.html#ab8739fdf7ec69f8a95f920e21e2b2966',1,'set_param_array_start(int *p, struct pmm_paramdef_set *pds):&#160;pmm_param.c']]],
+  ['set_5fparams_5finterval_5fmidpoint',['set_params_interval_midpoint',['../pmm__selector_8c.html#af0b037601262a05a6d04d07c4f4a1f58',1,'pmm_selector.c']]],
+  ['set_5fparams_5fstep_5falong_5fclimb_5finterval',['set_params_step_along_climb_interval',['../pmm__selector_8c.html#a67bb6a5e4a0f0a60fa6f72ea571eacc6',1,'pmm_selector.c']]],
+  ['set_5fparams_5fstep_5fbetween_5fparams',['set_params_step_between_params',['../pmm__param_8c.html#ae3a3bf09f08079c9b1180ab93e08a775',1,'set_params_step_between_params(int *params, int *start, int *end, int step, struct pmm_paramdef_set *pd_set):&#160;pmm_param.c'],['../pmm__param_8h.html#ae3a3bf09f08079c9b1180ab93e08a775',1,'set_params_step_between_params(int *params, int *start, int *end, int step, struct pmm_paramdef_set *pd_set):&#160;pmm_param.c']]],
+  ['set_5fplot_5flabels_5franges',['set_plot_labels_ranges',['../pmm__view_8c.html#a70dbe1afeca515c7d41d5f08dc5de88a',1,'pmm_view.c']]],
+  ['set_5fsplot_5flabels_5franges',['set_splot_labels_ranges',['../pmm__view_8c.html#ae627189b5769fd397cf16c4d793bc149',1,'pmm_view.c']]],
+  ['set_5fstr',['set_str',['../pmm__model_8c.html#a8995ca614e3f8ed052e9866f6b0efcdc',1,'set_str(char **dst, char *src):&#160;pmm_model.c'],['../pmm__model_8h.html#a8995ca614e3f8ed052e9866f6b0efcdc',1,'set_str(char **dst, char *src):&#160;pmm_model.c']]],
+  ['sig_5fchildexit',['sig_childexit',['../pmm__executor_8c.html#a5588fe2c42be2b004926f06fce1c6597',1,'pmm_executor.c']]],
+  ['sig_5fcleanup',['sig_cleanup',['../pmm__main_8c.html#a1af0728240fbff82caab1f1e97e81970',1,'pmm_main.c']]],
+  ['sig_5fdo_5fnothing',['sig_do_nothing',['../pmm__main_8c.html#a783e744853ab46e5e450656b35d0b52c',1,'pmm_main.c']]],
+  ['signal_5fhandler',['signal_handler',['../pmm__main_8c.html#acf468b5aa146dcdeff5404f6fd24f2c4',1,'pmm_main.c']]],
+  ['spawn_5fbenchmark_5fprocess',['spawn_benchmark_process',['../pmm__executor_8c.html#a66e429ad5725d679097aa38208e816e0',1,'pmm_executor.c']]],
+  ['splot_5fmodel',['splot_model',['../pmm__view_8c.html#a0d8f89cbb6537627b433f8909257d364',1,'pmm_view.c']]],
+  ['splot_5fslice_5fmodel',['splot_slice_model',['../pmm__view_8c.html#a38307c485cbdd50d3aa6cb77d8724923',1,'pmm_view.c']]],
+  ['sum_5fbench_5flist',['sum_bench_list',['../pmm__model_8c.html#a3f22c891d82c025d22d291097195f584',1,'sum_bench_list(struct pmm_benchmark *start, struct pmm_benchmark *end, struct pmm_benchmark *sum):&#160;pmm_model.c'],['../pmm__model_8h.html#a3f22c891d82c025d22d291097195f584',1,'sum_bench_list(struct pmm_benchmark *start, struct pmm_benchmark *end, struct pmm_benchmark *sum):&#160;pmm_model.c']]],
+  ['sync_5fclose_5ffile',['sync_close_file',['../pmm__cfgparser_8c.html#ae36b441d1d0da7e6802f51325f6e88e5',1,'pmm_cfgparser.c']]],
+  ['sync_5fparent_5fdir',['sync_parent_dir',['../pmm__cfgparser_8c.html#a191bad89704c87361690d1dc4395de6a',1,'pmm_cfgparser.c']]]
+];

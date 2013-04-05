@@ -1,0 +1,110 @@
+\hypertarget{pmm__cond_8c}{\section{/home/rhiggins/phd/pmm\-\_\-github/src/pmm\-\_\-cond.c File Reference}
+\label{pmm__cond_8c}\index{/home/rhiggins/phd/pmm\-\_\-github/src/pmm\-\_\-cond.\-c@{/home/rhiggins/phd/pmm\-\_\-github/src/pmm\-\_\-cond.\-c}}
+}
+
+
+Functions to test system conditions.  
+
+
+{\ttfamily \#include $<$stdlib.\-h$>$}\\*
+{\ttfamily \#include $<$stdio.\-h$>$}\\*
+{\ttfamily \#include $<$utmp.\-h$>$}\\*
+{\ttfamily \#include $<$paths.\-h$>$}\\*
+{\ttfamily \#include $<$sys/types.\-h$>$}\\*
+{\ttfamily \#include $<$sys/stat.\-h$>$}\\*
+{\ttfamily \#include $<$unistd.\-h$>$}\\*
+{\ttfamily \#include $<$sys/param.\-h$>$}\\*
+{\ttfamily \#include \char`\"{}pmm\-\_\-model.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}pmm\-\_\-cond.\-h\char`\"{}}\\*
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{pmm__cond_8c_a5ce75821a21badfcc4ba19c17221ed41}{ttystat} (char $\ast$line, int sz)
+\item 
+int \hyperlink{pmm__cond_8c_a36a9a1b9a0947a036ac2d8297620a7a8}{num\-\_\-users} ()
+\item 
+int \hyperlink{pmm__cond_8c_affec7c579a43c6332b4363c6b6fd9c49}{cond\-\_\-users} ()
+\item 
+int \hyperlink{pmm__cond_8c_a52d2182f99ae8254a660a7ed1dfd32e3}{cond\-\_\-idle} ()
+\item 
+int \hyperlink{pmm__cond_8c_a7d820e16efe20d53ec309f55c73377a2}{check\-\_\-conds} (struct \hyperlink{structpmm__routine}{pmm\-\_\-routine} $\ast$r)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Functions to test system conditions. this file contains the code for testing system conditions which may limit or permit the construction of models by the pmm daemon 
+
+\subsection{Function Documentation}
+\hypertarget{pmm__cond_8c_a7d820e16efe20d53ec309f55c73377a2}{\index{pmm\-\_\-cond.\-c@{pmm\-\_\-cond.\-c}!check\-\_\-conds@{check\-\_\-conds}}
+\index{check\-\_\-conds@{check\-\_\-conds}!pmm_cond.c@{pmm\-\_\-cond.\-c}}
+\subsubsection[{check\-\_\-conds}]{\setlength{\rightskip}{0pt plus 5cm}int check\-\_\-conds (
+\begin{DoxyParamCaption}
+\item[{struct {\bf pmm\-\_\-routine} $\ast$}]{r}
+\end{DoxyParamCaption}
+)}}\label{pmm__cond_8c_a7d820e16efe20d53ec309f55c73377a2}
+check if conditions for execution of a routine are satisfied and set executable parameter of routine accordingly
+
+
+\begin{DoxyParams}{Parameters}
+{\em r} & pointer to the routine\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if routine is not execuable based on conditions, 1 if it is 
+\end{DoxyReturn}
+\hypertarget{pmm__cond_8c_a52d2182f99ae8254a660a7ed1dfd32e3}{\index{pmm\-\_\-cond.\-c@{pmm\-\_\-cond.\-c}!cond\-\_\-idle@{cond\-\_\-idle}}
+\index{cond\-\_\-idle@{cond\-\_\-idle}!pmm_cond.c@{pmm\-\_\-cond.\-c}}
+\subsubsection[{cond\-\_\-idle}]{\setlength{\rightskip}{0pt plus 5cm}int cond\-\_\-idle (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{pmm__cond_8c_a52d2182f99ae8254a660a7ed1dfd32e3}
+test system for idleness
+
+true if 5 minute load is below 0.\-1
+
+return 0 if not idle, 1 if idle \hypertarget{pmm__cond_8c_affec7c579a43c6332b4363c6b6fd9c49}{\index{pmm\-\_\-cond.\-c@{pmm\-\_\-cond.\-c}!cond\-\_\-users@{cond\-\_\-users}}
+\index{cond\-\_\-users@{cond\-\_\-users}!pmm_cond.c@{pmm\-\_\-cond.\-c}}
+\subsubsection[{cond\-\_\-users}]{\setlength{\rightskip}{0pt plus 5cm}int cond\-\_\-users (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{pmm__cond_8c_affec7c579a43c6332b4363c6b6fd9c49}
+\hypertarget{pmm__cond_8c_a36a9a1b9a0947a036ac2d8297620a7a8}{\index{pmm\-\_\-cond.\-c@{pmm\-\_\-cond.\-c}!num\-\_\-users@{num\-\_\-users}}
+\index{num\-\_\-users@{num\-\_\-users}!pmm_cond.c@{pmm\-\_\-cond.\-c}}
+\subsubsection[{num\-\_\-users}]{\setlength{\rightskip}{0pt plus 5cm}int num\-\_\-users (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{pmm__cond_8c_a36a9a1b9a0947a036ac2d8297620a7a8}
+counts the number of users logged into a system by reading utmp returns the number of users logged in.
+
+code comes from Free\-B\-S\-D /usr/src/usr.bin/w/w.\-c
+
+\begin{DoxyReturn}{Returns}
+number of users logged in 
+\end{DoxyReturn}
+\hypertarget{pmm__cond_8c_a5ce75821a21badfcc4ba19c17221ed41}{\index{pmm\-\_\-cond.\-c@{pmm\-\_\-cond.\-c}!ttystat@{ttystat}}
+\index{ttystat@{ttystat}!pmm_cond.c@{pmm\-\_\-cond.\-c}}
+\subsubsection[{ttystat}]{\setlength{\rightskip}{0pt plus 5cm}int ttystat (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{line, }
+\item[{int}]{sz}
+\end{DoxyParamCaption}
+)}}\label{pmm__cond_8c_a5ce75821a21badfcc4ba19c17221ed41}
+checks that the tty a user is logged into (as per utmp) exists in /dev
+
+This indicates whether a user has an interactive session or not
+
+code comes from Free\-B\-S\-D /usr/src/usr.bin/w/w.\-c
+
+
+\begin{DoxyParams}{Parameters}
+{\em line} & pointer to line of the utmp file \\
+\hline
+{\em sz} & size of the line\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+1 if user has a tty, 0 if user does not. 
+\end{DoxyReturn}

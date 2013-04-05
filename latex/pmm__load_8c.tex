@@ -1,0 +1,165 @@
+\hypertarget{pmm__load_8c}{\section{/home/rhiggins/phd/pmm\-\_\-github/src/pmm\-\_\-load.c File Reference}
+\label{pmm__load_8c}\index{/home/rhiggins/phd/pmm\-\_\-github/src/pmm\-\_\-load.\-c@{/home/rhiggins/phd/pmm\-\_\-github/src/pmm\-\_\-load.\-c}}
+}
+
+
+Code for handling load structure.  
+
+
+{\ttfamily \#include $<$stdlib.\-h$>$}\\*
+{\ttfamily \#include $<$time.\-h$>$}\\*
+{\ttfamily \#include \char`\"{}pmm\-\_\-load.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}pmm\-\_\-log.\-h\char`\"{}}\\*
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structpmm__loadhistory}{pmm\-\_\-loadhistory} $\ast$ \hyperlink{pmm__load_8c_ad07afc7aeb664fedcc07f4a955ab43f9}{new\-\_\-loadhistory} ()
+\item 
+int \hyperlink{pmm__load_8c_ae54383aadb1f12a1c4879fd85a3c909c}{init\-\_\-loadhistory} (struct \hyperlink{structpmm__loadhistory}{pmm\-\_\-loadhistory} $\ast$h, int size)
+\item 
+void \hyperlink{pmm__load_8c_aa8c259ded3c4a1bf8e9c19c85d942ca6}{add\-\_\-load} (struct \hyperlink{structpmm__loadhistory}{pmm\-\_\-loadhistory} $\ast$h, struct \hyperlink{structpmm__load}{pmm\-\_\-load} $\ast$l)
+\item 
+int \hyperlink{pmm__load_8c_a29614e7a74815e916206e98f515d5848}{check\-\_\-loadhistory} (struct \hyperlink{structpmm__loadhistory}{pmm\-\_\-loadhistory} $\ast$h)
+\item 
+struct \hyperlink{structpmm__load}{pmm\-\_\-load} $\ast$ \hyperlink{pmm__load_8c_ab8e9e631f77e07614e60d53f00a37474}{new\-\_\-load} ()
+\item 
+void \hyperlink{pmm__load_8c_a79f5c035105980a40ff28beb44623d99}{print\-\_\-loadhistory} (const char $\ast$output, struct \hyperlink{structpmm__loadhistory}{pmm\-\_\-loadhistory} $\ast$h)
+\item 
+void \hyperlink{pmm__load_8c_a520dcba3debc99b6a8a3ca1124789d42}{print\-\_\-load} (const char $\ast$output, struct \hyperlink{structpmm__load}{pmm\-\_\-load} $\ast$l)
+\item 
+void \hyperlink{pmm__load_8c_af9a37959809b52f265f1db6b3bfd88d7}{free\-\_\-loadhistory} (struct \hyperlink{structpmm__loadhistory}{pmm\-\_\-loadhistory} $\ast$$\ast$h)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Code for handling load structure. Contains functions for dealing with the load data structures. 
+
+\subsection{Function Documentation}
+\hypertarget{pmm__load_8c_aa8c259ded3c4a1bf8e9c19c85d942ca6}{\index{pmm\-\_\-load.\-c@{pmm\-\_\-load.\-c}!add\-\_\-load@{add\-\_\-load}}
+\index{add\-\_\-load@{add\-\_\-load}!pmm_load.c@{pmm\-\_\-load.\-c}}
+\subsubsection[{add\-\_\-load}]{\setlength{\rightskip}{0pt plus 5cm}void add\-\_\-load (
+\begin{DoxyParamCaption}
+\item[{struct {\bf pmm\-\_\-loadhistory} $\ast$}]{h, }
+\item[{struct {\bf pmm\-\_\-load} $\ast$}]{l}
+\end{DoxyParamCaption}
+)}}\label{pmm__load_8c_aa8c259ded3c4a1bf8e9c19c85d942ca6}
+This function {\itshape copies} the structure l into the load history structure which is a circular array.
+
+
+\begin{DoxyParams}{Parameters}
+{\em h} & pointer to the load history structure \\
+\hline
+{\em l} & pointer to the load to be copied into the next free/expired element of the circular array \\
+\hline
+\end{DoxyParams}
+\hypertarget{pmm__load_8c_a29614e7a74815e916206e98f515d5848}{\index{pmm\-\_\-load.\-c@{pmm\-\_\-load.\-c}!check\-\_\-loadhistory@{check\-\_\-loadhistory}}
+\index{check\-\_\-loadhistory@{check\-\_\-loadhistory}!pmm_load.c@{pmm\-\_\-load.\-c}}
+\subsubsection[{check\-\_\-loadhistory}]{\setlength{\rightskip}{0pt plus 5cm}int check\-\_\-loadhistory (
+\begin{DoxyParamCaption}
+\item[{struct {\bf pmm\-\_\-loadhistory} $\ast$}]{h}
+\end{DoxyParamCaption}
+)}}\label{pmm__load_8c_a29614e7a74815e916206e98f515d5848}
+Do some sanity checking on the load history structure
+
+
+\begin{DoxyParams}{Parameters}
+{\em h} & pointer to load history\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+1 if load history passes check, 0 if it fails 
+\end{DoxyReturn}
+\hypertarget{pmm__load_8c_af9a37959809b52f265f1db6b3bfd88d7}{\index{pmm\-\_\-load.\-c@{pmm\-\_\-load.\-c}!free\-\_\-loadhistory@{free\-\_\-loadhistory}}
+\index{free\-\_\-loadhistory@{free\-\_\-loadhistory}!pmm_load.c@{pmm\-\_\-load.\-c}}
+\subsubsection[{free\-\_\-loadhistory}]{\setlength{\rightskip}{0pt plus 5cm}void free\-\_\-loadhistory (
+\begin{DoxyParamCaption}
+\item[{struct {\bf pmm\-\_\-loadhistory} $\ast$$\ast$}]{h}
+\end{DoxyParamCaption}
+)}}\label{pmm__load_8c_af9a37959809b52f265f1db6b3bfd88d7}
+frees a load history structure and all of its members
+
+
+\begin{DoxyParams}{Parameters}
+{\em h} & pointer to address of the load history structure \\
+\hline
+\end{DoxyParams}
+\hypertarget{pmm__load_8c_ae54383aadb1f12a1c4879fd85a3c909c}{\index{pmm\-\_\-load.\-c@{pmm\-\_\-load.\-c}!init\-\_\-loadhistory@{init\-\_\-loadhistory}}
+\index{init\-\_\-loadhistory@{init\-\_\-loadhistory}!pmm_load.c@{pmm\-\_\-load.\-c}}
+\subsubsection[{init\-\_\-loadhistory}]{\setlength{\rightskip}{0pt plus 5cm}int init\-\_\-loadhistory (
+\begin{DoxyParamCaption}
+\item[{struct {\bf pmm\-\_\-loadhistory} $\ast$}]{h, }
+\item[{int}]{size}
+\end{DoxyParamCaption}
+)}}\label{pmm__load_8c_ae54383aadb1f12a1c4879fd85a3c909c}
+Function initialises the array and indexes that are used to store the load history (in a circular type array)
+
+
+\begin{DoxyParams}{Parameters}
+{\em h} & pointer to a load history structure \\
+\hline
+{\em size} & size of the circular array\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success, -\/1 on failure
+\end{DoxyReturn}
+T\-O\-D\-O check that history is not already allocated, free in this case first \hypertarget{pmm__load_8c_ab8e9e631f77e07614e60d53f00a37474}{\index{pmm\-\_\-load.\-c@{pmm\-\_\-load.\-c}!new\-\_\-load@{new\-\_\-load}}
+\index{new\-\_\-load@{new\-\_\-load}!pmm_load.c@{pmm\-\_\-load.\-c}}
+\subsubsection[{new\-\_\-load}]{\setlength{\rightskip}{0pt plus 5cm}struct {\bf pmm\-\_\-load}$\ast$ new\-\_\-load (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [read]}}}\label{pmm__load_8c_ab8e9e631f77e07614e60d53f00a37474}
+initialized a new load observation structure
+
+\begin{DoxyReturn}{Returns}
+pointer to an allocated and intialized load structure 
+\end{DoxyReturn}
+\hypertarget{pmm__load_8c_ad07afc7aeb664fedcc07f4a955ab43f9}{\index{pmm\-\_\-load.\-c@{pmm\-\_\-load.\-c}!new\-\_\-loadhistory@{new\-\_\-loadhistory}}
+\index{new\-\_\-loadhistory@{new\-\_\-loadhistory}!pmm_load.c@{pmm\-\_\-load.\-c}}
+\subsubsection[{new\-\_\-loadhistory}]{\setlength{\rightskip}{0pt plus 5cm}struct {\bf pmm\-\_\-loadhistory}$\ast$ new\-\_\-loadhistory (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [read]}}}\label{pmm__load_8c_ad07afc7aeb664fedcc07f4a955ab43f9}
+Allocates and initialises memory for a new load history structure. This is a circular array arrangement with pointers to the beginning and end. Iteration over the array is done using the modulus operator to wrap the physically beginning and end addresses.
+
+note for a given size we must keep size+1 elements in the array. Thus we store two different sizes. 'size' refers to the number of accessible elements in the circular array. 'size\-\_\-mod' refers to actual allocated elements in the array and is only to be used when iterating through the accessible elements using i+1size\-\_\-mod. 'size\-\_\-mod' will always be the accessible size 'size' + 1
+
+\begin{DoxyReturn}{Returns}
+pointer to a new loadhistory structure or N\-U\-L\-L on failure 
+\end{DoxyReturn}
+\hypertarget{pmm__load_8c_a520dcba3debc99b6a8a3ca1124789d42}{\index{pmm\-\_\-load.\-c@{pmm\-\_\-load.\-c}!print\-\_\-load@{print\-\_\-load}}
+\index{print\-\_\-load@{print\-\_\-load}!pmm_load.c@{pmm\-\_\-load.\-c}}
+\subsubsection[{print\-\_\-load}]{\setlength{\rightskip}{0pt plus 5cm}void print\-\_\-load (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{output, }
+\item[{struct {\bf pmm\-\_\-load} $\ast$}]{l}
+\end{DoxyParamCaption}
+)}}\label{pmm__load_8c_a520dcba3debc99b6a8a3ca1124789d42}
+prints a single load observation
+
+
+\begin{DoxyParams}{Parameters}
+{\em output} & output stream to print to \\
+\hline
+{\em l} & pointer to load structure to print \\
+\hline
+\end{DoxyParams}
+\hypertarget{pmm__load_8c_a79f5c035105980a40ff28beb44623d99}{\index{pmm\-\_\-load.\-c@{pmm\-\_\-load.\-c}!print\-\_\-loadhistory@{print\-\_\-loadhistory}}
+\index{print\-\_\-loadhistory@{print\-\_\-loadhistory}!pmm_load.c@{pmm\-\_\-load.\-c}}
+\subsubsection[{print\-\_\-loadhistory}]{\setlength{\rightskip}{0pt plus 5cm}void print\-\_\-loadhistory (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{output, }
+\item[{struct {\bf pmm\-\_\-loadhistory} $\ast$}]{h}
+\end{DoxyParamCaption}
+)}}\label{pmm__load_8c_a79f5c035105980a40ff28beb44623d99}
+prints a load history sequence
+
+
+\begin{DoxyParams}{Parameters}
+{\em output} & output stream to print to \\
+\hline
+{\em h} & pointer to the load history \\
+\hline
+\end{DoxyParams}

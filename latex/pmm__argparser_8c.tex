@@ -1,0 +1,144 @@
+\hypertarget{pmm__argparser_8c}{\section{/home/rhiggins/phd/pmm\-\_\-github/src/pmm\-\_\-argparser.c File Reference}
+\label{pmm__argparser_8c}\index{/home/rhiggins/phd/pmm\-\_\-github/src/pmm\-\_\-argparser.\-c@{/home/rhiggins/phd/pmm\-\_\-github/src/pmm\-\_\-argparser.\-c}}
+}
+
+
+Parsing command line arguments.  
+
+
+{\ttfamily \#include $<$stdio.\-h$>$}\\*
+{\ttfamily \#include $<$stdlib.\-h$>$}\\*
+{\ttfamily \#include $<$getopt.\-h$>$}\\*
+{\ttfamily \#include $<$string.\-h$>$}\\*
+{\ttfamily \#include \char`\"{}pmm\-\_\-argparser.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}pmm\-\_\-model.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}pmm\-\_\-log.\-h\char`\"{}}\\*
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{pmm__argparser_8c_a16e94689113d31c9232d768bfcf3c8a8}{parse\-\_\-slice\-\_\-str} (char $\ast$slice\-\_\-str, struct \hyperlink{structpmm__view__options}{pmm\-\_\-view\-\_\-options} $\ast$options)
+\item 
+int \hyperlink{pmm__argparser_8c_acc4bb3c695a4a47c9b1a3c96825323cf}{count\-\_\-tokens\-\_\-in\-\_\-str} (char $\ast$str, char $\ast$delimiters)
+\item 
+void \hyperlink{pmm__argparser_8c_a2ef30c42cbc289d899a8be5d2d8f77d0}{usage} ()
+\item 
+void \hyperlink{pmm__argparser_8c_a83da97a0ab39b0225a7032c2d478ac98}{parse\-\_\-args} (struct \hyperlink{structpmm__config}{pmm\-\_\-config} $\ast$cfg, int argc, char $\ast$$\ast$argv)
+\item 
+void \hyperlink{pmm__argparser_8c_a2b44d32a4bfc670223a243a377a82d9a}{usage\-\_\-pmm\-\_\-view} ()
+\item 
+int \hyperlink{pmm__argparser_8c_a15346bfaff8bc13f79afbe80b8484f42}{parse\-\_\-pmm\-\_\-view\-\_\-args} (struct \hyperlink{structpmm__view__options}{pmm\-\_\-view\-\_\-options} $\ast$options, int argc, char $\ast$$\ast$argv)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Parsing command line arguments. This file contains the command line argument parsing code for the pmm daemon and the pmm\-\_\-view utility 
+
+\subsection{Function Documentation}
+\hypertarget{pmm__argparser_8c_acc4bb3c695a4a47c9b1a3c96825323cf}{\index{pmm\-\_\-argparser.\-c@{pmm\-\_\-argparser.\-c}!count\-\_\-tokens\-\_\-in\-\_\-str@{count\-\_\-tokens\-\_\-in\-\_\-str}}
+\index{count\-\_\-tokens\-\_\-in\-\_\-str@{count\-\_\-tokens\-\_\-in\-\_\-str}!pmm_argparser.c@{pmm\-\_\-argparser.\-c}}
+\subsubsection[{count\-\_\-tokens\-\_\-in\-\_\-str}]{\setlength{\rightskip}{0pt plus 5cm}int count\-\_\-tokens\-\_\-in\-\_\-str (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{str, }
+\item[{char $\ast$}]{delimiters}
+\end{DoxyParamCaption}
+)}}\label{pmm__argparser_8c_acc4bb3c695a4a47c9b1a3c96825323cf}
+Count the number of tokens in a atring seperated by a delimiter
+
+
+\begin{DoxyParams}{Parameters}
+{\em str} & pointer to the string \\
+\hline
+{\em delimiters} & pointer to a string listing the delimiters\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+number of tokens or -\/1 on error
+\end{DoxyReturn}
+\begin{DoxyWarning}{Warning}
+Not thread safe. 
+\end{DoxyWarning}
+\hypertarget{pmm__argparser_8c_a83da97a0ab39b0225a7032c2d478ac98}{\index{pmm\-\_\-argparser.\-c@{pmm\-\_\-argparser.\-c}!parse\-\_\-args@{parse\-\_\-args}}
+\index{parse\-\_\-args@{parse\-\_\-args}!pmm_argparser.c@{pmm\-\_\-argparser.\-c}}
+\subsubsection[{parse\-\_\-args}]{\setlength{\rightskip}{0pt plus 5cm}void parse\-\_\-args (
+\begin{DoxyParamCaption}
+\item[{struct {\bf pmm\-\_\-config} $\ast$}]{cfg, }
+\item[{int}]{argc, }
+\item[{char $\ast$$\ast$}]{argv}
+\end{DoxyParamCaption}
+)}}\label{pmm__argparser_8c_a83da97a0ab39b0225a7032c2d478ac98}
+Parse arguments for pmm building daemon.
+
+
+\begin{DoxyParams}{Parameters}
+{\em cfg} & pointer to config structure \\
+\hline
+{\em argc} & number of command line arguments \\
+\hline
+{\em argv} & pointer to command line arguments (array of character arrays) \\
+\hline
+\end{DoxyParams}
+\hypertarget{pmm__argparser_8c_a15346bfaff8bc13f79afbe80b8484f42}{\index{pmm\-\_\-argparser.\-c@{pmm\-\_\-argparser.\-c}!parse\-\_\-pmm\-\_\-view\-\_\-args@{parse\-\_\-pmm\-\_\-view\-\_\-args}}
+\index{parse\-\_\-pmm\-\_\-view\-\_\-args@{parse\-\_\-pmm\-\_\-view\-\_\-args}!pmm_argparser.c@{pmm\-\_\-argparser.\-c}}
+\subsubsection[{parse\-\_\-pmm\-\_\-view\-\_\-args}]{\setlength{\rightskip}{0pt plus 5cm}int parse\-\_\-pmm\-\_\-view\-\_\-args (
+\begin{DoxyParamCaption}
+\item[{struct {\bf pmm\-\_\-view\-\_\-options} $\ast$}]{options, }
+\item[{int}]{argc, }
+\item[{char $\ast$$\ast$}]{argv}
+\end{DoxyParamCaption}
+)}}\label{pmm__argparser_8c_a15346bfaff8bc13f79afbe80b8484f42}
+Parse arguments for pmm\-\_\-view tool
+
+
+\begin{DoxyParams}{Parameters}
+{\em options} & pointer to pmm\-\_\-view options structure \\
+\hline
+{\em argc} & number of command line arguments \\
+\hline
+{\em argv} & pointer to command line arguments (array of character arrays)\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on successful parsing, -\/1 on error 
+\end{DoxyReturn}
+\hypertarget{pmm__argparser_8c_a16e94689113d31c9232d768bfcf3c8a8}{\index{pmm\-\_\-argparser.\-c@{pmm\-\_\-argparser.\-c}!parse\-\_\-slice\-\_\-str@{parse\-\_\-slice\-\_\-str}}
+\index{parse\-\_\-slice\-\_\-str@{parse\-\_\-slice\-\_\-str}!pmm_argparser.c@{pmm\-\_\-argparser.\-c}}
+\subsubsection[{parse\-\_\-slice\-\_\-str}]{\setlength{\rightskip}{0pt plus 5cm}int parse\-\_\-slice\-\_\-str (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{slice\-\_\-str, }
+\item[{struct {\bf pmm\-\_\-view\-\_\-options} $\ast$}]{options}
+\end{DoxyParamCaption}
+)}}\label{pmm__argparser_8c_a16e94689113d31c9232d768bfcf3c8a8}
+Parse the slice string into a arrays of parameter index and parameter value of a \hyperlink{structpmm__view__options}{pmm\-\_\-view\-\_\-options} structure.
+
+The slice string format is a comma seperated list of pairs. Each pair is seperated by a colon. The first element of the pair describes a parameter index in the form p\-N, where N is a number. The second element of the pair is either min, max or a integer value, describing the value that parameter should be fixed at.
+
+To specify a slice all but 1 or 2 parameters must have their values fixed as specified by the string. If 1 parameter is left free the model will be a 2d plot, if 2 parameters are left free the plot will be a 3d surface.
+
+
+\begin{DoxyParams}{Parameters}
+{\em slice\-\_\-str} & pointer to the slice string \\
+\hline
+{\em options} & pointer to the \hyperlink{structpmm__view__options}{pmm\-\_\-view\-\_\-options} structure\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success, -\/1 on failure
+\end{DoxyReturn}
+\begin{DoxyWarning}{Warning}
+Not thread safe. 
+\end{DoxyWarning}
+\hypertarget{pmm__argparser_8c_a2ef30c42cbc289d899a8be5d2d8f77d0}{\index{pmm\-\_\-argparser.\-c@{pmm\-\_\-argparser.\-c}!usage@{usage}}
+\index{usage@{usage}!pmm_argparser.c@{pmm\-\_\-argparser.\-c}}
+\subsubsection[{usage}]{\setlength{\rightskip}{0pt plus 5cm}void usage (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{pmm__argparser_8c_a2ef30c42cbc289d899a8be5d2d8f77d0}
+print command line usage for pmm building daemon \hypertarget{pmm__argparser_8c_a2b44d32a4bfc670223a243a377a82d9a}{\index{pmm\-\_\-argparser.\-c@{pmm\-\_\-argparser.\-c}!usage\-\_\-pmm\-\_\-view@{usage\-\_\-pmm\-\_\-view}}
+\index{usage\-\_\-pmm\-\_\-view@{usage\-\_\-pmm\-\_\-view}!pmm_argparser.c@{pmm\-\_\-argparser.\-c}}
+\subsubsection[{usage\-\_\-pmm\-\_\-view}]{\setlength{\rightskip}{0pt plus 5cm}void usage\-\_\-pmm\-\_\-view (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{pmm__argparser_8c_a2b44d32a4bfc670223a243a377a82d9a}
+print command line usage for pmm\-\_\-view tool 

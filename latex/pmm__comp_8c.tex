@@ -1,0 +1,109 @@
+\hypertarget{pmm__comp_8c}{\section{/home/rhiggins/phd/pmm\-\_\-github/src/pmm\-\_\-comp.c File Reference}
+\label{pmm__comp_8c}\index{/home/rhiggins/phd/pmm\-\_\-github/src/pmm\-\_\-comp.\-c@{/home/rhiggins/phd/pmm\-\_\-github/src/pmm\-\_\-comp.\-c}}
+}
+
+
+Program to compare two models.  
+
+
+{\ttfamily \#include $<$stdio.\-h$>$}\\*
+{\ttfamily \#include $<$stdlib.\-h$>$}\\*
+{\ttfamily \#include $<$getopt.\-h$>$}\\*
+{\ttfamily \#include $<$math.\-h$>$}\\*
+{\ttfamily \#include $<$gsl/gsl\-\_\-statistics\-\_\-double.\-h$>$}\\*
+{\ttfamily \#include \char`\"{}pmm\-\_\-model.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}pmm\-\_\-octave.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}pmm\-\_\-cfgparser.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}pmm\-\_\-log.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}pmm\-\_\-param.\-h\char`\"{}}\\*
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structpmm__comp__options}{pmm\-\_\-comp\-\_\-options}
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{structpmm__comp__options}{pmm\-\_\-comp\-\_\-options} \hyperlink{pmm__comp_8c_adf15026fa1aa06d74273a9f39f1b97ef}{P\-M\-M\-\_\-\-Comp\-\_\-\-Options}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{pmm__comp_8c_a2ef30c42cbc289d899a8be5d2d8f77d0}{usage} ()
+\item 
+void \hyperlink{pmm__comp_8c_a46c99395879bd62d0f13ea12fc833d4b}{parse\-\_\-args} (struct \hyperlink{structpmm__comp__options}{pmm\-\_\-comp\-\_\-options} $\ast$opts, int argc, char $\ast$$\ast$argv)
+\item 
+double \hyperlink{pmm__comp_8c_af7833c59fcbc21c93a78906b7664808a}{correlate\-\_\-models} (struct \hyperlink{structpmm__model}{pmm\-\_\-model} $\ast$approx\-\_\-model, struct \hyperlink{structpmm__model}{pmm\-\_\-model} $\ast$base\-\_\-model)
+\item 
+int \hyperlink{pmm__comp_8c_a3c04138a5bfe5d72780bb7e82a18e627}{main} (int argc, char $\ast$$\ast$argv)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Program to compare two models. This file contains the pmm\-\_\-comp program, which is a simple utility to compare two models 
+
+\subsection{Typedef Documentation}
+\hypertarget{pmm__comp_8c_adf15026fa1aa06d74273a9f39f1b97ef}{\index{pmm\-\_\-comp.\-c@{pmm\-\_\-comp.\-c}!P\-M\-M\-\_\-\-Comp\-\_\-\-Options@{P\-M\-M\-\_\-\-Comp\-\_\-\-Options}}
+\index{P\-M\-M\-\_\-\-Comp\-\_\-\-Options@{P\-M\-M\-\_\-\-Comp\-\_\-\-Options}!pmm_comp.c@{pmm\-\_\-comp.\-c}}
+\subsubsection[{P\-M\-M\-\_\-\-Comp\-\_\-\-Options}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf pmm\-\_\-comp\-\_\-options}  {\bf P\-M\-M\-\_\-\-Comp\-\_\-\-Options}}}\label{pmm__comp_8c_adf15026fa1aa06d74273a9f39f1b97ef}
+structure storing options for pmm\-\_\-comp tool 
+
+\subsection{Function Documentation}
+\hypertarget{pmm__comp_8c_af7833c59fcbc21c93a78906b7664808a}{\index{pmm\-\_\-comp.\-c@{pmm\-\_\-comp.\-c}!correlate\-\_\-models@{correlate\-\_\-models}}
+\index{correlate\-\_\-models@{correlate\-\_\-models}!pmm_comp.c@{pmm\-\_\-comp.\-c}}
+\subsubsection[{correlate\-\_\-models}]{\setlength{\rightskip}{0pt plus 5cm}double correlate\-\_\-models (
+\begin{DoxyParamCaption}
+\item[{struct {\bf pmm\-\_\-model} $\ast$}]{approx\-\_\-model, }
+\item[{struct {\bf pmm\-\_\-model} $\ast$}]{base\-\_\-model}
+\end{DoxyParamCaption}
+)}}\label{pmm__comp_8c_af7833c59fcbc21c93a78906b7664808a}
+find the correlation between two models
+
+
+\begin{DoxyParams}{Parameters}
+{\em approx\-\_\-model} & pointer to so called approximation model \\
+\hline
+{\em base\-\_\-model} & pointer to base model\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the correlation factor 
+\end{DoxyReturn}
+\hypertarget{pmm__comp_8c_a3c04138a5bfe5d72780bb7e82a18e627}{\index{pmm\-\_\-comp.\-c@{pmm\-\_\-comp.\-c}!main@{main}}
+\index{main@{main}!pmm_comp.c@{pmm\-\_\-comp.\-c}}
+\subsubsection[{main}]{\setlength{\rightskip}{0pt plus 5cm}int main (
+\begin{DoxyParamCaption}
+\item[{int}]{argc, }
+\item[{char $\ast$$\ast$}]{argv}
+\end{DoxyParamCaption}
+)}}\label{pmm__comp_8c_a3c04138a5bfe5d72780bb7e82a18e627}
+pmm\-\_\-comp compares pairs of model files
+
+shows statistics such as correlation, number of points, time spent benchmarking, etc. \hypertarget{pmm__comp_8c_a46c99395879bd62d0f13ea12fc833d4b}{\index{pmm\-\_\-comp.\-c@{pmm\-\_\-comp.\-c}!parse\-\_\-args@{parse\-\_\-args}}
+\index{parse\-\_\-args@{parse\-\_\-args}!pmm_comp.c@{pmm\-\_\-comp.\-c}}
+\subsubsection[{parse\-\_\-args}]{\setlength{\rightskip}{0pt plus 5cm}void parse\-\_\-args (
+\begin{DoxyParamCaption}
+\item[{struct {\bf pmm\-\_\-comp\-\_\-options} $\ast$}]{opts, }
+\item[{int}]{argc, }
+\item[{char $\ast$$\ast$}]{argv}
+\end{DoxyParamCaption}
+)}}\label{pmm__comp_8c_a46c99395879bd62d0f13ea12fc833d4b}
+parse arguments for pmm\-\_\-comp tool
+
+
+\begin{DoxyParams}{Parameters}
+{\em opts} & pointer to options structure \\
+\hline
+{\em argc} & number of command line arguments \\
+\hline
+{\em argv} & command line arguments character array pointer \\
+\hline
+\end{DoxyParams}
+\hypertarget{pmm__comp_8c_a2ef30c42cbc289d899a8be5d2d8f77d0}{\index{pmm\-\_\-comp.\-c@{pmm\-\_\-comp.\-c}!usage@{usage}}
+\index{usage@{usage}!pmm_comp.c@{pmm\-\_\-comp.\-c}}
+\subsubsection[{usage}]{\setlength{\rightskip}{0pt plus 5cm}void usage (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{pmm__comp_8c_a2ef30c42cbc289d899a8be5d2d8f77d0}
+print command line usage for pmm\-\_\-comp tool 

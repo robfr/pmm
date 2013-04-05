@@ -1,0 +1,44 @@
+\hypertarget{pmm__scheduler_8c}{\section{/home/rhiggins/phd/pmm\-\_\-github/src/pmm\-\_\-scheduler.c File Reference}
+\label{pmm__scheduler_8c}\index{/home/rhiggins/phd/pmm\-\_\-github/src/pmm\-\_\-scheduler.\-c@{/home/rhiggins/phd/pmm\-\_\-github/src/pmm\-\_\-scheduler.\-c}}
+}
+
+
+Choose next routine to benchmark.  
+
+
+{\ttfamily \#include \char`\"{}pmm\-\_\-model.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}pmm\-\_\-cond.\-h\char`\"{}}\\*
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{pmm__scheduler_8c_add912276b723522e8a7e430e633a2b7f}{schedule\-\_\-routine} (struct \hyperlink{structpmm__routine}{pmm\-\_\-routine} $\ast$$\ast$scheduled, struct \hyperlink{structpmm__routine}{pmm\-\_\-routine} $\ast$$\ast$r, int n)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Choose next routine to benchmark. Code to select next routine that should be benchmarked. 
+
+\subsection{Function Documentation}
+\hypertarget{pmm__scheduler_8c_add912276b723522e8a7e430e633a2b7f}{\index{pmm\-\_\-scheduler.\-c@{pmm\-\_\-scheduler.\-c}!schedule\-\_\-routine@{schedule\-\_\-routine}}
+\index{schedule\-\_\-routine@{schedule\-\_\-routine}!pmm_scheduler.c@{pmm\-\_\-scheduler.\-c}}
+\subsubsection[{schedule\-\_\-routine}]{\setlength{\rightskip}{0pt plus 5cm}int schedule\-\_\-routine (
+\begin{DoxyParamCaption}
+\item[{struct {\bf pmm\-\_\-routine} $\ast$$\ast$}]{scheduled, }
+\item[{struct {\bf pmm\-\_\-routine} $\ast$$\ast$}]{r, }
+\item[{int}]{n}
+\end{DoxyParamCaption}
+)}}\label{pmm__scheduler_8c_add912276b723522e8a7e430e633a2b7f}
+Function handles the chosing of the next routine to benchmark.
+
+
+\begin{DoxyParams}{Parameters}
+{\em scheduled} & pointer to pointer describing routine picked for scheduling \\
+\hline
+{\em r} & pointer to array of routines from which to pick \\
+\hline
+{\em n} & number of routines in array\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if all routines are already complete (so we don't need to try to schedule them any longer), 1 if there is a schedulable routine, 2 if there are no schedulable routines at present (but some are still incomplete) 
+\end{DoxyReturn}
