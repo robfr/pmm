@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">pmm
-   &#160;<span id="projectnumber">0.0.1</span>
+   &#160;<span id="projectnumber">1.0.0</span>
    </div>
   </td>
  </tr>
@@ -86,14 +86,14 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="pmm__model_8h_source.html">pmm_model.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="pmm-1_80_80_2src_2pmm__model_8h_source.html">pmm_model.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2><a name="pub-attribs"></a>
 Data Fields</h2></td></tr>
 <tr class="memitem:a3b5f76d33ecae36cacba87717cd393b6"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structpmm__benchmark.html#a3b5f76d33ecae36cacba87717cd393b6">n_p</a></td></tr>
 <tr class="memdesc:a3b5f76d33ecae36cacba87717cd393b6"><td class="mdescLeft">&#160;</td><td class="mdescRight">number of parameters  <a href="#a3b5f76d33ecae36cacba87717cd393b6"></a><br/></td></tr>
-<tr class="memitem:aca03a9b2a577a23fe1c5ade67fe42712"><td class="memItemLeft" align="right" valign="top">int *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structpmm__benchmark.html#aca03a9b2a577a23fe1c5ade67fe42712">p</a></td></tr>
-<tr class="memdesc:aca03a9b2a577a23fe1c5ade67fe42712"><td class="mdescLeft">&#160;</td><td class="mdescRight">array of parameters  <a href="#aca03a9b2a577a23fe1c5ade67fe42712"></a><br/></td></tr>
+<tr class="memitem:ac38a50c30dccca979edd97f5e7e7bd05"><td class="memItemLeft" align="right" valign="top">int *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structpmm__benchmark.html#ac38a50c30dccca979edd97f5e7e7bd05">p</a></td></tr>
+<tr class="memdesc:ac38a50c30dccca979edd97f5e7e7bd05"><td class="mdescLeft">&#160;</td><td class="mdescRight">array of parameters  <a href="#ac38a50c30dccca979edd97f5e7e7bd05"></a><br/></td></tr>
 <tr class="memitem:a7c6fd0e47a41583f4abe721aad76b692"><td class="memItemLeft" align="right" valign="top">long long int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structpmm__benchmark.html#a7c6fd0e47a41583f4abe721aad76b692">complexity</a></td></tr>
 <tr class="memdesc:a7c6fd0e47a41583f4abe721aad76b692"><td class="mdescLeft">&#160;</td><td class="mdescRight">complexity of benchmark (no. of float ops.)  <a href="#a7c6fd0e47a41583f4abe721aad76b692"></a><br/></td></tr>
 <tr class="memitem:a28b204369a2e020588b09bb67a442fcb"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structpmm__benchmark.html#a28b204369a2e020588b09bb67a442fcb">flops</a></td></tr>
@@ -104,14 +104,16 @@ Data Fields</h2></td></tr>
 <tr class="memdesc:a0523de7c2b09ca2a96bbee433a567a9e"><td class="mdescLeft">&#160;</td><td class="mdescRight">wall clock execution time (timeval)  <a href="#a0523de7c2b09ca2a96bbee433a567a9e"></a><br/></td></tr>
 <tr class="memitem:a5ddf544feb0ebedcbb44aab727652fe7"><td class="memItemLeft" align="right" valign="top">struct timeval&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structpmm__benchmark.html#a5ddf544feb0ebedcbb44aab727652fe7">used_t</a></td></tr>
 <tr class="memdesc:a5ddf544feb0ebedcbb44aab727652fe7"><td class="mdescLeft">&#160;</td><td class="mdescRight">kernel and user mode execution time summed  <a href="#a5ddf544feb0ebedcbb44aab727652fe7"></a><br/></td></tr>
-<tr class="memitem:a03978c97ff1cfa03fd7fffce71044b06"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="structpmm__benchmark.html">pmm_benchmark</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structpmm__benchmark.html#a03978c97ff1cfa03fd7fffce71044b06">previous</a></td></tr>
-<tr class="memdesc:a03978c97ff1cfa03fd7fffce71044b06"><td class="mdescLeft">&#160;</td><td class="mdescRight">pointer to previous bench in list  <a href="#a03978c97ff1cfa03fd7fffce71044b06"></a><br/></td></tr>
-<tr class="memitem:aae543e14825b5772d245f7f4756b4a49"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="structpmm__benchmark.html">pmm_benchmark</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structpmm__benchmark.html#aae543e14825b5772d245f7f4756b4a49">next</a></td></tr>
-<tr class="memdesc:aae543e14825b5772d245f7f4756b4a49"><td class="mdescLeft">&#160;</td><td class="mdescRight">pointer to next bench in list  <a href="#aae543e14825b5772d245f7f4756b4a49"></a><br/></td></tr>
+<tr class="memitem:aaf30c987aee4b2e3090f882108d734b4"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="structpmm__benchmark.html">pmm_benchmark</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structpmm__benchmark.html#aaf30c987aee4b2e3090f882108d734b4">previous</a></td></tr>
+<tr class="memdesc:aaf30c987aee4b2e3090f882108d734b4"><td class="mdescLeft">&#160;</td><td class="mdescRight">pointer to previous bench in list  <a href="#aaf30c987aee4b2e3090f882108d734b4"></a><br/></td></tr>
+<tr class="memitem:abf5eefb6b6936cb9c11318914923534c"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="structpmm__benchmark.html">pmm_benchmark</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structpmm__benchmark.html#abf5eefb6b6936cb9c11318914923534c">next</a></td></tr>
+<tr class="memdesc:abf5eefb6b6936cb9c11318914923534c"><td class="mdescLeft">&#160;</td><td class="mdescRight">pointer to next bench in list  <a href="#abf5eefb6b6936cb9c11318914923534c"></a><br/></td></tr>
 </table>
 <a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Benchmark structure, storing information routine tests.</p>
 <p>Details the on the parameters and execution results of a benchmark execution. Also pointers to next/previous benchmarks should the one in question is a member of a list. </p>
+
+<p>Definition at line <a class="el" href="pmm-1_80_80_2src_2pmm__model_8h_source.html#l00116">116</a> of file <a class="el" href="pmm-1_80_80_2src_2pmm__model_8h_source.html">pmm_model.h</a>.</p>
 </div><h2>Field Documentation</h2>
 <a class="anchor" id="a7c6fd0e47a41583f4abe721aad76b692"></a>
 <div class="memitem">
@@ -124,6 +126,8 @@ Data Fields</h2></td></tr>
 </div><div class="memdoc">
 
 <p>complexity of benchmark (no. of float ops.) </p>
+
+<p>Definition at line <a class="el" href="pmm-1_80_80_2src_2pmm__model_8h_source.html#l00121">121</a> of file <a class="el" href="pmm-1_80_80_2src_2pmm__model_8h_source.html">pmm_model.h</a>.</p>
 
 </div>
 </div>
@@ -139,6 +143,8 @@ Data Fields</h2></td></tr>
 
 <p>speed of benchmark execution </p>
 
+<p>Definition at line <a class="el" href="pmm-1_80_80_2src_2pmm__model_8h_source.html#l00122">122</a> of file <a class="el" href="pmm-1_80_80_2src_2pmm__model_8h_source.html">pmm_model.h</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a3b5f76d33ecae36cacba87717cd393b6"></a>
@@ -153,47 +159,55 @@ Data Fields</h2></td></tr>
 
 <p>number of parameters </p>
 
+<p>Definition at line <a class="el" href="pmm-1_80_80_2src_2pmm__model_8h_source.html#l00117">117</a> of file <a class="el" href="pmm-1_80_80_2src_2pmm__model_8h_source.html">pmm_model.h</a>.</p>
+
 </div>
 </div>
-<a class="anchor" id="aae543e14825b5772d245f7f4756b4a49"></a>
+<a class="anchor" id="abf5eefb6b6936cb9c11318914923534c"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">struct <a class="el" href="structpmm__benchmark.html">pmm_benchmark</a>* pmm_benchmark::next</td>
+          <td class="memname">struct <a class="el" href="structpmm__benchmark.html">pmm_benchmark</a> * pmm_benchmark::next</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p>pointer to next bench in list </p>
 
+<p>Definition at line <a class="el" href="pmm-1_80_80_2src_2pmm__model_8h_source.html#l00130">130</a> of file <a class="el" href="pmm-1_80_80_2src_2pmm__model_8h_source.html">pmm_model.h</a>.</p>
+
 </div>
 </div>
-<a class="anchor" id="aca03a9b2a577a23fe1c5ade67fe42712"></a>
+<a class="anchor" id="ac38a50c30dccca979edd97f5e7e7bd05"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int* pmm_benchmark::p</td>
+          <td class="memname">int * pmm_benchmark::p</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p>array of parameters </p>
 
+<p>Definition at line <a class="el" href="pmm-1_80_80_2src_2pmm__model_8h_source.html#l00118">118</a> of file <a class="el" href="pmm-1_80_80_2src_2pmm__model_8h_source.html">pmm_model.h</a>.</p>
+
 </div>
 </div>
-<a class="anchor" id="a03978c97ff1cfa03fd7fffce71044b06"></a>
+<a class="anchor" id="aaf30c987aee4b2e3090f882108d734b4"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">struct <a class="el" href="structpmm__benchmark.html">pmm_benchmark</a>* pmm_benchmark::previous</td>
+          <td class="memname">struct <a class="el" href="structpmm__benchmark.html">pmm_benchmark</a> * pmm_benchmark::previous</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p>pointer to previous bench in list </p>
+
+<p>Definition at line <a class="el" href="pmm-1_80_80_2src_2pmm__model_8h_source.html#l00129">129</a> of file <a class="el" href="pmm-1_80_80_2src_2pmm__model_8h_source.html">pmm_model.h</a>.</p>
 
 </div>
 </div>
@@ -209,6 +223,8 @@ Data Fields</h2></td></tr>
 
 <p>benchmark execution time in seconds </p>
 
+<p>Definition at line <a class="el" href="pmm-1_80_80_2src_2pmm__model_8h_source.html#l00123">123</a> of file <a class="el" href="pmm-1_80_80_2src_2pmm__model_8h_source.html">pmm_model.h</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a5ddf544feb0ebedcbb44aab727652fe7"></a>
@@ -222,6 +238,8 @@ Data Fields</h2></td></tr>
 </div><div class="memdoc">
 
 <p>kernel and user mode execution time summed </p>
+
+<p>Definition at line <a class="el" href="pmm-1_80_80_2src_2pmm__model_8h_source.html#l00127">127</a> of file <a class="el" href="pmm-1_80_80_2src_2pmm__model_8h_source.html">pmm_model.h</a>.</p>
 
 </div>
 </div>
@@ -237,15 +255,18 @@ Data Fields</h2></td></tr>
 
 <p>wall clock execution time (timeval) </p>
 
+<p>Definition at line <a class="el" href="pmm-1_80_80_2src_2pmm__model_8h_source.html#l00125">125</a> of file <a class="el" href="pmm-1_80_80_2src_2pmm__model_8h_source.html">pmm_model.h</a>.</p>
+
 </div>
 </div>
-<hr/>The documentation for this struct was generated from the following file:<ul>
-<li>/home/rhiggins/phd/pmm_github/src/<a class="el" href="pmm__model_8h_source.html">pmm_model.h</a></li>
+<hr/>The documentation for this struct was generated from the following files:<ul>
+<li>/home/rhiggins/phd/pmm_github/pmm-1.0.0/src/<a class="el" href="pmm-1_80_80_2src_2pmm__model_8h_source.html">pmm_model.h</a></li>
+<li>/home/rhiggins/phd/pmm_github/src/<a class="el" href="src_2pmm__model_8h_source.html">pmm_model.h</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 5 2013 14:46:34 for pmm by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Apr 5 2013 16:05:27 for pmm by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.1.2
 </small></address>
