@@ -561,6 +561,10 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Finds the parameters of the next benchmarking point based on a parameter interval and the GBBP algorithm.</p>
+<p>If the interval is _EMPTY, the model is empty and the starting point of the interval is returned for benchmarking</p>
+<p>If the interval is _CLIMB, the model is in the initial building phase and an increment on the starting point is returned for benchmarking</p>
+<p>If the interval is either _BISECT or _INFLECT then the main phase of building is in progress and the mid point between the start and end of the interval is returned for benchmarking</p>
+<p>If the interval is _POINT, then the interval describes a distingt point rather than an interval and this point is returned for benchmarking</p>
 <p>The benchmarking point is aligned to the stride/offset of parameter definitions.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -573,7 +577,7 @@ Functions</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>0 on success, -1 if no benchmark is associated with the interval type (i.e. IT_COMPLETE) or -2 on an error</dd></dl>
 <dl class="section pre"><dt>Precondition</dt><dd>params is a pointer to allocated memory of the correct size </dd></dl>
 
-<p>Definition at line <a class="el" href="pmm__selector_8c_source.html#l03816">3816</a> of file <a class="el" href="pmm__selector_8c_source.html">pmm_selector.c</a>.</p>
+<p>Definition at line <a class="el" href="pmm__selector_8c_source.html#l03829">3829</a> of file <a class="el" href="pmm__selector_8c_source.html">pmm_selector.c</a>.</p>
 
 </div>
 </div>
@@ -1511,7 +1515,7 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section pre"><dt>Precondition</dt><dd>p is allocated and i is an interval of the correct type, with start and end points set (IT_BISECT, IT_INFLECT) </dd></dl>
 
-<p>Definition at line <a class="el" href="pmm__selector_8c_source.html#l03895">3895</a> of file <a class="el" href="pmm__selector_8c_source.html">pmm_selector.c</a>.</p>
+<p>Definition at line <a class="el" href="pmm__selector_8c_source.html#l03908">3908</a> of file <a class="el" href="pmm__selector_8c_source.html">pmm_selector.c</a>.</p>
 
 </div>
 </div>
@@ -1570,7 +1574,7 @@ Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 5 2013 17:40:48 for pmm by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Apr 5 2013 18:20:18 for pmm by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.1.2
 </small></address>
